@@ -1,6 +1,6 @@
 # CDUntappdKit
 
-[![CI Status](http://img.shields.io/travis/Christopher de Haan/CDUntappdKit.svg?style=flat)](https://travis-ci.org/Christopher de Haan/CDUntappdKit)
+[![CI Status](http://img.shields.io/travis/chrisdhaan/CDUntappdKit.svg?style=flat)](https://travis-ci.org/chrisdhaan/CDUntappdKit)
 [![Version](https://img.shields.io/cocoapods/v/CDUntappdKit.svg?style=flat)](http://cocoapods.org/pods/CDUntappdKit)
 [![License](https://img.shields.io/cocoapods/l/CDUntappdKit.svg?style=flat)](http://cocoapods.org/pods/CDUntappdKit)
 [![Platform](https://img.shields.io/cocoapods/p/CDUntappdKit.svg?style=flat)](http://cocoapods.org/pods/CDUntappdKit)
