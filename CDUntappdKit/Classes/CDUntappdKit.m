@@ -9,9 +9,9 @@
 #import "CDUntappdKit.h"
 #import "CDNSString+ExtraMethods.h"
 
-NSString * const CDUntappdBaseURL = @"https://api.untappd.com/v4";
-NSString * const CDUntappdAuthenticateURL = @"https://untappd.com/oauth/authenticate";
-NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
+NSString *const CDUntappdBaseURL = @"https://api.untappd.com/v4";
+NSString *const CDUntappdAuthenticateURL = @"https://untappd.com/oauth/authenticate";
+NSString *const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
 
 @interface CDUntappdKit ()
 
@@ -39,8 +39,8 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
     _clientSecret = clientSecret;
     _redirectUrl = redirectUrl;
     
-    _authenticationSessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:CDUntappdBaseURL];
-    _untappdAPIClient = [[CDUntappdAPIClient alloc] initWithBaseURL:CDUntappdBaseURL];
+    _authenticationSessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:CDUntappdBaseURL]];
+    _untappdAPIClient = [[CDUntappdAPIClient alloc] initWithBaseURL:[NSURL URLWithString:CDUntappdBaseURL]];
     
     return self;
 }
@@ -68,12 +68,12 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
                              @"response_type": @"code",
                              @"code": accessCode};
     
-    [self.authenticationSessionManager GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self.authenticationSessionManager GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (responseObject[@"response"][@"access_token"]) {
             self.accessToken = responseObject[@"response"][@"access_token"];
         }
         completion(responseObject, nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -86,9 +86,9 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
     NSString *url = @"checkin/recent";
     NSMutableDictionary *params = [self requestParamsWithMinID:nil maxID:maxID limit:limit];
     
-    [self.untappdAPIClient GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-//        completion([self.parser checkinsFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -102,9 +102,9 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
     NSString *url = [NSString stringWithFormat:@"user/checkins%@%@", username ? @"/" : @"", username ?: @""];
     NSMutableDictionary *params = [self requestParamsWithMinID:nil maxID:maxID limit:limit];
     
-    [self.untappdAPIClient GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-//        completion([self.parser checkinsFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -122,9 +122,9 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
     if (longitude > 0) params[@"lng"] = @(longitude);
     if (radius > 0) params[@"radius"] = @(radius);
     
-    [self.untappdAPIClient GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-//        completion([self.parser checkinsFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -139,9 +139,9 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
     NSString *url = [NSString stringWithFormat:@"venue/checkins/%@", venueID];
     NSMutableDictionary *params = [self requestParamsWithMinID:minID maxID:maxID limit:limit];
     
-    [self.untappdAPIClient GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-//        completion([self.parser checkinsFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -156,9 +156,9 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
     NSString *url = [NSString stringWithFormat:@"beer/checkins/%@", beerID];
     NSMutableDictionary *params = [self requestParamsWithMinID:minID maxID:maxID limit:limit];
     
-    [self.untappdAPIClient GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-//        completion([self.parser checkinsFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -173,9 +173,9 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
     NSString *url = [NSString stringWithFormat:@"brewery/checkins/%@", breweryID];
     NSMutableDictionary *params = [self requestParamsWithMinID:minID maxID:maxID limit:limit];
     
-    [self.untappdAPIClient GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-//        completion([self.parser checkinsFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -189,9 +189,9 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
     NSString *url = [NSString stringWithFormat:@"brewery/info/%@", breweryID];
     NSMutableDictionary *params = [self authorizationParamsWithParams:@{@"compact": [NSString stringFromBool:compact]}];
     
-    [self.untappdAPIClient GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-//        completion([self.parser breweryFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -202,9 +202,9 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
     NSString *url = [NSString stringWithFormat:@"beer/info/%@", beerID];
     NSMutableDictionary *params = [self authorizationParamsWithParams:@{@"compact": [NSString stringFromBool:compact]}];
     
-    [self.untappdAPIClient GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-//        completion([self.parser beerFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -215,9 +215,9 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
     NSString *url = [NSString stringWithFormat:@"venue/info/%@", venueID];
     NSMutableDictionary *params = [self authorizationParamsWithParams:@{@"compact": [NSString stringFromBool:compact]}];
     
-    [self.untappdAPIClient GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-//        completion([self.parser venueFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -232,9 +232,9 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
     NSString *url = [NSString stringWithFormat:@"checkin/view/%@", checkinID];
     NSMutableDictionary *params = [self authorizationParamsWithParams:nil];
     
-    [self.untappdAPIClient GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-//        completion([self.parser checkinFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -245,9 +245,9 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
     NSString *url = [NSString stringWithFormat:@"user/info%@%@", username ? @"/" : @"", username ?: @""];
     NSMutableDictionary *params = [self authorizationParamsWithParams:nil];
     
-    [self.untappdAPIClient GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-//        completion([self.parser userFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -262,9 +262,9 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
     NSMutableDictionary *params = [self authorizationParamsWithParams:nil];
     if (offset > 0) params[@"offset"] = @(offset);
     
-    [self.untappdAPIClient GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-//        completion([self.parser badgesFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -280,9 +280,9 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
     if (offset > 0) params[@"offset"] = @(offset);
     if (limit > 0 && limit <= 50) params[@"limit"] = @(limit);
     
-    [self.untappdAPIClient GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-//        completion([self.parser usersFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -298,9 +298,9 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
     NSMutableDictionary *params = [self authorizationParamsWithParams:@{@"sort": sortValue}];
     if (offset > 0) params[@"offset"] = @(offset);
     
-    [self.untappdAPIClient GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-//        completion([self.parser beersAndBreweriesFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -316,10 +316,9 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
     NSMutableDictionary *params = [self authorizationParamsWithParams:@{@"sort": sortValue}];
     if (offset > 0) params[@"offset"] = @(offset);
     
-    [self.untappdAPIClient GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-        // Todo: account for things like recent_created_at, first_had, count
-//        completion([self.parser beersAndBreweriesFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -333,10 +332,10 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
     NSString *url = @"search/brewery";
     NSMutableDictionary *params = [self authorizationParamsWithParams:@{@"q": query}];
     
-    [self.untappdAPIClient GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-//        completion([self.parser breweriesFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        [self handleError:error forTask:task completion:completion];
+    [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        //
     }];
 }
 
@@ -349,10 +348,9 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
     NSString *sortValue = [self parameterValueForBeerSearchSortType:sortBy];
     NSMutableDictionary *params = [self authorizationParamsWithParams:@{@"q": query, @"sort": sortValue}];
     
-    [self.untappdAPIClient GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-        // Note: account for things like your_count, have_had, checkin_count
-//        completion([self.parser beersAndBreweriesFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -360,9 +358,10 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
 - (void)trendingBeers:(CDUntappdKitResultBlock)completion {
     NSString *url = @"beer/trending";
     NSMutableDictionary *params = [self authorizationParamsWithParams:nil];
-    [self.untappdAPIClient GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-//        completion([self.parser beersFromTrendingResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    
+    [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -401,10 +400,9 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
     if ((postTo & CDUntappdCheckinPostToTwitter) != 0) params[@"twitter"] = @"on";
     if ((postTo & CDUntappdCheckinPostToFoursquare) != 0) params[@"foursquare"] = @"on";
     
-    [self.untappdAPIClient POST:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-//        completion([self.parser checkinResultFromCheckinCreationResponseObject:responseObject], nil);
-//        completion(nil, nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    [self.untappdAPIClient POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -416,9 +414,10 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
     
     NSString *url = [NSString stringWithFormat:@"checkin/addcomment/%@", checkinID];
     NSMutableDictionary *params = [self authorizationParamsWithParams:nil];
-    [self.untappdAPIClient POST:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-//        completion([self.parser toastsFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    
+    [self.untappdAPIClient POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -428,9 +427,10 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
     
     NSString *url = [NSString stringWithFormat:@"checkin/deletecomment/%@", commentID];
     NSMutableDictionary *params = [self authorizationParamsWithParams:nil];
-    [self.untappdAPIClient POST:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-//        completion([self.parser toastsFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    
+    [self.untappdAPIClient POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -440,9 +440,10 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
     
     NSString *url = [NSString stringWithFormat:@"checkin/toast/%@", checkinID];
     NSMutableDictionary *params = [self authorizationParamsWithParams:nil];
-    [self.untappdAPIClient GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-//        completion([self.parser toastsFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    
+    [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -455,10 +456,10 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
     
     NSString *url = @"user/wishlist/add";
     NSMutableDictionary *params = [self authorizationParamsWithParams:@{@"bid": beerID}];
-    [self.untappdAPIClient GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-        // TODO: figure out a better way to parse this stuff :(
-//        completion([self.parser beerFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    
+    [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -468,10 +469,10 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
     
     NSString *url = @"user/wishlist/delete";
     NSMutableDictionary *params = [self authorizationParamsWithParams:@{@"bid": beerID}];
-    [self.untappdAPIClient GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-        // TODO: figure out a better way to parse this stuff :(
-//        completion([self.parser beerFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    
+    [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -482,10 +483,10 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
 - (void)pendingFriendRequests:(CDUntappdKitResultBlock)completion {
     NSString *url = @"user/pending";
     NSMutableDictionary *params = [self authorizationParamsWithParams:nil];
-    [self.untappdAPIClient GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-        // TODO: figure out a better way to parse this stuff :(
-//        completion([self.parser usersFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    
+    [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -493,10 +494,10 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
 - (void)approvePendingFriendshipForUserID:(NSNumber *)userID completion:(CDUntappdKitResultBlock)completion {
     NSString *url = [NSString stringWithFormat:@"friend/accept/%@", userID];
     NSMutableDictionary *params = [self authorizationParamsWithParams:nil];
-    [self.untappdAPIClient POST:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-        // TODO: figure out a better way to parse this stuff :(
-//        completion([self.parser userFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    
+    [self.untappdAPIClient POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -504,10 +505,10 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
 - (void)rejectPendingFriendshipForUserID:(NSNumber *)userID completion:(CDUntappdKitResultBlock)completion {
     NSString *url = [NSString stringWithFormat:@"friend/reject/%@", userID];
     NSMutableDictionary *params = [self authorizationParamsWithParams:nil];
-    [self.untappdAPIClient POST:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-        // TODO: figure out a better way to parse this stuff :(
-//        completion([self.parser userFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    
+    [self.untappdAPIClient POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -515,9 +516,10 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
 - (void)revokeFriendshipForUserID:(NSNumber *)userID completion:(CDUntappdKitResultBlock)completion {
     NSString *url = [NSString stringWithFormat:@"/v3/friend/remove/%@", userID];
     NSMutableDictionary *params = [self authorizationParamsWithParams:nil];
-    [self.untappdAPIClient GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-//        completion(responseObject, nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    
+    [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -525,10 +527,10 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
 - (void)requestFriendshipForUserID:(NSNumber *)userID completion:(CDUntappdKitResultBlock)completion {
     NSString *url = [NSString stringWithFormat:@"friend/request/%@", userID];
     NSMutableDictionary *params = [self authorizationParamsWithParams:nil];
-    [self.untappdAPIClient GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-        // TODO: figure out a better way to parse this stuff :(
-//        completion([self.parser userFromResponseObject:responseObject], nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    
+    [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }
@@ -539,10 +541,10 @@ NSString * const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
 - (void)notificationsForCurrentUser:(CDUntappdKitResultBlock)completion {
     NSString *url = @"notifications";
     NSMutableDictionary *params = [self authorizationParamsWithParams:nil];
-    [self.untappdAPIClient GET:url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-        // TODO: figure out a better way to parse this stuff :(
-//        completion(responseObject, nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    
+    [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
+        //
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
 }

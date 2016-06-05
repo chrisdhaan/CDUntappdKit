@@ -46,7 +46,7 @@ typedef NS_OPTIONS(NSInteger, CDUntappdCheckinPostTo) {
     CDUntappdCheckinPostToFoursquare = (1 << 2)
 };
 
-extern NSString * const CDUntappdBaseURL;
+extern NSString *const CDUntappdBaseURL;
 
 @interface CDUntappdKit : NSObject
 
