@@ -33,6 +33,33 @@
 		5579BDE7AA29F552FD9C0E3BAB11F4EB /* Overcoat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 373E5535197ED0CFA0DF1A903F788412 /* Overcoat.framework */; };
 		572F88C50F1E28CAD59D9224F9A55704 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3CB3FB0D0AC0CE15633BF85C3FC6F8E /* SystemConfiguration.framework */; };
 		57FC7A19C008F92B8106608DB8CD1ADA /* NSValueTransformer+MTLInversionAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = E27D8FCBFB2C003A132E6CD4510F96AD /* NSValueTransformer+MTLInversionAdditions.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		5F0E105A1D04001F008342BB /* CDUntappdKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F0E10581D04001F008342BB /* CDUntappdKit.h */; };
+		5F0E105B1D04001F008342BB /* CDUntappdKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F0E10591D04001F008342BB /* CDUntappdKit.m */; };
+		5F0E105F1D04006F008342BB /* CDUntappdBadge.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F0E105D1D04006F008342BB /* CDUntappdBadge.h */; };
+		5F0E10601D04006F008342BB /* CDUntappdBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F0E105E1D04006F008342BB /* CDUntappdBadge.m */; };
+		5F0E10631D040192008342BB /* CDUntappdBeer.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F0E10611D040192008342BB /* CDUntappdBeer.h */; };
+		5F0E10641D040192008342BB /* CDUntappdBeer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F0E10621D040192008342BB /* CDUntappdBeer.m */; };
+		5F0E10671D0402E8008342BB /* CDUntappdBrewery.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F0E10651D0402E8008342BB /* CDUntappdBrewery.h */; };
+		5F0E10681D0402E8008342BB /* CDUntappdBrewery.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F0E10661D0402E8008342BB /* CDUntappdBrewery.m */; };
+		5F0E106C1D04042B008342BB /* CDUntappdCategory.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F0E106A1D04042B008342BB /* CDUntappdCategory.h */; };
+		5F0E106D1D04042B008342BB /* CDUntappdCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F0E106B1D04042B008342BB /* CDUntappdCategory.m */; };
+		5F0E10701D0404FF008342BB /* CDUntappdCheckin.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F0E106E1D0404FF008342BB /* CDUntappdCheckin.h */; };
+		5F0E10711D0404FF008342BB /* CDUntappdCheckin.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F0E106F1D0404FF008342BB /* CDUntappdCheckin.m */; };
+		5F0E10741D040608008342BB /* CDUntappdPhoto.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F0E10721D040608008342BB /* CDUntappdPhoto.h */; };
+		5F0E10751D040608008342BB /* CDUntappdPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F0E10731D040608008342BB /* CDUntappdPhoto.m */; };
+		5F0E10781D040671008342BB /* CDUntappdToast.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F0E10761D040671008342BB /* CDUntappdToast.h */; };
+		5F0E10791D040671008342BB /* CDUntappdToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F0E10771D040671008342BB /* CDUntappdToast.m */; };
+		5F0E107C1D0406BE008342BB /* CDUntappdUser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F0E107A1D0406BE008342BB /* CDUntappdUser.h */; };
+		5F0E107D1D0406BE008342BB /* CDUntappdUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F0E107B1D0406BE008342BB /* CDUntappdUser.m */; };
+		5F0E10801D040762008342BB /* CDUntappdVenue.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F0E107E1D040762008342BB /* CDUntappdVenue.h */; };
+		5F0E10811D040762008342BB /* CDUntappdVenue.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F0E107F1D040762008342BB /* CDUntappdVenue.m */; };
+		5F0E10831D040862008342BB /* CDUntappdModels.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F0E10821D040862008342BB /* CDUntappdModels.h */; };
+		5F0E10861D040B7C008342BB /* CDUntappdAPIClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F0E10841D040B7C008342BB /* CDUntappdAPIClient.h */; };
+		5F0E10871D040B7C008342BB /* CDUntappdAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F0E10851D040B7C008342BB /* CDUntappdAPIClient.m */; };
+		5F0E108A1D04173B008342BB /* CDUntappdNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F0E10881D04173B008342BB /* CDUntappdNotification.h */; };
+		5F0E108B1D04173B008342BB /* CDUntappdNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F0E10891D04173B008342BB /* CDUntappdNotification.m */; };
+		5F0E108F1D042714008342BB /* CDNSString+ExtraMethods.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F0E108D1D042714008342BB /* CDNSString+ExtraMethods.h */; };
+		5F0E10901D042714008342BB /* CDNSString+ExtraMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F0E108E1D042714008342BB /* CDNSString+ExtraMethods.m */; };
 		60E5CB1AF40A634D43FB11C6CDB068E5 /* MTLJSONAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = 38C2624225CA544FC5030B6A2FCD31B9 /* MTLJSONAdapter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		61DBF4581279D1B47D2774494AC0B49D /* MTLReflection.m in Sources */ = {isa = PBXBuildFile; fileRef = CCFD897B2A48B36D29923C9A5DEB21D9 /* MTLReflection.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		624BB905042ACE14AA07562671422DA1 /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 96DF52FE5F4384BE1A78A9D8E5D122C5 /* AFURLResponseSerialization.m */; };
@@ -75,7 +102,6 @@
 		CBC9EB6EB0364C1121955DD55A830571 /* NSDictionary+MTLJSONKeyPath.h in Headers */ = {isa = PBXBuildFile; fileRef = B12A0DE026C15E665108704893080BE1 /* NSDictionary+MTLJSONKeyPath.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CEC187921387C4A64A60764B7595EFB8 /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2BA699717A3A833DB63164393C10644 /* AFNetworking.framework */; };
 		CF99541CF27DBF914EE2ADC2C7E63297 /* NSObject+MTLComparisonAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 85763CA14986A9FD44250BE12CA2AC2E /* NSObject+MTLComparisonAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D105437EE06B240A847D3A3468F71259 /* ReplaceMe.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F84B8E2412F4F5FB4180856079D1C9C /* ReplaceMe.m */; };
 		D58734982A6A9E719137BD3EEA343433 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 414BE54F27DD27974307467FBE8246E3 /* CoreGraphics.framework */; };
 		D65FE7E3E75EBD00697141841A8F8C95 /* MTLReflection.h in Headers */ = {isa = PBXBuildFile; fileRef = 689D78EBBD573F34CB092B5F3BFCBD3C /* MTLReflection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D70009E70641B3E36B5303CE68BE11C3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25FE117F4BAAB43FA682032FEB58E340 /* Foundation.framework */; };
@@ -203,6 +229,33 @@
 		585F0463BB9284BC297881C151E91629 /* NSError+MTLModelException.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSError+MTLModelException.h"; path = "Mantle/NSError+MTLModelException.h"; sourceTree = "<group>"; };
 		592DC62A0F74F45F52C5DFD87C3A4B0B /* OVCModelResponseSerializer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OVCModelResponseSerializer.m; path = sources/Core/OVCModelResponseSerializer.m; sourceTree = "<group>"; };
 		5D10CE0E3ECCBF581152D91F0B020DB8 /* NSValueTransformer+MTLInversionAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSValueTransformer+MTLInversionAdditions.h"; path = "Mantle/NSValueTransformer+MTLInversionAdditions.h"; sourceTree = "<group>"; };
+		5F0E10581D04001F008342BB /* CDUntappdKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDUntappdKit.h; sourceTree = "<group>"; };
+		5F0E10591D04001F008342BB /* CDUntappdKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDUntappdKit.m; sourceTree = "<group>"; };
+		5F0E105D1D04006F008342BB /* CDUntappdBadge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDUntappdBadge.h; sourceTree = "<group>"; };
+		5F0E105E1D04006F008342BB /* CDUntappdBadge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDUntappdBadge.m; sourceTree = "<group>"; };
+		5F0E10611D040192008342BB /* CDUntappdBeer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDUntappdBeer.h; sourceTree = "<group>"; };
+		5F0E10621D040192008342BB /* CDUntappdBeer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDUntappdBeer.m; sourceTree = "<group>"; };
+		5F0E10651D0402E8008342BB /* CDUntappdBrewery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDUntappdBrewery.h; sourceTree = "<group>"; };
+		5F0E10661D0402E8008342BB /* CDUntappdBrewery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDUntappdBrewery.m; sourceTree = "<group>"; };
+		5F0E106A1D04042B008342BB /* CDUntappdCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDUntappdCategory.h; sourceTree = "<group>"; };
+		5F0E106B1D04042B008342BB /* CDUntappdCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDUntappdCategory.m; sourceTree = "<group>"; };
+		5F0E106E1D0404FF008342BB /* CDUntappdCheckin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDUntappdCheckin.h; sourceTree = "<group>"; };
+		5F0E106F1D0404FF008342BB /* CDUntappdCheckin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDUntappdCheckin.m; sourceTree = "<group>"; };
+		5F0E10721D040608008342BB /* CDUntappdPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDUntappdPhoto.h; sourceTree = "<group>"; };
+		5F0E10731D040608008342BB /* CDUntappdPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDUntappdPhoto.m; sourceTree = "<group>"; };
+		5F0E10761D040671008342BB /* CDUntappdToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDUntappdToast.h; sourceTree = "<group>"; };
+		5F0E10771D040671008342BB /* CDUntappdToast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDUntappdToast.m; sourceTree = "<group>"; };
+		5F0E107A1D0406BE008342BB /* CDUntappdUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDUntappdUser.h; sourceTree = "<group>"; };
+		5F0E107B1D0406BE008342BB /* CDUntappdUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDUntappdUser.m; sourceTree = "<group>"; };
+		5F0E107E1D040762008342BB /* CDUntappdVenue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDUntappdVenue.h; sourceTree = "<group>"; };
+		5F0E107F1D040762008342BB /* CDUntappdVenue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDUntappdVenue.m; sourceTree = "<group>"; };
+		5F0E10821D040862008342BB /* CDUntappdModels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDUntappdModels.h; sourceTree = "<group>"; };
+		5F0E10841D040B7C008342BB /* CDUntappdAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDUntappdAPIClient.h; sourceTree = "<group>"; };
+		5F0E10851D040B7C008342BB /* CDUntappdAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDUntappdAPIClient.m; sourceTree = "<group>"; };
+		5F0E10881D04173B008342BB /* CDUntappdNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDUntappdNotification.h; sourceTree = "<group>"; };
+		5F0E10891D04173B008342BB /* CDUntappdNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDUntappdNotification.m; sourceTree = "<group>"; };
+		5F0E108D1D042714008342BB /* CDNSString+ExtraMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CDNSString+ExtraMethods.h"; sourceTree = "<group>"; };
+		5F0E108E1D042714008342BB /* CDNSString+ExtraMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CDNSString+ExtraMethods.m"; sourceTree = "<group>"; };
 		5F2D6D78EE5119518E0AD14D23C7A762 /* Mantle.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Mantle.h; path = Mantle/Mantle.h; sourceTree = "<group>"; };
 		614053B86FCD72CB189A14F334B1E552 /* Overcoat.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = Overcoat.modulemap; sourceTree = "<group>"; };
 		622953641C25ADBEB3AC0B275B8B1D1C /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -240,7 +293,6 @@
 		9C004A5937CE53C5C07F24012302691D /* MTLModel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MTLModel.m; path = Mantle/MTLModel.m; sourceTree = "<group>"; };
 		9C0607CE294C101950C1BAF7A9AA1319 /* Pods-CDUntappdKit_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-CDUntappdKit_Tests-umbrella.h"; sourceTree = "<group>"; };
 		9EAE10EE4BC117CA916CF0C4954B7A30 /* Mantle-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Mantle-dummy.m"; sourceTree = "<group>"; };
-		9F84B8E2412F4F5FB4180856079D1C9C /* ReplaceMe.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ReplaceMe.m; sourceTree = "<group>"; };
 		A168968B6900C0AC38CF0DC2BE33BB10 /* NSDictionary+MTLMappingAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSDictionary+MTLMappingAdditions.h"; path = "Mantle/NSDictionary+MTLMappingAdditions.h"; sourceTree = "<group>"; };
 		A64259D8F6DDBDED75605CE58609F5E0 /* MTLValueTransformer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MTLValueTransformer.m; path = Mantle/MTLValueTransformer.m; sourceTree = "<group>"; };
 		A7882B326045084FFCB8ACD77888896F /* Overcoat-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Overcoat-prefix.pch"; sourceTree = "<group>"; };
@@ -505,6 +557,43 @@
 			path = ../..;
 			sourceTree = "<group>";
 		};
+		5F0E105C1D040047008342BB /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				5F0E10821D040862008342BB /* CDUntappdModels.h */,
+				5F0E105D1D04006F008342BB /* CDUntappdBadge.h */,
+				5F0E105E1D04006F008342BB /* CDUntappdBadge.m */,
+				5F0E10611D040192008342BB /* CDUntappdBeer.h */,
+				5F0E10621D040192008342BB /* CDUntappdBeer.m */,
+				5F0E10651D0402E8008342BB /* CDUntappdBrewery.h */,
+				5F0E10661D0402E8008342BB /* CDUntappdBrewery.m */,
+				5F0E106A1D04042B008342BB /* CDUntappdCategory.h */,
+				5F0E106B1D04042B008342BB /* CDUntappdCategory.m */,
+				5F0E106E1D0404FF008342BB /* CDUntappdCheckin.h */,
+				5F0E106F1D0404FF008342BB /* CDUntappdCheckin.m */,
+				5F0E10881D04173B008342BB /* CDUntappdNotification.h */,
+				5F0E10891D04173B008342BB /* CDUntappdNotification.m */,
+				5F0E10721D040608008342BB /* CDUntappdPhoto.h */,
+				5F0E10731D040608008342BB /* CDUntappdPhoto.m */,
+				5F0E10761D040671008342BB /* CDUntappdToast.h */,
+				5F0E10771D040671008342BB /* CDUntappdToast.m */,
+				5F0E107A1D0406BE008342BB /* CDUntappdUser.h */,
+				5F0E107B1D0406BE008342BB /* CDUntappdUser.m */,
+				5F0E107E1D040762008342BB /* CDUntappdVenue.h */,
+				5F0E107F1D040762008342BB /* CDUntappdVenue.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		5F0E108C1D0426A7008342BB /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				5F0E108D1D042714008342BB /* CDNSString+ExtraMethods.h */,
+				5F0E108E1D042714008342BB /* CDNSString+ExtraMethods.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
 		75B4E08A5577A672783C915B9DCC7B31 /* Development Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -602,7 +691,12 @@
 		C9B8D59D787BCF6AD427835298EDFD07 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				9F84B8E2412F4F5FB4180856079D1C9C /* ReplaceMe.m */,
+				5F0E10581D04001F008342BB /* CDUntappdKit.h */,
+				5F0E10591D04001F008342BB /* CDUntappdKit.m */,
+				5F0E10841D040B7C008342BB /* CDUntappdAPIClient.h */,
+				5F0E10851D040B7C008342BB /* CDUntappdAPIClient.m */,
+				5F0E105C1D040047008342BB /* Model */,
+				5F0E108C1D0426A7008342BB /* Categories */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -682,7 +776,21 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F0E10861D040B7C008342BB /* CDUntappdAPIClient.h in Headers */,
 				F67A9A8D0AC8FC732B8B5049D516B348 /* CDUntappdKit-umbrella.h in Headers */,
+				5F0E10701D0404FF008342BB /* CDUntappdCheckin.h in Headers */,
+				5F0E105F1D04006F008342BB /* CDUntappdBadge.h in Headers */,
+				5F0E10801D040762008342BB /* CDUntappdVenue.h in Headers */,
+				5F0E108A1D04173B008342BB /* CDUntappdNotification.h in Headers */,
+				5F0E10741D040608008342BB /* CDUntappdPhoto.h in Headers */,
+				5F0E10781D040671008342BB /* CDUntappdToast.h in Headers */,
+				5F0E106C1D04042B008342BB /* CDUntappdCategory.h in Headers */,
+				5F0E10631D040192008342BB /* CDUntappdBeer.h in Headers */,
+				5F0E10671D0402E8008342BB /* CDUntappdBrewery.h in Headers */,
+				5F0E105A1D04001F008342BB /* CDUntappdKit.h in Headers */,
+				5F0E108F1D042714008342BB /* CDNSString+ExtraMethods.h in Headers */,
+				5F0E10831D040862008342BB /* CDUntappdModels.h in Headers */,
+				5F0E107C1D0406BE008342BB /* CDUntappdUser.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -961,8 +1069,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F0E10751D040608008342BB /* CDUntappdPhoto.m in Sources */,
+				5F0E105B1D04001F008342BB /* CDUntappdKit.m in Sources */,
 				39F083356B85CE6A6620E432FD79C4CE /* CDUntappdKit-dummy.m in Sources */,
-				D105437EE06B240A847D3A3468F71259 /* ReplaceMe.m in Sources */,
+				5F0E10871D040B7C008342BB /* CDUntappdAPIClient.m in Sources */,
+				5F0E108B1D04173B008342BB /* CDUntappdNotification.m in Sources */,
+				5F0E10601D04006F008342BB /* CDUntappdBadge.m in Sources */,
+				5F0E10901D042714008342BB /* CDNSString+ExtraMethods.m in Sources */,
+				5F0E107D1D0406BE008342BB /* CDUntappdUser.m in Sources */,
+				5F0E10681D0402E8008342BB /* CDUntappdBrewery.m in Sources */,
+				5F0E10711D0404FF008342BB /* CDUntappdCheckin.m in Sources */,
+				5F0E10641D040192008342BB /* CDUntappdBeer.m in Sources */,
+				5F0E106D1D04042B008342BB /* CDUntappdCategory.m in Sources */,
+				5F0E10811D040762008342BB /* CDUntappdVenue.m in Sources */,
+				5F0E10791D040671008342BB /* CDUntappdToast.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
