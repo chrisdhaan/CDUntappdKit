@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'CDUntappdKit'
-  s.version          = '0.2.0'
+  s.version          = '0.2.1'
   s.summary          = 'An extensive Objective C wrapper for the Untappd API.'
   s.description      = <<-DESC
 This Objective C wrapper covers all possible network endpoints and responses for the Untappd developers API.

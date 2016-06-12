@@ -103,7 +103,7 @@ NSString *const CDUntappdAuthorizeURL = @"https://untappd.com/oauth/authorize";
     NSMutableDictionary *params = [self requestParamsWithMinID:nil maxID:maxID limit:limit];
     
     [self.untappdAPIClient GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, OVCResponse * _Nullable responseObject) {
-        NSLog(responseObject.result);
+//        NSLog(@"%@", responseObject.result);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleError:error forTask:task completion:completion];
     }];
