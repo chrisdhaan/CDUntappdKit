@@ -60,6 +60,8 @@
 		5F0E108B1D04173B008342BB /* CDUntappdNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F0E10891D04173B008342BB /* CDUntappdNotification.m */; };
 		5F0E108F1D042714008342BB /* CDNSString+ExtraMethods.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F0E108D1D042714008342BB /* CDNSString+ExtraMethods.h */; };
 		5F0E10901D042714008342BB /* CDNSString+ExtraMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F0E108E1D042714008342BB /* CDNSString+ExtraMethods.m */; };
+		5F52B12C1D0DDC650087A76A /* CDUntappdCheckinResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F52B12A1D0DDC650087A76A /* CDUntappdCheckinResponse.h */; };
+		5F52B12D1D0DDC650087A76A /* CDUntappdCheckinResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F52B12B1D0DDC650087A76A /* CDUntappdCheckinResponse.m */; };
 		60E5CB1AF40A634D43FB11C6CDB068E5 /* MTLJSONAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = 38C2624225CA544FC5030B6A2FCD31B9 /* MTLJSONAdapter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		61DBF4581279D1B47D2774494AC0B49D /* MTLReflection.m in Sources */ = {isa = PBXBuildFile; fileRef = CCFD897B2A48B36D29923C9A5DEB21D9 /* MTLReflection.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		624BB905042ACE14AA07562671422DA1 /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 96DF52FE5F4384BE1A78A9D8E5D122C5 /* AFURLResponseSerialization.m */; };
@@ -257,6 +259,8 @@
 		5F0E108D1D042714008342BB /* CDNSString+ExtraMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CDNSString+ExtraMethods.h"; sourceTree = "<group>"; };
 		5F0E108E1D042714008342BB /* CDNSString+ExtraMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CDNSString+ExtraMethods.m"; sourceTree = "<group>"; };
 		5F2D6D78EE5119518E0AD14D23C7A762 /* Mantle.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Mantle.h; path = Mantle/Mantle.h; sourceTree = "<group>"; };
+		5F52B12A1D0DDC650087A76A /* CDUntappdCheckinResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDUntappdCheckinResponse.h; sourceTree = "<group>"; };
+		5F52B12B1D0DDC650087A76A /* CDUntappdCheckinResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDUntappdCheckinResponse.m; sourceTree = "<group>"; };
 		614053B86FCD72CB189A14F334B1E552 /* Overcoat.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = Overcoat.modulemap; sourceTree = "<group>"; };
 		622953641C25ADBEB3AC0B275B8B1D1C /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		62591651C17E243D6D5DDF7C36F06CD3 /* Mantle-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Mantle-prefix.pch"; sourceTree = "<group>"; };
@@ -594,6 +598,15 @@
 			name = Categories;
 			sourceTree = "<group>";
 		};
+		5F52B1291D0DDC3A0087A76A /* Responses */ = {
+			isa = PBXGroup;
+			children = (
+				5F52B12A1D0DDC650087A76A /* CDUntappdCheckinResponse.h */,
+				5F52B12B1D0DDC650087A76A /* CDUntappdCheckinResponse.m */,
+			);
+			name = Responses;
+			sourceTree = "<group>";
+		};
 		75B4E08A5577A672783C915B9DCC7B31 /* Development Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -696,6 +709,7 @@
 				5F0E10841D040B7C008342BB /* CDUntappdAPIClient.h */,
 				5F0E10851D040B7C008342BB /* CDUntappdAPIClient.m */,
 				5F0E105C1D040047008342BB /* Model */,
+				5F52B1291D0DDC3A0087A76A /* Responses */,
 				5F0E108C1D0426A7008342BB /* Categories */,
 			);
 			path = Classes;
@@ -783,6 +797,7 @@
 				5F0E10801D040762008342BB /* CDUntappdVenue.h in Headers */,
 				5F0E108A1D04173B008342BB /* CDUntappdNotification.h in Headers */,
 				5F0E10741D040608008342BB /* CDUntappdPhoto.h in Headers */,
+				5F52B12C1D0DDC650087A76A /* CDUntappdCheckinResponse.h in Headers */,
 				5F0E10781D040671008342BB /* CDUntappdToast.h in Headers */,
 				5F0E106C1D04042B008342BB /* CDUntappdCategory.h in Headers */,
 				5F0E10631D040192008342BB /* CDUntappdBeer.h in Headers */,
@@ -1070,6 +1085,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5F0E10751D040608008342BB /* CDUntappdPhoto.m in Sources */,
+				5F52B12D1D0DDC650087A76A /* CDUntappdCheckinResponse.m in Sources */,
 				5F0E105B1D04001F008342BB /* CDUntappdKit.m in Sources */,
 				39F083356B85CE6A6620E432FD79C4CE /* CDUntappdKit-dummy.m in Sources */,
 				5F0E10871D040B7C008342BB /* CDUntappdAPIClient.m in Sources */,
