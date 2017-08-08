@@ -1,6 +1,0 @@
-framework module CDUntappdKit {
-  umbrella header "CDUntappdKit-umbrella.h"
-
-  export *
-  module * { export * }
-}
