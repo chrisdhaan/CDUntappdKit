@@ -25,6 +25,7 @@
 //  THE SOFTWARE.
 //
 
+import CDUntappdKit
 import UIKit
 
 class ViewController: UIViewController {
@@ -34,6 +35,14 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        let _ = CDUntappdAPIClient(clientId: "BDCFF6FA3CF64AC57585386B4051EB5A716F3FBD",
+                                   clientSecret: "572C8CB091E1AC5C8ED452A40A7EFF68832A08B9",
+                                   redirectUrl: "https://www.untappd.com/")
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

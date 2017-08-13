@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		B26791641F350863008635CD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26791621F350863008635CD /* AppDelegate.swift */; };
 		B26791651F350863008635CD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26791631F350863008635CD /* ViewController.swift */; };
-		B26791691F350887008635CD /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B26791681F350887008635CD /* Info.plist */; };
 		B267916B1F350895008635CD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B267916A1F350895008635CD /* Assets.xcassets */; };
 		B26791701F35089F008635CD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B267916C1F35089F008635CD /* LaunchScreen.storyboard */; };
 		B26791711F35089F008635CD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B267916E1F35089F008635CD /* Main.storyboard */; };
@@ -202,7 +201,6 @@
 			files = (
 				B26791701F35089F008635CD /* LaunchScreen.storyboard in Resources */,
 				B267916B1F350895008635CD /* Assets.xcassets in Resources */,
-				B26791691F350887008635CD /* Info.plist in Resources */,
 				B26791711F35089F008635CD /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

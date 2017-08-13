@@ -1,8 +1,8 @@
 //
-//  String+CDUntappdKit.swift
+//  CDUntappdOAuthRouter.swift
 //  CDUntappdKit
 //
-//  Created by Chris De Haan on 8/4/17.
+//  Created by Chris De Haan on 8/8/17.
 //
 //  Copyright (c) 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
 //
@@ -25,16 +25,37 @@
 //  THE SOFTWARE.
 //
 
-extension String {
+import Alamofire
+
+enum CDUntappdOAuthRouter: URLRequestConvertible {
+
+    case authorize(parameters: Parameters)
     
-    static func fromBool(value: Bool) -> String {
-        return String(format: "%@", value ? "true" : "false")
+    var method: HTTPMethod {
+        switch self {
+        case .authorize(parameters: _):
+            return .get
+        }
     }
     
-    static func path(_ path: String, forUsername username: String?) -> String {
-        if let username = username {
-            return "\(path)/\(username)"
+    var path: String {
+        switch self {
+        case .authorize(parameters: _):
+            return "authorize"
         }
-        return path
+    }
+    
+    func asURLRequest() throws -> URLRequest {
+        let url = try CDUntappdURL.oAuth.asURL()
+        
+        var urlRequest = URLRequest(url: url.appendingPathComponent(path))
+        urlRequest.httpMethod = method.rawValue
+        
+        switch self {
+        case .authorize(let parameters):
+            urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
+        }
+        
+        return urlRequest
     }
 }

@@ -27,7 +27,7 @@ This framework is currently in development. As of release 0.9.0 the code is stab
 
 ## Features
 
-- [ ] Authentication
+- [x] Authentication
 - [ ] API Endpoints
   - [ ] Activity Feed
   - [ ] User Activity Feed

@@ -1,8 +1,8 @@
 //
-//  String+CDUntappdKit.swift
+//  UIApplication+CDUntappdKit.swift
 //  CDUntappdKit
 //
-//  Created by Chris De Haan on 8/4/17.
+//  Created by Chris De Haan on 8/9/17.
 //
 //  Copyright (c) 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
 //
@@ -25,16 +25,24 @@
 //  THE SOFTWARE.
 //
 
-extension String {
+extension UIApplication {
     
-    static func fromBool(value: Bool) -> String {
-        return String(format: "%@", value ? "true" : "false")
-    }
-    
-    static func path(_ path: String, forUsername username: String?) -> String {
-        if let username = username {
-            return "\(path)/\(username)"
+    class func topViewController(controller: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
+        
+        if let navigationController = controller as? UINavigationController {
+            return topViewController(controller: navigationController.visibleViewController)
         }
-        return path
+        
+        if let tabController = controller as? UITabBarController {
+            if let selected = tabController.selectedViewController {
+                return topViewController(controller: selected)
+            }
+        }
+        
+        if let presented = controller?.presentedViewController {
+            return topViewController(controller: presented)
+        }
+        
+        return controller
     }
 }

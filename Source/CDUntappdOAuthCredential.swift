@@ -1,8 +1,8 @@
 //
-//  String+CDUntappdKit.swift
+//  CDUntappdOAuthCredential.swift
 //  CDUntappdKit
 //
-//  Created by Chris De Haan on 8/4/17.
+//  Created by Chris De Haan on 8/8/17.
 //
 //  Copyright (c) 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
 //
@@ -25,16 +25,16 @@
 //  THE SOFTWARE.
 //
 
-extension String {
+import ObjectMapper
+
+class CDUntappdOAuthCredential: Mappable {
+
+    var accessToken: String?
     
-    static func fromBool(value: Bool) -> String {
-        return String(format: "%@", value ? "true" : "false")
+    required init?(map: Map) {
     }
     
-    static func path(_ path: String, forUsername username: String?) -> String {
-        if let username = username {
-            return "\(path)/\(username)"
-        }
-        return path
+    func mapping(map: Map) {
+        accessToken <- map["response.access_token"]
     }
 }

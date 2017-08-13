@@ -1,5 +1,5 @@
 //
-//  String+CDUntappdKit.swift
+//  CDUntappdEnums.swift
 //  CDUntappdKit
 //
 //  Created by Chris De Haan on 8/4/17.
@@ -25,16 +25,4 @@
 //  THE SOFTWARE.
 //
 
-extension String {
-    
-    static func fromBool(value: Bool) -> String {
-        return String(format: "%@", value ? "true" : "false")
-    }
-    
-    static func path(_ path: String, forUsername username: String?) -> String {
-        if let username = username {
-            return "\(path)/\(username)"
-        }
-        return path
-    }
-}
+

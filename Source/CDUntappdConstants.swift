@@ -1,5 +1,5 @@
 //
-//  String+CDUntappdKit.swift
+//  CDUntappdConstants.swift
 //  CDUntappdKit
 //
 //  Created by Chris De Haan on 8/4/17.
@@ -25,16 +25,17 @@
 //  THE SOFTWARE.
 //
 
-extension String {
-    
-    static func fromBool(value: Bool) -> String {
-        return String(format: "%@", value ? "true" : "false")
-    }
-    
-    static func path(_ path: String, forUsername username: String?) -> String {
-        if let username = username {
-            return "\(path)/\(username)"
-        }
-        return path
-    }
+let CDUntappdKitBundleIdentifier = "com.christopherdehaan.CDUntappdKit"
+
+struct CDUntappdURL {
+    static let oAuth = "https://untappd.com/oauth/"
+    static let base  = "https://api.untappd.com/v4/"
+}
+
+struct CDUntappdStoryboardIdentifier {
+    static let oAuth = "CDUntappdOAuth"
+}
+
+struct CDUntappdNavigationControllerIdentifier {
+    static let oAuth = "CDUntappdOAuthNavigationController"
 }

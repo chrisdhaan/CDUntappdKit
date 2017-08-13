@@ -1,5 +1,5 @@
 //
-//  String+CDUntappdKit.swift
+//  CDUntappdContact.swift
 //  CDUntappdKit
 //
 //  Created by Chris De Haan on 8/4/17.
@@ -25,16 +25,20 @@
 //  THE SOFTWARE.
 //
 
-extension String {
+import ObjectMapper
+
+public class CDUntappdContact: Mappable {
+
+    public var foursquare: Int?
+    public var twitter: String?
+    public var facebook: Int?
     
-    static func fromBool(value: Bool) -> String {
-        return String(format: "%@", value ? "true" : "false")
+    public required init?(map: Map) {
     }
     
-    static func path(_ path: String, forUsername username: String?) -> String {
-        if let username = username {
-            return "\(path)/\(username)"
-        }
-        return path
+    public func mapping(map: Map) {
+        foursquare  <- map["foursquare"]
+        twitter     <- map["twitter"]
+        facebook    <- map["facebook"]
     }
 }

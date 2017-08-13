@@ -1,5 +1,5 @@
 //
-//  String+CDUntappdKit.swift
+//  CDUntappdStats.swift
 //  CDUntappdKit
 //
 //  Created by Chris De Haan on 8/4/17.
@@ -25,16 +25,28 @@
 //  THE SOFTWARE.
 //
 
-extension String {
+import ObjectMapper
+
+public class CDUntappdStats: Mappable {
+
+    public var totalBadges: Int?
+    public var totalFriends: Int?
+    public var totalCheckins: Int?
+    public var totalBeers: Int?
+    public var totalCreatedBeers: Int?
+    public var totalFollowings: Int?
+    public var totalPhotos: Int?
     
-    static func fromBool(value: Bool) -> String {
-        return String(format: "%@", value ? "true" : "false")
+    public required init?(map: Map) {
     }
     
-    static func path(_ path: String, forUsername username: String?) -> String {
-        if let username = username {
-            return "\(path)/\(username)"
-        }
-        return path
+    public func mapping(map: Map) {
+        totalBadges         <- map["total_badges"]
+        totalFriends        <- map["total_friends"]
+        totalCheckins       <- map["total_checkins"]
+        totalBeers          <- map["total_beers"]
+        totalCreatedBeers   <- map["total_created_beers"]
+        totalFollowings     <- map["total_followings"]
+        totalPhotos         <- map["total_photos"]
     }
 }

@@ -1,5 +1,5 @@
 //
-//  String+CDUntappdKit.swift
+//  CDUntappdSettings.swift
 //  CDUntappdKit
 //
 //  Created by Chris De Haan on 8/4/17.
@@ -25,16 +25,28 @@
 //  THE SOFTWARE.
 //
 
-extension String {
+import ObjectMapper
+
+public class CDUntappdSettings: Mappable {
+
+    public var badgesToFacebook: Bool?
+    public var badgesToTwitter: Bool?
+    public var checkinToFacebook: Bool?
+    public var checkinToTwitter: Bool?
+    public var checkinToFoursquare: Bool?
+    public var defaultToCheckin: Bool?
+    public var emailAddress: String?
     
-    static func fromBool(value: Bool) -> String {
-        return String(format: "%@", value ? "true" : "false")
+    public required init?(map: Map) {
     }
     
-    static func path(_ path: String, forUsername username: String?) -> String {
-        if let username = username {
-            return "\(path)/\(username)"
-        }
-        return path
+    public func mapping(map: Map) {
+        badgesToFacebook    <- map["badge.badges_to_facebook"]
+        badgesToTwitter     <- map["badge.badges_to_twitter"]
+        checkinToFacebook   <- map["checkin.checkin_to_facebook"]
+        checkinToTwitter    <- map["checkin.checkin_to_twitter"]
+        checkinToFoursquare <- map["checkin.checkin_to_foursquare"]
+        defaultToCheckin    <- map["navigation.default_to_checkin"]
+        emailAddress        <- map["email_address"]
     }
 }
