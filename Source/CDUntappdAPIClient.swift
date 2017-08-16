@@ -30,10 +30,7 @@ import AlamofireObjectMapper
 
 public class CDUntappdAPIClient: NSObject {
     
-    private let clientId: String!
-    private let clientSecret: String!
-    private let redirectUrl: String!
-    private var oAuthViewController: CDUntappdOAuthViewController? = nil
+    private let oAuthClient: CDUntappdOAuthClient!
     
     // MARK: - Initializers
     
@@ -53,53 +50,58 @@ public class CDUntappdAPIClient: NSObject {
         assert((clientId != nil && clientId != "") &&
             (clientSecret != nil && clientSecret != "") &&
             (redirectUrl != nil && redirectUrl != ""), "A clientId, clientSecret, and redirectUrl are required to query the Untappd Developers API oauth endpoint.")
-        self.clientId = clientId
-        self.clientSecret = clientSecret
-        self.redirectUrl = redirectUrl
+        self.oAuthClient = CDUntappdOAuthClient(clientId: clientId,
+                                                clientSecret: clientSecret,
+                                                redirectUrl: redirectUrl)
         super.init()
-        self.authenticate()
     }
     
     // MARK: - Authentication Methods
     
     ///
-    /// Attempts to authenticate the Untappd application credentials with the Untappd API.
+    /// Attempts to authenticate the Untappd application credentials with the Untappd API if the Untappd application has not already authenticated.
     ///
     /// - returns: Void
     ///
     public func authenticate() {
         if let tvc = UIApplication.topViewController(),
-            tvc.parent as? UINavigationController == nil {
+            tvc.parent as? UINavigationController == nil,
+            self.isAuthenticated() == false {
+            
             let oAuthStoryboard = UIStoryboard(name: CDUntappdStoryboardIdentifier.oAuth,
                                                bundle: Bundle(identifier: CDUntappdKitBundleIdentifier))
             let oAuthNavigationController = oAuthStoryboard.instantiateViewController(withIdentifier: CDUntappdNavigationControllerIdentifier.oAuth) as! UINavigationController
             if let oAuthViewController = oAuthNavigationController.topViewController as? CDUntappdOAuthViewController {
-                oAuthViewController.clientId = self.clientId
-                oAuthViewController.clientSecret = self.clientSecret
-                oAuthViewController.redirectUrl = self.redirectUrl
-                oAuthViewController.onAuthorization = { [weak self] (successful, error) in
+                oAuthViewController.oAuthClient = self.oAuthClient
+                oAuthViewController.onAuthorization = { (successful, error) in
                     
                     if let error = error {
                         print("authorize() failure: ", error.localizedDescription)
                     }
-                    self?.oAuthViewController?.dismiss(animated: true, completion: nil)
+                    UIApplication.topViewController()?.dismiss(animated: true, completion: nil)
                 }
-                self.oAuthViewController = oAuthViewController
             }
             tvc.present(oAuthNavigationController, animated: true, completion: nil)
         }
     }
     
     ///
-    /// Determines whether or not the Untappd application has successfully authorized with the Untappd API.
+    /// Determines whether or not the Untappd application has successfully authenticated with the Untappd API.
     ///
     /// - returns: Bool
     ///
-    public func isAuthorized() -> Bool {
-        if let _ = self.oAuthViewController?.oAuthCredential?.accessToken {
-            return true
-        } else {
-            return false
-        }
+    public func isAuthenticated() -> Bool {
+        return self.oAuthClient.isAuthorized()
+    }
+    
+    ///
+    /// Removes the Untappd API authentication credentials.
+    ///
+    /// - returns: Void
+    ///
+    public func unauthenticate() {
+        let userDefaults = UserDefaults.standard
+        userDefaults.removeObject(forKey: CDUntappdDefaults.accessToken)
+        userDefaults.synchronize()
     }
 }

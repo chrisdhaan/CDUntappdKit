@@ -30,13 +30,8 @@ import AlamofireObjectMapper
 import WebKit
 
 class CDUntappdOAuthViewController: UIViewController {
-
-    fileprivate var code: String?
     
-    var clientId: String!
-    var clientSecret: String!
-    var redirectUrl: String!
-    var oAuthCredential: CDUntappdOAuthCredential? = nil
+    var oAuthClient: CDUntappdOAuthClient!
     var onAuthorization: ((Bool, Error?) -> ())? = nil
     
     private var webView: WKWebView!
@@ -51,35 +46,11 @@ class CDUntappdOAuthViewController: UIViewController {
         self.view.addSubview(webView)
         self.webView = webView
         
-        let urlString = CDUntappdURL.oAuth + "authenticate/?client_id=" + self.clientId + "&response_type=code&redirect_url=" + self.redirectUrl
+        let urlString = CDUntappdURL.oAuth + "authenticate/?client_id=" + self.oAuthClient.clientId + "&response_type=code&redirect_url=" + self.oAuthClient.redirectUrl
         let url = URL(string: urlString)
         if let url = url {
             let urlRequest = URLRequest(url: url)
             self.webView.load(urlRequest)
-        }
-    }
-    
-    // MARK: - Authorization Methods
-    
-    fileprivate func authorize() {
-        if let code = self.code {
-            let params: Parameters = ["client_id": self.clientId,
-                                      "client_secret": self.clientSecret,
-                                      "response_type": "code",
-                                      "redirect_url": self.redirectUrl,
-                                      "code": code]
-            Alamofire.request(CDUntappdOAuthRouter.authorize(parameters: params)).responseObject { (response: DataResponse<CDUntappdOAuthCredential>) in
-                switch response.result {
-                case .success(let oAuthCredential):
-                    self.oAuthCredential = oAuthCredential
-                    self.onAuthorization?(true, nil)
-                case .failure(let error):
-                    print("authorize() failure: ", error.localizedDescription)
-                    self.onAuthorization?(false, error)
-                }
-            }
-        } else {
-            self.onAuthorization?(false, nil)
         }
     }
 }
@@ -89,15 +60,29 @@ class CDUntappdOAuthViewController: UIViewController {
 extension CDUntappdOAuthViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         
-        let scheme = self.redirectUrl + "?code="
+        let scheme = self.oAuthClient.redirectUrl + "?code="
         if let url = navigationAction.request.url?.absoluteString,
             url.contains(scheme) {
+            
             decisionHandler(.cancel)
+            var authorizationCode = ""
             if let range = url.range(of: "?code=") {
                 let code = url.substring(from: range.upperBound).trimmingCharacters(in: .whitespacesAndNewlines)
-                self.code = code
+                authorizationCode = code
             }
-            self.authorize()
+            self.oAuthClient.authorize(withCode: authorizationCode, completion: { (successful, error) in
+                
+                if let error = error {
+                    self.onAuthorization?(false, error)
+                }
+                
+                if let successful = successful,
+                    successful == true {
+                    self.onAuthorization?(true, nil)
+                } else {
+                    self.onAuthorization?(false, nil)
+                }
+            })
         }
         
         decisionHandler(.allow)

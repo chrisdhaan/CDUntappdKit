@@ -13,6 +13,7 @@
 		B26791701F35089F008635CD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B267916C1F35089F008635CD /* LaunchScreen.storyboard */; };
 		B26791711F35089F008635CD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B267916E1F35089F008635CD /* Main.storyboard */; };
 		B26791791F350930008635CD /* CDUntappdKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B26791771F350922008635CD /* CDUntappdKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B2D6C3E01F43D5290067279A /* CDUntappdKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D6C3DF1F43D5290067279A /* CDUntappdKitManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		B267916D1F35089F008635CD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Resources/Base.lproj/LaunchScreen.storyboard; sourceTree = SOURCE_ROOT; };
 		B267916F1F35089F008635CD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Resources/Base.lproj/Main.storyboard; sourceTree = SOURCE_ROOT; };
 		B26791721F350922008635CD /* CDUntappdKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CDUntappdKit.xcodeproj; path = ../CDUntappdKit.xcodeproj; sourceTree = "<group>"; };
+		B2D6C3DF1F43D5290067279A /* CDUntappdKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDUntappdKitManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				B26791621F350863008635CD /* AppDelegate.swift */,
+				B2D6C3DF1F43D5290067279A /* CDUntappdKitManager.swift */,
 				B26791631F350863008635CD /* ViewController.swift */,
 				B26791661F35086C008635CD /* Resources */,
 				B26791671F350874008635CD /* Supporting Files */,
@@ -212,6 +215,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2D6C3E01F43D5290067279A /* CDUntappdKitManager.swift in Sources */,
 				B26791651F350863008635CD /* ViewController.swift in Sources */,
 				B26791641F350863008635CD /* AppDelegate.swift in Sources */,
 			);

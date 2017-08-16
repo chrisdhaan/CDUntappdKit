@@ -1,8 +1,8 @@
 //
-//  ViewController.swift
+//  CDUntappdKitManager.swift
 //  iOS Example
 //
-//  Created by Chris De Haan on 8/4/17.
+//  Created by Chris De Haan on 8/15/17.
 //
 //  Copyright (c) 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
 //
@@ -25,26 +25,19 @@
 //  THE SOFTWARE.
 //
 
+import CDUntappdKit
 import UIKit
 
-class ViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        
-    }
+final class CDUntappdKitManager: NSObject {
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    static let shared = CDUntappdKitManager()
+    
+    var apiClient: CDUntappdAPIClient!
+    
+    func configure() {
+        // How to authorize using your clientId and clientSecret
+        self.apiClient = CDUntappdAPIClient(clientId: "YOUR_CLIENT_ID",
+                                            clientSecret: "YOUR_CLIENT_SECRET",
+                                            redirectUrl: "YOUR_REDIRECT_URL")
     }
-
-
 }
-

@@ -32,6 +32,10 @@ struct CDUntappdURL {
     static let base  = "https://api.untappd.com/v4/"
 }
 
+struct CDUntappdDefaults {
+    static let accessToken = "CDUntappdAccessToken"
+}
+
 struct CDUntappdStoryboardIdentifier {
     static let oAuth = "CDUntappdOAuth"
 }
