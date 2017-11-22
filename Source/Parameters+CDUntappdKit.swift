@@ -1,8 +1,8 @@
 //
-//  CDUntappdKit.h
+//  Parameters+CDUntappdKit.swift
 //  CDUntappdKit
 //
-//  Created by Christopher de Haan on 8/4/17.
+//  Created by Christopher de Haan on 11/21/17.
 //
 //  Copyright (c) 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
 //
@@ -25,9 +25,15 @@
 //  THE SOFTWARE.
 //
 
-#import <UIKit/UIKit.h>
+import Alamofire
 
-//! Project version number for CDUntappdKit.
-FOUNDATION_EXPORT double CDUntappdKitVersionNumber;
-//! Project version string for CDUntappdKit.
-FOUNDATION_EXPORT const unsigned char CDUntappdKitVersionString[];
+extension Dictionary where Key: ExpressibleByStringLiteral, Value: Any {
+    
+    static func userInfoParameters(isCompact compact: Bool) -> Parameters {
+        var params: Parameters = [:]
+        
+        params["compact"] = compact ? "true" : false
+        
+        return params
+    }
+}

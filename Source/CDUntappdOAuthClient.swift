@@ -2,7 +2,7 @@
 //  CDUntappdOAuthClient.swift
 //  CDUntappdKit
 //
-//  Created by Chris De Haan on 8/15/17.
+//  Created by Christopher de Haan on 8/15/17.
 //
 //  Copyright (c) 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
 //
@@ -90,5 +90,18 @@ class CDUntappdOAuthClient: NSObject {
         } else {
             return nil
         }
+    }
+    
+    func addTokens(toParameters parameters: Parameters) -> Parameters {
+        var params = parameters
+        
+        if let accessToken = self.accessToken() {
+            params["access_token"] = accessToken
+        } else {
+            params["client_id"] = self.clientId
+            params["client_secret"] = self.clientSecret
+        }
+        
+        return params
     }
 }

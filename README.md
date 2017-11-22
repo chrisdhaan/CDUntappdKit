@@ -1,10 +1,40 @@
-# CDUntappdKit
+<p align="center">
+    <a href="https://github.com/chrisdhaan/CDUntappdKit">
+        <img src="https://raw.githubusercontent.com/chrisdhaan/CDUntappdKit/master/Documentation/cduntappdkit.png" alt="CDUntappdKit" width="850" />
+    </a>
+</p>
 
-[![CI Status](http://img.shields.io/travis/chrisdhaan/CDUntappdKit.svg?style=flat)](https://travis-ci.org/chrisdhaan/CDUntappdKit)
-[![Version](https://img.shields.io/cocoapods/v/CDUntappdKit.svg?style=flat)](http://cocoapods.org/pods/CDUntappdKit)
-[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![License](https://img.shields.io/cocoapods/l/CDUntappdKit.svg?style=flat)](http://cocoapods.org/pods/CDUntappdKit)
-[![Platform](https://img.shields.io/cocoapods/p/CDUntappdKit.svg?style=flat)](http://cocoapods.org/pods/CDUntappdKit)
+<p align="center">
+    <a href="https://github.com/chrisdhaan/CDUntappdKit">
+        <img src="https://raw.githubusercontent.com/chrisdhaan/CDUntappdKit/master/Documentation/github.png" alt="Star CDUntappdKit On Github" />
+    </a>
+    <a href="http://stackoverflow.com/questions/tagged/cduntappdkit">
+        <img src="https://raw.githubusercontent.com/chrisdhaan/CDUntappdKit/master/Documentation/stackoverflow.png" alt="Stack Overflow" />
+    </a>
+</p>
+
+<p align="center">
+    <a href="https://travis-ci.org/chrisdhaan/CDUntappdKit">
+        <img src="http://img.shields.io/travis/chrisdhaan/CDUntappdKit.svg?style=flat" alt="CI Status">
+    </a>
+    <a href="https://github.com/chrisdhaan/CDUntappdKit/releases">
+        <img src="https://img.shields.io/github/release/chrisdhaan/CDUntappdKit.svg" alt="GitHub Release">
+    </a>
+    <a href="http://cocoapods.org/pods/CDUntappdKit">
+        <img src="https://img.shields.io/cocoapods/v/CDUntappdKit.svg?style=flat" alt="Version">
+    </a>
+    <a href="https://github.com/Carthage/Carthage">
+        <img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat" alt="Carthage compatible">
+    </a>
+    <a href="http://cocoapods.org/pods/CDUntappdKit">
+        <img src="https://img.shields.io/cocoapods/p/CDUntappdKit.svg?style=flat" alt="Platform">
+    </a>
+    <a href="http://cocoapods.org/pods/CDUntappdKit">
+        <img src="https://img.shields.io/cocoapods/l/CDUntappdKit.svg?style=flat" alt="License">
+    </a>
+</p>
+
+<br>
 
 This Swift wrapper covers all possible network endpoints and responses for the Untappd Developers API.
 
@@ -92,9 +122,9 @@ To integrate CDUntappdKit into your Xcode project using CocoaPods, simply add th
 
 ```ruby
 # use this line to install CDUntappdKit while in development
-pod "CDUntappdKit", :git => "https://github.com/chrisdhaan/CDUntappdKit"
+pod 'CDUntappdKit', :git => 'https://github.com/chrisdhaan/CDUntappdKit'
 # this line will eventually be used upon the 1.0.0 release of CDUntappdKit and can be disregarded for now
-pod "CDUntappdKit" "~> 1.0.0"
+pod 'CDUntappdKit', '~> 1.0.0'
 ```
 
 Afterwards, run the following command:
@@ -120,7 +150,7 @@ To integrate CDUntappdKit into your Xcode project using Carthage, simply add the
 # use this line to install CDUntappdKit while in development
 github "chrisdhaan/CDUntappdKit"
 # this line will eventually be used upon the 1.0.0 release of CDUntappdKit and can be disregarded for now
-github "chrisdhaan/CDUntappdKit" ~> 1.0.0
+github "chrisdhaan/CDUntappdKit" == 1.0.0
 ```
 
 Afterwards, run the following command:
@@ -143,7 +173,7 @@ To integrate CDUntappdKit into your Xcode project using The Swift Package Manage
 
 ```swift
 dependencies: [
-    .Package(url: "https://github.com/chrisdhaan/CDUntappdKit.git", majorVersion: 1)
+    .Package(url: "https://github.com/chrisdhaan/CDUntappdKit.git", "1.0.0")
 ]
 ```
 

@@ -2,7 +2,7 @@
 //  CDUntappdConstants.swift
 //  CDUntappdKit
 //
-//  Created by Chris De Haan on 8/4/17.
+//  Created by Christopher de Haan on 8/4/17.
 //
 //  Copyright (c) 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
 //

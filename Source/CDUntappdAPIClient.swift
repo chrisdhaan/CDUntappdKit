@@ -2,7 +2,7 @@
 //  CDUntappdAPIClient.swift
 //  CDUntappdKit
 //
-//  Created by Chris De Haan on 8/4/17.
+//  Created by Christopher de Haan on 8/4/17.
 //
 //  Copyright (c) 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
 //
@@ -103,5 +103,31 @@ public class CDUntappdAPIClient: NSObject {
         let userDefaults = UserDefaults.standard
         userDefaults.removeObject(forKey: CDUntappdDefaults.accessToken)
         userDefaults.synchronize()
+    }
+    
+    // MARK: - Untappd API Methods
+    
+    public func userInfo(forUsername username: String?,
+                         compact: Bool,
+                         completion: @escaping (CDUntappdUserInfoResponse?) -> Void) {
+        // Assert that a user must be authenticated to not include a username
+        
+        var params = Parameters.userInfoParameters(isCompact: compact)
+        params = self.oAuthClient.addTokens(toParameters: params)
+        
+        Alamofire.request(CDUntappdRouter.userInfo(username: username, parameters: params)).responseObject { (response: DataResponse<CDUntappdUserInfoResponse>) in
+            
+            switch response.result {
+            case .success(let response):
+                if let metadata = response.metadata,
+                    metadata.hasError() {
+                    print("userInfo(forUsername) error: ", metadata.description())
+                }
+                completion(response)
+            case .failure(let error):
+                print("userInfo(forUsername) failure: ", error.localizedDescription)
+                completion(nil)
+            }
+        }
     }
 }

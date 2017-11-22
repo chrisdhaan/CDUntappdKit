@@ -1,8 +1,8 @@
 //
-//  CDUntappdKit.h
+//  CDUntappdMetadata.swift
 //  CDUntappdKit
 //
-//  Created by Christopher de Haan on 8/4/17.
+//  Created by Christopher de Haan on 11/21/17.
 //
 //  Copyright (c) 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
 //
@@ -25,9 +25,45 @@
 //  THE SOFTWARE.
 //
 
-#import <UIKit/UIKit.h>
+import ObjectMapper
 
-//! Project version number for CDUntappdKit.
-FOUNDATION_EXPORT double CDUntappdKitVersionNumber;
-//! Project version string for CDUntappdKit.
-FOUNDATION_EXPORT const unsigned char CDUntappdKitVersionString[];
+public class CDUntappdMetadata: Mappable {
+    
+    public var code: Int?
+    public var details: String?
+    public var type: String?
+    
+    public required init?(map: Map) {
+    }
+    
+    public func mapping(map: Map) {
+        code    <- map["code"]
+        details <- map["error_detail"]
+        type    <- map["error_type"]
+    }
+    
+    public func description() -> String {
+        var description = ""
+        
+        if let code = self.code {
+            description += "Code \(code): "
+        }
+        if let type = self.type {
+            description += "\(type) - "
+        }
+        if let details = self.details {
+            description += "\(details)"
+        }
+        
+        return description
+    }
+    
+    public func hasError() -> Bool {
+        if let code = self.code,
+            code != 200 {
+            return true
+        } else {
+            return false
+        }
+    }
+}

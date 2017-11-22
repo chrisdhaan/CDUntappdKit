@@ -2,7 +2,7 @@
 //  CDUntappdUser.swift
 //  CDUntappdKit
 //
-//  Created by Chris De Haan on 8/4/17.
+//  Created by Christopher de Haan on 8/4/17.
 //
 //  Copyright (c) 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
 //
@@ -38,16 +38,23 @@ public class CDUntappdUser: Mappable {
     public var userAvatatHd: URL?
     public var userCoverPhoto: URL?
     public var userCoverPhotoOffset: Int?
-    public var isPrivate: Bool?
     public var location: String?
-    public var url: URL?
     public var bio: String?
+    public var url: URL?
+    public var untappdUrl: URL?
+    public var isPrivate: Bool?
+    public var isModerator: Bool?
     public var isSupporter: Bool?
     public var relationship: String?
-    public var untappdUrl: URL?
     public var accountType: String?
+    public var blockStatus: String?
     public var stats: CDUntappdStats?
+    // public var checkins: [CDUntappdCheckin]?
+    // public var recentBrews: [CDUntappdRecentBrew]?
+    // public var media: [CDUntappdMedia]?
+    public var contact: CDUntappdContact?
     public var dateJoined: String?
+    public var settings: CDUntappdSettings?
     
     public required init?(map: Map) {
     }
@@ -58,19 +65,26 @@ public class CDUntappdUser: Mappable {
         username                <- map["user_name"]
         firstName               <- map["first_name"]
         lastName                <- map["last_name"]
-        userAvatar              <- map["user_avatar"]
-        userAvatatHd            <- map["user_avatar"]
-        userCoverPhoto          <- map["user_cover_photo"]
+        userAvatar              <- (map["user_avatar"], URLTransform())
+        userAvatatHd            <- (map["user_avatar"], URLTransform())
+        userCoverPhoto          <- (map["user_cover_photo"], URLTransform())
         userCoverPhotoOffset    <- map["user_cover_photo_offset"]
-        isPrivate               <- map["is_private"]
         location                <- map["location"]
-        url                     <- map["url"]
         bio                     <- map["bio"]
+        url                     <- (map["url"], URLTransform())
+        untappdUrl              <- (map["untappd_url"], URLTransform())
+        isPrivate               <- map["is_private"]
+        isModerator             <- map["is_moderator"]
         isSupporter             <- map["is_supporter"]
         relationship            <- map["relationship"]
-        untappdUrl              <- map["untappd_url"]
         accountType             <- map["account_type"]
+        blockStatus             <- map["block_status"]
         stats                   <- map["stats"]
+//        checkins                <- map["checkins"]
+//        recentBrews             <- map["recent_brews"]
+//        media                   <- map["media"]
+        contact                 <- map["contact"]
         dateJoined              <- map["date_joined"]
+        settings                <- map["settings"]
     }
 }
