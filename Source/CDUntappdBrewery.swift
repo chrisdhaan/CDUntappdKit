@@ -1,8 +1,8 @@
 //
-//  CDUntappdStats.swift
+//  CDUntappdBrewery.swift
 //  CDUntappdKit
 //
-//  Created by Christopher de Haan on 8/4/17.
+//  Created by Christopher de Haan on 11/27/17.
 //
 //  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
 //
@@ -27,26 +27,40 @@
 
 import ObjectMapper
 
-public class CDUntappdStats: Mappable {
+public class CDUntappdBrewery: Mappable {
 
-    public var totalBadges: Int?
-    public var totalFriends: Int?
-    public var totalCheckins: Int?
-    public var totalBeers: Int?
-    public var totalCreatedBeers: Int?
-    public var totalFollowings: Int?
-    public var totalPhotos: Int?
+    public var id: Int?
+    public var name: String?
+    public var isActive: Bool?
+    public var label: URL?
+    public var slug: String?
+    public var latitude: Double?
+    public var longitude: Double?
+    public var city: String?
+    public var state: String?
+    public var country: String?
+    public var facebookUrl: URL?
+    public var twitterHandle: String?
+    public var instagramHandle: String?
+    public var website: URL?
     
     public required init?(map: Map) {
     }
     
     public func mapping(map: Map) {
-        totalBadges         <- map["total_badges"]
-        totalFriends        <- map["total_friends"]
-        totalCheckins       <- map["total_checkins"]
-        totalBeers          <- map["total_beers"]
-        totalCreatedBeers   <- map["total_created_beers"]
-        totalFollowings     <- map["total_followings"]
-        totalPhotos         <- map["total_photos"]
+        id              <- map["brewery_id"]
+        name            <- map["brewery_name"]
+        isActive        <- map["brewery_active"]
+        label           <- (map["brewery_label"], URLTransform())
+        slug            <- map["brewery_slug"]
+        latitude        <- map["location.lat"]
+        longitude       <- map["location.lng"]
+        city            <- map["location.brewery_city"]
+        state           <- map["location.brewery_state"]
+        country         <- map["country_name"]
+        facebookUrl     <- (map["contact.facebook"], URLTransform())
+        twitterHandle   <- map["contact.twitter"]
+        instagramHandle <- map["contact.instagram"]
+        website         <- (map["contact.url"], URLTransform())
     }
 }

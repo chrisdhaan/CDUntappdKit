@@ -1,10 +1,8 @@
 //
-//  UIApplication+CDUntappdKit.swift
+//  CDUntappdBadge.swift
 //  CDUntappdKit
 //
-//  Created by Christopher de Haan on 8/9/17.
-//
-//  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
+//  Created by Christopher de Haan on 11/27/17.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,24 +23,30 @@
 //  THE SOFTWARE.
 //
 
-extension UIApplication {
+import ObjectMapper
+
+public class CDUntappdBadge: Mappable {
+
+    public var id: Int?
+    public var name: String?
+    public var description: String?
+    public var smallImage: URL?
+    public var mediumImage: URL?
+    public var largeImage: URL?
+    public var userBadgeId: Int?
+    public var createdAt: String?
     
-    class func topViewController(controller: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
-        
-        if let navigationController = controller as? UINavigationController {
-            return topViewController(controller: navigationController.visibleViewController)
-        }
-        
-        if let tabController = controller as? UITabBarController {
-            if let selected = tabController.selectedViewController {
-                return topViewController(controller: selected)
-            }
-        }
-        
-        if let presented = controller?.presentedViewController {
-            return topViewController(controller: presented)
-        }
-        
-        return controller
+    public required init?(map: Map) {
+    }
+    
+    public func mapping(map: Map) {
+        id          <- map["badge_id"]
+        name        <- map["badge_name"]
+        description <- map["badge_description"]
+        smallImage  <- (map["badge_image.sm"], URLTransform())
+        mediumImage <- (map["badge_image.md"], URLTransform())
+        largeImage  <- (map["badge_image.lg"], URLTransform())
+        userBadgeId <- map["user_badge_id"]
+        createdAt   <- map["created_at"]
     }
 }

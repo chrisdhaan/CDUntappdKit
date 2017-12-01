@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 11/21/17.
 //
-//  Copyright (c) 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -33,6 +33,38 @@ extension Dictionary where Key: ExpressibleByStringLiteral, Value: Any {
         var params: Parameters = [:]
         
         params["compact"] = compact ? "true" : false
+        
+        return params
+    }
+    
+    static func userWishListParameters(withOffset offset: Int?,
+                                       limit: Int?,
+                                       sort: CDUntappdUserWishListSortType?) -> Parameters {
+        var params: Parameters = [:]
+        
+        if let offset = offset {
+            params["offset"] = offset
+        }
+        if let limit = limit {
+            params["limit"] = limit
+        }
+        if let sort = sort {
+            params["sort"] = sort
+        }
+        
+        return params
+    }
+    
+    static func userFriendsParameters(withOffset offset: Int?,
+                                      limit: Int?) -> Parameters {
+        var params: Parameters = [:]
+        
+        if let offset = offset {
+            params["offset"] = offset
+        }
+        if let limit = limit {
+            params["limit"] = limit
+        }
         
         return params
     }

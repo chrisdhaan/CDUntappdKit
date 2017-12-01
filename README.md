@@ -44,6 +44,11 @@ For a demonstration of the capabilities of CDUntappdKit; run the iOS Example pro
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage](#usage)
+    - [Initialization](#initialization)
+    - [User Info Endpoint](#user-info-endpoint)
+    - [User Wish List Endpoint](#user-wish-list-endpoint)
+    - [User Friends Endpoint](#user-friends-endpoint)
+    - [Brand Assets](#brand-assets)
 - [Resources](#resources)
 - [License](#license)
 
@@ -66,9 +71,9 @@ This framework is currently in development. As of release 0.9.0 the code is stab
   - [ ] Beer Activity Feed
   - [ ] Brewery Activity Feed
   - [ ] Notifications
-  - [ ] User Info
-  - [ ] User Wish List
-  - [ ] User Friends
+  - [x] User Info
+  - [x] User Wish List
+  - [x] User Friends
   - [ ] User Badges
   - [ ] User Beers
   - [ ] Brewery Info
@@ -88,6 +93,12 @@ This framework is currently in development. As of release 0.9.0 the code is stab
   - [ ] Add to Wish List
   - [ ] Remove from Wish List
   - [ ] Foursquare Lookup
+- [ ] Brand Assets
+- [ ] Platform Support
+  - [x] iOS
+  - [ ] macOS
+  - [ ] tvOS
+  - [ ] watchOS
 - [ ] Documentation
 
 ---
@@ -206,6 +217,102 @@ Next, select your application project in the **Project Navigator** to navigate t
 ---
 
 ## Usage
+
+### Initialization
+
+```swift
+let untappdAPIClient = CDUntappdAPIClient(clientId: "YOUR_CLIENT_ID",
+                                          clientSecret: "YOUR_CLIENT_SECRET",
+                                          redirectUrl: "YOUR_REDIRECT_URL")
+```
+
+Once you've created a CDUntappdAPIClient object you can use it to query the Untappd API using any of the following methods.
+
+- Parameters with `// Optional` can take nil as a value.
+- Parameters with `// Required` will throw an exception when passing nil as a value.
+
+### [User Info Endpoint](https://untappd.com/api/docs#userinfo)
+
+```swift
+public func fetchUserInfo(forUsername username: String?, // Optional
+                          compact: Bool,                 // Required
+                          completion: @escaping (CDUntappdUserInfoResponse?) -> Void)
+```
+
+The following lines of code show an example query to the user info endpoint.
+
+```swift
+// Cancel any API requests previously made
+untappdAPIClient.cancelAllPendingAPIRequests()
+// Query Untappd API for user info results
+untappdAPIClient.fetchUserInfo(forUsername: "DehaanSolo",
+                               compact: false) { (response) in
+                               
+  if let response = response,
+      let user = response.user {
+      print(user)
+  }
+}
+```
+
+### [User Wish List Endpoint](https://untappd.com/api/docs#userwishlist)
+
+```swift
+public func fetchUserWishList(forUsername username: String?,
+                              offset: Int?,
+                              limit: Int?,
+                              sort: CDUntappdUserWishListSortType?,
+                              completion: @escaping (CDUntappdUserWishListResponse?) -> Void)
+```
+
+The user wish list endpoint has a `sort` parameter which allows for query results to be filtered based off six types of criteria. The following lines of code show which sort types can be passed into the `sort` parameter.
+
+```swift
+CDUntappdUserWishListSortType.checkin
+CDUntappdUserWishListSortType.date
+CDUntappdUserWishListSortType.highestABV
+CDUntappdUserWishListSortType.highestRated
+CDUntappdUserWishListSortType.lowestABV
+CDUntappdUserWishListSortType.lowestRated
+```
+
+The following lines of code show an example query to the user wish list endpoint.
+
+```swift
+untappdAPIClient.fetchUserWishList(forUsername: "DehaanSolo",
+                                   offset: 0,
+                                   limit: 10,
+                                   sort: .highestABV) { (response) in
+                                   
+  if let response = response,
+      let wishList = response.wishList {
+      print(wishList)
+  }
+}
+```
+
+### [User Friends Endpoint](https://untappd.com/api/docs#userfriends)
+
+```swift
+public func fetchUserFriends(forUsername username: String?,
+                             offset: Int?,
+                             limit: Int?,
+                             completion: @escaping (CDUntappdUserFriendsResponse?) -> Void)
+```
+
+The following lines of code show an example query to the user friends endpoint.
+
+```swift
+untappdAPIClient.fetchUserFriends(forUsername: "DehaanSolo",
+                                  offset: 0,
+                                  limit: 10) { (response) in
+                                  
+  if let response = response,
+      let friends = response.friends {
+      print(friends)
+  }
+}
+```
 
 ---
 

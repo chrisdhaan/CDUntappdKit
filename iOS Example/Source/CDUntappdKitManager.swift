@@ -2,9 +2,9 @@
 //  CDUntappdKitManager.swift
 //  iOS Example
 //
-//  Created by Chris De Haan on 8/15/17.
+//  Created by Christopher de Haan on 8/15/17.
 //
-//  Copyright (c) 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -36,8 +36,8 @@ final class CDUntappdKitManager: NSObject {
     
     func configure() {
         // How to authorize using your clientId and clientSecret
-        self.apiClient = CDUntappdAPIClient(clientId: "YOUR_CLIENT_ID",
-                                            clientSecret: "YOUR_CLIENT_SECRET",
-                                            redirectUrl: "YOUR_REDIRECT_URL")
+        self.apiClient = CDUntappdAPIClient(clientId: "BDCFF6FA3CF64AC57585386B4051EB5A716F3FBD",
+                                            clientSecret: "572C8CB091E1AC5C8ED452A40A7EFF68832A08B9",
+                                            redirectUrl: "https://www.untappd.com/")
     }
 }

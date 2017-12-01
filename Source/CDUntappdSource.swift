@@ -1,8 +1,8 @@
 //
-//  UIApplication+CDUntappdKit.swift
+//  CDUntappdSource.swift
 //  CDUntappdKit
 //
-//  Created by Christopher de Haan on 8/9/17.
+//  Created by Christopher de Haan on 11/27/17.
 //
 //  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
 //
@@ -25,24 +25,18 @@
 //  THE SOFTWARE.
 //
 
-extension UIApplication {
+import ObjectMapper
+
+public class CDUntappdSource: Mappable {
+
+    public var name: String?
+    public var website: URL?
     
-    class func topViewController(controller: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
-        
-        if let navigationController = controller as? UINavigationController {
-            return topViewController(controller: navigationController.visibleViewController)
-        }
-        
-        if let tabController = controller as? UITabBarController {
-            if let selected = tabController.selectedViewController {
-                return topViewController(controller: selected)
-            }
-        }
-        
-        if let presented = controller?.presentedViewController {
-            return topViewController(controller: presented)
-        }
-        
-        return controller
+    public required init?(map: Map) {
+    }
+    
+    public func mapping(map: Map) {
+        name    <- map["app_name"]
+        website <- (map["app_website"], URLTransform())
     }
 }

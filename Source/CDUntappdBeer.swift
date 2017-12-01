@@ -1,8 +1,8 @@
 //
-//  CDUntappdStats.swift
+//  CDUntappdBeer.swift
 //  CDUntappdKit
 //
-//  Created by Christopher de Haan on 8/4/17.
+//  Created by Christopher de Haan on 11/27/17.
 //
 //  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
 //
@@ -27,26 +27,40 @@
 
 import ObjectMapper
 
-public class CDUntappdStats: Mappable {
+public class CDUntappdBeer: Mappable {
 
-    public var totalBadges: Int?
-    public var totalFriends: Int?
-    public var totalCheckins: Int?
-    public var totalBeers: Int?
-    public var totalCreatedBeers: Int?
-    public var totalFollowings: Int?
-    public var totalPhotos: Int?
+    public var id: Int?
+    public var name: String?
+    public var description: String?
+    public var style: String?
+    public var abv: Double?
+    public var ibu: Double?
+    public var rating: Double?
+    public var overallRating: Double?
+    public var totalRatings: Int?
+    public var label: URL?
+    public var isInProduction: Bool?
+    public var hasHad: Bool?
+    public var isOnWishList: Bool?
+    public var createdAt: String?
     
     public required init?(map: Map) {
     }
     
     public func mapping(map: Map) {
-        totalBadges         <- map["total_badges"]
-        totalFriends        <- map["total_friends"]
-        totalCheckins       <- map["total_checkins"]
-        totalBeers          <- map["total_beers"]
-        totalCreatedBeers   <- map["total_created_beers"]
-        totalFollowings     <- map["total_followings"]
-        totalPhotos         <- map["total_photos"]
+        id              <- map["bid"]
+        name            <- map["beer_name"]
+        description     <- map["beer_description"]
+        style           <- map["beer_style"]
+        abv             <- map["beer_abv"]
+        ibu             <- map["beer_ibu"]
+        rating          <- map["auth_rating"]
+        overallRating   <- map["rating_score"]
+        totalRatings    <- map["rating_count"]
+        label           <- (map["beer_label"], URLTransform())
+        isInProduction  <- map["is_in_production"]
+        hasHad          <- map["has_had"]
+        isOnWishList    <- map["wish_list"]
+        createdAt       <- map["created_at"]
     }
 }

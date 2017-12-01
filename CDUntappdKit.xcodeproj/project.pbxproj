@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B20143BF1FD0C2D4005FCBC8 /* CDUntappdUserWishListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20143BE1FD0C2D4005FCBC8 /* CDUntappdUserWishListResponse.swift */; };
+		B20143C81FD0C3D7005FCBC8 /* CDUntappdWishList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20143C71FD0C3D7005FCBC8 /* CDUntappdWishList.swift */; };
+		B20143CA1FD0C482005FCBC8 /* CDUntappdWishListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20143C91FD0C482005FCBC8 /* CDUntappdWishListItem.swift */; };
+		B20143E41FD0D0A8005FCBC8 /* CDUntappdUserFriendsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20143E31FD0D0A8005FCBC8 /* CDUntappdUserFriendsResponse.swift */; };
+		B20143E61FD0D109005FCBC8 /* CDUntappdFriend.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20143E51FD0D109005FCBC8 /* CDUntappdFriend.swift */; };
 		B20232B31FC4D3DD00C33B69 /* Parameters+CDUntappdKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20232B21FC4D3DD00C33B69 /* Parameters+CDUntappdKit.swift */; };
 		B20232BC1FC4D99D00C33B69 /* CDUntappdUserInfoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20232BB1FC4D99D00C33B69 /* CDUntappdUserInfoResponse.swift */; };
 		B20232BE1FC4DC6800C33B69 /* CDUntappdMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20232BD1FC4DC6800C33B69 /* CDUntappdMetadata.swift */; };
@@ -21,11 +26,21 @@
 		B20537381F398A6E00338826 /* AlamofireObjectMapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B205372B1F398A6400338826 /* AlamofireObjectMapper.framework */; };
 		B267913C1F350759008635CD /* CDUntappdKit.h in Headers */ = {isa = PBXBuildFile; fileRef = B267913A1F350759008635CD /* CDUntappdKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B26791831F350A10008635CD /* String+CDUntappdKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26791821F350A10008635CD /* String+CDUntappdKit.swift */; };
+		B28180BC1FCCCFF500806E4C /* CDUntappdRecentBrew.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28180BB1FCCCFF500806E4C /* CDUntappdRecentBrew.swift */; };
+		B28180C51FCCD0BE00806E4C /* CDUntappdBrewery.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28180C41FCCD0BE00806E4C /* CDUntappdBrewery.swift */; };
+		B28180C71FCCD0C700806E4C /* CDUntappdBeer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28180C61FCCD0C700806E4C /* CDUntappdBeer.swift */; };
+		B28180C91FCCD5CB00806E4C /* CDUntappdCheckin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28180C81FCCD5CB00806E4C /* CDUntappdCheckin.swift */; };
+		B28180CB1FCCD95E00806E4C /* CDUntappdSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28180CA1FCCD95E00806E4C /* CDUntappdSource.swift */; };
+		B28180CD1FCCDA1500806E4C /* CDUntappdVenue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28180CC1FCCDA1500806E4C /* CDUntappdVenue.swift */; };
+		B28180CF1FCCDE5600806E4C /* CDUntappdCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28180CE1FCCDE5600806E4C /* CDUntappdCategory.swift */; };
+		B28180D11FCCE38100806E4C /* CDUntappdBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28180D01FCCE38100806E4C /* CDUntappdBadge.swift */; };
+		B28180D31FCCE49800806E4C /* CDUntappdMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28180D21FCCE49800806E4C /* CDUntappdMedia.swift */; };
 		B29E00B31F3A81E100302663 /* CDUntappdOAuthRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E00B21F3A81E100302663 /* CDUntappdOAuthRouter.swift */; };
 		B29E00B51F3A82AF00302663 /* CDUntappdOAuthCredential.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E00B41F3A82AF00302663 /* CDUntappdOAuthCredential.swift */; };
 		B2B7070A1F3B7E6700FAA6EF /* CDUntappdOAuth.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B2B707091F3B7E6700FAA6EF /* CDUntappdOAuth.storyboard */; };
 		B2B7070C1F3B800C00FAA6EF /* UIApplication+CDUntappdKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7070B1F3B800C00FAA6EF /* UIApplication+CDUntappdKit.swift */; };
 		B2B7070E1F3B810400FAA6EF /* CDUntappdOAuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7070D1F3B810400FAA6EF /* CDUntappdOAuthViewController.swift */; };
+		B2C4A0391FCE2F2000B253A2 /* UIColor+CDUntappdKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C4A0381FCE2F2000B253A2 /* UIColor+CDUntappdKit.swift */; };
 		B2D6C3E21F43D5BE0067279A /* CDUntappdOAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D6C3E11F43D5BE0067279A /* CDUntappdOAuthClient.swift */; };
 /* End PBXBuildFile section */
 
@@ -82,6 +97,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B20143BE1FD0C2D4005FCBC8 /* CDUntappdUserWishListResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDUntappdUserWishListResponse.swift; sourceTree = "<group>"; };
+		B20143C71FD0C3D7005FCBC8 /* CDUntappdWishList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDUntappdWishList.swift; sourceTree = "<group>"; };
+		B20143C91FD0C482005FCBC8 /* CDUntappdWishListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDUntappdWishListItem.swift; sourceTree = "<group>"; };
+		B20143E31FD0D0A8005FCBC8 /* CDUntappdUserFriendsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDUntappdUserFriendsResponse.swift; sourceTree = "<group>"; };
+		B20143E51FD0D109005FCBC8 /* CDUntappdFriend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDUntappdFriend.swift; sourceTree = "<group>"; };
 		B20232B21FC4D3DD00C33B69 /* Parameters+CDUntappdKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Parameters+CDUntappdKit.swift"; sourceTree = "<group>"; };
 		B20232BB1FC4D99D00C33B69 /* CDUntappdUserInfoResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDUntappdUserInfoResponse.swift; sourceTree = "<group>"; };
 		B20232BD1FC4DC6800C33B69 /* CDUntappdMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDUntappdMetadata.swift; sourceTree = "<group>"; };
@@ -106,11 +126,21 @@
 		B267913A1F350759008635CD /* CDUntappdKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDUntappdKit.h; sourceTree = "<group>"; };
 		B267913B1F350759008635CD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B26791821F350A10008635CD /* String+CDUntappdKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+CDUntappdKit.swift"; sourceTree = "<group>"; };
+		B28180BB1FCCCFF500806E4C /* CDUntappdRecentBrew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDUntappdRecentBrew.swift; sourceTree = "<group>"; };
+		B28180C41FCCD0BE00806E4C /* CDUntappdBrewery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDUntappdBrewery.swift; sourceTree = "<group>"; };
+		B28180C61FCCD0C700806E4C /* CDUntappdBeer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDUntappdBeer.swift; sourceTree = "<group>"; };
+		B28180C81FCCD5CB00806E4C /* CDUntappdCheckin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDUntappdCheckin.swift; sourceTree = "<group>"; };
+		B28180CA1FCCD95E00806E4C /* CDUntappdSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDUntappdSource.swift; sourceTree = "<group>"; };
+		B28180CC1FCCDA1500806E4C /* CDUntappdVenue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDUntappdVenue.swift; sourceTree = "<group>"; };
+		B28180CE1FCCDE5600806E4C /* CDUntappdCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDUntappdCategory.swift; sourceTree = "<group>"; };
+		B28180D01FCCE38100806E4C /* CDUntappdBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDUntappdBadge.swift; sourceTree = "<group>"; };
+		B28180D21FCCE49800806E4C /* CDUntappdMedia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDUntappdMedia.swift; sourceTree = "<group>"; };
 		B29E00B21F3A81E100302663 /* CDUntappdOAuthRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDUntappdOAuthRouter.swift; sourceTree = "<group>"; };
 		B29E00B41F3A82AF00302663 /* CDUntappdOAuthCredential.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDUntappdOAuthCredential.swift; sourceTree = "<group>"; };
 		B2B707091F3B7E6700FAA6EF /* CDUntappdOAuth.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = CDUntappdOAuth.storyboard; path = Resources/CDUntappdOAuth.storyboard; sourceTree = SOURCE_ROOT; };
 		B2B7070B1F3B800C00FAA6EF /* UIApplication+CDUntappdKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+CDUntappdKit.swift"; sourceTree = "<group>"; };
 		B2B7070D1F3B810400FAA6EF /* CDUntappdOAuthViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDUntappdOAuthViewController.swift; sourceTree = "<group>"; };
+		B2C4A0381FCE2F2000B253A2 /* UIColor+CDUntappdKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+CDUntappdKit.swift"; sourceTree = "<group>"; };
 		B2D6C3E11F43D5BE0067279A /* CDUntappdOAuthClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDUntappdOAuthClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -140,12 +170,26 @@
 		B205370D1F39897200338826 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				B28180D01FCCE38100806E4C /* CDUntappdBadge.swift */,
+				B28180C61FCCD0C700806E4C /* CDUntappdBeer.swift */,
+				B28180C41FCCD0BE00806E4C /* CDUntappdBrewery.swift */,
+				B28180CE1FCCDE5600806E4C /* CDUntappdCategory.swift */,
+				B28180C81FCCD5CB00806E4C /* CDUntappdCheckin.swift */,
 				B205370E1F3989E400338826 /* CDUntappdContact.swift */,
+				B20143E51FD0D109005FCBC8 /* CDUntappdFriend.swift */,
+				B28180D21FCCE49800806E4C /* CDUntappdMedia.swift */,
 				B20232BD1FC4DC6800C33B69 /* CDUntappdMetadata.swift */,
+				B28180BB1FCCCFF500806E4C /* CDUntappdRecentBrew.swift */,
 				B20537111F3989E400338826 /* CDUntappdSettings.swift */,
+				B28180CA1FCCD95E00806E4C /* CDUntappdSource.swift */,
 				B205370F1F3989E400338826 /* CDUntappdStats.swift */,
 				B20537101F3989E400338826 /* CDUntappdUser.swift */,
+				B20143E31FD0D0A8005FCBC8 /* CDUntappdUserFriendsResponse.swift */,
 				B20232BB1FC4D99D00C33B69 /* CDUntappdUserInfoResponse.swift */,
+				B20143BE1FD0C2D4005FCBC8 /* CDUntappdUserWishListResponse.swift */,
+				B28180CC1FCCDA1500806E4C /* CDUntappdVenue.swift */,
+				B20143C71FD0C3D7005FCBC8 /* CDUntappdWishList.swift */,
+				B20143C91FD0C482005FCBC8 /* CDUntappdWishListItem.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -233,6 +277,7 @@
 				B20232B21FC4D3DD00C33B69 /* Parameters+CDUntappdKit.swift */,
 				B26791821F350A10008635CD /* String+CDUntappdKit.swift */,
 				B2B7070B1F3B800C00FAA6EF /* UIApplication+CDUntappdKit.swift */,
+				B2C4A0381FCE2F2000B253A2 /* UIColor+CDUntappdKit.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -396,21 +441,36 @@
 			buildActionMask = 2147483647;
 			files = (
 				B205371C1F398A0000338826 /* CDUntappdAPIClient.swift in Sources */,
+				B28180D11FCCE38100806E4C /* CDUntappdBadge.swift in Sources */,
+				B20143BF1FD0C2D4005FCBC8 /* CDUntappdUserWishListResponse.swift in Sources */,
 				B205371B1F398A0000338826 /* CDUntappdConstants.swift in Sources */,
+				B28180CD1FCCDA1500806E4C /* CDUntappdVenue.swift in Sources */,
 				B20537121F3989E400338826 /* CDUntappdContact.swift in Sources */,
+				B28180C71FCCD0C700806E4C /* CDUntappdBeer.swift in Sources */,
 				B205371D1F398A0000338826 /* CDUntappdEnums.swift in Sources */,
 				B20232BE1FC4DC6800C33B69 /* CDUntappdMetadata.swift in Sources */,
 				B2D6C3E21F43D5BE0067279A /* CDUntappdOAuthClient.swift in Sources */,
 				B29E00B51F3A82AF00302663 /* CDUntappdOAuthCredential.swift in Sources */,
+				B20143E61FD0D109005FCBC8 /* CDUntappdFriend.swift in Sources */,
 				B29E00B31F3A81E100302663 /* CDUntappdOAuthRouter.swift in Sources */,
 				B2B7070E1F3B810400FAA6EF /* CDUntappdOAuthViewController.swift in Sources */,
+				B28180CF1FCCDE5600806E4C /* CDUntappdCategory.swift in Sources */,
 				B205371A1F398A0000338826 /* CDUntappdRouter.swift in Sources */,
+				B28180D31FCCE49800806E4C /* CDUntappdMedia.swift in Sources */,
+				B28180C91FCCD5CB00806E4C /* CDUntappdCheckin.swift in Sources */,
+				B20143CA1FD0C482005FCBC8 /* CDUntappdWishListItem.swift in Sources */,
+				B28180CB1FCCD95E00806E4C /* CDUntappdSource.swift in Sources */,
 				B20537151F3989E400338826 /* CDUntappdSettings.swift in Sources */,
+				B2C4A0391FCE2F2000B253A2 /* UIColor+CDUntappdKit.swift in Sources */,
 				B20537131F3989E400338826 /* CDUntappdStats.swift in Sources */,
 				B20537141F3989E400338826 /* CDUntappdUser.swift in Sources */,
 				B20232BC1FC4D99D00C33B69 /* CDUntappdUserInfoResponse.swift in Sources */,
+				B28180BC1FCCCFF500806E4C /* CDUntappdRecentBrew.swift in Sources */,
 				B26791831F350A10008635CD /* String+CDUntappdKit.swift in Sources */,
+				B28180C51FCCD0BE00806E4C /* CDUntappdBrewery.swift in Sources */,
+				B20143E41FD0D0A8005FCBC8 /* CDUntappdUserFriendsResponse.swift in Sources */,
 				B2B7070C1F3B800C00FAA6EF /* UIApplication+CDUntappdKit.swift in Sources */,
+				B20143C81FD0C3D7005FCBC8 /* CDUntappdWishList.swift in Sources */,
 				B20232B31FC4D3DD00C33B69 /* Parameters+CDUntappdKit.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

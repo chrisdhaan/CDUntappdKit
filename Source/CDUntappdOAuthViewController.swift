@@ -1,10 +1,10 @@
 //
-//  CDUntappdAuthenticationViewController.swift
+//  CDUntappdOAuthViewController.swift
 //  CDUntappdKit
 //
 //  Created by Christopher de Haan on 8/9/17.
 //
-//  Copyright (c) 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -58,7 +58,9 @@ class CDUntappdOAuthViewController: UIViewController {
 // MARK: - WKNavigationDelegate Methods
 
 extension CDUntappdOAuthViewController: WKNavigationDelegate {
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+    func webView(_ webView: WKWebView,
+                 decidePolicyFor navigationAction: WKNavigationAction,
+                 decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         
         let scheme = self.oAuthClient.redirectUrl + "?code="
         if let url = navigationAction.request.url?.absoluteString,
@@ -70,7 +72,8 @@ extension CDUntappdOAuthViewController: WKNavigationDelegate {
                 let code = url.substring(from: range.upperBound).trimmingCharacters(in: .whitespacesAndNewlines)
                 authorizationCode = code
             }
-            self.oAuthClient.authorize(withCode: authorizationCode, completion: { (successful, error) in
+            self.oAuthClient.authorize(withCode: authorizationCode,
+                                       completion: { (successful, error) in
                 
                 if let error = error {
                     self.onAuthorization?(false, error)

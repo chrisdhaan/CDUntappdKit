@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 8/4/17.
 //
-//  Copyright (c) 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -30,6 +30,9 @@ import AlamofireObjectMapper
 
 public class CDUntappdAPIClient: NSObject {
     
+    private lazy var manager: Alamofire.SessionManager = {
+        return Alamofire.SessionManager()
+    }()
     private let oAuthClient: CDUntappdOAuthClient!
     
     // MARK: - Initializers
@@ -107,27 +110,130 @@ public class CDUntappdAPIClient: NSObject {
     
     // MARK: - Untappd API Methods
     
-    public func userInfo(forUsername username: String?,
-                         compact: Bool,
-                         completion: @escaping (CDUntappdUserInfoResponse?) -> Void) {
-        // Assert that a user must be authenticated to not include a username
+    ///
+    /// This method will return the user information for a selected user. When using authentication, not passing the username parameter will return the authenticated users' information.
+    ///
+    /// - parameters:
+    ///   - forUsername: (**Required**) The username for the Untappd API to query. Can be (Optional) if an access token is provided for an authenticated user.
+    ///   - compact: (**Required**) Pass *true* to only show the user infomation, removing the *checkins*, *media*, and *recent_brews* attributes.
+    ///   - completion: A completion block in which the Untappd API user info endpoint response can be parsed.
+    ///
+    /// - returns: (CDUntappdUserInfoResponse?) -> Void
+    ///
+    public func fetchUserInfo(forUsername username: String?,
+                              compact: Bool,
+                              completion: @escaping (CDUntappdUserInfoResponse?) -> Void) {
+        assert(username != nil || self.isAuthenticated(), "Either user authentication or a username are required to query the Untappd API user info endpoint.")
         
         var params = Parameters.userInfoParameters(isCompact: compact)
         params = self.oAuthClient.addTokens(toParameters: params)
         
-        Alamofire.request(CDUntappdRouter.userInfo(username: username, parameters: params)).responseObject { (response: DataResponse<CDUntappdUserInfoResponse>) in
+        self.manager.request(CDUntappdRouter.userInfo(username: username,
+                                                      parameters: params)).responseObject { (response: DataResponse<CDUntappdUserInfoResponse>) in
             
             switch response.result {
             case .success(let response):
                 if let metadata = response.metadata,
                     metadata.hasError() {
-                    print("userInfo(forUsername) error: ", metadata.description())
+                    print("fetchUserInfo(forUsername) error: ", metadata.description())
                 }
                 completion(response)
             case .failure(let error):
-                print("userInfo(forUsername) failure: ", error.localizedDescription)
+                print("fetchUserInfo(forUsername) failure: ", error.localizedDescription)
                 completion(nil)
             }
+        }
+    }
+    
+    ///
+    /// This method will return a list of 25 of the user's wish listed beers. When using authentication, not passing the username parameter will return the authenticated users' information.
+    ///
+    /// - parameters:
+    ///   - forUsername: (**Required**) The username for the Untappd API to query. Can be (Optional) if an access token is provided for an authenticated user.
+    ///   - offset: (Optional) The numeric offset that you what results to start.
+    ///   - limit: (Optional) The number of results to return, max of 50, default is 25.
+    ///   - sort: (Optional) Results can be sorted using the following values (1) date - sorts by date (default), (2) checkin - sorted by highest checkin, (3) highest_rated - sorts by global rating descending order, (4) lowest_rated - sorts by global rating ascending order, (5) highest_abv - highest ABV from the wishlist, (6) lowest_abv - lowest ABV from the wishlist
+    ///   - completion: A completion block in which the Untappd API user wish list endpoint response can be parsed.
+    ///
+    /// - returns: (CDUntappdUserWishListResponse?) -> Void
+    ///
+    public func fetchUserWishList(forUsername username: String?,
+                                  offset: Int?,
+                                  limit: Int?,
+                                  sort: CDUntappdUserWishListSortType?,
+                                  completion: @escaping (CDUntappdUserWishListResponse?) -> Void) {
+        assert(username != nil || self.isAuthenticated(), "Either user authentication or a username are required to query the Untappd API user wish list endpoint.")
+        
+        var params = Parameters.userWishListParameters(withOffset: offset,
+                                                       limit: limit,
+                                                       sort: sort)
+        params = self.oAuthClient.addTokens(toParameters: params)
+        
+        self.manager.request(CDUntappdRouter.userWishList(username: username,
+                                                          parameters: params)).responseObject { (response: DataResponse<CDUntappdUserWishListResponse>) in
+                                                        
+            switch response.result {
+            case .success(let response):
+                if let metadata = response.metadata,
+                    metadata.hasError() {
+                    print("fetchUserWishList(forUsername) error: ", metadata.description())
+                }
+                completion(response)
+            case .failure(let error):
+                print("fetchUserWishList(forUsername) failure: ", error.localizedDescription)
+                completion(nil)
+            }
+        }
+    }
+    
+    ///
+    /// This method will return a list of 25 of the user's wish listed beers. When using authentication, not passing the username parameter will return the authenticated users' information.
+    ///
+    /// - parameters:
+    ///   - forUsername: (**Required**) The username for the Untappd API to query. Can be (Optional) if an access token is provided for an authenticated user.
+    ///   - offset: (Optional) The numeric offset that you what results to start.
+    ///   - limit: (Optional) The number of records that you will return (max 25, default 25).
+    ///   - completion: A completion block in which the Untappd API user friends endpoint response can be parsed.
+    ///
+    /// - returns: (CDUntappdUserFriendsResponse?) -> Void
+    ///
+    public func fetchUserFriends(forUsername username: String?,
+                                 offset: Int?,
+                                 limit: Int?,
+                                 completion: @escaping (CDUntappdUserFriendsResponse?) -> Void) {
+        assert(username != nil || self.isAuthenticated(), "Either user authentication or a username are required to query the Untappd API user friends endpoint.")
+        
+        var params = Parameters.userFriendsParameters(withOffset: offset,
+                                                      limit: limit)
+        params = self.oAuthClient.addTokens(toParameters: params)
+        
+        self.manager.request(CDUntappdRouter.userFriends(username: username,
+                                                         parameters: params)).responseObject { (response: DataResponse<CDUntappdUserFriendsResponse>) in
+                                                            
+            switch response.result {
+            case .success(let response):
+                if let metadata = response.metadata,
+                    metadata.hasError() {
+                    print("fetchUserFriends(forUsername) error: ", metadata.description())
+                }
+                completion(response)
+            case .failure(let error):
+                print("fetchUserFriends(forUsername) failure: ", error.localizedDescription)
+                completion(nil)
+            }
+        }
+    }
+    
+    ///
+    /// Cancels any in progress or pending API requests.
+    ///
+    /// - returns: Void
+    ///
+    public func cancelAllPendingAPIRequests() {
+        self.manager.session.getTasksWithCompletionHandler { (dataTasks, uploadTasks, downloadTasks) in
+            dataTasks.forEach { $0.cancel() }
+            uploadTasks.forEach { $0.cancel() }
+            downloadTasks.forEach { $0.cancel() }
         }
     }
 }

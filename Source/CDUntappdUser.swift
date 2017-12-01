@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 8/4/17.
 //
-//  Copyright (c) 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -40,7 +40,7 @@ public class CDUntappdUser: Mappable {
     public var userCoverPhotoOffset: Int?
     public var location: String?
     public var bio: String?
-    public var url: URL?
+    public var website: URL?
     public var untappdUrl: URL?
     public var isPrivate: Bool?
     public var isModerator: Bool?
@@ -49,9 +49,9 @@ public class CDUntappdUser: Mappable {
     public var accountType: String?
     public var blockStatus: String?
     public var stats: CDUntappdStats?
-    // public var checkins: [CDUntappdCheckin]?
-    // public var recentBrews: [CDUntappdRecentBrew]?
-    // public var media: [CDUntappdMedia]?
+    public var checkins: [CDUntappdCheckin]?
+    public var recentBrews: [CDUntappdRecentBrew]?
+     public var media: [CDUntappdMedia]?
     public var contact: CDUntappdContact?
     public var dateJoined: String?
     public var settings: CDUntappdSettings?
@@ -71,7 +71,7 @@ public class CDUntappdUser: Mappable {
         userCoverPhotoOffset    <- map["user_cover_photo_offset"]
         location                <- map["location"]
         bio                     <- map["bio"]
-        url                     <- (map["url"], URLTransform())
+        website                 <- (map["url"], URLTransform())
         untappdUrl              <- (map["untappd_url"], URLTransform())
         isPrivate               <- map["is_private"]
         isModerator             <- map["is_moderator"]
@@ -80,9 +80,9 @@ public class CDUntappdUser: Mappable {
         accountType             <- map["account_type"]
         blockStatus             <- map["block_status"]
         stats                   <- map["stats"]
-//        checkins                <- map["checkins"]
-//        recentBrews             <- map["recent_brews"]
-//        media                   <- map["media"]
+        checkins                <- map["checkins.items"]
+        recentBrews             <- map["recent_brews.items"]
+        media                   <- map["media"]
         contact                 <- map["contact"]
         dateJoined              <- map["date_joined"]
         settings                <- map["settings"]

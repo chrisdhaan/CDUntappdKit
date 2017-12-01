@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 8/4/17.
 //
-//  Copyright (c) 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,8 @@ extension String {
         return String(format: "%@", value ? "true" : "false")
     }
     
-    static func path(_ path: String, forUsername username: String?) -> String {
+    static func path(_ path: String,
+                     forUsername username: String?) -> String {
         if let username = username {
             return "\(path)/\(username)"
         }
