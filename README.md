@@ -94,6 +94,8 @@ This framework is currently in development. As of release 0.9.0 the code is stab
   - [ ] Remove from Wish List
   - [ ] Foursquare Lookup
 - [ ] Brand Assets
+  - [x] Colors
+  - [ ] Logo
 - [ ] Platform Support
   - [x] iOS
   - [ ] macOS
@@ -312,6 +314,24 @@ untappdAPIClient.fetchUserFriends(forUsername: "DehaanSolo",
       print(friends)
   }
 }
+```
+
+### Brand Assets
+
+The Untappd brand guidelines exist to achieve consistency and make sure the branded elements of Untappd are used correctly across every application.
+
+### Color
+
+```swift
+class func untappdBrown() -> UIColor
+class func untappdYellow() -> UIColor
+```
+
+The following lines of code show an example of how to use the brand color.
+
+```swift
+cell.textLabel?.textColor = UIColor.untappdBrown()
+cell.textLabel?.textColor = UIColor.untappdYellow()
 ```
 
 ---
