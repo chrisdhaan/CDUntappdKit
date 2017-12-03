@@ -98,9 +98,9 @@ This framework is currently in development. As of release 0.9.0 the code is stab
   - [ ] Logo
 - [ ] Platform Support
   - [x] iOS
-  - [ ] macOS
-  - [ ] tvOS
-  - [ ] watchOS
+  - [x] macOS
+  - [x] tvOS
+  - [x] watchOS
 - [ ] Documentation
 
 ---
