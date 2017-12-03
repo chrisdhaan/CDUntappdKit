@@ -25,6 +25,8 @@
 //  THE SOFTWARE.
 //
 
+import UIKit
+
 extension UIApplication {
     
     class func topViewController(controller: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {

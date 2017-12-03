@@ -25,9 +25,7 @@
 //  THE SOFTWARE.
 //
 
-#import <UIKit/UIKit.h>
+@import Foundation;
 
-//! Project version number for CDUntappdKit.
 FOUNDATION_EXPORT double CDUntappdKitVersionNumber;
-//! Project version string for CDUntappdKit.
 FOUNDATION_EXPORT const unsigned char CDUntappdKitVersionString[];

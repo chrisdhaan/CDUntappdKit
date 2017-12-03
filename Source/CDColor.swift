@@ -1,8 +1,8 @@
 //
-//  UIColor+CDUntappdKit.swift
+//  CDColor.swift
 //  CDUntappdKit
 //
-//  Created by Christopher de Haan on 11/28/17.
+//  Created by Christopher de Haan on 12/1/17.
 //
 //  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
 //
@@ -25,19 +25,12 @@
 //  THE SOFTWARE.
 //
 
-public extension CDColor {
-    
-    class func untappdBrown() -> CDColor {
-        return CDColor(red: (202.0/255.0),
-                       green: (102.0/255.0),
-                       blue: (26.0/255.0),
-                       alpha: 1.0)
-    }
-    
-    class func untappdYellow() -> CDColor {
-        return CDColor(red: (253.0/255.0),
-                       green: (191.0/255.0),
-                       blue: (45.0/255.0),
-                       alpha: 1.0)
-    }
-}
+import Foundation
+
+#if os(iOS) || os(tvOS) || os(watchOS)
+    import UIKit
+    public typealias CDColor = UIColor
+#elseif os(macOS)
+    import Cocoa
+    public typealias CDColor = NSColor
+#endif

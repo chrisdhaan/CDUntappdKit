@@ -27,6 +27,9 @@
 
 import Alamofire
 import AlamofireObjectMapper
+#if os(iOS)
+import UIKit
+#endif
 
 public class CDUntappdAPIClient: NSObject {
     
@@ -67,6 +70,7 @@ public class CDUntappdAPIClient: NSObject {
     /// - returns: Void
     ///
     public func authenticate() {
+#if os(iOS)
         if let tvc = UIApplication.topViewController(),
             tvc.parent as? UINavigationController == nil,
             self.isAuthenticated() == false {
@@ -86,6 +90,7 @@ public class CDUntappdAPIClient: NSObject {
             }
             tvc.present(oAuthNavigationController, animated: true, completion: nil)
         }
+#endif
     }
     
     ///
