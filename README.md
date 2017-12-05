@@ -64,43 +64,43 @@ This framework is currently in development. As of release 0.9.0 the code is stab
 
 - [x] Authentication
 - [ ] API Endpoints
-  - [ ] Activity Feed
-  - [ ] User Activity Feed
-  - [ ] The Pub (Local)
-  - [ ] Venue Activity Feed
-  - [ ] Beer Activity Feed
-  - [ ] Brewery Activity Feed
-  - [ ] Notifications
-  - [x] User Info
-  - [x] User Wish List
-  - [x] User Friends
-  - [ ] User Badges
-  - [ ] User Beers
-  - [ ] Brewery Info
-  - [ ] Beer Info
-  - [ ] Venue Info
-  - [ ] Beer Search
-  - [ ] Brewery Search
-  - [ ] Checkin
-  - [ ] Toast/Un-toast
-  - [ ] Pending Friends
-  - [ ] Add Friend
-  - [ ] Remove Friend
-  - [ ] Accept Friend
-  - [ ] Reject Friend
-  - [ ] Add Comment
-  - [ ] Remove Comment
-  - [ ] Add to Wish List
-  - [ ] Remove from Wish List
-  - [ ] Foursquare Lookup
+    - [ ] Activity Feed
+    - [ ] User Activity Feed
+    - [ ] The Pub (Local)
+    - [ ] Venue Activity Feed
+    - [ ] Beer Activity Feed
+    - [ ] Brewery Activity Feed
+    - [ ] Notifications
+    - [x] User Info
+    - [x] User Wish List
+    - [x] User Friends
+    - [ ] User Badges
+    - [ ] User Beers
+    - [ ] Brewery Info
+    - [ ] Beer Info
+    - [ ] Venue Info
+    - [ ] Beer Search
+    - [ ] Brewery Search
+    - [ ] Checkin
+    - [ ] Toast/Un-toast
+    - [ ] Pending Friends
+    - [ ] Add Friend
+    - [ ] Remove Friend
+    - [ ] Accept Friend
+    - [ ] Reject Friend
+    - [ ] Add Comment
+    - [ ] Remove Comment
+    - [ ] Add to Wish List
+    - [ ] Remove from Wish List
+    - [ ] Foursquare Lookup
 - [ ] Brand Assets
-  - [x] Colors
-  - [ ] Logo
-- [ ] Platform Support
-  - [x] iOS
-  - [x] macOS
-  - [x] tvOS
-  - [x] watchOS
+    - [x] Colors
+    - [ ] Logo
+- [x] Platform Support
+    - [x] iOS
+    - [x] macOS
+    - [x] tvOS
+- [x] watchOS
 - [ ] Documentation
 
 ---
@@ -134,10 +134,7 @@ gem install cocoapods
 To integrate CDUntappdKit into your Xcode project using CocoaPods, simply add the following line to your Podfile:
 
 ```ruby
-# use this line to install CDUntappdKit while in development
-pod 'CDUntappdKit', :git => 'https://github.com/chrisdhaan/CDUntappdKit'
-# this line will eventually be used upon the 1.0.0 release of CDUntappdKit and can be disregarded for now
-pod 'CDUntappdKit', '~> 1.0.0'
+pod 'CDUntappdKit', '1.0.0'
 ```
 
 Afterwards, run the following command:
@@ -160,9 +157,6 @@ brew install carthage
 To integrate CDUntappdKit into your Xcode project using Carthage, simply add the following line to your Cartfile:
 
 ```ruby
-# use this line to install CDUntappdKit while in development
-github "chrisdhaan/CDUntappdKit"
-# this line will eventually be used upon the 1.0.0 release of CDUntappdKit and can be disregarded for now
 github "chrisdhaan/CDUntappdKit" == 1.0.0
 ```
 
