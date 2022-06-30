@@ -139,6 +139,7 @@ public class CDUntappdAPIClient: NSObject {
         self.manager
             .request(CDUntappdRouter.userInfo(username: username,
                                               parameters: params))
+            .validate()
             .responseDecodable { (response: DataResponse<CDUntappdUserInfoResponse, AFError>) in
 
             switch response.result {
@@ -182,6 +183,7 @@ public class CDUntappdAPIClient: NSObject {
         self.manager
             .request(CDUntappdRouter.userWishList(username: username,
                                                   parameters: params))
+            .validate()
             .responseDecodable { (response: DataResponse<CDUntappdUserWishListResponse, AFError>) in
 
             switch response.result {
@@ -222,6 +224,7 @@ public class CDUntappdAPIClient: NSObject {
         self.manager
             .request(CDUntappdRouter.userFriends(username: username,
                                                  parameters: params))
+            .validate()
             .responseDecodable { (response: DataResponse<CDUntappdUserFriendsResponse, AFError>) in
 
             switch response.result {

@@ -15,15 +15,30 @@ Released on 2022-06-30.
 #### Added
 
 - [x] Swift 5.4, 5.5, and 5.6
+- [x] Client
+    - [x] `validate` to API methods
 
 #### Updated
     
 - [x] Swift Package Manager
     - [x] Minimum Swift version 5.3
+- [x] Client
+    - [x] `responseObject` model transformation to `responseDecodable`
+- [x] Models
+    - [x] Decodable, Encodable APIs
+    - [x] `class` to `struct`
+    - [x] `var` to `let`
 - [x] Dependencies
     - [x] Alamofire
 - [x] CI
     - [x] Tests device, platform, Xcode, and SDK versions
+
+#### Removed
+
+- [x] Dependencies
+    - [x] ObjectMapper
+- [x] Travis CI
+    - [x] Configuration
 
 ---
 
