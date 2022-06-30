@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 8/4/17.
 //
-//  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,20 +25,15 @@
 //  THE SOFTWARE.
 //
 
-import ObjectMapper
-
-public class CDUntappdContact: Mappable {
+public struct CDUntappdContact: Decodable {
 
     public var foursquare: String?
     public var twitter: String?
     public var facebook: String?
-    
-    public required init?(map: Map) {
-    }
-    
-    public func mapping(map: Map) {
-        foursquare  <- map["foursquare"]
-        twitter     <- map["twitter"]
-        facebook    <- map["facebook"]
+
+    enum CodingKeys: String, CodingKey {
+        case foursquare
+        case twitter
+        case facebook
     }
 }

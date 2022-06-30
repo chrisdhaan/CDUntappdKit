@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 8/4/17.
 //
-//  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,20 +26,21 @@
 //
 
 import Alamofire
-import AlamofireObjectMapper
-#if os(iOS)
-import UIKit
+#if !os(OSX)
+    import UIKit
+#else
+    import Foundation
 #endif
 
 public class CDUntappdAPIClient: NSObject {
-    
-    private lazy var manager: Alamofire.SessionManager = {
-        return Alamofire.SessionManager()
+
+    private lazy var manager: Alamofire.Session = {
+        return Alamofire.Session()
     }()
     private let oAuthClient: CDUntappdOAuthClient!
-    
+
     // MARK: - Initializers
-    
+
     ///
     /// Initializes a new CDUntappdAPIClient object.
     ///
@@ -61,38 +62,40 @@ public class CDUntappdAPIClient: NSObject {
                                                 redirectUrl: redirectUrl)
         super.init()
     }
-    
+
     // MARK: - Authentication Methods
-    
+
     ///
     /// Attempts to authenticate the Untappd application credentials with the Untappd API if the Untappd application has not already authenticated.
     ///
     /// - returns: Void
     ///
-    public func authenticate() {
 #if os(iOS)
+    @available(iOSApplicationExtension, unavailable)
+    public func authenticate() {
         if let tvc = UIApplication.topViewController(),
             tvc.parent as? UINavigationController == nil,
             self.isAuthenticated() == false {
-            
+
             let oAuthStoryboard = UIStoryboard(name: CDUntappdStoryboardIdentifier.oAuth,
                                                bundle: Bundle(identifier: CDUntappdKitBundleIdentifier))
-            let oAuthNavigationController = oAuthStoryboard.instantiateViewController(withIdentifier: CDUntappdNavigationControllerIdentifier.oAuth) as! UINavigationController
-            if let oAuthViewController = oAuthNavigationController.topViewController as? CDUntappdOAuthViewController {
-                oAuthViewController.oAuthClient = self.oAuthClient
-                oAuthViewController.onAuthorization = { (successful, error) in
-                    
-                    if let error = error {
-                        print("authorize() failure: ", error.localizedDescription)
+            if let oAuthNavigationController = oAuthStoryboard.instantiateViewController(withIdentifier: CDUntappdNavigationControllerIdentifier.oAuth) as? UINavigationController {
+                if let oAuthViewController = oAuthNavigationController.topViewController as? CDUntappdOAuthViewController {
+                    oAuthViewController.oAuthClient = self.oAuthClient
+                    oAuthViewController.onAuthorization = { (_, error) in
+
+                        if let error = error {
+                            print("authorize() failure: ", error.localizedDescription)
+                        }
+                        UIApplication.topViewController()?.dismiss(animated: true, completion: nil)
                     }
-                    UIApplication.topViewController()?.dismiss(animated: true, completion: nil)
                 }
+                tvc.present(oAuthNavigationController, animated: true, completion: nil)
             }
-            tvc.present(oAuthNavigationController, animated: true, completion: nil)
         }
-#endif
     }
-    
+#endif
+
     ///
     /// Determines whether or not the Untappd application has successfully authenticated with the Untappd API.
     ///
@@ -101,7 +104,7 @@ public class CDUntappdAPIClient: NSObject {
     public func isAuthenticated() -> Bool {
         return self.oAuthClient.isAuthorized()
     }
-    
+
     ///
     /// Removes the Untappd API authentication credentials.
     ///
@@ -112,9 +115,9 @@ public class CDUntappdAPIClient: NSObject {
         userDefaults.removeObject(forKey: CDUntappdDefaults.accessToken)
         userDefaults.synchronize()
     }
-    
+
     // MARK: - Untappd API Methods
-    
+
     ///
     /// This method will return the user information for a selected user. When using authentication, not passing the username parameter will return the authenticated users' information.
     ///
@@ -129,13 +132,16 @@ public class CDUntappdAPIClient: NSObject {
                               compact: Bool,
                               completion: @escaping (CDUntappdUserInfoResponse?) -> Void) {
         assert(username != nil || self.isAuthenticated(), "Either user authentication or a username are required to query the Untappd API user info endpoint.")
-        
+
         var params = Parameters.userInfoParameters(isCompact: compact)
         params = self.oAuthClient.addTokens(toParameters: params)
-        
-        self.manager.request(CDUntappdRouter.userInfo(username: username,
-                                                      parameters: params)).responseObject { (response: DataResponse<CDUntappdUserInfoResponse>) in
-            
+
+        self.manager
+            .request(CDUntappdRouter.userInfo(username: username,
+                                              parameters: params))
+            .validate()
+            .responseDecodable { (response: DataResponse<CDUntappdUserInfoResponse, AFError>) in
+
             switch response.result {
             case .success(let response):
                 if let metadata = response.metadata,
@@ -149,7 +155,7 @@ public class CDUntappdAPIClient: NSObject {
             }
         }
     }
-    
+
     ///
     /// This method will return a list of 25 of the user's wish listed beers. When using authentication, not passing the username parameter will return the authenticated users' information.
     ///
@@ -168,15 +174,18 @@ public class CDUntappdAPIClient: NSObject {
                                   sort: CDUntappdUserWishListSortType?,
                                   completion: @escaping (CDUntappdUserWishListResponse?) -> Void) {
         assert(username != nil || self.isAuthenticated(), "Either user authentication or a username are required to query the Untappd API user wish list endpoint.")
-        
+
         var params = Parameters.userWishListParameters(withOffset: offset,
                                                        limit: limit,
                                                        sort: sort)
         params = self.oAuthClient.addTokens(toParameters: params)
-        
-        self.manager.request(CDUntappdRouter.userWishList(username: username,
-                                                          parameters: params)).responseObject { (response: DataResponse<CDUntappdUserWishListResponse>) in
-                                                        
+
+        self.manager
+            .request(CDUntappdRouter.userWishList(username: username,
+                                                  parameters: params))
+            .validate()
+            .responseDecodable { (response: DataResponse<CDUntappdUserWishListResponse, AFError>) in
+
             switch response.result {
             case .success(let response):
                 if let metadata = response.metadata,
@@ -190,7 +199,7 @@ public class CDUntappdAPIClient: NSObject {
             }
         }
     }
-    
+
     ///
     /// This method will return a list of 25 of the user's wish listed beers. When using authentication, not passing the username parameter will return the authenticated users' information.
     ///
@@ -207,14 +216,17 @@ public class CDUntappdAPIClient: NSObject {
                                  limit: Int?,
                                  completion: @escaping (CDUntappdUserFriendsResponse?) -> Void) {
         assert(username != nil || self.isAuthenticated(), "Either user authentication or a username are required to query the Untappd API user friends endpoint.")
-        
+
         var params = Parameters.userFriendsParameters(withOffset: offset,
                                                       limit: limit)
         params = self.oAuthClient.addTokens(toParameters: params)
-        
-        self.manager.request(CDUntappdRouter.userFriends(username: username,
-                                                         parameters: params)).responseObject { (response: DataResponse<CDUntappdUserFriendsResponse>) in
-                                                            
+
+        self.manager
+            .request(CDUntappdRouter.userFriends(username: username,
+                                                 parameters: params))
+            .validate()
+            .responseDecodable { (response: DataResponse<CDUntappdUserFriendsResponse, AFError>) in
+
             switch response.result {
             case .success(let response):
                 if let metadata = response.metadata,
@@ -228,7 +240,7 @@ public class CDUntappdAPIClient: NSObject {
             }
         }
     }
-    
+
     ///
     /// Cancels any in progress or pending API requests.
     ///

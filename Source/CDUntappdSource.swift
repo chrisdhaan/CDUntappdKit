@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 11/27/17.
 //
-//  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,18 +25,19 @@
 //  THE SOFTWARE.
 //
 
-import ObjectMapper
+#if !os(OSX)
+    import UIKit
+#else
+    import Foundation
+#endif
 
-public class CDUntappdSource: Mappable {
+public struct CDUntappdSource: Decodable {
 
     public var name: String?
     public var website: URL?
-    
-    public required init?(map: Map) {
-    }
-    
-    public func mapping(map: Map) {
-        name    <- map["app_name"]
-        website <- (map["app_website"], URLTransform())
+
+    enum CodingKeys: String, CodingKey {
+        case name = "app_name"
+        case website = "app_website"
     }
 }

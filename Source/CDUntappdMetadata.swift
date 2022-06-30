@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 11/21/17.
 //
-//  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,26 +25,21 @@
 //  THE SOFTWARE.
 //
 
-import ObjectMapper
+public struct CDUntappdMetadata: Decodable {
 
-public class CDUntappdMetadata: Mappable {
-    
     public var code: Int?
     public var details: String?
     public var type: String?
-    
-    public required init?(map: Map) {
+
+    enum CodingKeys: String, CodingKey {
+        case code = "code"
+        case details = "error_detail"
+        case type = "error_type"
     }
-    
-    public func mapping(map: Map) {
-        code    <- map["code"]
-        details <- map["error_detail"]
-        type    <- map["error_type"]
-    }
-    
+
     public func description() -> String {
         var description = ""
-        
+
         if let code = self.code {
             description += "Code \(code): "
         }
@@ -54,10 +49,10 @@ public class CDUntappdMetadata: Mappable {
         if let details = self.details {
             description += "\(details)"
         }
-        
+
         return description
     }
-    
+
     public func hasError() -> Bool {
         if let code = self.code,
             code != 200 {

@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 8/4/17.
 //
-//  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +25,16 @@
 //  THE SOFTWARE.
 //
 
+#if !os(OSX)
+    import UIKit
+#else
+    import Foundation
+#endif
+
 import Alamofire
 
 enum CDUntappdRouter: URLRequestConvertible {
-    
+
     // Info / Search
     case userInfo(username: String?, parameters: Parameters)
     case userWishList(username: String?, parameters: Parameters)
@@ -40,7 +46,7 @@ enum CDUntappdRouter: URLRequestConvertible {
     case venueInfo(venueId: Int, parameters: Parameters)
     case beerSearch(parameters: Parameters)
     case brewerySearch(parameters: Parameters)
-    
+
     var method: HTTPMethod {
         switch self {
         // Info / Search
@@ -57,7 +63,7 @@ enum CDUntappdRouter: URLRequestConvertible {
             return .get
         }
     }
-    
+
     var path: String {
         switch self {
         // Info / Search
@@ -83,13 +89,13 @@ enum CDUntappdRouter: URLRequestConvertible {
             return "search/brewery"
         }
     }
-    
+
     func asURLRequest() throws -> URLRequest {
         let url = try CDUntappdURL.base.asURL()
-        
+
         var urlRequest = URLRequest(url: url.appendingPathComponent(path))
         urlRequest.httpMethod = method.rawValue
-        
+
         switch self {
         // Info / Search
         case .userInfo(username: _, let parameters),
@@ -108,7 +114,7 @@ enum CDUntappdRouter: URLRequestConvertible {
              .brewerySearch(let parameters):
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
         }
-        
+
         return urlRequest
     }
 }

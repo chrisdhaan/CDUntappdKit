@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 8/8/17.
 //
-//  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,16 +25,11 @@
 //  THE SOFTWARE.
 //
 
-import ObjectMapper
-
-class CDUntappdOAuthCredential: Mappable {
+struct CDUntappdOAuthCredential: Decodable {
 
     var accessToken: String?
-    
-    required init?(map: Map) {
-    }
-    
-    func mapping(map: Map) {
-        accessToken <- map["response.access_token"]
+
+    enum CodingKeys: String, CodingKey {
+        case accessToken = "response.access_token"
     }
 }

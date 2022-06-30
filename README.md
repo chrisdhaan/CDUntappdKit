@@ -14,20 +14,26 @@
 </p>
 
 <p align="center">
-    <a href="https://travis-ci.org/chrisdhaan/CDUntappdKit">
-        <img src="http://img.shields.io/travis/chrisdhaan/CDUntappdKit.svg?style=flat" alt="CI Status">
+    <a href="https://github.com/chrisdhaan/CDUntappdKit/actions/workflows/ci.yml">
+        <img src="https://github.com/chrisdhaan/CDUntappdKit/actions/workflows/ci.yml/badge.svg" alt="CI Status">
     </a>
     <a href="https://github.com/chrisdhaan/CDUntappdKit/releases">
         <img src="https://img.shields.io/github/release/chrisdhaan/CDUntappdKit.svg" alt="GitHub Release">
     </a>
+    <a href="https://www.swift.org">
+        <img src="https://img.shields.io/badge/Swift-5.3_5.4_5.5_5.6-orange?style=flat" alt="Swift Versions">
+    </a>
     <a href="http://cocoapods.org/pods/CDUntappdKit">
-        <img src="https://img.shields.io/cocoapods/v/CDUntappdKit.svg?style=flat" alt="Version">
+        <img src="https://img.shields.io/cocoapods/p/CDUntappdKit.svg?style=flat" alt="Platforms">
+    </a>
+    <a href="http://cocoapods.org/pods/CDUntappdKit">
+        <img src="https://img.shields.io/cocoapods/v/CDUntappdKit.svg?style=flat" alt="CocoaPods Compatible">
     </a>
     <a href="https://github.com/Carthage/Carthage">
         <img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat" alt="Carthage compatible">
     </a>
-    <a href="http://cocoapods.org/pods/CDUntappdKit">
-        <img src="https://img.shields.io/cocoapods/p/CDUntappdKit.svg?style=flat" alt="Platform">
+    <a href="https://www.swift.org/package-manager">
+        <img src="https://img.shields.io/badge/Swift_Package_Manager-compatible-orange?style=flat" alt="Swift Package Manager Compatible">
     </a>
     <a href="http://cocoapods.org/pods/CDUntappdKit">
         <img src="https://img.shields.io/cocoapods/l/CDUntappdKit.svg?style=flat" alt="License">
@@ -36,27 +42,23 @@
 
 <br>
 
-This Swift wrapper covers all possible network endpoints and responses for the Untappd Developers API.
+This Swift wrapper covers all possible network endpoints and responses for the Untappd API.
 
 For a demonstration of the capabilities of CDUntappdKit; run the iOS Example project after cloning the repo.
 
 - [Features](#features)
 - [Requirements](#requirements)
 - [Installation](#installation)
+- [Contributing](#contributing)
 - [Usage](#usage)
     - [Initialization](#initialization)
     - [User Info Endpoint](#user-info-endpoint)
     - [User Wish List Endpoint](#user-wish-list-endpoint)
     - [User Friends Endpoint](#user-friends-endpoint)
     - [Brand Assets](#brand-assets)
+- [Author](#author)
 - [Resources](#resources)
 - [License](#license)
-
----
-
-## Pre-Release Software
-
-This framework is currently in development. As of release 0.9.0 the code is stable and in a usable state to install in applications. But be aware that breaking changes may occur until 1.0.0 is released.
 
 ---
 
@@ -107,108 +109,88 @@ This framework is currently in development. As of release 0.9.0 the code is stab
 
 ## Requirements
 
-- iOS 8.0+
-- Xcode 8.1+
-- Swift 3.0+
+- iOS 10.0+ / macOS 10.12+ / tvOS 10.0+ / watchOS 3.0+
+- Swift 5.3+
 
 ---
 
 ## Dependencies
 
-- [AlamofireObjectMapper](https://github.com/tristanhimmelman/AlamofireObjectMapper)
 - [Alamofire](https://github.com/Alamofire/Alamofire)
-- [ObjectMapper](https://github.com/Hearst-DD/ObjectMapper)
 
 ---
 
 ## Installation
 
-### Installation via CocoaPods
+### CocoaPods
 
-CDUntappdKit is available through [CocoaPods](http://cocoapods.org). CocoaPods is a dependency manager that automates and simplifies the process of using 3rd-party libraries like CDUntappdKit in your projects. You can install CocoaPods with the following command:
-
-```ruby
-gem install cocoapods
-```
-
-To integrate CDUntappdKit into your Xcode project using CocoaPods, simply add the following line to your Podfile:
+[CocoaPods](https://cocoapods.org) is a dependency manager for Cocoa projects. For usage and installation instructions, visit their website. To integrate CDUntappdKit into your Xcode project using CocoaPods, specify it in your `Podfile`:
 
 ```ruby
-pod 'CDUntappdKit', '1.0.0'
+pod 'CDUntappdKit', '1.1.0'
 ```
 
-Afterwards, run the following command:
+### Carthage
 
-```ruby
-pod install
+[Carthage](https://github.com/Carthage/Carthage) is a decentralized dependency manager that builds your dependencies and provides you with binary frameworks. To integrate CDUntappdKit into your Xcode project using Carthage, specify it in your `Cartfile`:
+
+```ogdl
+github "chrisdhaan/CDUntappdKit" == 1.1.0
 ```
 
-### Installation via Carthage
+### Swift Package Manager
 
-CDUntappdKit is available through [Carthage](https://github.com/Carthage/Carthage). Carthage is a decentralized dependency manager that builds your dependencies and provides you with binary frameworks.
+The [Swift Package Manager](https://swift.org/package-manager/) is a tool for automating the distribution of Swift code and is integrated into the `swift` compiler.
 
-You can install Carthage via [Homebrew](http://brew.sh) with the following commands:
-
-```ruby
-brew update
-brew install carthage
-```
-
-To integrate CDUntappdKit into your Xcode project using Carthage, simply add the following line to your Cartfile:
-
-```ruby
-github "chrisdhaan/CDUntappdKit" == 1.0.0
-```
-
-Afterwards, run the following command:
-
-```ruby
-carthage update
-```
-
-Next, add the built CDUntappdKit.framework into your Xcode project.
-
-### Installation via Swift Package Manager
-
-CDUntappdKit is available through the [Swift Package Manager](https://swift.org/package-manager). The Swift Package Manager is a tool for automating the distribution of Swift code.
-
-The Swift Package Manager is in early development, but CDUntappdKit does support its use on supported platforms. Until the Swift Package Manager supports non-host platforms, it is recommended to use CocoaPods, Carthage, or Git Submodules to build iOS, watchOS, and tvOS apps.
-
-The Swift Package Manager is integrated into the Swift compiler.
-
-To integrate CDUntappdKit into your Xcode project using The Swift Package Manager, simply add the following line to your Package.swift file:
+Once you have your Swift package set up, adding CDUntappdKit as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
 
 ```swift
 dependencies: [
-    .Package(url: "https://github.com/chrisdhaan/CDUntappdKit.git", "1.0.0")
+    .package(url: "https://github.com/chrisdhaan/CDUntappdKit.git", .upToNextMajor(from: "1.1.0"))
 ]
 ```
 
-Afterwards, run the following command:
+### Git Submodule
 
-```ruby
-swift package fetch
+If you prefer not to use any of the aforementioned dependency managers, you can integrate CDUntappdKit into your project manually.
+
+- Open up Terminal, `cd` into your top-level project directory, and run the following command "if" your project is not initialized as a git repository:
+
+```bash
+$ git init
 ```
 
-### Installation via Git Submodule
-
-CDUntappdKit is available through [Git Submodule](https://git-scm.com/docs/git-submodule) Git Submodule allows you to keep another Git repository in a subdirectory of your repository.
-
-If your project is not initialized as a git repository, navigate into your top-level project directory, and install Git Submodule with the following command:
-
-```git
-git init
-```
-
-To integrate CDUntappdKit into your Xcode project using Git Submodule, simply run the following command:
+- Add CDUntappdKit as a git [submodule](https://git-scm.com/docs/git-submodule) by running the following command:
 
 ```git
 git submodule add https://github.com/chrisdhaan/CDUntappdKit.git
 ```
 
-Afterwards, open the new **CDUntappdKit** folder, and drag the **CDUntappdKit.xcodeproj** into the **Project Navigator** of your Xcode project. A common location for the **CDUntappdKit.xcodeproj** is directly below the **Products** folder.
+- Open the new `CDUntappdKit` folder, and drag the `CDUntappdKit.xcodeproj` into the Project Navigator of your application's Xcode project.
 
-Next, select your application project in the **Project Navigator** to navigate to the target configuration window and select the application target under the **Targets** heading in the sidebar. In the tab bar at the top of that window, open the **General** panel. Click on the **+** button under the **Embedded Binaries** section. You will see two different CDUntappdKit.xcodeproj folders, each with a version of the CDUntappdKit.framework nested inside a Products folder. It does not matter which Products folder you choose from, select the CDUntappdKit.framework for iOS.
+    > It should appear nested underneath your application's blue project icon. Whether it is above or below all the other Xcode groups does not matter.
+
+- Select the `CDUntappdKit.xcodeproj` in the Project Navigator and verify the deployment target matches that of your application target.
+- Next, select your application project in the Project Navigator (blue project icon) to navigate to the target configuration window and select the application target under the "Targets" heading in the sidebar.
+- In the tab bar at the top of that window, open the "General" panel.
+- Click on the `+` button under the "Embedded Binaries" section.
+- You will see two different `CDUntappdKit.xcodeproj` folders each with two different versions of the `CDUntappdKit.framework` nested inside a `Products` folder.
+
+    > It does not matter which `Products` folder you choose from, but it does matter whether you choose the top or bottom `CDUntappdKit.framework`.
+
+- Select the top `CDUntappdKit.framework` for iOS and the bottom one for macOS.
+
+    > You can verify which one you selected by inspecting the build log for your project. The build target for `CDUntappdKit` will be listed as either `CDUntappdKit iOS`, `CDUntappdKit macOS`, `CDUntappdKit tvOS` or `CDUntappdKit watchOS`.
+
+- And that's it!
+
+  > The `CDUntappdKit.framework` is automagically added as a target dependency, linked framework and embedded framework in a copy files build phase which is all you need to build on the simulator and a device.
+
+---
+
+## Contributing
+
+Before contributing to CDUntappdKit, please read the instructions detailed in our [contribution guide](https://github.com/chrisdhaan/CDUntappdKit/blob/master/CONTRIBUTING.md).
 
 ---
 
@@ -334,9 +316,13 @@ cell.textLabel?.textColor = UIColor.untappdYellow()
 
 Christopher de Haan, contact@christopherdehaan.me
 
+---
+
 ## Resources
 
 Visit the [Untappd Developers](https://untappd.com/api/docs) portal for additional resources regarding the Untappd API.
+
+---
 
 ## License
 
