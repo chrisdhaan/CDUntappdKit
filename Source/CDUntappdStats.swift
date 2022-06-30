@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 8/4/17.
 //
-//  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +25,7 @@
 //  THE SOFTWARE.
 //
 
-import ObjectMapper
-
-public class CDUntappdStats: Mappable {
+public struct CDUntappdStats: Decodable {
 
     public var totalBadges: Int?
     public var totalFriends: Int?
@@ -36,17 +34,14 @@ public class CDUntappdStats: Mappable {
     public var totalCreatedBeers: Int?
     public var totalFollowings: Int?
     public var totalPhotos: Int?
-    
-    public required init?(map: Map) {
-    }
-    
-    public func mapping(map: Map) {
-        totalBadges         <- map["total_badges"]
-        totalFriends        <- map["total_friends"]
-        totalCheckins       <- map["total_checkins"]
-        totalBeers          <- map["total_beers"]
-        totalCreatedBeers   <- map["total_created_beers"]
-        totalFollowings     <- map["total_followings"]
-        totalPhotos         <- map["total_photos"]
+
+    enum CodingKeys: String, CodingKey {
+        case totalBadges = "total_badges"
+        case totalFriends = "total_friends"
+        case totalCheckins = "total_checkins"
+        case totalBeers = "total_beers"
+        case totalCreatedBeers = "total_created_beers"
+        case totalFollowings = "total_followings"
+        case totalPhotos = "total_photos"
     }
 }

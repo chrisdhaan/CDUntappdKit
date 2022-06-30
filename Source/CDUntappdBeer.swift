@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 11/27/17.
 //
-//  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +25,13 @@
 //  THE SOFTWARE.
 //
 
-import ObjectMapper
+#if !os(OSX)
+    import UIKit
+#else
+    import Foundation
+#endif
 
-public class CDUntappdBeer: Mappable {
+public struct CDUntappdBeer: Decodable {
 
     public var id: Int?
     public var name: String?
@@ -43,24 +47,21 @@ public class CDUntappdBeer: Mappable {
     public var hasHad: Bool?
     public var isOnWishList: Bool?
     public var createdAt: String?
-    
-    public required init?(map: Map) {
-    }
-    
-    public func mapping(map: Map) {
-        id              <- map["bid"]
-        name            <- map["beer_name"]
-        description     <- map["beer_description"]
-        style           <- map["beer_style"]
-        abv             <- map["beer_abv"]
-        ibu             <- map["beer_ibu"]
-        rating          <- map["auth_rating"]
-        overallRating   <- map["rating_score"]
-        totalRatings    <- map["rating_count"]
-        label           <- (map["beer_label"], URLTransform())
-        isInProduction  <- map["is_in_production"]
-        hasHad          <- map["has_had"]
-        isOnWishList    <- map["wish_list"]
-        createdAt       <- map["created_at"]
+
+    enum CodingKeys: String, CodingKey {
+        case id = "bid"
+        case name = "beer_name"
+        case description = "beer_description"
+        case style = "beer_style"
+        case abv = "beer_abv"
+        case ibu = "beer_ibu"
+        case rating = "auth_rating"
+        case overallRating = "rating_score"
+        case totalRatings = "rating_count"
+        case label = "beer_label"
+        case isInProduction = "is_in_production"
+        case hasHad = "has_had"
+        case isOnWishList = "wish_list"
+        case createdAt = "created_at"
     }
 }

@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 11/27/17.
 //
-//  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +25,7 @@
 //  THE SOFTWARE.
 //
 
-import ObjectMapper
-
-public class CDUntappdCheckin: Mappable {
+public struct CDUntappdCheckin: Decodable {
 
     public var id: Int?
     public var comment: String?
@@ -42,23 +40,20 @@ public class CDUntappdCheckin: Mappable {
     public var media: [CDUntappdMedia]?
     public var source: CDUntappdSource?
     public var createdAt: String?
-    
-    public required init?(map: Map) {
-    }
-    
-    public func mapping(map: Map) {
-        id          <- map["checkin_id"]
-        comment     <- map["checkin_comment"]
-        rating      <- map["rating_score"]
-        user        <- map["user"]
-        brewery     <- map["brewery"]
-        beer        <- map["beer"]
-        venue       <- map["venue"]
-//        toasts      <- map["toasts.items"]
-//        comments    <- map["comments.items"]
-        badges      <- map["badges.items"]
-        media       <- map["media.items"]
-        source      <- map["source"]
-        createdAt   <- map["created_at"]
+
+    enum CodingKeys: String, CodingKey {
+        case id = "checkin_id"
+        case comment = "checkin_comment"
+        case rating = "rating_score"
+        case user = "user"
+        case brewery = "brewery"
+        case beer = "beer"
+        case venue = "venue"
+//        case toasts = "toasts.items"
+//        case comments = "comments.items"
+        case badges = "badges.items"
+        case media = "media.items"
+        case source = "source"
+        case createdAt = "created_at"
     }
 }

@@ -1,8 +1,8 @@
 //
-//  CDUntappdCategory.swift
+//  CDUntappdKit.swift
 //  CDUntappdKit
 //
-//  Created by Christopher de Haan on 11/27/17.
+//  Created by Christopher de Haan on 6/28/22.
 //
 //  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
 //
@@ -25,15 +25,12 @@
 //  THE SOFTWARE.
 //
 
-public struct CDUntappdCategory: Decodable {
+import Foundation
 
-    public var id: String?
-    public var name: String?
-    public var isPrimary: Bool?
+// Enforce minimum Swift version for all platforms and build systems.
+#if swift(<5.3)
+#error("CDUntappdKit doesn't support Swift versions below 5.3.")
+#endif
 
-    enum CodingKeys: String, CodingKey {
-        case id = "category_id"
-        case name = "category_name"
-        case isPrimary = "is_primary"
-    }
-}
+/// Current CDUntappdKit version. Necessary since SPM doesn't use dynamic libraries. Plus this will be more accurate.
+let version = "1.1.0"

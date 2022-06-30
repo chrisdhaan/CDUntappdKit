@@ -1,10 +1,11 @@
+// swift-tools-version:5.3
 //
-//  CDUntappdKit.h
+//  Package.swift
 //  CDUntappdKit
 //
-//  Created by Christopher de Haan on 8/4/17.
+//  Created by Christopher de Haan on 06/30/2022.
 //
-//  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +26,35 @@
 //  THE SOFTWARE.
 //
 
-@import Foundation;
+import PackageDescription
 
-FOUNDATION_EXPORT double CDUntappdKitVersionNumber;
-FOUNDATION_EXPORT const unsigned char CDUntappdKitVersionString[];
+let package = Package(
+    name: "CDUntappdKit",
+    platforms: [
+        .macOS(.v10_12),
+        .iOS(.v10),
+        .tvOS(.v10),
+        .watchOS(.v3)
+    ],
+    products: [
+        .library(
+            name: "CDUntappdKit",
+            targets: ["CDUntappdKit"])
+    ],
+    dependencies: [
+        .package(
+            url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.6.1"))
+    ],
+    targets: [
+        .target(
+            name: "CDUntappdKit",
+            dependencies: [
+                .product(name: "Alamofire", package: "Alamofire")
+            ],
+            path: "Source",
+            exclude: ["Info.plist"],
+            linkerSettings: [
+                .linkedFramework("UIKit", .when(platforms: [.iOS, .tvOS]))
+            ])
+    ],
+    swiftLanguageVersions: [.v5])

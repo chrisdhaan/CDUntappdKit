@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 8/15/17.
 //
-//  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,17 +25,22 @@
 //  THE SOFTWARE.
 //
 
+#if !os(OSX)
+    import UIKit
+#else
+    import Foundation
+#endif
+
 import Alamofire
-import AlamofireObjectMapper
 
 class CDUntappdOAuthClient: NSObject {
 
     let clientId: String!
     let clientSecret: String!
     let redirectUrl: String!
-    
+
     // MARK: - Initializers
-    
+
     init(clientId: String!,
          clientSecret: String!,
          redirectUrl: String!) {
@@ -46,17 +51,23 @@ class CDUntappdOAuthClient: NSObject {
         self.clientSecret = clientSecret
         self.redirectUrl = redirectUrl
     }
-    
+
     // MARK: - Authorization Methods
-    
+
     func authorize(withCode code: String!, completion: @escaping (Bool?, Error?) -> Void) {
-        if code != "" {
-            let params: Parameters = ["client_id": self.clientId,
-                                      "client_secret": self.clientSecret,
+        if let clientId = self.clientId,
+           let clientSecret = self.clientSecret,
+           let redirectUrl = self.redirectUrl,
+           let code = code,
+           code != "" {
+            let params: Parameters = ["client_id": clientId,
+                                      "client_secret": clientSecret,
                                       "response_type": "code",
-                                      "redirect_url": self.redirectUrl,
+                                      "redirect_url": redirectUrl,
                                       "code": code]
-            Alamofire.request(CDUntappdOAuthRouter.authorize(parameters: params)).responseObject { (response: DataResponse<CDUntappdOAuthCredential>) in
+            Alamofire.Session()
+                .request(CDUntappdOAuthRouter.authorize(parameters: params))
+                .responseDecodable { (response: DataResponse<CDUntappdOAuthCredential, AFError>) in
                 switch response.result {
                 case .success(let oAuthCredential):
                     let defaults = UserDefaults.standard
@@ -73,16 +84,16 @@ class CDUntappdOAuthClient: NSObject {
             completion(false, nil)
         }
     }
-    
+
     func isAuthorized() -> Bool {
         let defaults = UserDefaults.standard
-        if let _ = defaults.string(forKey: CDUntappdDefaults.accessToken) {
+        if defaults.string(forKey: CDUntappdDefaults.accessToken) != nil {
             return true
         } else {
             return false
         }
     }
-    
+
     func accessToken() -> String? {
         let defaults = UserDefaults.standard
         if let accessToken = defaults.string(forKey: CDUntappdDefaults.accessToken) {
@@ -91,17 +102,17 @@ class CDUntappdOAuthClient: NSObject {
             return nil
         }
     }
-    
+
     func addTokens(toParameters parameters: Parameters) -> Parameters {
         var params = parameters
-        
+
         if let accessToken = self.accessToken() {
             params["access_token"] = accessToken
         } else {
             params["client_id"] = self.clientId
             params["client_secret"] = self.clientSecret
         }
-        
+
         return params
     }
 }

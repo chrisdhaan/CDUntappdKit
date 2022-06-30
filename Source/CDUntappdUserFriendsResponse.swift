@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 11/30/17.
 //
-//  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,18 +25,13 @@
 //  THE SOFTWARE.
 //
 
-import ObjectMapper
-
-public class CDUntappdUserFriendsResponse: Mappable {
+public struct CDUntappdUserFriendsResponse: Decodable {
 
     public var metadata: CDUntappdMetadata?
     public var friends: [CDUntappdFriend]?
-    
-    public required init?(map: Map) {
-    }
-    
-    public func mapping(map: Map) {
-        metadata    <- map["meta"]
-        friends     <- map["response.items"]
+
+    enum CodingKeys: String, CodingKey {
+        case metadata = "meta"
+        case friends = "response.items"
     }
 }

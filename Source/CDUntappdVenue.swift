@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 11/27/17.
 //
-//  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +25,13 @@
 //  THE SOFTWARE.
 //
 
-import ObjectMapper
+#if !os(OSX)
+    import UIKit
+#else
+    import Foundation
+#endif
 
-public class CDUntappdVenue: Mappable {
+public struct CDUntappdVenue: Decodable {
 
     public var id: Int?
     public var name: String?
@@ -49,30 +53,27 @@ public class CDUntappdVenue: Mappable {
     public var foursqaureUrl: URL?
     public var twitterHandle: String?
     public var website: URL?
-    
-    public required init?(map: Map) {
-    }
-    
-    public func mapping(map: Map) {
-        id                  <- map["venue_id"]
-        name                <- map["venue_name"]
-        isVerified          <- map["is_verified"]
-        parentCategoryId    <- map["parent_category_id"]
-        primaryCategory     <- map["primary_category"]
-        categories          <- map["categories.items"]
-        smallIcon           <- (map["venue_icon.sm"], URLTransform())
-        mediumIcon          <- (map["venue_icon.md"], URLTransform())
-        largeIcon           <- (map["venue_icon.lg"], URLTransform())
-        slug                <- map["venue_slug"]
-        latitude            <- map["location.lat"]
-        longitude           <- map["location.lng"]
-        address             <- map["location.venue_address"]
-        city                <- map["location.venue_city"]
-        state               <- map["location.venue_state"]
-        country             <- map["location.venue_country"]
-        foursqaureId        <- map["foursquare.foursquare_id"]
-        foursqaureUrl       <- (map["foursquare.foursquare_url"], URLTransform())
-        twitterHandle       <- map["contact.twitter"]
-        website             <- (map["contact.venue_url"], URLTransform())
+
+    enum CodingKeys: String, CodingKey {
+        case id = "venue_id"
+        case name = "venue_name"
+        case isVerified = "is_verified"
+        case parentCategoryId = "parent_category_id"
+        case primaryCategory = "primary_category"
+        case categories = "categories.items"
+        case smallIcon = "venue_icon.sm"
+        case mediumIcon = "venue_icon.md"
+        case largeIcon = "venue_icon.lg"
+        case slug = "venue_slug"
+        case latitude = "location.lat"
+        case longitude = "location.lng"
+        case address = "location.venue_address"
+        case city = "location.venue_city"
+        case state = "location.venue_state"
+        case country = "location.venue_country"
+        case foursqaureId = "foursquare.foursquare_id"
+        case foursqaureUrl = "foursquare.foursquare_url"
+        case twitterHandle = "contact.twitter"
+        case website = "contact.venue_url"
     }
 }

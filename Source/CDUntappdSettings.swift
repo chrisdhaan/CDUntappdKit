@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 8/4/17.
 //
-//  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +25,7 @@
 //  THE SOFTWARE.
 //
 
-import ObjectMapper
-
-public class CDUntappdSettings: Mappable {
+public struct CDUntappdSettings: Decodable {
 
     public var badgesToFacebook: Bool?
     public var badgesToTwitter: Bool?
@@ -36,17 +34,14 @@ public class CDUntappdSettings: Mappable {
     public var checkinToFoursquare: Bool?
     public var defaultToCheckin: Bool?
     public var emailAddress: String?
-    
-    public required init?(map: Map) {
-    }
-    
-    public func mapping(map: Map) {
-        badgesToFacebook    <- map["badge.badges_to_facebook"]
-        badgesToTwitter     <- map["badge.badges_to_twitter"]
-        checkinToFacebook   <- map["checkin.checkin_to_facebook"]
-        checkinToTwitter    <- map["checkin.checkin_to_twitter"]
-        checkinToFoursquare <- map["checkin.checkin_to_foursquare"]
-        defaultToCheckin    <- map["navigation.default_to_checkin"]
-        emailAddress        <- map["email_address"]
+
+    enum CodingKeys: String, CodingKey {
+        case badgesToFacebook = "badge.badges_to_facebook"
+        case badgesToTwitter = "badge.badges_to_twitter"
+        case checkinToFacebook = "checkin.checkin_to_facebook"
+        case checkinToTwitter = "checkin.checkin_to_twitter"
+        case checkinToFoursquare = "checkin.checkin_to_foursquare"
+        case defaultToCheckin = "navigation.default_to_checkin"
+        case emailAddress = "email_address"
     }
 }

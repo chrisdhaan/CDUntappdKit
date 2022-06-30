@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 8/4/17.
 //
-//  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +25,13 @@
 //  THE SOFTWARE.
 //
 
-import ObjectMapper
+#if !os(OSX)
+    import UIKit
+#else
+    import Foundation
+#endif
 
-public class CDUntappdUser: Mappable {
+public struct CDUntappdUser: Decodable {
 
     public var id: Int?
     public var uid: Int?
@@ -51,40 +55,37 @@ public class CDUntappdUser: Mappable {
     public var stats: CDUntappdStats?
     public var checkins: [CDUntappdCheckin]?
     public var recentBrews: [CDUntappdRecentBrew]?
-     public var media: [CDUntappdMedia]?
+    public var media: [CDUntappdMedia]?
     public var contact: CDUntappdContact?
     public var dateJoined: String?
     public var settings: CDUntappdSettings?
-    
-    public required init?(map: Map) {
-    }
-    
-    public func mapping(map: Map) {
-        id                      <- map["id"]
-        uid                     <- map["uid"]
-        username                <- map["user_name"]
-        firstName               <- map["first_name"]
-        lastName                <- map["last_name"]
-        userAvatar              <- (map["user_avatar"], URLTransform())
-        userAvatatHd            <- (map["user_avatar"], URLTransform())
-        userCoverPhoto          <- (map["user_cover_photo"], URLTransform())
-        userCoverPhotoOffset    <- map["user_cover_photo_offset"]
-        location                <- map["location"]
-        bio                     <- map["bio"]
-        website                 <- (map["url"], URLTransform())
-        untappdUrl              <- (map["untappd_url"], URLTransform())
-        isPrivate               <- map["is_private"]
-        isModerator             <- map["is_moderator"]
-        isSupporter             <- map["is_supporter"]
-        relationship            <- map["relationship"]
-        accountType             <- map["account_type"]
-        blockStatus             <- map["block_status"]
-        stats                   <- map["stats"]
-        checkins                <- map["checkins.items"]
-        recentBrews             <- map["recent_brews.items"]
-        media                   <- map["media"]
-        contact                 <- map["contact"]
-        dateJoined              <- map["date_joined"]
-        settings                <- map["settings"]
+
+    enum CodingKeys: String, CodingKey {
+        case id = "id"
+        case uid = "uid"
+        case username = "user_name"
+        case firstName = "first_name"
+        case lastName = "last_name"
+        case userAvatar = "user_avatar"
+        case userAvatatHd = "user_avatar_hd"
+        case userCoverPhoto = "user_cover_photo"
+        case userCoverPhotoOffset = "user_cover_photo_offset"
+        case location = "location"
+        case bio = "bio"
+        case website = "url"
+        case untappdUrl = "untappd_url"
+        case isPrivate = "is_private"
+        case isModerator = "is_moderator"
+        case isSupporter = "is_supporter"
+        case relationship = "relationship"
+        case accountType = "account_type"
+        case blockStatus = "block_status"
+        case stats = "stats"
+        case checkins = "checkins.items"
+        case recentBrews = "recent_brews.items"
+        case media = "media"
+        case contact = "contact"
+        case dateJoined = "date_joined"
+        case settings = "settings"
     }
 }

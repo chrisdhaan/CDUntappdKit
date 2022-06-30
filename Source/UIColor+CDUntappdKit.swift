@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 11/28/17.
 //
-//  Copyright © 2016-2017 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,14 +26,14 @@
 //
 
 public extension CDColor {
-    
+
     class func untappdBrown() -> CDColor {
         return CDColor(red: (202.0/255.0),
                        green: (102.0/255.0),
                        blue: (26.0/255.0),
                        alpha: 1.0)
     }
-    
+
     class func untappdYellow() -> CDColor {
         return CDColor(red: (253.0/255.0),
                        green: (191.0/255.0),

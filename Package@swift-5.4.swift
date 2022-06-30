@@ -1,8 +1,9 @@
+// swift-tools-version:5.4
 //
-//  CDUntappdCategory.swift
+//  Package.swift
 //  CDUntappdKit
 //
-//  Created by Christopher de Haan on 11/27/17.
+//  Created by Christopher de Haan on 06/30/2022.
 //
 //  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
 //
@@ -25,15 +26,35 @@
 //  THE SOFTWARE.
 //
 
-public struct CDUntappdCategory: Decodable {
+import PackageDescription
 
-    public var id: String?
-    public var name: String?
-    public var isPrimary: Bool?
-
-    enum CodingKeys: String, CodingKey {
-        case id = "category_id"
-        case name = "category_name"
-        case isPrimary = "is_primary"
-    }
-}
+let package = Package(
+    name: "CDUntappdKit",
+    platforms: [
+        .macOS(.v10_12),
+        .iOS(.v10),
+        .tvOS(.v10),
+        .watchOS(.v3)
+    ],
+    products: [
+        .library(
+            name: "CDUntappdKit",
+            targets: ["CDUntappdKit"])
+    ],
+    dependencies: [
+        .package(
+            url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.6.1"))
+    ],
+    targets: [
+        .target(
+            name: "CDUntappdKit",
+            dependencies: [
+                .product(name: "Alamofire", package: "Alamofire")
+            ],
+            path: "Source",
+            exclude: ["Info.plist"],
+            linkerSettings: [
+                .linkedFramework("UIKit", .when(platforms: [.iOS, .tvOS]))
+            ])
+    ],
+    swiftLanguageVersions: [.v5])

@@ -23,30 +23,31 @@
 //  THE SOFTWARE.
 //
 
-import ObjectMapper
+#if !os(OSX)
+    import UIKit
+#else
+    import Foundation
+#endif
 
-public class CDUntappdBadge: Mappable {
+public struct CDUntappdBadge: Decodable {
 
-    public var id: Int?
-    public var name: String?
-    public var description: String?
-    public var smallImage: URL?
-    public var mediumImage: URL?
-    public var largeImage: URL?
-    public var userBadgeId: Int?
-    public var createdAt: String?
-    
-    public required init?(map: Map) {
-    }
-    
-    public func mapping(map: Map) {
-        id          <- map["badge_id"]
-        name        <- map["badge_name"]
-        description <- map["badge_description"]
-        smallImage  <- (map["badge_image.sm"], URLTransform())
-        mediumImage <- (map["badge_image.md"], URLTransform())
-        largeImage  <- (map["badge_image.lg"], URLTransform())
-        userBadgeId <- map["user_badge_id"]
-        createdAt   <- map["created_at"]
+    public let id: Int?
+    public let name: String?
+    public let description: String?
+    public let smallImage: URL?
+    public let mediumImage: URL?
+    public let largeImage: URL?
+    public let userBadgeId: Int?
+    public let createdAt: String?
+
+    enum CodingKeys: String, CodingKey {
+        case id = "badge_id"
+        case name = "badge_name"
+        case description = "badge_description"
+        case smallImage = "badge_image.sm"
+        case mediumImage = "badge_image.md"
+        case largeImage = "badge_image.lg"
+        case userBadgeId = "user_badge_id"
+        case createdAt = "created_at"
     }
 }
