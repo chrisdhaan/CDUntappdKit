@@ -25,11 +25,8 @@
 //  THE SOFTWARE.
 //
 
-#if !os(OSX)
-    import UIKit
-#else
-    import Foundation
-#endif
+#if os(iOS)
+import UIKit
 
 extension UIApplication {
 
@@ -53,3 +50,4 @@ extension UIApplication {
         return controller
     }
 }
+#endif

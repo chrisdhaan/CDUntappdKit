@@ -25,7 +25,9 @@
 //  THE SOFTWARE.
 //
 
+#if os(iOS)
 import Alamofire
+import UIKit
 import WebKit
 
 class CDUntappdOAuthViewController: UIViewController {
@@ -90,3 +92,4 @@ extension CDUntappdOAuthViewController: WKNavigationDelegate {
         decisionHandler(.allow)
     }
 }
+#endif

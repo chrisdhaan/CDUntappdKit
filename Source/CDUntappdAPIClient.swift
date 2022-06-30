@@ -70,9 +70,9 @@ public class CDUntappdAPIClient: NSObject {
     ///
     /// - returns: Void
     ///
+#if os(iOS)
     @available(iOSApplicationExtension, unavailable)
     public func authenticate() {
-#if os(iOS)
         if let tvc = UIApplication.topViewController(),
             tvc.parent as? UINavigationController == nil,
             self.isAuthenticated() == false {
@@ -93,8 +93,8 @@ public class CDUntappdAPIClient: NSObject {
                 tvc.present(oAuthNavigationController, animated: true, completion: nil)
             }
         }
-#endif
     }
+#endif
 
     ///
     /// Determines whether or not the Untappd application has successfully authenticated with the Untappd API.
