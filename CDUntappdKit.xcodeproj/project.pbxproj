@@ -117,6 +117,14 @@
 		B22019F61FD21A7800A2BE3F /* CDColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22019F41FD21A7800A2BE3F /* CDColor.swift */; };
 		B22019F71FD21A7800A2BE3F /* CDColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22019F41FD21A7800A2BE3F /* CDColor.swift */; };
 		B22019F81FD21A7800A2BE3F /* CDColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22019F41FD21A7800A2BE3F /* CDColor.swift */; };
+		B22454C1286E415100BE85D0 /* CDUntappdResponseTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22454C0286E415100BE85D0 /* CDUntappdResponseTime.swift */; };
+		B22454C2286E415100BE85D0 /* CDUntappdResponseTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22454C0286E415100BE85D0 /* CDUntappdResponseTime.swift */; };
+		B22454C3286E415100BE85D0 /* CDUntappdResponseTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22454C0286E415100BE85D0 /* CDUntappdResponseTime.swift */; };
+		B22454C4286E415100BE85D0 /* CDUntappdResponseTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22454C0286E415100BE85D0 /* CDUntappdResponseTime.swift */; };
+		B22454CE286E440500BE85D0 /* CDUntappdInitTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22454CD286E440500BE85D0 /* CDUntappdInitTime.swift */; };
+		B22454CF286E440500BE85D0 /* CDUntappdInitTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22454CD286E440500BE85D0 /* CDUntappdInitTime.swift */; };
+		B22454D0286E440500BE85D0 /* CDUntappdInitTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22454CD286E440500BE85D0 /* CDUntappdInitTime.swift */; };
+		B22454D1286E440500BE85D0 /* CDUntappdInitTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22454CD286E440500BE85D0 /* CDUntappdInitTime.swift */; };
 		B2409CFD286B9C8F0001AE66 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2409CDA286A566D0001AE66 /* Alamofire.framework */; };
 		B2409CFE286B9EA00001AE66 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2409CDE286A566D0001AE66 /* Alamofire.framework */; };
 		B2409D05286BA0330001AE66 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2409CE2286A566D0001AE66 /* Alamofire.framework */; };
@@ -224,6 +232,8 @@
 		B22019961FD206F700A2BE3F /* CDUntappdKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CDUntappdKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B22019C61FD207F700A2BE3F /* CDUntappdKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CDUntappdKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B22019F41FD21A7800A2BE3F /* CDColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDColor.swift; sourceTree = "<group>"; };
+		B22454C0286E415100BE85D0 /* CDUntappdResponseTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDUntappdResponseTime.swift; sourceTree = "<group>"; };
+		B22454CD286E440500BE85D0 /* CDUntappdInitTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDUntappdInitTime.swift; sourceTree = "<group>"; };
 		B2409CC0286A50010001AE66 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		B2409CC8286A50120001AE66 /* ci.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; name = ci.yml; path = .github/workflows/ci.yml; sourceTree = "<group>"; };
 		B2409CC9286A50310001AE66 /* PULL_REQUEST_TEMPLATE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = PULL_REQUEST_TEMPLATE.md; path = .github/PULL_REQUEST_TEMPLATE.md; sourceTree = "<group>"; };
@@ -314,9 +324,11 @@
 				B28180C81FCCD5CB00806E4C /* CDUntappdCheckin.swift */,
 				B205370E1F3989E400338826 /* CDUntappdContact.swift */,
 				B20143E51FD0D109005FCBC8 /* CDUntappdFriend.swift */,
+				B22454CD286E440500BE85D0 /* CDUntappdInitTime.swift */,
 				B28180D21FCCE49800806E4C /* CDUntappdMedia.swift */,
 				B20232BD1FC4DC6800C33B69 /* CDUntappdMetadata.swift */,
 				B28180BB1FCCCFF500806E4C /* CDUntappdRecentBrew.swift */,
+				B22454C0286E415100BE85D0 /* CDUntappdResponseTime.swift */,
 				B20537111F3989E400338826 /* CDUntappdSettings.swift */,
 				B28180CA1FCCD95E00806E4C /* CDUntappdSource.swift */,
 				B205370F1F3989E400338826 /* CDUntappdStats.swift */,
@@ -808,8 +820,10 @@
 				B22019811FD203EF00A2BE3F /* CDUntappdUser.swift in Sources */,
 				B22019821FD203EF00A2BE3F /* CDUntappdUserFriendsResponse.swift in Sources */,
 				B22019831FD203EF00A2BE3F /* CDUntappdUserInfoResponse.swift in Sources */,
+				B22454C4286E415100BE85D0 /* CDUntappdResponseTime.swift in Sources */,
 				B22019841FD203EF00A2BE3F /* CDUntappdUserWishListResponse.swift in Sources */,
 				B22019851FD203EF00A2BE3F /* CDUntappdVenue.swift in Sources */,
+				B22454D1286E440500BE85D0 /* CDUntappdInitTime.swift in Sources */,
 				B22019861FD203EF00A2BE3F /* CDUntappdWishList.swift in Sources */,
 				B22019871FD203EF00A2BE3F /* CDUntappdWishListItem.swift in Sources */,
 				B22019881FD203EF00A2BE3F /* CDUntappdOAuthClient.swift in Sources */,
@@ -847,8 +861,10 @@
 				B22019B31FD207AE00A2BE3F /* CDUntappdUser.swift in Sources */,
 				B22019B41FD207AE00A2BE3F /* CDUntappdUserFriendsResponse.swift in Sources */,
 				B22019B51FD207AE00A2BE3F /* CDUntappdUserInfoResponse.swift in Sources */,
+				B22454C3286E415100BE85D0 /* CDUntappdResponseTime.swift in Sources */,
 				B22019B61FD207AE00A2BE3F /* CDUntappdUserWishListResponse.swift in Sources */,
 				B22019B71FD207AE00A2BE3F /* CDUntappdVenue.swift in Sources */,
+				B22454D0286E440500BE85D0 /* CDUntappdInitTime.swift in Sources */,
 				B22019B81FD207AE00A2BE3F /* CDUntappdWishList.swift in Sources */,
 				B22019B91FD207AE00A2BE3F /* CDUntappdWishListItem.swift in Sources */,
 				B22019BA1FD207AE00A2BE3F /* CDUntappdOAuthClient.swift in Sources */,
@@ -886,8 +902,10 @@
 				B22019E51FD2129200A2BE3F /* CDUntappdUser.swift in Sources */,
 				B22019E61FD2129200A2BE3F /* CDUntappdUserFriendsResponse.swift in Sources */,
 				B22019E71FD2129200A2BE3F /* CDUntappdUserInfoResponse.swift in Sources */,
+				B22454C2286E415100BE85D0 /* CDUntappdResponseTime.swift in Sources */,
 				B22019E81FD2129200A2BE3F /* CDUntappdUserWishListResponse.swift in Sources */,
 				B22019E91FD2129200A2BE3F /* CDUntappdVenue.swift in Sources */,
+				B22454CF286E440500BE85D0 /* CDUntappdInitTime.swift in Sources */,
 				B22019EA1FD2129200A2BE3F /* CDUntappdWishList.swift in Sources */,
 				B22019EB1FD2129200A2BE3F /* CDUntappdWishListItem.swift in Sources */,
 				B22019EC1FD2129200A2BE3F /* CDUntappdOAuthClient.swift in Sources */,
@@ -918,6 +936,7 @@
 				B205371D1F398A0000338826 /* CDUntappdEnums.swift in Sources */,
 				B20232BE1FC4DC6800C33B69 /* CDUntappdMetadata.swift in Sources */,
 				B2D6C3E21F43D5BE0067279A /* CDUntappdOAuthClient.swift in Sources */,
+				B22454CE286E440500BE85D0 /* CDUntappdInitTime.swift in Sources */,
 				B29E00B51F3A82AF00302663 /* CDUntappdOAuthCredential.swift in Sources */,
 				B20143E61FD0D109005FCBC8 /* CDUntappdFriend.swift in Sources */,
 				B29E00B31F3A81E100302663 /* CDUntappdOAuthRouter.swift in Sources */,
@@ -939,6 +958,7 @@
 				B20143E41FD0D0A8005FCBC8 /* CDUntappdUserFriendsResponse.swift in Sources */,
 				B2B7070C1F3B800C00FAA6EF /* UIApplication+CDUntappdKit.swift in Sources */,
 				B20143C81FD0C3D7005FCBC8 /* CDUntappdWishList.swift in Sources */,
+				B22454C1286E415100BE85D0 /* CDUntappdResponseTime.swift in Sources */,
 				B20232B31FC4D3DD00C33B69 /* Parameters+CDUntappdKit.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1083,7 +1103,7 @@
 				INFOPLIST_FILE = Source/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.1;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.christopherdehaan.CDUntappdKit;
 				PRODUCT_NAME = CDUntappdKit;
@@ -1146,7 +1166,7 @@
 				INFOPLIST_FILE = Source/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.christopherdehaan.CDUntappdKit;
 				PRODUCT_NAME = CDUntappdKit;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";

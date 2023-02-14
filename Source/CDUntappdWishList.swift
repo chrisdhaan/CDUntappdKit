@@ -27,8 +27,8 @@
 
 public struct CDUntappdWishList: Decodable {
 
-    public var items: [CDUntappdWishListItem]?
-    public var updatedAt: String?
+    public let items: [CDUntappdWishListItem]?
+    public let updatedAt: String?
 
     enum CodingKeys: String, CodingKey {
         case items = "beers.items"

@@ -35,6 +35,14 @@ import Alamofire
 
 enum CDUntappdRouter: URLRequestConvertible {
 
+    // Feeds
+    case activityFeed(parameters: Parameters)
+    case userActivityFeed(username: String?, parameters: Parameters)
+    case thePubLocal(parameters: Parameters)
+    case venueActivityFeed(venueId: Int, parameters: Parameters)
+    case beerActivityFeed(bid: Int, parameters: Parameters)
+    case breweryActivityFeed(breweryId: Int, parameters: Parameters)
+    case notifications(parameters: Parameters)
     // Info / Search
     case userInfo(username: String?, parameters: Parameters)
     case userWishList(username: String?, parameters: Parameters)
@@ -46,26 +54,81 @@ enum CDUntappdRouter: URLRequestConvertible {
     case venueInfo(venueId: Int, parameters: Parameters)
     case beerSearch(parameters: Parameters)
     case brewerySearch(parameters: Parameters)
+    // Actions
+    case checkin(parameters: Parameters)
+    case toast(checkinId: Int, parameters: Parameters)
+    case pendingFriends(parameters: Parameters)
+    case addFriend(targetId: Int, parameters: Parameters)
+    case removeFriend(targetId: Int, parameters: Parameters)
+    case acceptFriend(targetId: Int, parameters: Parameters)
+    case rejectFriend(targetId: Int, parameters: Parameters)
+    case addComment(checkinId: Int, parameters: Parameters)
+    case removeComment(checkinId: Int, parameters: Parameters)
+    case addToWishList(parameters: Parameters)
+    case removeFromWishList(parameters: Parameters)
+    // Utilities
+    case foursquareLookup(venueId: String, parameters: Parameters)
 
     var method: HTTPMethod {
         switch self {
-        // Info / Search
-        case .userInfo(username: _, parameters: _),
-             .userWishList(username: _, parameters: _),
-             .userFriends(username: _, parameters: _),
-             .userBadges(username: _, parameters: _),
-             .userBeers(username: _, parameters: _),
-             .breweryInfo(breweryId: _, parameters: _),
-             .beerInfo(bid: _, parameters: _),
-             .venueInfo(venueId: _, parameters: _),
-             .beerSearch(parameters: _),
-             .brewerySearch(parameters: _):
+        case
+            // Feeds
+            .activityFeed(parameters: _),
+            .userActivityFeed(username: _, parameters: _),
+            .thePubLocal(parameters: _),
+            .venueActivityFeed(venueId: _, parameters: _),
+            .beerActivityFeed(bid: _, parameters: _),
+            .breweryActivityFeed(breweryId: _, parameters: _),
+            .notifications(parameters: _),
+            // Info / Search
+            .userInfo(username: _, parameters: _),
+            .userWishList(username: _, parameters: _),
+            .userFriends(username: _, parameters: _),
+            .userBadges(username: _, parameters: _),
+            .userBeers(username: _, parameters: _),
+            .breweryInfo(breweryId: _, parameters: _),
+            .beerInfo(bid: _, parameters: _),
+            .venueInfo(venueId: _, parameters: _),
+            .beerSearch(parameters: _),
+            .brewerySearch(parameters: _),
+            // Actions
+            .pendingFriends(parameters: _),
+            .addFriend(targetId: _, parameters: _),
+            .removeFriend(targetId: _, parameters: _),
+            .acceptFriend(targetId: _, parameters: _),
+            .rejectFriend(targetId: _, parameters: _),
+            .addToWishList(parameters: _),
+            .removeFromWishList(parameters: _),
+            // Utilities
+            .foursquareLookup(venueId: _, parameters: _):
             return .get
+        case
+            // Actions
+            .checkin(parameters: _),
+            .toast(checkinId: _, parameters: _),
+            .addComment(checkinId: _, parameters: _),
+            .removeComment(checkinId: _, parameters: _):
+            return .post
         }
     }
 
     var path: String {
         switch self {
+        // Feeds
+        case .activityFeed(parameters: _):
+            return "checkin/recent"
+        case .userActivityFeed(let username, parameters: _):
+            return String.path("user/checkins", forUsername: username)
+        case .thePubLocal(parameters: _):
+            return "thepub/local"
+        case .venueActivityFeed(let venueId, parameters: _):
+            return "venue/checkins/\(venueId)"
+        case .beerActivityFeed(let bid, parameters: _):
+            return "beer/checkins/\(bid)"
+        case .breweryActivityFeed(let breweryId, parameters: _):
+            return "brewery/checkins/\(breweryId)"
+        case .notifications(parameters: _):
+            return "notifications"
         // Info / Search
         case .userInfo(let username, parameters: _):
             return String.path("user/info", forUsername: username)
@@ -87,6 +150,32 @@ enum CDUntappdRouter: URLRequestConvertible {
             return "search/beer"
         case .brewerySearch(parameters: _):
             return "search/brewery"
+        // Actions
+        case .checkin(parameters: _):
+            return "checkin/add"
+        case .toast(let checkinId, parameters: _):
+            return "checkin/toast/\(checkinId)"
+        case .pendingFriends(parameters: _):
+            return "user/pending"
+        case .addFriend(let targetId, parameters: _):
+            return "friend/request/\(targetId)"
+        case .removeFriend(let targetId, parameters: _):
+            return "friend/remove/\(targetId)"
+        case .acceptFriend(let targetId, parameters: _):
+            return "friend/accept/\(targetId)"
+        case .rejectFriend(let targetId, parameters: _):
+            return "friend/reject/\(targetId)"
+        case .addComment(let checkinId, parameters: _):
+            return "checkin/addcomment/\(checkinId)"
+        case .removeComment(let checkinId, parameters: _):
+            return "checkin/deletecomment/\(checkinId)"
+        case .addToWishList(parameters: _):
+            return "user/wishlist/add"
+        case .removeFromWishList(parameters: _):
+            return "user/wishlist/add"
+        // Utilities
+        case .foursquareLookup(let venueId, parameters: _):
+            return "venue/foursquare_lookup/\(venueId)"
         }
     }
 
@@ -97,21 +186,40 @@ enum CDUntappdRouter: URLRequestConvertible {
         urlRequest.httpMethod = method.rawValue
 
         switch self {
-        // Info / Search
-        case .userInfo(username: _, let parameters),
-             .userWishList(username: _, let parameters),
-             .userFriends(username: _, let parameters),
-             .userBadges(username: _, let parameters),
-             .userBeers(username: _, let parameters):
-            urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
-        case .breweryInfo(breweryId: _, let parameters):
-            urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
-        case .beerInfo(bid: _, let parameters):
-            urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
-        case .venueInfo(venueId: _, let parameters):
-            urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
-        case .beerSearch(let parameters),
-             .brewerySearch(let parameters):
+        case
+            // Feeds
+            .activityFeed(let parameters),
+            .userActivityFeed(username: _, let parameters),
+            .thePubLocal(let parameters),
+            .venueActivityFeed(venueId: _, let parameters),
+            .beerActivityFeed(bid: _, let parameters),
+            .breweryActivityFeed(breweryId: _, let parameters),
+            .notifications(let parameters),
+            // Info / Search
+            .userInfo(username: _, let parameters),
+            .userWishList(username: _, let parameters),
+            .userFriends(username: _, let parameters),
+            .userBadges(username: _, let parameters),
+            .userBeers(username: _, let parameters),
+            .breweryInfo(breweryId: _, let parameters),
+            .beerInfo(bid: _, let parameters),
+            .venueInfo(venueId: _, let parameters),
+            .beerSearch(let parameters),
+            .brewerySearch(let parameters),
+            // Actions
+            .checkin(let parameters),
+            .toast(checkinId: _, let parameters),
+            .pendingFriends(let parameters),
+            .addFriend(targetId: _, let parameters),
+            .removeFriend(targetId: _, let parameters),
+            .acceptFriend(targetId: _, let parameters),
+            .rejectFriend(targetId: _, let parameters),
+            .addComment(checkinId: _, let parameters),
+            .removeComment(checkinId: _, let parameters),
+            .addToWishList(let parameters),
+            .removeFromWishList(let parameters),
+            // Utilities
+            .foursquareLookup(venueId: _, let parameters):
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
         }
 

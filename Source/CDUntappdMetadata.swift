@@ -27,14 +27,20 @@
 
 public struct CDUntappdMetadata: Decodable {
 
-    public var code: Int?
-    public var details: String?
-    public var type: String?
+    public let code: Int?
+    public let initTime: CDUntappdInitTime?
+    public let responseTime: CDUntappdResponseTime?
+    public let details: String?
+    public let type: String?
+    public let developerFriendly: String?
 
     enum CodingKeys: String, CodingKey {
-        case code = "code"
+        case code
+        case initTime = "init_time"
+        case responseTime = "response_time"
         case details = "error_detail"
         case type = "error_type"
+        case developerFriendly = "developer_friendly"
     }
 
     public func description() -> String {

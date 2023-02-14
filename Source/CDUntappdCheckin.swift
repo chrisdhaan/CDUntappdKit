@@ -27,33 +27,33 @@
 
 public struct CDUntappdCheckin: Decodable {
 
-    public var id: Int?
-    public var comment: String?
-    public var rating: Double?
-    public var user: CDUntappdUser?
-    public var brewery: CDUntappdBrewery?
-    public var beer: CDUntappdBeer?
-    public var venue: CDUntappdVenue?
-//    public var toasts: [CDUntappdToast]?
-//    public var comments: [CDUntappdComment]?
-    public var badges: [CDUntappdBadge]?
-    public var media: [CDUntappdMedia]?
-    public var source: CDUntappdSource?
-    public var createdAt: String?
+    public let id: Int?
+    public let comment: String?
+    public let rating: Double?
+    public let user: CDUntappdUser?
+    public let brewery: CDUntappdBrewery?
+    public let beer: CDUntappdBeer?
+    public let venue: CDUntappdVenue?
+//    public let toasts: [CDUntappdToast]?
+//    public let comments: [CDUntappdComment]?
+    public let badges: [CDUntappdBadge]?
+    public let media: [CDUntappdMedia]?
+    public let source: CDUntappdSource?
+    public let createdAt: String?
 
     enum CodingKeys: String, CodingKey {
         case id = "checkin_id"
         case comment = "checkin_comment"
         case rating = "rating_score"
-        case user = "user"
-        case brewery = "brewery"
-        case beer = "beer"
-        case venue = "venue"
+        case user
+        case brewery
+        case beer
+        case venue
 //        case toasts = "toasts.items"
 //        case comments = "comments.items"
         case badges = "badges.items"
         case media = "media.items"
-        case source = "source"
+        case source
         case createdAt = "created_at"
     }
 }

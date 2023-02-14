@@ -27,8 +27,8 @@
 
 public struct CDUntappdUserFriendsResponse: Decodable {
 
-    public var metadata: CDUntappdMetadata?
-    public var friends: [CDUntappdFriend]?
+    public let metadata: CDUntappdMetadata?
+    public let friends: [CDUntappdFriend]?
 
     enum CodingKeys: String, CodingKey {
         case metadata = "meta"

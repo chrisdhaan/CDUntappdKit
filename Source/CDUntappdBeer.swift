@@ -33,20 +33,20 @@
 
 public struct CDUntappdBeer: Decodable {
 
-    public var id: Int?
-    public var name: String?
-    public var description: String?
-    public var style: String?
-    public var abv: Double?
-    public var ibu: Double?
-    public var rating: Double?
-    public var overallRating: Double?
-    public var totalRatings: Int?
-    public var label: URL?
-    public var isInProduction: Bool?
-    public var hasHad: Bool?
-    public var isOnWishList: Bool?
-    public var createdAt: String?
+    public let id: Int?
+    public let name: String?
+    public let description: String?
+    public let style: String?
+    public let abv: Double?
+    public let ibu: Double?
+    public let rating: Double?
+    public let overallRating: Double?
+    public let totalRatings: Int?
+    public let label: URL?
+    public let isInProduction: Bool?
+    public let hasHad: Bool?
+    public let isOnWishList: Bool?
+    public let createdAt: String?
 
     enum CodingKeys: String, CodingKey {
         case id = "bid"

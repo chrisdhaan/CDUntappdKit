@@ -33,17 +33,17 @@
 
 public struct CDUntappdMedia: Decodable {
 
-    public var id: Int?
-    public var originalImage: URL?
-    public var smallImage: URL?
-    public var mediumImage: URL?
-    public var largeImage: URL?
-    public var checkInId: Int?
-    public var user: CDUntappdUser?
-    public var brewery: CDUntappdBrewery?
-    public var beer: CDUntappdBeer?
-    public var venue: CDUntappdVenue?
-    public var createdAt: String?
+    public let id: Int?
+    public let originalImage: URL?
+    public let smallImage: URL?
+    public let mediumImage: URL?
+    public let largeImage: URL?
+    public let checkInId: Int?
+    public let user: CDUntappdUser?
+    public let brewery: CDUntappdBrewery?
+    public let beer: CDUntappdBeer?
+    public let venue: CDUntappdVenue?
+    public let createdAt: String?
 
     enum CodingKeys: String, CodingKey {
         case id = "photo_id"
@@ -52,10 +52,10 @@ public struct CDUntappdMedia: Decodable {
         case mediumImage = "photo.photo_img_md"
         case largeImage = "photo.photo_img_lg"
         case checkInId = "checkin_id"
-        case user = "user"
-        case brewery = "brewery"
-        case beer = "beer"
-        case venue = "venue"
+        case user
+        case brewery
+        case beer
+        case venue
         case createdAt = "created_at"
     }
 }

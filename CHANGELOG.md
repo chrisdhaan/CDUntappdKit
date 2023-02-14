@@ -3,8 +3,22 @@ All notable changes to this project will be documented in this file.
 `CDUntappdKit` adheres to [Semantic Versioning](https://semver.org/).
 
 #### 1.x Releases
-- `1.1.x` Releases - [1.1.0](#110)
+- `1.1.x` Releases - [1.1.0](#110) | [1.1.1](#111)
 - `1.0.x` Releases - [1.0.0](#100)
+
+---
+
+## [1.1.1](https://github.com/chrisdhaan/CDUntappdKit/releases/tag/1.1.1)
+## TODO
+Released on 2022-06-30.
+
+#### Added
+
+TODO
+
+#### Updated
+    
+TODO
 
 ---
 

@@ -27,9 +27,9 @@
 
 public struct CDUntappdContact: Decodable {
 
-    public var foursquare: String?
-    public var twitter: String?
-    public var facebook: String?
+    public let foursquare: String?
+    public let twitter: String?
+    public let facebook: String?
 
     enum CodingKeys: String, CodingKey {
         case foursquare

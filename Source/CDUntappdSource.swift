@@ -33,8 +33,8 @@
 
 public struct CDUntappdSource: Decodable {
 
-    public var name: String?
-    public var website: URL?
+    public let name: String?
+    public let website: URL?
 
     enum CodingKeys: String, CodingKey {
         case name = "app_name"

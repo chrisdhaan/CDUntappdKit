@@ -1,8 +1,8 @@
 //
-//  CDUntappdSettings.swift
+//  CDUntappdInitTime.swift
 //  CDUntappdKit
 //
-//  Created by Christopher de Haan on 8/4/17.
+//  Created by Christopher de Haan on 6/30/22.
 //
 //  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
 //
@@ -25,23 +25,13 @@
 //  THE SOFTWARE.
 //
 
-public struct CDUntappdSettings: Decodable {
+public struct CDUntappdInitTime: Decodable {
 
-    public let badgesToFacebook: Bool?
-    public let badgesToTwitter: Bool?
-    public let checkinToFacebook: Bool?
-    public let checkinToTwitter: Bool?
-    public let checkinToFoursquare: Bool?
-    public let defaultToCheckin: Bool?
-    public let emailAddress: String?
+    public let time: Double?
+    public let measure: String?
 
     enum CodingKeys: String, CodingKey {
-        case badgesToFacebook = "badge.badges_to_facebook"
-        case badgesToTwitter = "badge.badges_to_twitter"
-        case checkinToFacebook = "checkin.checkin_to_facebook"
-        case checkinToTwitter = "checkin.checkin_to_twitter"
-        case checkinToFoursquare = "checkin.checkin_to_foursquare"
-        case defaultToCheckin = "navigation.default_to_checkin"
-        case emailAddress = "email_address"
+        case time
+        case measure
     }
 }

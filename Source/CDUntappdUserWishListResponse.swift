@@ -27,8 +27,8 @@
 
 public struct CDUntappdUserWishListResponse: Decodable {
 
-    public var metadata: CDUntappdMetadata?
-    public var wishList: CDUntappdWishList?
+    public let metadata: CDUntappdMetadata?
+    public let wishList: CDUntappdWishList?
 
     enum CodingKeys: String, CodingKey {
         case metadata = "meta"

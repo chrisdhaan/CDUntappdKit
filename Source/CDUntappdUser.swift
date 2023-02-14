@@ -33,59 +33,153 @@
 
 public struct CDUntappdUser: Decodable {
 
-    public var id: Int?
-    public var uid: Int?
-    public var username: String?
-    public var firstName: String?
-    public var lastName: String?
-    public var userAvatar: URL?
-    public var userAvatatHd: URL?
-    public var userCoverPhoto: URL?
-    public var userCoverPhotoOffset: Int?
-    public var location: String?
-    public var bio: String?
-    public var website: URL?
-    public var untappdUrl: URL?
-    public var isPrivate: Bool?
-    public var isModerator: Bool?
-    public var isSupporter: Bool?
-    public var relationship: String?
-    public var accountType: String?
-    public var blockStatus: String?
-    public var stats: CDUntappdStats?
-    public var checkins: [CDUntappdCheckin]?
-    public var recentBrews: [CDUntappdRecentBrew]?
-    public var media: [CDUntappdMedia]?
-    public var contact: CDUntappdContact?
-    public var dateJoined: String?
-    public var settings: CDUntappdSettings?
+    public let id: Int?
+    public let uid: Int?
+    public let username: String?
+    public let firstName: String?
+    public let lastName: String?
+    public let userAvatar: String?
+    public let userAvatarHd: String?
+    public let userCoverPhoto: String?
+    public let userCoverPhotoOffset: Int?
+    public let isPrivate: Int?
+    public let location: String?
+    public let website: String?
+    public let bio: String?
+    public let isSupporter: Int?
+    public let relationship: String?
+    public let untappd: String?
+    public let accountType: String?
+//    public let isModerator: Int?
+//    public let blockStatus: String?
+//    public let stats: CDUntappdStats?
+//    public let checkins: [CDUntappdCheckin]?
+//    public let recentBrews: [CDUntappdRecentBrew]?
+//    public let media: [CDUntappdMedia]?
+//    public let contact: CDUntappdContact?
+//    public let dateJoined: String?
+//    public let settings: CDUntappdSettings?
 
     enum CodingKeys: String, CodingKey {
-        case id = "id"
-        case uid = "uid"
+        case id
+        case uid
         case username = "user_name"
         case firstName = "first_name"
         case lastName = "last_name"
         case userAvatar = "user_avatar"
-        case userAvatatHd = "user_avatar_hd"
+        case userAvatarHd = "user_avatar_hd"
         case userCoverPhoto = "user_cover_photo"
         case userCoverPhotoOffset = "user_cover_photo_offset"
-        case location = "location"
-        case bio = "bio"
-        case website = "url"
-        case untappdUrl = "untappd_url"
         case isPrivate = "is_private"
-        case isModerator = "is_moderator"
+        case location
+        case website = "url"
+        case bio
         case isSupporter = "is_supporter"
-        case relationship = "relationship"
+        case relationship
+        case untappd = "untappd_url"
         case accountType = "account_type"
-        case blockStatus = "block_status"
-        case stats = "stats"
-        case checkins = "checkins.items"
-        case recentBrews = "recent_brews.items"
-        case media = "media"
-        case contact = "contact"
-        case dateJoined = "date_joined"
-        case settings = "settings"
+//        case isModerator = "is_moderator"
+//        case blockStatus = "block_status"
+//        case stats
+//        case checkins = "checkins.items"
+//        case recentBrews = "recent_brews.items"
+//        case media
+//        case contact
+//        case dateJoined = "date_joined"
+//        case settings
     }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        id = try container.decodeIfPresent(Int.self, forKey: .id)
+        uid = try container.decodeIfPresent(Int.self, forKey: .uid)
+        username = try container.decodeIfPresent(String.self, forKey: .username)
+        firstName = try container.decodeIfPresent(String.self, forKey: .firstName)
+        lastName = try container.decodeIfPresent(String.self, forKey: .lastName)
+        userAvatar = try container.decodeIfPresent(String.self, forKey: .userAvatar)
+        userAvatarHd = try container.decodeIfPresent(String.self, forKey: .userAvatarHd)
+        userCoverPhoto = try container.decodeIfPresent(String.self, forKey: .userCoverPhoto)
+        userCoverPhotoOffset = try container.decodeIfPresent(Int.self, forKey: .userCoverPhotoOffset)
+        isPrivate = try container.decodeIfPresent(Int.self, forKey: .isPrivate)
+        location = try container.decodeIfPresent(String.self, forKey: .location)
+        bio = try container.decodeIfPresent(String.self, forKey: .bio)
+        website = try container.decodeIfPresent(String.self, forKey: .website)
+        isSupporter = try container.decodeIfPresent(Int.self, forKey: .isSupporter)
+        relationship = try container.decodeIfPresent(String.self, forKey: .relationship)
+        untappd = try container.decodeIfPresent(String.self, forKey: .untappd)
+        accountType = try container.decodeIfPresent(String.self, forKey: .accountType)
+//        isModerator = try container.decodeIfPresent(Int.self, forKey: .isModerator)
+//        blockStatus = try container.decodeIfPresent(String.self, forKey: .blockStatus)
+//        stats = try container.decodeIfPresent(CDUntappdStats.self, forKey: .stats)
+//        dateJoined = try container.decodeIfPresent(String.self, forKey: .dateJoined)
+//        let response = try container.nestedContainer(keyedBy: ResponseKeys.self, forKey: .response)
+//        user = try response.decode(CDUntappdUser.self, forKey: .user)
+    }
+
+    public func userAvatarUrl() -> URL? {
+        if let userAvatar = self.userAvatar,
+           let url = URL(string: userAvatar) {
+            return url
+        }
+        return nil
+    }
+
+    public func userAvatarHdUrl() -> URL? {
+        if let userAvatarHd = self.userAvatarHd,
+           let url = URL(string: userAvatarHd) {
+            return url
+        }
+        return nil
+    }
+
+    public func userCoverPhotoUrl() -> URL? {
+        if let userCoverPhoto = self.userCoverPhoto,
+           let url = URL(string: userCoverPhoto) {
+            return url
+        }
+        return nil
+    }
+
+    public func isPrivateBool() -> Bool? {
+        if let isPrivate = self.isPrivate,
+           isPrivate == 1 {
+            return true
+        }
+        return false
+    }
+
+    public func websiteUrl() -> URL? {
+        if let website = self.website,
+           let url = URL(string: website) {
+            return url
+        }
+        return nil
+    }
+
+    public func isSupporterBool() -> Bool? {
+        if let isSupporter = self.isSupporter,
+           isSupporter == 1 {
+            return true
+        }
+        return false
+    }
+
+    public func untappdUrl() -> URL? {
+        if let untappd = self.untappd,
+           let url = URL(string: untappd) {
+            return url
+        }
+        return nil
+    }
+//
+//
+//    public func isModeratorBool() -> Bool? {
+//        if let isModerator = self.isModerator,
+//           isModerator == 1 {
+//            return true
+//        }
+//        return false
+//    }
+//
 }

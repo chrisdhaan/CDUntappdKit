@@ -27,9 +27,9 @@
 
 public struct CDUntappdCategory: Decodable {
 
-    public var id: String?
-    public var name: String?
-    public var isPrimary: Bool?
+    public let id: String?
+    public let name: String?
+    public let isPrimary: Bool?
 
     enum CodingKeys: String, CodingKey {
         case id = "category_id"

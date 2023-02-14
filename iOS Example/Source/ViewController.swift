@@ -98,6 +98,7 @@ extension ViewController: UITableViewDataSource {
 extension ViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        CDUntappdKitManager.shared.apiClient.cancelAllPendingAPIRequests()
         switch indexPath.row {
         case 0:
             CDUntappdKitManager.shared.apiClient.fetchUserInfo(forUsername: "DehaanSolo",

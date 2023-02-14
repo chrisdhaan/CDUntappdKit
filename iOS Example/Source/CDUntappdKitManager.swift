@@ -36,6 +36,9 @@ final class CDUntappdKitManager: NSObject {
     
     func configure() {
         // How to authorize using your clientId and clientSecret
+        // YOUR_CLIENT_ID
+        // YOUR_CLIENT_SECRET
+        // YOUR_REDIRECT_URL
         self.apiClient = CDUntappdAPIClient(clientId: "BDCFF6FA3CF64AC57585386B4051EB5A716F3FBD",
                                             clientSecret: "572C8CB091E1AC5C8ED452A40A7EFF68832A08B9",
                                             redirectUrl: "https://www.untappd.com/")

@@ -27,11 +27,23 @@
 
 public struct CDUntappdUserInfoResponse: Decodable {
 
-    public var metadata: CDUntappdMetadata?
-    public var user: CDUntappdUser?
+    public let metadata: CDUntappdMetadata?
+    public let user: CDUntappdUser?
 
     enum CodingKeys: String, CodingKey {
         case metadata = "meta"
-        case user = "response.user"
+        case response
+    }
+
+    enum ResponseKeys: String, CodingKey {
+        case user
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        metadata = try container.decodeIfPresent(CDUntappdMetadata.self, forKey: .metadata)
+        let response = try container.nestedContainer(keyedBy: ResponseKeys.self, forKey: .response)
+        user = try response.decodeIfPresent(CDUntappdUser.self, forKey: .user)
     }
 }

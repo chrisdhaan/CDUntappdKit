@@ -27,8 +27,8 @@
 
 public struct CDUntappdRecentBrew: Decodable {
 
-    public var brewery: CDUntappdBrewery?
-    public var beer: CDUntappdBeer?
+    public let brewery: CDUntappdBrewery?
+    public let beer: CDUntappdBeer?
 
     enum CodingKeys: String, CodingKey {
         case brewery

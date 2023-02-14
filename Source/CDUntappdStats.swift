@@ -27,13 +27,13 @@
 
 public struct CDUntappdStats: Decodable {
 
-    public var totalBadges: Int?
-    public var totalFriends: Int?
-    public var totalCheckins: Int?
-    public var totalBeers: Int?
-    public var totalCreatedBeers: Int?
-    public var totalFollowings: Int?
-    public var totalPhotos: Int?
+    public let totalBadges: Int?
+    public let totalFriends: Int?
+    public let totalCheckins: Int?
+    public let totalBeers: Int?
+    public let totalCreatedBeers: Int?
+    public let totalFollowings: Int?
+    public let totalPhotos: Int?
 
     enum CodingKeys: String, CodingKey {
         case totalBadges = "total_badges"

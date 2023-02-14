@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'CDUntappdKit'
-  s.version = '1.0.0'
+  s.version = '1.1.1'
   s.license = { :type => 'MIT', :file => 'LICENSE' }
   s.summary = 'An extensive Swift wrapper for the Untappd API.'
   s.description = <<-DESC

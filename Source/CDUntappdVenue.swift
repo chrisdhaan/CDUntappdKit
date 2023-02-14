@@ -33,26 +33,26 @@
 
 public struct CDUntappdVenue: Decodable {
 
-    public var id: Int?
-    public var name: String?
-    public var isVerified: Bool?
-    public var parentCategoryId: String?
-    public var primaryCategory: String?
-    public var categories: [CDUntappdCategory]?
-    public var smallIcon: URL?
-    public var mediumIcon: URL?
-    public var largeIcon: URL?
-    public var slug: String?
-    public var latitude: Double?
-    public var longitude: Double?
-    public var address: String?
-    public var city: String?
-    public var state: String?
-    public var country: String?
-    public var foursqaureId: String?
-    public var foursqaureUrl: URL?
-    public var twitterHandle: String?
-    public var website: URL?
+    public let id: Int?
+    public let name: String?
+    public let isVerified: Bool?
+    public let parentCategoryId: String?
+    public let primaryCategory: String?
+    public let categories: [CDUntappdCategory]?
+    public let smallIcon: URL?
+    public let mediumIcon: URL?
+    public let largeIcon: URL?
+    public let slug: String?
+    public let latitude: Double?
+    public let longitude: Double?
+    public let address: String?
+    public let city: String?
+    public let state: String?
+    public let country: String?
+    public let foursqaureId: String?
+    public let foursqaureUrl: URL?
+    public let twitterHandle: String?
+    public let website: URL?
 
     enum CodingKeys: String, CodingKey {
         case id = "venue_id"

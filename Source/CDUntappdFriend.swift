@@ -27,14 +27,14 @@
 
 public struct CDUntappdFriend: Decodable {
 
-    public var friendshipHash: String?
-    public var user: CDUntappdUser?
-    public var mutualFriends: [CDUntappdFriend]?
-    public var createdAt: String?
+    public let friendshipHash: String?
+    public let user: CDUntappdUser?
+    public let mutualFriends: [CDUntappdFriend]?
+    public let createdAt: String?
 
     enum CodingKeys: String, CodingKey {
         case friendshipHash = "friendship_hash"
-        case user = "user"
+        case user
         case mutualFriends = "mutual_friends.items"
         case createdAt = "created_at"
     }

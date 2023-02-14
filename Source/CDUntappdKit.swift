@@ -33,4 +33,4 @@ import Foundation
 #endif
 
 /// Current CDUntappdKit version. Necessary since SPM doesn't use dynamic libraries. Plus this will be more accurate.
-let version = "1.1.0"
+let version = "1.1.1"
