@@ -1975,7 +1975,7 @@ bundle exec pod trunk push CDUntappdKit.podspec --allow-warnings
 
 CDMarkdownKit 3.1.0 added visionOS as a first-class supported platform. CDUntappdKit follows the same pattern. visionOS uses UIKit and supports `WKWebView`, so the API client and OAuth flow are broadly compatible.
 
-### 16.1 Update Package.swift
+### 16.1 Update Package.swift ✅
 
 Already covered in Section 3.2 — `.visionOS(.v1)` is added to the platforms array, `visionOS` is added to the UIKit linker setting `.when(platforms:)`.
 
