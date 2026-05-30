@@ -2038,7 +2038,7 @@ In Xcode:
 
 The CI job in Section 2.2 uses `-scheme "CDUntappdKit visionOS"` — this scheme must exist before CI will pass.
 
-### 16.6 Update CI
+### 16.6 Update CI ✅
 
 Already covered in Section 2.2 — the `visionOS` CI job is defined with 4 `macos-26` matrix entries. No `macos-15` entry since visionOS simulator requires Xcode 26+.
 
