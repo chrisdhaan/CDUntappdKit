@@ -29,9 +29,6 @@
     <a href="http://cocoapods.org/pods/CDUntappdKit">
         <img src="https://img.shields.io/cocoapods/v/CDUntappdKit.svg?style=flat" alt="CocoaPods Compatible">
     </a>
-    <a href="https://github.com/Carthage/Carthage">
-        <img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat" alt="Carthage compatible">
-    </a>
     <a href="https://www.swift.org/package-manager">
         <img src="https://img.shields.io/badge/Swift_Package_Manager-compatible-orange?style=flat" alt="Swift Package Manager Compatible">
     </a>
@@ -128,14 +125,6 @@ For a demonstration of the capabilities of CDUntappdKit; run the iOS Example pro
 
 ```ruby
 pod 'CDUntappdKit', '1.1.0'
-```
-
-### Carthage
-
-[Carthage](https://github.com/Carthage/Carthage) is a decentralized dependency manager that builds your dependencies and provides you with binary frameworks. To integrate CDUntappdKit into your Xcode project using Carthage, specify it in your `Cartfile`:
-
-```ogdl
-github "chrisdhaan/CDUntappdKit" == 1.1.0
 ```
 
 ### Swift Package Manager

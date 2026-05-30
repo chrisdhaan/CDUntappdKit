@@ -806,7 +806,7 @@ docs/undocumented.json
 
 The `Carthage/Build` entry can be removed since Carthage itself is being removed. The `.bundle/` entry is new (needed for Section 6). The `docs/undocumented.json` entry suppresses Jazzy's machine-path-containing file from the repo.
 
-### 5.3 Remove Carthage from README
+### 5.3 Remove Carthage from README ✅
 
 Update the README (Section 13) to remove all Carthage installation instructions. The supported installation methods become: Swift Package Manager, CocoaPods, and Git Submodule.
 
