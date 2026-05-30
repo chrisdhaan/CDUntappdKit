@@ -941,7 +941,7 @@ In `project.pbxproj`, for each scheme's target, set:
 ENABLE_USER_SCRIPT_SANDBOXING = NO;
 ```
 
-### 8.4 Update Copyright Year in All Source Files
+### 8.4 Update Copyright Year in All Source Files ✅
 
 Every `.swift` file in `Source/` contains a copyright header of the form:
 
