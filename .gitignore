@@ -37,6 +37,3 @@ playground.xcworkspace
 
 # Bundler
 .bundle/
-
-# Jazzy documentation
-docs/undocumented.json

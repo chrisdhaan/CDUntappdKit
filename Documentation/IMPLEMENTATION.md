@@ -1550,7 +1550,7 @@ Commit the generated `docs/` directory. GitHub Pages will serve it at `https://c
 
 In repository settings on GitHub, configure GitHub Pages to serve from the `docs/` directory on the `master` branch. The `--hosting-base-path CDUntappdKit` flag in the generate command aligns with GitHub Pages' project-page URL scheme (`/<repo-name>/`).
 
-### 12.6 Update .gitignore
+### 12.6 Update .gitignore ✅
 
 The previous Jazzy plan added `docs/undocumented.json` to `.gitignore`. DocC does not produce that file, so that entry can be omitted. However, the `docs/` directory itself contains generated files that **should** be committed (for GitHub Pages) — do not add `docs/` to `.gitignore`.
 
