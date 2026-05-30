@@ -569,7 +569,8 @@
 		B26791251F350723008635CD /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1340;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2640;
 				ORGANIZATIONNAME = "Christopher de Haan";
 				TargetAttributes = {
 					B22019591FD2030900A2BE3F = {
