@@ -2120,7 +2120,7 @@ swiftformat Source Tests
 
 Review the diff to confirm the changes are mechanical (indentation, trailing commas, etc.) and do not alter logic. Commit the formatting changes separately from any logic changes to keep the diff readable.
 
-### 17.3 CI Job
+### 17.3 CI Job ✅
 
 Already added in Section 2.2 — the `swiftformat` CI job runs:
 
