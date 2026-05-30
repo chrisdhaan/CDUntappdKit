@@ -2109,7 +2109,7 @@ CDMarkdownKit 3.1.0 added SwiftFormat enforcement with a `.swiftformat` config a
 
 This is adapted directly from CDMarkdownKit 3.1.0's `.swiftformat`. The disabled rules preserve the codebase's existing conventions without forcing a sweeping reformatting of every file.
 
-### 17.2 Apply SwiftFormat to Source Files
+### 17.2 Apply SwiftFormat to Source Files ✅
 
 Before committing `.swiftformat`, run SwiftFormat in apply mode to fix any formatting issues in the existing source:
 
