@@ -746,7 +746,7 @@ end
 
 Carthage is being removed as a supported installation method and as the CI dependency resolver. Alamofire is available via SPM; CocoaPods users use the podspec dependency.
 
-### 5.1 Files to Delete
+### 5.1 Files to Delete ✅
 
 - `Cartfile`
 - `Cartfile.resolved`
