@@ -1379,7 +1379,7 @@ CDMarkdownKit 3.1.0 migrated from Jazzy to DocC. CDUntappdKit skips Jazzy entire
 
 This is already included in Section 3.2. The `swift-docc-plugin` dependency enables `swift package generate-documentation` and `swift package preview-documentation` commands without requiring a separate tool installation.
 
-### 12.2 Create DocC Catalog
+### 12.2 Create DocC Catalog ✅
 
 **Directory to create:** `Source/CDUntappdKit.docc/`
 
