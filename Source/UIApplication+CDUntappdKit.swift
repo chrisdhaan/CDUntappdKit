@@ -25,29 +25,36 @@
 //  THE SOFTWARE.
 //
 
-#if os(iOS)
+#if os(iOS) || os(visionOS)
 import UIKit
 
-extension UIApplication {
+internal extension UIApplication {
 
     @available(iOSApplicationExtension, unavailable)
-    class func topViewController(controller: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
+    class func topViewController(_ base: UIViewController? = {
+        guard let scene = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first(where: { $0.activationState == .foregroundActive }),
+              let window = scene.windows.first(where: { $0.isKeyWindow })
+        else { return nil }
+        return window.rootViewController
+    }()) -> UIViewController? {
 
-        if let navigationController = controller as? UINavigationController {
-            return topViewController(controller: navigationController.visibleViewController)
+        if let navigationController = base as? UINavigationController {
+            return topViewController(navigationController.visibleViewController)
         }
 
-        if let tabController = controller as? UITabBarController {
+        if let tabController = base as? UITabBarController {
             if let selected = tabController.selectedViewController {
-                return topViewController(controller: selected)
+                return topViewController(selected)
             }
         }
 
-        if let presented = controller?.presentedViewController {
-            return topViewController(controller: presented)
+        if let presented = base?.presentedViewController {
+            return topViewController(presented)
         }
 
-        return controller
+        return base
     }
 }
 #endif

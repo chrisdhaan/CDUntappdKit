@@ -2001,7 +2001,7 @@ find Source -name "*.swift" -exec grep -l "os(iOS) || os(tvOS) || os(watchOS)" {
   xargs sed -i '' 's/os(iOS) || os(tvOS) || os(watchOS)/os(iOS) || os(tvOS) || os(watchOS) || os(visionOS)/g'
 ```
 
-### 16.4 Update UIApplication+CDUntappdKit.swift for visionOS
+### 16.4 Update UIApplication+CDUntappdKit.swift for visionOS ✅
 
 The current `topViewController()` helper uses `UIApplication.shared.windows.first { $0.isKeyWindow }`, which is deprecated on visionOS in favor of `UIWindowScene`. For 2.0.0, extend the guard to include visionOS but add a visionOS-compatible fallback:
 
