@@ -578,7 +578,7 @@ Delete the following files (they are redundant once the primary Package.swift su
 - `Package@swift-5.4.swift`
 - `Package@swift-5.5.swift`
 
-### 3.2 Update Package.swift
+### 3.2 Update Package.swift ✅
 
 **File:** `Package.swift`
 
