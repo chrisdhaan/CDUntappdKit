@@ -1058,7 +1058,7 @@ This is the most significant source-level change. The completion-handler API is 
 
 **Rationale:** Alamofire 5.5+ provides `async/await` support via `.serializingDecodable()` and `.value`. Using async/await eliminates completion handler nesting, integrates naturally with Swift structured concurrency, and is now the expected API pattern for networking libraries in 2026.
 
-### 10.1 Update CDUntappdAPIClient.swift
+### 10.1 Update CDUntappdAPIClient.swift ✅
 
 **Current pattern (remove):**
 ```swift
@@ -1099,7 +1099,7 @@ Apply the same pattern to all three implemented endpoints:
 - `fetchUserWishList(forUsername:offset:limit:sort:)` → `async throws -> CDUntappdUserWishListResponse`
 - `fetchUserFriends(forUsername:offset:limit:)` → `async throws -> CDUntappdUserFriendsResponse`
 
-### 10.2 Add CDUntappdKitError
+### 10.2 Add CDUntappdKitError ✅
 
 Create `Source/CDUntappdKitError.swift` to replace the nil-on-failure pattern:
 

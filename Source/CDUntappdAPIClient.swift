@@ -127,36 +127,32 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
     /// - parameters:
     ///   - forUsername: (**Required**) The username for the Untappd API to query. Can be (Optional) if an access token is provided for an authenticated user.
     ///   - compact: (**Required**) Pass *true* to only show the user infomation, removing the *checkins*, *media*, and *recent_brews* attributes.
-    ///   - completion: A completion block in which the Untappd API user info endpoint response can be parsed.
     ///
-    /// - returns: (CDUntappdUserInfoResponse?) -> Void
+    /// - returns: CDUntappdUserInfoResponse
+    ///
+    /// - throws: CDUntappdKitError if the request fails or the response is invalid.
     ///
     public func fetchUserInfo(forUsername username: String?,
-                              compact: Bool,
-                              completion: @escaping (CDUntappdUserInfoResponse?) -> Void) {
+                              compact: Bool) async throws -> CDUntappdUserInfoResponse {
         assert(username != nil || self.isAuthenticated(), "Either user authentication or a username are required to query the Untappd API user info endpoint.")
 
         var params = Parameters.userInfoParameters(isCompact: compact)
         params = self.oAuthClient.addTokens(toParameters: params)
 
-        self.manager
+        let response = try await self.manager
             .request(CDUntappdRouter.userInfo(username: username,
                                               parameters: params))
             .validate()
-            .responseDecodable { (response: DataResponse<CDUntappdUserInfoResponse, AFError>) in
-
-            switch response.result {
-            case .success(let response):
-                if let metadata = response.metadata,
-                    metadata.hasError() {
-                    logger.error("fetchUserInfo(forUsername) error: \(metadata.description())")
-                }
-                completion(response)
-            case .failure(let error):
-                logger.error("fetchUserInfo(forUsername) failure: \(error.localizedDescription)")
-                completion(nil)
-            }
+            .serializingDecodable(CDUntappdUserInfoResponse.self)
+            .value
+        
+        if let metadata = response.metadata,
+            metadata.hasError() {
+            logger.error("fetchUserInfo(forUsername) error: \(metadata.description())")
+            throw CDUntappdKitError.apiError(metadata.description())
         }
+
+        return response
     }
 
     ///
@@ -167,15 +163,15 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
     ///   - offset: (Optional) The numeric offset that you what results to start.
     ///   - limit: (Optional) The number of results to return, max of 50, default is 25.
     ///   - sort: (Optional) Results can be sorted using the following values (1) date - sorts by date (default), (2) checkin - sorted by highest checkin, (3) highest_rated - sorts by global rating descending order, (4) lowest_rated - sorts by global rating ascending order, (5) highest_abv - highest ABV from the wishlist, (6) lowest_abv - lowest ABV from the wishlist
-    ///   - completion: A completion block in which the Untappd API user wish list endpoint response can be parsed.
     ///
-    /// - returns: (CDUntappdUserWishListResponse?) -> Void
+    /// - returns: CDUntappdUserWishListResponse
+    ///
+    /// - throws: CDUntappdKitError if the request fails or the response is invalid.
     ///
     public func fetchUserWishList(forUsername username: String?,
                                   offset: Int?,
                                   limit: Int?,
-                                  sort: CDUntappdUserWishListSortType?,
-                                  completion: @escaping (CDUntappdUserWishListResponse?) -> Void) {
+                                  sort: CDUntappdUserWishListSortType?) async throws -> CDUntappdUserWishListResponse {
         assert(username != nil || self.isAuthenticated(), "Either user authentication or a username are required to query the Untappd API user wish list endpoint.")
 
         var params = Parameters.userWishListParameters(withOffset: offset,
@@ -183,65 +179,57 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
                                                        sort: sort)
         params = self.oAuthClient.addTokens(toParameters: params)
 
-        self.manager
+        let response = try await self.manager
             .request(CDUntappdRouter.userWishList(username: username,
                                                   parameters: params))
             .validate()
-            .responseDecodable { (response: DataResponse<CDUntappdUserWishListResponse, AFError>) in
-
-            switch response.result {
-            case .success(let response):
-                if let metadata = response.metadata,
-                    metadata.hasError() {
-                    logger.error("fetchUserWishList(forUsername) error: \(metadata.description())")
-                }
-                completion(response)
-            case .failure(let error):
-                logger.error("fetchUserWishList(forUsername) failure: \(error.localizedDescription)")
-                completion(nil)
-            }
+            .serializingDecodable(CDUntappdUserWishListResponse.self)
+            .value
+        
+        if let metadata = response.metadata,
+            metadata.hasError() {
+            logger.error("fetchUserWishList(forUsername) error: \(metadata.description())")
+            throw CDUntappdKitError.apiError(metadata.description())
         }
+
+        return response
     }
 
     ///
-    /// This method will return a list of 25 of the user's wish listed beers. When using authentication, not passing the username parameter will return the authenticated users' information.
+    /// This method will return a list of the user's friends. When using authentication, not passing the username parameter will return the authenticated users' information.
     ///
     /// - parameters:
     ///   - forUsername: (**Required**) The username for the Untappd API to query. Can be (Optional) if an access token is provided for an authenticated user.
     ///   - offset: (Optional) The numeric offset that you what results to start.
     ///   - limit: (Optional) The number of records that you will return (max 25, default 25).
-    ///   - completion: A completion block in which the Untappd API user friends endpoint response can be parsed.
     ///
-    /// - returns: (CDUntappdUserFriendsResponse?) -> Void
+    /// - returns: CDUntappdUserFriendsResponse
+    ///
+    /// - throws: CDUntappdKitError if the request fails or the response is invalid.
     ///
     public func fetchUserFriends(forUsername username: String?,
                                  offset: Int?,
-                                 limit: Int?,
-                                 completion: @escaping (CDUntappdUserFriendsResponse?) -> Void) {
+                                 limit: Int?) async throws -> CDUntappdUserFriendsResponse {
         assert(username != nil || self.isAuthenticated(), "Either user authentication or a username are required to query the Untappd API user friends endpoint.")
 
         var params = Parameters.userFriendsParameters(withOffset: offset,
                                                       limit: limit)
         params = self.oAuthClient.addTokens(toParameters: params)
 
-        self.manager
+        let response = try await self.manager
             .request(CDUntappdRouter.userFriends(username: username,
                                                  parameters: params))
             .validate()
-            .responseDecodable { (response: DataResponse<CDUntappdUserFriendsResponse, AFError>) in
-
-            switch response.result {
-            case .success(let response):
-                if let metadata = response.metadata,
-                    metadata.hasError() {
-                    logger.error("fetchUserFriends(forUsername) error: \(metadata.description())")
-                }
-                completion(response)
-            case .failure(let error):
-                logger.error("fetchUserFriends(forUsername) failure: \(error.localizedDescription)")
-                completion(nil)
-            }
+            .serializingDecodable(CDUntappdUserFriendsResponse.self)
+            .value
+        
+        if let metadata = response.metadata,
+            metadata.hasError() {
+            logger.error("fetchUserFriends(forUsername) error: \(metadata.description())")
+            throw CDUntappdKitError.apiError(metadata.description())
         }
+
+        return response
     }
 
     ///
