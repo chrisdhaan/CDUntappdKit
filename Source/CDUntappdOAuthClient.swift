@@ -33,7 +33,7 @@
 
 import Alamofire
 
-class CDUntappdOAuthClient: NSObject {
+public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
 
     let clientId: String!
     let clientSecret: String!

@@ -1016,7 +1016,7 @@ public class CDUntappdAPIClient: NSObject {
 
 This enforces that all calls to `CDUntappdAPIClient` happen on the main actor, preventing data races on the internal session and request tracking without requiring locks.
 
-### 9.5 Add @unchecked Sendable to CDUntappdAPIClient and CDUntappdOAuthClient
+### 9.5 Add @unchecked Sendable to CDUntappdAPIClient and CDUntappdOAuthClient ✅
 
 If CDUntappdAPIClient needs to be shared across actor boundaries (e.g., passed into an actor's initializer), mark it `@unchecked Sendable` while the thread-safety story is being established:
 

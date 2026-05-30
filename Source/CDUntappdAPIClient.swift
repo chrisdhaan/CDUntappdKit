@@ -33,7 +33,7 @@ import Alamofire
 #endif
 
 @MainActor
-public class CDUntappdAPIClient: NSObject {
+public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
 
     private lazy var manager: Alamofire.Session = {
         return Alamofire.Session()
