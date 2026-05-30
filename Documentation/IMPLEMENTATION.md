@@ -128,7 +128,7 @@ labels: enhancement
 **Have you considered any alternatives?**
 ```
 
-### 1.3 Update PULL_REQUEST_TEMPLATE.md
+### 1.3 Update PULL_REQUEST_TEMPLATE.md ✅
 
 **File:** `.github/PULL_REQUEST_TEMPLATE.md`
 
