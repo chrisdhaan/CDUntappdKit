@@ -176,7 +176,7 @@ Copyright (c) 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 
 The current `.github/workflows/ci.yml` uses macOS-10.15/11/12 runners (retired), Xcode 12.x/13.x (outdated), xcpretty (unmaintained), checkout@v3/cache@v3 (outdated), and Carthage for dependency resolution. The entire workflow needs to be rewritten.
 
-### 2.1 Key Changes Summary
+### 2.1 Key Changes Summary ✅
 
 | Change | Current | Target |
 |--------|---------|--------|
@@ -192,7 +192,7 @@ The current `.github/workflows/ci.yml` uses macOS-10.15/11/12 runners (retired),
 | concurrency group | ci (static) | ${{ github.ref_name }} |
 | Pod lint invocation | gem install + pod lib lint | bundle install + bundle exec pod lib lint |
 
-### 2.2 New ci.yml — Complete Replacement
+### 2.2 New ci.yml — Complete Replacement ✅
 
 **File:** `.github/workflows/ci.yml`
 
