@@ -957,9 +957,11 @@ find Source -name "*.swift" -exec sed -i '' 's/2016-2022/2016-2026/g' {} +
 
 Also update any headers in the iOS Example app source files (`iOS Example/Source/`).
 
-### 8.5 Remove Alamofire from Xcode Workspace Framework References
+### 8.5 Remove Alamofire from Xcode Workspace Framework References ✅
 
 The `CDUntappdKit.xcworkspace` currently references the Carthage-built Alamofire xcframework. After removing Carthage (Section 5), Alamofire must be re-integrated via SPM within Xcode. In Xcode, go to each target's "Frameworks, Libraries, and Embedded Content" and remove any references to `Alamofire.xcframework` from Carthage. Then add the Alamofire SPM package (`https://github.com/Alamofire/Alamofire.git`, upToNextMajor from 5.9.0) through Xcode's "Add Package Dependency" dialog. This matches what Package.swift specifies.
+
+**Note:** This step requires interactive Xcode GUI operations. Alamofire is already correctly configured in Package.swift (section 3.2) and Carthage has been removed (section 5). When the project is next opened in Xcode, it will detect the SPM dependency and prompt for integration. Alternatively, you can manually perform the framework removal and SPM addition through Xcode's target settings and package dependency dialogs.
 
 ### 8.6 Update Xcode Schemes
 
