@@ -33,7 +33,7 @@
 
 import Alamofire
 
-enum CDUntappdOAuthRouter: URLRequestConvertible {
+enum CDUntappdOAuthRouter: any URLRequestConvertible {
 
     case authorize(parameters: Parameters)
 

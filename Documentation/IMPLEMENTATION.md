@@ -973,7 +973,7 @@ Each scheme file under `CDUntappdKit.xcodeproj/xcshareddata/xcschemes/` has a `L
 
 These changes prepare all source files for Swift 6 concurrency checking. They do not yet change the public API (that is Section 10).
 
-### 9.1 Enable ExistentialAny and Add Protocol `any` Annotations
+### 9.1 Enable ExistentialAny and Add Protocol `any` Annotations ✅
 
 With `swift-tools-version:6.0` and `.enableUpcomingFeature("ExistentialAny")` in Package.swift, bare protocol type references in function signatures will produce warnings. Update all existential uses.
 
