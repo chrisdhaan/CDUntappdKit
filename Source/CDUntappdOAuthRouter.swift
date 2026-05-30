@@ -44,14 +44,14 @@ public enum CDUntappdOAuthRouter: URLRequestConvertible {
     var method: HTTPMethod {
         switch self {
         case .authorize(parameters: _):
-            return .get
+            .get
         }
     }
 
     var path: String {
         switch self {
         case .authorize(parameters: _):
-            return "authorize"
+            "authorize"
         }
     }
 
@@ -62,7 +62,7 @@ public enum CDUntappdOAuthRouter: URLRequestConvertible {
         urlRequest.httpMethod = method.rawValue
 
         switch self {
-        case .authorize(let parameters):
+        case let .authorize(parameters):
             urlRequest = try URLEncoding.default.encode(urlRequest,
                                                         with: parameters)
         }

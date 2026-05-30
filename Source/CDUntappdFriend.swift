@@ -39,7 +39,7 @@ public struct CDUntappdFriend: Decodable, Sendable {
 
     enum CodingKeys: String, CodingKey {
         case friendshipHash = "friendship_hash"
-        case user = "user"
+        case user
         case mutualFriends = "mutual_friends.items"
         case createdAt = "created_at"
     }

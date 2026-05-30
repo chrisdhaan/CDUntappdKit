@@ -23,8 +23,8 @@
 //  THE SOFTWARE.
 //
 
-import Testing
 import Foundation
+import Testing
 @testable import CDUntappdKit
 
 @Suite("CDUntappdOAuthRouter Tests")
@@ -70,7 +70,7 @@ struct CDUntappdOAuthRouterTests {
         let parameters: [String: Any] = [
             "client_id": "id123",
             "response_type": "code",
-            "redirect_url": "myapp://oauth"
+            "redirect_url": "myapp://oauth",
         ]
         let request = try CDUntappdOAuthRouter.authorize(parameters: parameters).asURLRequest()
         #expect(request.url?.query != nil)

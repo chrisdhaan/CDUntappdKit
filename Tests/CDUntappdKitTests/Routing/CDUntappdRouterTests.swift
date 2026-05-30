@@ -23,8 +23,8 @@
 //  THE SOFTWARE.
 //
 
-import Testing
 import Foundation
+import Testing
 @testable import CDUntappdKit
 
 @Suite("CDUntappdRouter Tests")

@@ -39,9 +39,7 @@ import Alamofire
 @MainActor
 public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
 
-    private lazy var manager: Alamofire.Session = {
-        return Alamofire.Session()
-    }()
+    private lazy var manager: Alamofire.Session = Alamofire.Session()
     private let oAuthClient: CDUntappdOAuthClient!
 
     // MARK: - Initializers
@@ -56,7 +54,8 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
                 redirectUrl: String!) {
         assert((clientId != nil && clientId != "") &&
             (clientSecret != nil && clientSecret != "") &&
-            (redirectUrl != nil && redirectUrl != ""), "A clientId, clientSecret, and redirectUrl are required to query the Untappd Developers API oauth endpoint.")
+            (redirectUrl != nil && redirectUrl != ""),
+            "A clientId, clientSecret, and redirectUrl are required to query the Untappd Developers API oauth endpoint.")
         self.oAuthClient = CDUntappdOAuthClient(clientId: clientId,
                                                 clientSecret: clientSecret,
                                                 redirectUrl: redirectUrl)
@@ -65,39 +64,40 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
 
     // MARK: - Authentication Methods
 
-    /// Presents an OAuth authentication flow to authorize access to the Untappd API.
-    ///
-    /// This method displays a ``CDUntappdOAuthViewController`` with a `WKWebView`-based OAuth flow.
-    /// On iOS and visionOS only.
-#if os(iOS) || os(visionOS)
-    @available(iOSApplicationExtension, unavailable)
-    public func authenticate() {
-        if let tvc = UIApplication.topViewController(),
-            tvc.parent as? UINavigationController == nil,
-            self.isAuthenticated() == false {
+    // Presents an OAuth authentication flow to authorize access to the Untappd API.
+    //
+    // This method displays a ``CDUntappdOAuthViewController`` with a `WKWebView`-based OAuth flow.
+    // On iOS and visionOS only.
+    #if os(iOS) || os(visionOS)
+        @available(iOSApplicationExtension, unavailable)
+        public func authenticate() {
+            if let tvc = UIApplication.topViewController(),
+               tvc.parent as? UINavigationController == nil,
+               self.isAuthenticated() == false {
 
-            let oAuthStoryboard = UIStoryboard(name: CDUntappdStoryboardIdentifier.oAuth,
-                                               bundle: Bundle(identifier: CDUntappdKitBundleIdentifier))
-            if let oAuthNavigationController = oAuthStoryboard.instantiateViewController(withIdentifier: CDUntappdNavigationControllerIdentifier.oAuth) as? UINavigationController {
-                if let oAuthViewController = oAuthNavigationController.topViewController as? CDUntappdOAuthViewController {
-                    oAuthViewController.oAuthClient = self.oAuthClient
-                    oAuthViewController.onAuthorization = { (_, error) in
+                let oAuthStoryboard = UIStoryboard(name: CDUntappdStoryboardIdentifier.oAuth,
+                                                   bundle: Bundle(identifier: CDUntappdKitBundleIdentifier))
+                if let oAuthNavigationController = oAuthStoryboard.instantiateViewController(
+                    withIdentifier: CDUntappdNavigationControllerIdentifier.oAuth
+                ) as? UINavigationController {
+                    if let oAuthViewController = oAuthNavigationController.topViewController as? CDUntappdOAuthViewController {
+                        oAuthViewController.oAuthClient = self.oAuthClient
+                        oAuthViewController.onAuthorization = { _, error in
 
-                        if let error = error {
+                            if let error {}
+                            UIApplication.topViewController()?.dismiss(animated: true, completion: nil)
                         }
-                        UIApplication.topViewController()?.dismiss(animated: true, completion: nil)
                     }
+                    tvc.present(oAuthNavigationController, animated: true, completion: nil)
                 }
-                tvc.present(oAuthNavigationController, animated: true, completion: nil)
             }
         }
-    }
-#endif
+    #endif
 
     /// Checks whether the client has an active access token.
     /// - Returns: `true` if an access token is stored in UserDefaults.
     public func isAuthenticated() -> Bool {
-        return self.oAuthClient.isAuthorized()
+        self.oAuthClient.isAuthorized()
     }
 
     /// Clears the stored access token from UserDefaults.
@@ -118,7 +118,10 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     public func fetchUserInfo(forUsername username: String?,
                               compact: Bool) async throws -> CDUntappdUserInfoResponse {
-        assert(username != nil || self.isAuthenticated(), "Either user authentication or a username are required to query the Untappd API user info endpoint.")
+        assert(
+            username != nil || self.isAuthenticated(),
+            "Either user authentication or a username are required to query the Untappd API user info endpoint."
+        )
 
         var params = Parameters.userInfoParameters(isCompact: compact)
         params = self.oAuthClient.addTokens(toParameters: params)
@@ -129,9 +132,9 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
             .validate()
             .serializingDecodable(CDUntappdUserInfoResponse.self)
             .value
-        
+
         if let metadata = response.metadata,
-            metadata.hasError() {
+           metadata.hasError() {
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -151,7 +154,10 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
                                   offset: Int?,
                                   limit: Int?,
                                   sort: CDUntappdUserWishListSortType?) async throws -> CDUntappdUserWishListResponse {
-        assert(username != nil || self.isAuthenticated(), "Either user authentication or a username are required to query the Untappd API user wish list endpoint.")
+        assert(
+            username != nil || self.isAuthenticated(),
+            "Either user authentication or a username are required to query the Untappd API user wish list endpoint."
+        )
 
         var params = Parameters.userWishListParameters(withOffset: offset,
                                                        limit: limit,
@@ -164,9 +170,9 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
             .validate()
             .serializingDecodable(CDUntappdUserWishListResponse.self)
             .value
-        
+
         if let metadata = response.metadata,
-            metadata.hasError() {
+           metadata.hasError() {
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -184,7 +190,10 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
     public func fetchUserFriends(forUsername username: String?,
                                  offset: Int?,
                                  limit: Int?) async throws -> CDUntappdUserFriendsResponse {
-        assert(username != nil || self.isAuthenticated(), "Either user authentication or a username are required to query the Untappd API user friends endpoint.")
+        assert(
+            username != nil || self.isAuthenticated(),
+            "Either user authentication or a username are required to query the Untappd API user friends endpoint."
+        )
 
         var params = Parameters.userFriendsParameters(withOffset: offset,
                                                       limit: limit)
@@ -196,9 +205,9 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
             .validate()
             .serializingDecodable(CDUntappdUserFriendsResponse.self)
             .value
-        
+
         if let metadata = response.metadata,
-            metadata.hasError() {
+           metadata.hasError() {
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -210,7 +219,7 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
     /// With async/await, call `Task.cancel()` on the task that wraps the async API call.
     @available(*, deprecated, message: "Use Task.cancel() with async/await API instead")
     public func cancelAllPendingAPIRequests() {
-        self.manager.session.getTasksWithCompletionHandler { (dataTasks, uploadTasks, downloadTasks) in
+        self.manager.session.getTasksWithCompletionHandler { dataTasks, uploadTasks, downloadTasks in
             dataTasks.forEach { $0.cancel() }
             uploadTasks.forEach { $0.cancel() }
             downloadTasks.forEach { $0.cancel() }

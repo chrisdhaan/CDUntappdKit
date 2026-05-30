@@ -26,35 +26,35 @@
 //
 
 #if os(iOS) || os(visionOS)
-import UIKit
+    import UIKit
 
-internal extension UIApplication {
+    internal extension UIApplication {
 
-    @available(iOSApplicationExtension, unavailable)
-    class func topViewController(_ base: UIViewController? = {
-        guard let scene = UIApplication.shared.connectedScenes
-            .compactMap({ $0 as? UIWindowScene })
-            .first(where: { $0.activationState == .foregroundActive }),
-              let window = scene.windows.first(where: { $0.isKeyWindow })
-        else { return nil }
-        return window.rootViewController
-    }()) -> UIViewController? {
+        @available(iOSApplicationExtension, unavailable)
+        class func topViewController(_ base: UIViewController? = {
+            guard let scene = UIApplication.shared.connectedScenes
+                .compactMap({ $0 as? UIWindowScene })
+                .first(where: { $0.activationState == .foregroundActive }),
+                let window = scene.windows.first(where: { $0.isKeyWindow })
+            else { return nil }
+            return window.rootViewController
+        }()) -> UIViewController? {
 
-        if let navigationController = base as? UINavigationController {
-            return topViewController(navigationController.visibleViewController)
-        }
-
-        if let tabController = base as? UITabBarController {
-            if let selected = tabController.selectedViewController {
-                return topViewController(selected)
+            if let navigationController = base as? UINavigationController {
+                return topViewController(navigationController.visibleViewController)
             }
-        }
 
-        if let presented = base?.presentedViewController {
-            return topViewController(presented)
-        }
+            if let tabController = base as? UITabBarController {
+                if let selected = tabController.selectedViewController {
+                    return topViewController(selected)
+                }
+            }
 
-        return base
+            if let presented = base?.presentedViewController {
+                return topViewController(presented)
+            }
+
+            return base
+        }
     }
-}
 #endif

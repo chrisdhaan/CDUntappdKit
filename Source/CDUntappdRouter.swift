@@ -72,7 +72,7 @@ public enum CDUntappdRouter: URLRequestConvertible {
              .venueInfo(venueId: _, parameters: _),
              .beerSearch(parameters: _),
              .brewerySearch(parameters: _):
-            return .get
+            .get
         }
     }
 
@@ -80,25 +80,25 @@ public enum CDUntappdRouter: URLRequestConvertible {
         switch self {
         // Info / Search
         case .userInfo(let username, parameters: _):
-            return String.path("user/info", forUsername: username)
+            String.path("user/info", forUsername: username)
         case .userWishList(let username, parameters: _):
-            return String.path("user/wishlist", forUsername: username)
+            String.path("user/wishlist", forUsername: username)
         case .userFriends(let username, parameters: _):
-            return String.path("user/friends", forUsername: username)
+            String.path("user/friends", forUsername: username)
         case .userBadges(let username, parameters: _):
-            return String.path("user/badges", forUsername: username)
+            String.path("user/badges", forUsername: username)
         case .userBeers(let username, parameters: _):
-            return String.path("user/beers", forUsername: username)
+            String.path("user/beers", forUsername: username)
         case .breweryInfo(let breweryId, parameters: _):
-            return "brewery/info/\(breweryId)"
+            "brewery/info/\(breweryId)"
         case .beerInfo(let bid, parameters: _):
-            return "beer/info/\(bid)"
+            "beer/info/\(bid)"
         case .venueInfo(let venueId, parameters: _):
-            return "venue/info/\(venueId)"
+            "venue/info/\(venueId)"
         case .beerSearch(parameters: _):
-            return "search/beer"
+            "search/beer"
         case .brewerySearch(parameters: _):
-            return "search/brewery"
+            "search/brewery"
         }
     }
 
@@ -122,8 +122,8 @@ public enum CDUntappdRouter: URLRequestConvertible {
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
         case .venueInfo(venueId: _, let parameters):
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
-        case .beerSearch(let parameters),
-             .brewerySearch(let parameters):
+        case let .beerSearch(parameters),
+             let .brewerySearch(parameters):
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
         }
 

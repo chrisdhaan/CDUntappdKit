@@ -31,7 +31,7 @@ extension String {
     /// - Parameter value: The boolean to convert.
     /// - Returns: `"true"` if the value is `true`, `"false"` otherwise.
     static func fromBool(value: Bool) -> String {
-        return String(format: "%@", value ? "true" : "false")
+        String(format: "%@", value ? "true" : "false")
     }
 
     /// Appends an optional username to an API path.
@@ -41,7 +41,7 @@ extension String {
     /// - Returns: The path with the username appended if provided, otherwise the original path.
     static func path(_ path: String,
                      forUsername username: String?) -> String {
-        if let username = username {
+        if let username {
             return "\(path)/\(username)"
         }
         return path

@@ -52,10 +52,10 @@ public struct CDUntappdMedia: Decodable, Sendable {
         case mediumImage = "photo.photo_img_md"
         case largeImage = "photo.photo_img_lg"
         case checkInId = "checkin_id"
-        case user = "user"
-        case brewery = "brewery"
-        case beer = "beer"
-        case venue = "venue"
+        case user
+        case brewery
+        case beer
+        case venue
         case createdAt = "created_at"
     }
 }

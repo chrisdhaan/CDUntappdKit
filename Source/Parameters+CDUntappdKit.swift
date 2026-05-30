@@ -51,13 +51,13 @@ extension Dictionary where Key: ExpressibleByStringLiteral, Value: Any {
                                        sort: CDUntappdUserWishListSortType?) -> Parameters {
         var params: Parameters = [:]
 
-        if let offset = offset {
+        if let offset {
             params["offset"] = offset
         }
-        if let limit = limit {
+        if let limit {
             params["limit"] = limit
         }
-        if let sort = sort {
+        if let sort {
             params["sort"] = sort
         }
 
@@ -73,10 +73,10 @@ extension Dictionary where Key: ExpressibleByStringLiteral, Value: Any {
                                       limit: Int?) -> Parameters {
         var params: Parameters = [:]
 
-        if let offset = offset {
+        if let offset {
             params["offset"] = offset
         }
-        if let limit = limit {
+        if let limit {
             params["limit"] = limit
         }
 

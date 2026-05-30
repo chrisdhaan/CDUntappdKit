@@ -29,12 +29,12 @@ public struct CDUntappdWishListItem: Decodable, Sendable {
 
     public var brewery: CDUntappdBrewery?
     public var beer: CDUntappdBeer?
-//    public var friends: [CDUntappdFriend]?
+    ///    public var friends: [CDUntappdFriend]?
     public var createdAt: String?
 
     enum CodingKeys: String, CodingKey {
-        case brewery = "brewery"
-        case beer = "beer"
+        case brewery
+        case beer
         case createdAt = "created_at"
 //        case friends = "friends"
     }

@@ -53,15 +53,15 @@ public struct CDUntappdCheckin: Decodable, Sendable {
         case id = "checkin_id"
         case comment = "checkin_comment"
         case rating = "rating_score"
-        case user = "user"
-        case brewery = "brewery"
-        case beer = "beer"
-        case venue = "venue"
+        case user
+        case brewery
+        case beer
+        case venue
 //        case toasts = "toasts.items"
 //        case comments = "comments.items"
         case badges = "badges.items"
         case media = "media.items"
-        case source = "source"
+        case source
         case createdAt = "created_at"
     }
 }

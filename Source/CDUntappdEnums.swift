@@ -28,15 +28,15 @@
 /// Sort order options for wish list queries.
 public enum CDUntappdUserWishListSortType: String, Sendable {
     /// Sort by number of check-ins.
-    case checkin      = "checkin"
+    case checkin
     /// Sort by date added (default).
-    case date         = "date"
+    case date
     /// Sort by highest ABV (alcohol by volume).
-    case highestABV   = "highest_abv"
+    case highestABV = "highest_abv"
     /// Sort by highest global rating.
     case highestRated = "highest_rated"
     /// Sort by lowest ABV.
-    case lowestABV    = "lowest_abv"
+    case lowestABV = "lowest_abv"
     /// Sort by lowest global rating.
-    case lowestRated  = "lowest_rated"
+    case lowestRated = "lowest_rated"
 }

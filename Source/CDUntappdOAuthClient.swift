@@ -53,11 +53,12 @@ public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
     ///   - clientSecret: Your Untappd application client secret.
     ///   - redirectUrl: The OAuth redirect URL registered with your application.
     public init(clientId: String!,
-         clientSecret: String!,
-         redirectUrl: String!) {
+                clientSecret: String!,
+                redirectUrl: String!) {
         assert((clientId != nil && clientId != "") &&
             (clientSecret != nil && clientSecret != "") &&
-            (redirectUrl != nil && redirectUrl != ""), "A clientId, clientSecret, and redirectUrl are required to query the Untappdd Developers API oauth endpoint.")
+            (redirectUrl != nil && redirectUrl != ""),
+            "A clientId, clientSecret, and redirectUrl are required to query the Untappdd Developers API oauth endpoint.")
         self.clientId = clientId
         self.clientSecret = clientSecret
         self.redirectUrl = redirectUrl
@@ -74,7 +75,7 @@ public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
         if let clientId = self.clientId,
            let clientSecret = self.clientSecret,
            let redirectUrl = self.redirectUrl,
-           let code = code,
+           let code,
            code != "" {
             let params: Parameters = ["client_id": clientId,
                                       "client_secret": clientSecret,
@@ -84,17 +85,17 @@ public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
             Alamofire.Session()
                 .request(CDUntappdOAuthRouter.authorize(parameters: params))
                 .responseDecodable { (response: DataResponse<CDUntappdOAuthCredential, AFError>) in
-                switch response.result {
-                case .success(let oAuthCredential):
-                    let defaults = UserDefaults.standard
-                    // Save access token
-                    defaults.set(oAuthCredential.accessToken, forKey: CDUntappdDefaults.accessToken)
-                    defaults.synchronize()
-                    completion(true, nil)
-                case .failure(let error):
-                    completion(false, error)
+                    switch response.result {
+                    case let .success(oAuthCredential):
+                        let defaults = UserDefaults.standard
+                        // Save access token
+                        defaults.set(oAuthCredential.accessToken, forKey: CDUntappdDefaults.accessToken)
+                        defaults.synchronize()
+                        completion(true, nil)
+                    case let .failure(error):
+                        completion(false, error)
+                    }
                 }
-            }
         } else {
             completion(false, nil)
         }

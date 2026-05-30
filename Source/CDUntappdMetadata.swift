@@ -32,7 +32,7 @@ public struct CDUntappdMetadata: Decodable, Sendable {
     public var type: String?
 
     enum CodingKeys: String, CodingKey {
-        case code = "code"
+        case code
         case details = "error_detail"
         case type = "error_type"
     }
@@ -55,10 +55,10 @@ public struct CDUntappdMetadata: Decodable, Sendable {
 
     public func hasError() -> Bool {
         if let code = self.code,
-            code != 200 {
-            return true
+           code != 200 {
+            true
         } else {
-            return false
+            false
         }
     }
 }

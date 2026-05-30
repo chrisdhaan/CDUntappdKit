@@ -28,7 +28,7 @@ import Testing
 @Suite("CDUntappdKit Test Suite")
 struct CDUntappdKitTests {
     @Test
-    func testSuiteInitializes() {
+    func suiteInitializes() {
         #expect(true)
     }
 }

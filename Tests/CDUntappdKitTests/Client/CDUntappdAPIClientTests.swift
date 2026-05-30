@@ -23,11 +23,10 @@
 //  THE SOFTWARE.
 //
 
-import Testing
 import Foundation
+import Testing
 @testable import CDUntappdKit
 
 @Suite("CDUntappdAPIClient Tests")
 @MainActor
-struct CDUntappdAPIClientTests {
-}
+struct CDUntappdAPIClientTests {}

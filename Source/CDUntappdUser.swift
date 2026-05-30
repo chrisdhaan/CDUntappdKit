@@ -67,8 +67,8 @@ public struct CDUntappdUser: Decodable, Sendable {
     public var settings: CDUntappdSettings?
 
     enum CodingKeys: String, CodingKey {
-        case id = "id"
-        case uid = "uid"
+        case id
+        case uid
         case username = "user_name"
         case firstName = "first_name"
         case lastName = "last_name"
@@ -76,22 +76,22 @@ public struct CDUntappdUser: Decodable, Sendable {
         case userAvatatHd = "user_avatar_hd"
         case userCoverPhoto = "user_cover_photo"
         case userCoverPhotoOffset = "user_cover_photo_offset"
-        case location = "location"
-        case bio = "bio"
+        case location
+        case bio
         case website = "url"
         case untappdUrl = "untappd_url"
         case isPrivate = "is_private"
         case isModerator = "is_moderator"
         case isSupporter = "is_supporter"
-        case relationship = "relationship"
+        case relationship
         case accountType = "account_type"
         case blockStatus = "block_status"
-        case stats = "stats"
+        case stats
         case checkins = "checkins.items"
         case recentBrews = "recent_brews.items"
-        case media = "media"
-        case contact = "contact"
+        case media
+        case contact
         case dateJoined = "date_joined"
-        case settings = "settings"
+        case settings
     }
 }

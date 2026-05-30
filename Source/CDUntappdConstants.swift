@@ -27,19 +27,19 @@
 
 let CDUntappdKitBundleIdentifier = "com.christopherdehaan.CDUntappdKit"
 
-struct CDUntappdURL {
+enum CDUntappdURL {
     static let oAuth = "https://untappd.com/oauth/"
-    static let base  = "https://api.untappd.com/v4/"
+    static let base = "https://api.untappd.com/v4/"
 }
 
-struct CDUntappdDefaults {
+enum CDUntappdDefaults {
     static let accessToken = "CDUntappdAccessToken"
 }
 
-struct CDUntappdStoryboardIdentifier {
+enum CDUntappdStoryboardIdentifier {
     static let oAuth = "CDUntappdOAuth"
 }
 
-struct CDUntappdNavigationControllerIdentifier {
+enum CDUntappdNavigationControllerIdentifier {
     static let oAuth = "CDUntappdOAuthNavigationController"
 }
