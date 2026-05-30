@@ -1979,7 +1979,7 @@ CDMarkdownKit 3.1.0 added visionOS as a first-class supported platform. CDUntapp
 
 Already covered in Section 3.2 — `.visionOS(.v1)` is added to the platforms array, `visionOS` is added to the UIKit linker setting `.when(platforms:)`.
 
-### 16.2 Update podspec
+### 16.2 Update podspec ✅
 
 Already covered in Section 4 — `s.visionos.deployment_target = '1.0'` and `s.visionos.framework = 'UIKit'`.
 
