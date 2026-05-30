@@ -2064,7 +2064,7 @@ Add a visionOS row to the Current State Summary table at the top of this documen
 
 CDMarkdownKit 3.1.0 added SwiftFormat enforcement with a `.swiftformat` config and a CI lint job. CDUntappdKit should follow the same pattern.
 
-### 17.1 Create .swiftformat
+### 17.1 Create .swiftformat ✅
 
 **File:** `.swiftformat`
 
