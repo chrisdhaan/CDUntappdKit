@@ -753,7 +753,7 @@ Carthage is being removed as a supported installation method and as the CI depen
 - `.gitmodules` (only references the Alamofire submodule)
 - `Carthage/` directory (tracked only as a CI cache; the `Carthage/Build` directory is already gitignored but `Carthage/Checkouts` containing the Alamofire submodule may be partially tracked)
 
-### 5.2 Update .gitignore
+### 5.2 Update .gitignore ✅
 
 **File:** `.gitignore`
 
