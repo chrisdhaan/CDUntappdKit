@@ -25,14 +25,18 @@
 //  THE SOFTWARE.
 //
 
-///
-/// A list of the user wish list sort types the Untappd API supports.
-///
+/// Sort order options for wish list queries.
 public enum CDUntappdUserWishListSortType: String, Sendable {
+    /// Sort by number of check-ins.
     case checkin      = "checkin"
+    /// Sort by date added (default).
     case date         = "date"
+    /// Sort by highest ABV (alcohol by volume).
     case highestABV   = "highest_abv"
+    /// Sort by highest global rating.
     case highestRated = "highest_rated"
+    /// Sort by lowest ABV.
     case lowestABV    = "lowest_abv"
+    /// Sort by lowest global rating.
     case lowestRated  = "lowest_rated"
 }

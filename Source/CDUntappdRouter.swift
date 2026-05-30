@@ -33,18 +33,30 @@
 
 import Alamofire
 
-enum CDUntappdRouter: URLRequestConvertible {
+/// Routes for Untappd API endpoints.
+///
+/// Used internally to construct HTTP requests for the Untappd API.
+public enum CDUntappdRouter: URLRequestConvertible {
 
-    // Info / Search
+    /// Fetch user information by username.
     case userInfo(username: String?, parameters: Parameters)
+    /// Fetch a user's wish list of beers.
     case userWishList(username: String?, parameters: Parameters)
+    /// Fetch a user's friends list.
     case userFriends(username: String?, parameters: Parameters)
+    /// Fetch a user's badges.
     case userBadges(username: String?, parameters: Parameters)
+    /// Fetch beers a user has checked in.
     case userBeers(username: String?, parameters: Parameters)
+    /// Fetch brewery information by ID.
     case breweryInfo(breweryId: Int, parameters: Parameters)
+    /// Fetch beer information by ID.
     case beerInfo(bid: Int, parameters: Parameters)
+    /// Fetch venue information by ID.
     case venueInfo(venueId: Int, parameters: Parameters)
+    /// Search for beers.
     case beerSearch(parameters: Parameters)
+    /// Search for breweries.
     case brewerySearch(parameters: Parameters)
 
     var method: HTTPMethod {

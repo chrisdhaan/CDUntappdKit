@@ -25,11 +25,16 @@
 //  THE SOFTWARE.
 //
 
+/// Represents a friendship relationship on Untappd.
 public struct CDUntappdFriend: Decodable, Sendable {
 
+    /// A unique hash for the friendship.
     public var friendshipHash: String?
+    /// The friend's user information.
     public var user: CDUntappdUser?
+    /// Mutual friends between the two users.
     public var mutualFriends: [CDUntappdFriend]?
+    /// When the friendship was established.
     public var createdAt: String?
 
     enum CodingKeys: String, CodingKey {

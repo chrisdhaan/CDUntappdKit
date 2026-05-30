@@ -31,12 +31,18 @@
     import Foundation
 #endif
 
+/// Represents an Untappd venue (establishment).
 public struct CDUntappdVenue: Decodable, Sendable {
 
+    /// The unique venue identifier.
     public var id: Int?
+    /// The venue's name.
     public var name: String?
+    /// Whether the venue is verified by Untappd.
     public var isVerified: Bool?
+    /// The parent category identifier.
     public var parentCategoryId: String?
+    /// The venue's primary category.
     public var primaryCategory: String?
     public var categories: [CDUntappdCategory]?
     public var smallIcon: URL?

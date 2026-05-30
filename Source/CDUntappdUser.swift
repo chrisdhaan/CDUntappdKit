@@ -31,12 +31,18 @@
     import Foundation
 #endif
 
+/// Represents an Untappd user.
 public struct CDUntappdUser: Decodable, Sendable {
 
+    /// The unique user identifier.
     public var id: Int?
+    /// The unique user ID (alias for `id`).
     public var uid: Int?
+    /// The user's display name.
     public var username: String?
+    /// The user's first name.
     public var firstName: String?
+    /// The user's last name.
     public var lastName: String?
     public var userAvatar: URL?
     public var userAvatatHd: URL?

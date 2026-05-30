@@ -25,14 +25,22 @@
 //  THE SOFTWARE.
 //
 
+/// Represents user statistics on Untappd.
 public struct CDUntappdStats: Decodable, Sendable {
 
+    /// The number of badges earned.
     public var totalBadges: Int?
+    /// The number of friends.
     public var totalFriends: Int?
+    /// The total number of check-ins.
     public var totalCheckins: Int?
+    /// The number of unique beers consumed.
     public var totalBeers: Int?
+    /// The number of beers created by the user.
     public var totalCreatedBeers: Int?
+    /// The number of people the user follows.
     public var totalFollowings: Int?
+    /// The number of photos uploaded.
     public var totalPhotos: Int?
 
     enum CodingKeys: String, CodingKey {

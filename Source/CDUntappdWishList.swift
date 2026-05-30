@@ -25,9 +25,12 @@
 //  THE SOFTWARE.
 //
 
+/// Represents a user's Untappd wish list.
 public struct CDUntappdWishList: Decodable, Sendable {
 
+    /// The beers on the wish list.
     public var items: [CDUntappdWishListItem]?
+    /// When the wish list was last updated.
     public var updatedAt: String?
 
     enum CodingKeys: String, CodingKey {

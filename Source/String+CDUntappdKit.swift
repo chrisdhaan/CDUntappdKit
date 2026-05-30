@@ -27,10 +27,18 @@
 
 extension String {
 
+    /// Converts a boolean value to its lowercase string representation.
+    /// - Parameter value: The boolean to convert.
+    /// - Returns: `"true"` if the value is `true`, `"false"` otherwise.
     static func fromBool(value: Bool) -> String {
         return String(format: "%@", value ? "true" : "false")
     }
 
+    /// Appends an optional username to an API path.
+    /// - Parameters:
+    ///   - path: The base API path (e.g., `"user/info"`).
+    ///   - username: The username to append, or `nil` to return the base path unchanged.
+    /// - Returns: The path with the username appended if provided, otherwise the original path.
     static func path(_ path: String,
                      forUsername username: String?) -> String {
         if let username = username {

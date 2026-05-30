@@ -29,6 +29,9 @@ import Alamofire
 
 extension Dictionary where Key: ExpressibleByStringLiteral, Value: Any {
 
+    /// Builds parameters for the user info API endpoint.
+    /// - Parameter isCompact: Pass `true` for a compact response omitting extended fields.
+    /// - Returns: A parameters dictionary with the `compact` key set.
     static func userInfoParameters(isCompact compact: Bool) -> Parameters {
         var params: Parameters = [:]
 
@@ -37,6 +40,12 @@ extension Dictionary where Key: ExpressibleByStringLiteral, Value: Any {
         return params
     }
 
+    /// Builds parameters for the user wish list API endpoint.
+    /// - Parameters:
+    ///   - offset: Zero-based offset for pagination. Pass `nil` to omit.
+    ///   - limit: Maximum number of results (max 50). Pass `nil` to omit.
+    ///   - sort: How to sort results. Pass `nil` to omit.
+    /// - Returns: A parameters dictionary with the provided values.
     static func userWishListParameters(withOffset offset: Int?,
                                        limit: Int?,
                                        sort: CDUntappdUserWishListSortType?) -> Parameters {
@@ -55,6 +64,11 @@ extension Dictionary where Key: ExpressibleByStringLiteral, Value: Any {
         return params
     }
 
+    /// Builds parameters for the user friends API endpoint.
+    /// - Parameters:
+    ///   - offset: Zero-based offset for pagination. Pass `nil` to omit.
+    ///   - limit: Maximum number of results (max 25). Pass `nil` to omit.
+    /// - Returns: A parameters dictionary with the provided values.
     static func userFriendsParameters(withOffset offset: Int?,
                                       limit: Int?) -> Parameters {
         var params: Parameters = [:]

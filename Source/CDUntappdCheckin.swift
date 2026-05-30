@@ -25,14 +25,22 @@
 //  THE SOFTWARE.
 //
 
+/// Represents an Untappd check-in (beer visit record).
 public struct CDUntappdCheckin: Decodable, Sendable {
 
+    /// The unique check-in identifier.
     public var id: Int?
+    /// The user's comment on the check-in.
     public var comment: String?
+    /// The user's rating for the beer (0–5).
     public var rating: Double?
+    /// The user who made the check-in.
     public var user: CDUntappdUser?
+    /// The brewery associated with the beer.
     public var brewery: CDUntappdBrewery?
+    /// The beer that was checked in.
     public var beer: CDUntappdBeer?
+    /// The venue where the check-in occurred.
     public var venue: CDUntappdVenue?
 //    public var toasts: [CDUntappdToast]?
 //    public var comments: [CDUntappdComment]?

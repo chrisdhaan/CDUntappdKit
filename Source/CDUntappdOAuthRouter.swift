@@ -33,8 +33,12 @@
 
 import Alamofire
 
-enum CDUntappdOAuthRouter: URLRequestConvertible {
+/// Routes for Untappd OAuth endpoints.
+///
+/// Used internally to construct HTTP requests for OAuth authentication.
+public enum CDUntappdOAuthRouter: URLRequestConvertible {
 
+    /// The OAuth authorization endpoint.
     case authorize(parameters: Parameters)
 
     var method: HTTPMethod {

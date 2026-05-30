@@ -1489,7 +1489,7 @@ Use the standard DocC catalog Info.plist — Xcode generates this automatically 
 </plist>
 ```
 
-### 12.3 Add DocC-Compatible Documentation Comments
+### 12.3 Add DocC-Compatible Documentation Comments ✅
 
 Write `///` doc comments on every `public` and `open` declaration in `Source/`. DocC renders these as the symbol reference. Focus on:
 

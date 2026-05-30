@@ -31,13 +31,20 @@
     import Foundation
 #endif
 
+/// Represents an Untappd beer.
 public struct CDUntappdBeer: Decodable, Sendable {
 
+    /// The unique beer identifier.
     public var id: Int?
+    /// The beer's name.
     public var name: String?
+    /// The beer's description.
     public var description: String?
+    /// The beer's style category.
     public var style: String?
+    /// The beer's alcohol by volume percentage.
     public var abv: Double?
+    /// The beer's International Bitterness Units value.
     public var ibu: Double?
     public var rating: Double?
     public var overallRating: Double?

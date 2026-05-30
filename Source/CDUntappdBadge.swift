@@ -29,15 +29,24 @@
     import Foundation
 #endif
 
+/// Represents an Untappd achievement badge.
 public struct CDUntappdBadge: Decodable, Sendable {
 
+    /// The badge's unique identifier.
     public let id: Int?
+    /// The badge's name.
     public let name: String?
+    /// The badge's description.
     public let description: String?
+    /// The badge's small image.
     public let smallImage: URL?
+    /// The badge's medium image.
     public let mediumImage: URL?
+    /// The badge's large image.
     public let largeImage: URL?
+    /// The user's badge instance identifier.
     public let userBadgeId: Int?
+    /// When the user earned the badge.
     public let createdAt: String?
 
     enum CodingKeys: String, CodingKey {

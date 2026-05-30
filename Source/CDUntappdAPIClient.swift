@@ -32,6 +32,10 @@ import Alamofire
     import Foundation
 #endif
 
+/// The primary API client for interacting with the Untappd API.
+///
+/// Create one instance per application and hold a strong reference to it.
+/// All methods are `@MainActor` — call them from the main thread or from a `Task`.
 @MainActor
 public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
 
@@ -42,16 +46,11 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
 
     // MARK: - Initializers
 
-    ///
-    /// Initializes a new CDUntappdAPIClient object.
-    ///
-    /// - parameters:
-    ///   - clientId: (**Required**) A unique identifier for the Untappd application used for authenticating with the Untappd API.
-    ///   - clientSecret: (**Required**) A unique key for the Untappd application used for authenticating with the Untappd API. **Do not share this key**.
-    ///   - redirectUrl: (**Required**) A url to redirect the Untappd application to during the authentication process.
-    ///
-    /// - returns: Void
-    ///
+    /// Creates an Untappd API client.
+    /// - Parameters:
+    ///   - clientId: Your Untappd application client ID.
+    ///   - clientSecret: Your Untappd application client secret. Do not share this key.
+    ///   - redirectUrl: The OAuth redirect URL registered with your application.
     public init(clientId: String!,
                 clientSecret: String!,
                 redirectUrl: String!) {
@@ -66,11 +65,10 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
 
     // MARK: - Authentication Methods
 
+    /// Presents an OAuth authentication flow to authorize access to the Untappd API.
     ///
-    /// Attempts to authenticate the Untappd application credentials with the Untappd API if the Untappd application has not already authenticated.
-    ///
-    /// - returns: Void
-    ///
+    /// This method displays a ``CDUntappdOAuthViewController`` with a `WKWebView`-based OAuth flow.
+    /// On iOS and visionOS only.
 #if os(iOS)
     @available(iOSApplicationExtension, unavailable)
     public func authenticate() {
@@ -96,20 +94,13 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
     }
 #endif
 
-    ///
-    /// Determines whether or not the Untappd application has successfully authenticated with the Untappd API.
-    ///
-    /// - returns: Bool
-    ///
+    /// Checks whether the client has an active access token.
+    /// - Returns: `true` if an access token is stored in UserDefaults.
     public func isAuthenticated() -> Bool {
         return self.oAuthClient.isAuthorized()
     }
 
-    ///
-    /// Removes the Untappd API authentication credentials.
-    ///
-    /// - returns: Void
-    ///
+    /// Clears the stored access token from UserDefaults.
     public func unauthenticate() {
         let userDefaults = UserDefaults.standard
         userDefaults.removeObject(forKey: CDUntappdDefaults.accessToken)
@@ -118,17 +109,12 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
 
     // MARK: - Untappd API Methods
 
-    ///
-    /// This method will return the user information for a selected user. When using authentication, not passing the username parameter will return the authenticated users' information.
-    ///
-    /// - parameters:
-    ///   - forUsername: (**Required**) The username for the Untappd API to query. Can be (Optional) if an access token is provided for an authenticated user.
-    ///   - compact: (**Required**) Pass *true* to only show the user infomation, removing the *checkins*, *media*, and *recent_brews* attributes.
-    ///
-    /// - returns: CDUntappdUserInfoResponse
-    ///
-    /// - throws: CDUntappdKitError if the request fails or the response is invalid.
-    ///
+    /// Fetches user information for the given username.
+    /// - Parameters:
+    ///   - username: The Untappd username to fetch. Pass `nil` to fetch the authenticated user (requires prior authorization).
+    ///   - compact: Pass `true` to omit checkins, media, and recent brews. Defaults to `false` for full response.
+    /// - Returns: The decoded ``CDUntappdUserInfoResponse``.
+    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     public func fetchUserInfo(forUsername username: String?,
                               compact: Bool) async throws -> CDUntappdUserInfoResponse {
@@ -152,19 +138,14 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
         return response
     }
 
-    ///
-    /// This method will return a list of 25 of the user's wish listed beers. When using authentication, not passing the username parameter will return the authenticated users' information.
-    ///
-    /// - parameters:
-    ///   - forUsername: (**Required**) The username for the Untappd API to query. Can be (Optional) if an access token is provided for an authenticated user.
-    ///   - offset: (Optional) The numeric offset that you what results to start.
-    ///   - limit: (Optional) The number of results to return, max of 50, default is 25.
-    ///   - sort: (Optional) Results can be sorted using the following values (1) date - sorts by date (default), (2) checkin - sorted by highest checkin, (3) highest_rated - sorts by global rating descending order, (4) lowest_rated - sorts by global rating ascending order, (5) highest_abv - highest ABV from the wishlist, (6) lowest_abv - lowest ABV from the wishlist
-    ///
-    /// - returns: CDUntappdUserWishListResponse
-    ///
-    /// - throws: CDUntappdKitError if the request fails or the response is invalid.
-    ///
+    /// Fetches the user's wish list of beers.
+    /// - Parameters:
+    ///   - username: The Untappd username to fetch the wish list for. Pass `nil` to fetch for the authenticated user.
+    ///   - offset: The zero-based offset for pagination. Defaults to `nil` (start from 0).
+    ///   - limit: Maximum number of results to return (max 50, default 25). Defaults to `nil`.
+    ///   - sort: How to sort results. Defaults to `nil` (date order).
+    /// - Returns: The decoded ``CDUntappdUserWishListResponse``.
+    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     public func fetchUserWishList(forUsername username: String?,
                                   offset: Int?,
@@ -192,18 +173,13 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
         return response
     }
 
-    ///
-    /// This method will return a list of the user's friends. When using authentication, not passing the username parameter will return the authenticated users' information.
-    ///
-    /// - parameters:
-    ///   - forUsername: (**Required**) The username for the Untappd API to query. Can be (Optional) if an access token is provided for an authenticated user.
-    ///   - offset: (Optional) The numeric offset that you what results to start.
-    ///   - limit: (Optional) The number of records that you will return (max 25, default 25).
-    ///
-    /// - returns: CDUntappdUserFriendsResponse
-    ///
-    /// - throws: CDUntappdKitError if the request fails or the response is invalid.
-    ///
+    /// Fetches a list of the user's friends.
+    /// - Parameters:
+    ///   - username: The Untappd username to fetch friends for. Pass `nil` to fetch for the authenticated user.
+    ///   - offset: The zero-based offset for pagination. Defaults to `nil` (start from 0).
+    ///   - limit: Maximum number of results to return (max 25, default 25). Defaults to `nil`.
+    /// - Returns: The decoded ``CDUntappdUserFriendsResponse``.
+    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     public func fetchUserFriends(forUsername username: String?,
                                  offset: Int?,
@@ -229,12 +205,9 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
         return response
     }
 
+    /// Deprecated: Use Swift structured concurrency instead.
     ///
-    /// Deprecated: With async/await, use Swift's structured concurrency cancellation instead.
-    /// Call `Task.cancel()` on the Task that wraps the async API call to cancel it.
-    ///
-    /// - returns: Void
-    ///
+    /// With async/await, call `Task.cancel()` on the task that wraps the async API call.
     @available(*, deprecated, message: "Use Task.cancel() with async/await API instead")
     public func cancelAllPendingAPIRequests() {
         self.manager.session.getTasksWithCompletionHandler { (dataTasks, uploadTasks, downloadTasks) in

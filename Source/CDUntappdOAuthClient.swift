@@ -33,15 +33,26 @@
 
 import Alamofire
 
+/// Handles OAuth 2.0 authentication with the Untappd API.
+///
+/// Manages access tokens stored in UserDefaults and adds them to API requests.
 public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
 
-    let clientId: String!
-    let clientSecret: String!
-    let redirectUrl: String!
+    /// Your Untappd application client ID.
+    public let clientId: String!
+    /// Your Untappd application client secret. Do not share this value.
+    public let clientSecret: String!
+    /// The OAuth redirect URL registered with your Untappd application.
+    public let redirectUrl: String!
 
     // MARK: - Initializers
 
-    init(clientId: String!,
+    /// Creates an OAuth client for Untappd API authentication.
+    /// - Parameters:
+    ///   - clientId: Your Untappd application client ID.
+    ///   - clientSecret: Your Untappd application client secret.
+    ///   - redirectUrl: The OAuth redirect URL registered with your application.
+    public init(clientId: String!,
          clientSecret: String!,
          redirectUrl: String!) {
         assert((clientId != nil && clientId != "") &&
@@ -54,6 +65,11 @@ public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
 
     // MARK: - Authorization Methods
 
+    /// Exchanges an OAuth authorization code for an access token.
+    ///
+    /// - Parameters:
+    ///   - code: The authorization code received from the OAuth provider.
+    ///   - completion: A closure called with the result. Passes `true` and `nil` on success, `false` and an error on failure.
     public func authorize(withCode code: String!, completion: @escaping (Bool?, (any Error)?) -> Void) {
         if let clientId = self.clientId,
            let clientSecret = self.clientSecret,
@@ -84,6 +100,8 @@ public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
         }
     }
 
+    /// Checks if an access token is stored.
+    /// - Returns: `true` if an access token exists in UserDefaults.
     public func isAuthorized() -> Bool {
         let defaults = UserDefaults.standard
         if defaults.string(forKey: CDUntappdDefaults.accessToken) != nil {
@@ -93,6 +111,8 @@ public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
         }
     }
 
+    /// Returns the stored access token.
+    /// - Returns: The access token string, or `nil` if no token is stored.
     public func accessToken() -> String? {
         let defaults = UserDefaults.standard
         if let accessToken = defaults.string(forKey: CDUntappdDefaults.accessToken) {
@@ -102,6 +122,12 @@ public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
         }
     }
 
+    /// Adds authentication tokens to API request parameters.
+    ///
+    /// If an access token is available, adds it with key `access_token`.
+    /// Otherwise, adds client ID and secret with keys `client_id` and `client_secret`.
+    /// - Parameter parameters: The parameters dictionary to modify.
+    /// - Returns: The updated parameters dictionary.
     public func addTokens(toParameters parameters: Parameters) -> Parameters {
         var params = parameters
 

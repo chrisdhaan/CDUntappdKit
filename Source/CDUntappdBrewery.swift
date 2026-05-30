@@ -31,12 +31,18 @@
     import Foundation
 #endif
 
+/// Represents an Untappd brewery.
 public struct CDUntappdBrewery: Decodable, Sendable {
 
+    /// The unique brewery identifier.
     public var id: Int?
+    /// The brewery's name.
     public var name: String?
+    /// Whether the brewery is currently active.
     public var isActive: Bool?
+    /// The brewery's logo image URL.
     public var label: URL?
+    /// The brewery's URL-friendly slug.
     public var slug: String?
     public var latitude: Double?
     public var longitude: Double?
