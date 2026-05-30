@@ -554,7 +554,7 @@ jobs:
         uses: github/codeql-action/analyze@v3
 ```
 
-### 2.3 Notes on CI Architecture
+### 2.3 Notes on CI Architecture ✅
 
 - **No Carthage steps**: All dependency resolution is now handled by Xcode/SPM directly. The `Cartfile`, `Cartfile.resolved`, and `.gitmodules` are removed in Section 5.
 - **`swift test` instead of `swift build`**: Once Section 11 (Unit Tests) is complete, the SPM job runs tests rather than just building. Until tests exist, temporarily use `swift build -c debug` and update after Section 11 is done.
