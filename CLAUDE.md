@@ -53,7 +53,7 @@ swift package --disable-sandbox generate-documentation \
   --transform-for-static-hosting \
   --hosting-base-path CDUntappdKit
 
-# Format source (apply)
+# Format source before committing
 swiftformat Source Tests
 
 # Check formatting (CI mode)

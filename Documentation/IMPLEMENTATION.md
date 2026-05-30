@@ -2134,7 +2134,7 @@ swiftformat Source Tests --lint
 
 SwiftLint and SwiftFormat enforce complementary rules. Verify that no rules conflict — specifically, that SwiftLint's `line_length` warning threshold (149) matches SwiftFormat's `--maxwidth 149`. Review after running both tools on the same source.
 
-### 17.5 Developer Workflow
+### 17.5 Developer Workflow ✅
 
 Add a note in `CLAUDE.md` under the Building section:
 
