@@ -834,7 +834,7 @@ After creating the Gemfile, run `bundle lock` locally to generate `Gemfile.lock`
 bundle lock
 ```
 
-### 6.3 Add .ruby-version
+### 6.3 Add .ruby-version ✅
 
 **File:** `.ruby-version`
 
