@@ -25,7 +25,7 @@
 //  THE SOFTWARE.
 //
 
-public struct CDUntappdUserWishListResponse: Decodable {
+public struct CDUntappdUserWishListResponse: Decodable, Sendable {
 
     public var metadata: CDUntappdMetadata?
     public var wishList: CDUntappdWishList?

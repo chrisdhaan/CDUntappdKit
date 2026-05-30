@@ -25,7 +25,7 @@
 //  THE SOFTWARE.
 //
 
-public struct CDUntappdFriend: Decodable {
+public struct CDUntappdFriend: Decodable, Sendable {
 
     public var friendshipHash: String?
     public var user: CDUntappdUser?

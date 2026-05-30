@@ -31,7 +31,7 @@
     import Foundation
 #endif
 
-public struct CDUntappdBeer: Decodable {
+public struct CDUntappdBeer: Decodable, Sendable {
 
     public var id: Int?
     public var name: String?

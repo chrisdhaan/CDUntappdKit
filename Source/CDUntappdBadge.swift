@@ -29,7 +29,7 @@
     import Foundation
 #endif
 
-public struct CDUntappdBadge: Decodable {
+public struct CDUntappdBadge: Decodable, Sendable {
 
     public let id: Int?
     public let name: String?

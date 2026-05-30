@@ -25,7 +25,7 @@
 //  THE SOFTWARE.
 //
 
-public struct CDUntappdCategory: Decodable {
+public struct CDUntappdCategory: Decodable, Sendable {
 
     public var id: String?
     public var name: String?

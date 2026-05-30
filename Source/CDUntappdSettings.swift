@@ -25,7 +25,7 @@
 //  THE SOFTWARE.
 //
 
-public struct CDUntappdSettings: Decodable {
+public struct CDUntappdSettings: Decodable, Sendable {
 
     public var badgesToFacebook: Bool?
     public var badgesToTwitter: Bool?

@@ -25,7 +25,7 @@
 //  THE SOFTWARE.
 //
 
-public struct CDUntappdStats: Decodable {
+public struct CDUntappdStats: Decodable, Sendable {
 
     public var totalBadges: Int?
     public var totalFriends: Int?

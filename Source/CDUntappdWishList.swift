@@ -25,7 +25,7 @@
 //  THE SOFTWARE.
 //
 
-public struct CDUntappdWishList: Decodable {
+public struct CDUntappdWishList: Decodable, Sendable {
 
     public var items: [CDUntappdWishListItem]?
     public var updatedAt: String?

@@ -28,7 +28,7 @@
 ///
 /// A list of the user wish list sort types the Untappd API supports.
 ///
-public enum CDUntappdUserWishListSortType: String {
+public enum CDUntappdUserWishListSortType: String, Sendable {
     case checkin      = "checkin"
     case date         = "date"
     case highestABV   = "highest_abv"

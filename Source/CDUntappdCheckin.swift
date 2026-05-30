@@ -25,7 +25,7 @@
 //  THE SOFTWARE.
 //
 
-public struct CDUntappdCheckin: Decodable {
+public struct CDUntappdCheckin: Decodable, Sendable {
 
     public var id: Int?
     public var comment: String?

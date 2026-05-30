@@ -25,7 +25,7 @@
 //  THE SOFTWARE.
 //
 
-public struct CDUntappdMetadata: Decodable {
+public struct CDUntappdMetadata: Decodable, Sendable {
 
     public var code: Int?
     public var details: String?

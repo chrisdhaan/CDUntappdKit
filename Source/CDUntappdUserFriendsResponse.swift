@@ -25,7 +25,7 @@
 //  THE SOFTWARE.
 //
 
-public struct CDUntappdUserFriendsResponse: Decodable {
+public struct CDUntappdUserFriendsResponse: Decodable, Sendable {
 
     public var metadata: CDUntappdMetadata?
     public var friends: [CDUntappdFriend]?

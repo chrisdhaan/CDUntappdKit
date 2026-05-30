@@ -31,7 +31,7 @@
     import Foundation
 #endif
 
-public struct CDUntappdMedia: Decodable {
+public struct CDUntappdMedia: Decodable, Sendable {
 
     public var id: Int?
     public var originalImage: URL?

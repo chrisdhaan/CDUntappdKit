@@ -982,7 +982,7 @@ With `swift-tools-version:6.0` and `.enableUpcomingFeature("ExistentialAny")` in
 - `CDUntappdOAuthRouter.swift` — same
 - `CDUntappdAPIClient.swift` — any protocol-typed parameters or properties
 
-### 9.2 Add Sendable Conformance to Models
+### 9.2 Add Sendable Conformance to Models ✅
 
 All model structs (`CDUntappdUser`, `CDUntappdBeer`, `CDUntappdBrewery`, etc.) are value types and can trivially conform to `Sendable`. Add `Sendable` to each struct declaration:
 

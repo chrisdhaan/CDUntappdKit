@@ -31,7 +31,7 @@
     import Foundation
 #endif
 
-public struct CDUntappdSource: Decodable {
+public struct CDUntappdSource: Decodable, Sendable {
 
     public var name: String?
     public var website: URL?

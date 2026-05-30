@@ -25,7 +25,7 @@
 //  THE SOFTWARE.
 //
 
-public struct CDUntappdContact: Decodable {
+public struct CDUntappdContact: Decodable, Sendable {
 
     public var foursquare: String?
     public var twitter: String?

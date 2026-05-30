@@ -25,7 +25,7 @@
 //  THE SOFTWARE.
 //
 
-public struct CDUntappdWishListItem: Decodable {
+public struct CDUntappdWishListItem: Decodable, Sendable {
 
     public var brewery: CDUntappdBrewery?
     public var beer: CDUntappdBeer?
