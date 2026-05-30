@@ -963,7 +963,7 @@ The `CDUntappdKit.xcworkspace` currently references the Carthage-built Alamofire
 
 **Note:** This step requires interactive Xcode GUI operations. Alamofire is already correctly configured in Package.swift (section 3.2) and Carthage has been removed (section 5). When the project is next opened in Xcode, it will detect the SPM dependency and prompt for integration. Alternatively, you can manually perform the framework removal and SPM addition through Xcode's target settings and package dependency dialogs.
 
-### 8.6 Update Xcode Schemes
+### 8.6 Update Xcode Schemes ✅
 
 Each scheme file under `CDUntappdKit.xcodeproj/xcshareddata/xcschemes/` has a `LastUpgradeVersion` attribute. Update these from their current value to `2640`.
 
