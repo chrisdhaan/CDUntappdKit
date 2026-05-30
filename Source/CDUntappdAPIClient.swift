@@ -32,6 +32,7 @@ import Alamofire
     import Foundation
 #endif
 
+@MainActor
 public class CDUntappdAPIClient: NSObject {
 
     private lazy var manager: Alamofire.Session = {

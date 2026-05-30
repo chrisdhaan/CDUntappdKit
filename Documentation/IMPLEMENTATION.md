@@ -1005,7 +1005,7 @@ Also add `Sendable` to the `CDUntappdUserWishListSortType` enum in `CDUntappdEnu
 public class CDUntappdOAuthViewController: UIViewController {
 ```
 
-### 9.4 Mark CDUntappdAPIClient with @MainActor
+### 9.4 Mark CDUntappdAPIClient with @MainActor ✅
 
 `CDUntappdAPIClient` manages mutable state (the Alamofire session manager, the OAuth client, and pending request references). Since all callers interact with it from UI code, annotate the class:
 
