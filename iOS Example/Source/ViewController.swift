@@ -100,34 +100,46 @@ extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row {
         case 0:
-            CDUntappdKitManager.shared.apiClient.fetchUserInfo(forUsername: "DehaanSolo",
-                                                               compact: false) { (response) in
-                                                                
-                                                                if let response = response,
-                                                                    let user = response.user {
-                                                                    print(user)
-                                                                }
+            Task { [weak self] in
+                do {
+                    let response = try await self?.CDUntappdKitManager.shared.apiClient.fetchUserInfo(forUsername: "DehaanSolo",
+                                                                                                       compact: false)
+                    if let response = response,
+                        let user = response.user {
+                        print(user)
+                    }
+                } catch {
+                    print("Error fetching user info: \(error.localizedDescription)")
+                }
             }
         case 1:
-            CDUntappdKitManager.shared.apiClient.fetchUserWishList(forUsername: "DehaanSolo",
-                                                                   offset: 0,
-                                                                   limit: 10,
-                                                                   sort: .highestABV) { (response) in
-                                                                    
-                                                                    if let response = response,
-                                                                        let wishList = response.wishList {
-                                                                        print(wishList)
-                                                                    }
+            Task { [weak self] in
+                do {
+                    let response = try await self?.CDUntappdKitManager.shared.apiClient.fetchUserWishList(forUsername: "DehaanSolo",
+                                                                                                           offset: 0,
+                                                                                                           limit: 10,
+                                                                                                           sort: .highestABV)
+                    if let response = response,
+                        let wishList = response.wishList {
+                        print(wishList)
+                    }
+                } catch {
+                    print("Error fetching wish list: \(error.localizedDescription)")
+                }
             }
         case 2:
-            CDUntappdKitManager.shared.apiClient.fetchUserFriends(forUsername: "DehaanSolo",
-                                                                  offset: 0,
-                                                                  limit: 10) { (response) in
-                                                                    
-                                                                    if let response = response,
-                                                                        let friends = response.friends {
-                                                                        print(friends)
-                                                                    }
+            Task { [weak self] in
+                do {
+                    let response = try await self?.CDUntappdKitManager.shared.apiClient.fetchUserFriends(forUsername: "DehaanSolo",
+                                                                                                          offset: 0,
+                                                                                                          limit: 10)
+                    if let response = response,
+                        let friends = response.friends {
+                        print(friends)
+                    }
+                } catch {
+                    print("Error fetching friends: \(error.localizedDescription)")
+                }
             }
         default:
             break

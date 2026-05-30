@@ -1152,7 +1152,7 @@ This is a more advanced change. If it introduces too much complexity, the OAuth 
 
 The current `cancelAllPendingAPIRequests()` is synchronous. With async/await, callers use Swift's structured concurrency cancellation (`Task.cancel()`). Deprecate `cancelAllPendingAPIRequests()` or remove it. Document that callers should cancel the `Task` that wraps the async call.
 
-### 10.5 Update iOS Example App
+### 10.5 Update iOS Example App ✅
 
 The iOS Example app (`iOS Example/Source/`) uses the completion handler API. Update all call sites to use `async/await` within `Task { }` blocks, following the same pattern CDMarkdownKit used for its example app:
 
