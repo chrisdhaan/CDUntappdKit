@@ -34,5 +34,5 @@ public enum CDUntappdKitError: Error, Sendable {
     /// The API returned an error response.
     case apiError(String)
     /// The response could not be decoded.
-    case decodingFailed(any Error)
+    case decodingFailed(any Error & Sendable)
 }
