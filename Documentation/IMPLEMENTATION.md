@@ -814,7 +814,7 @@ Update the README (Section 13) to remove all Carthage installation instructions.
 
 ## 6. Ruby Toolchain — Gemfile
 
-### 6.1 Add Gemfile
+### 6.1 Add Gemfile ✅
 
 **File:** `Gemfile`
 
