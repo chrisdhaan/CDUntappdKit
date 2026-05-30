@@ -1128,7 +1128,7 @@ public enum CDUntappdKitError: Error, Sendable {
 
 This replaces the current pattern of silently calling `completion(nil)` on errors.
 
-### 10.3 Update CDUntappdOAuthClient.swift
+### 10.3 Update CDUntappdOAuthClient.swift ✅
 
 The OAuth flow involves a `WKWebView` redirect (iOS-only) and token storage. The async migration here is simpler since authentication is event-driven:
 

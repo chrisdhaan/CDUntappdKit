@@ -56,7 +56,7 @@ public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
 
     // MARK: - Authorization Methods
 
-    func authorize(withCode code: String!, completion: @escaping (Bool?, Error?) -> Void) {
+    public func authorize(withCode code: String!, completion: @escaping (Bool?, Error?) -> Void) {
         if let clientId = self.clientId,
            let clientSecret = self.clientSecret,
            let redirectUrl = self.redirectUrl,
@@ -87,7 +87,7 @@ public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
         }
     }
 
-    func isAuthorized() -> Bool {
+    public func isAuthorized() -> Bool {
         let defaults = UserDefaults.standard
         if defaults.string(forKey: CDUntappdDefaults.accessToken) != nil {
             return true
@@ -96,7 +96,7 @@ public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
         }
     }
 
-    func accessToken() -> String? {
+    public func accessToken() -> String? {
         let defaults = UserDefaults.standard
         if let accessToken = defaults.string(forKey: CDUntappdDefaults.accessToken) {
             return accessToken
@@ -105,7 +105,7 @@ public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
         }
     }
 
-    func addTokens(toParameters parameters: Parameters) -> Parameters {
+    public func addTokens(toParameters parameters: Parameters) -> Parameters {
         var params = parameters
 
         if let accessToken = self.accessToken() {
