@@ -1848,7 +1848,7 @@ bundle exec pod lib lint --allow-warnings
 - No visionOS OAuth flow — `authenticate()` is `#if os(iOS) || os(visionOS)` but the UIApplication-based top-view-controller lookup may need a visionOS-specific window scene approach
 - `@unchecked Sendable` on `CDUntappdAPIClient` — pending full thread-safety audit
 
-### 14.2 Create Documentation/ARCHITECTURE.md
+### 14.2 Create Documentation/ARCHITECTURE.md ✅
 
 **File:** `Documentation/ARCHITECTURE.md`
 
