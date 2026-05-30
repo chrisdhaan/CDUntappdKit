@@ -1734,7 +1734,7 @@ Create a comprehensive usage guide covering:
 9. **Advanced: Cancellation** — How to cancel in-flight requests using Swift `Task` cancellation
 10. **Unimplemented Endpoints** — List of all Untappd API endpoints not yet implemented, to guide contributors
 
-### 13.4 Create Migration Guide
+### 13.4 Create Migration Guide ✅
 
 **File:** `Documentation/CDUntappdKit 2.0 Migration Guide.md`
 
@@ -1847,7 +1847,6 @@ bundle exec pod lib lint --allow-warnings
 - No watchOS OAuth flow (WKWebView unavailable on watchOS)
 - No visionOS OAuth flow — `authenticate()` is `#if os(iOS) || os(visionOS)` but the UIApplication-based top-view-controller lookup may need a visionOS-specific window scene approach
 - `@unchecked Sendable` on `CDUntappdAPIClient` — pending full thread-safety audit
-```
 
 ### 14.2 Create Documentation/ARCHITECTURE.md
 
