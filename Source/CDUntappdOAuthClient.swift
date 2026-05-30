@@ -32,9 +32,11 @@
 #endif
 
 import Alamofire
+import os
 
 public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
 
+    private let logger = Logger(subsystem: "me.christopherdehaan.CDUntappdKit", category: "OAuth")
     let clientId: String!
     let clientSecret: String!
     let redirectUrl: String!
@@ -76,7 +78,7 @@ public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
                     defaults.synchronize()
                     completion(true, nil)
                 case .failure(let error):
-                    print("authorize() failure: ", error.localizedDescription)
+                    logger.error("authorize() failure: \(error.localizedDescription)")
                     completion(false, error)
                 }
             }

@@ -1027,7 +1027,7 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
 
 This is a transitional marker; a future clean-up can remove it once the concurrency model is fully verified.
 
-### 9.6 Replace print() Debugging with os.log
+### 9.6 Replace print() Debugging with os.log ✅
 
 The current implementation uses `print()` for error reporting, which is not suitable for a framework:
 

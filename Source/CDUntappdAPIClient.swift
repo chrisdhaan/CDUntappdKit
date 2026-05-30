@@ -26,6 +26,7 @@
 //
 
 import Alamofire
+import os
 #if !os(OSX)
     import UIKit
 #else
@@ -35,6 +36,7 @@ import Alamofire
 @MainActor
 public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
 
+    private let logger = Logger(subsystem: "me.christopherdehaan.CDUntappdKit", category: "API")
     private lazy var manager: Alamofire.Session = {
         return Alamofire.Session()
     }()
@@ -86,7 +88,7 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
                     oAuthViewController.onAuthorization = { (_, error) in
 
                         if let error = error {
-                            print("authorize() failure: ", error.localizedDescription)
+                            logger.error("authorize() failure: \(error.localizedDescription)")
                         }
                         UIApplication.topViewController()?.dismiss(animated: true, completion: nil)
                     }
@@ -147,11 +149,11 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
             case .success(let response):
                 if let metadata = response.metadata,
                     metadata.hasError() {
-                    print("fetchUserInfo(forUsername) error: ", metadata.description())
+                    logger.error("fetchUserInfo(forUsername) error: \(metadata.description())")
                 }
                 completion(response)
             case .failure(let error):
-                print("fetchUserInfo(forUsername) failure: ", error.localizedDescription)
+                logger.error("fetchUserInfo(forUsername) failure: \(error.localizedDescription)")
                 completion(nil)
             }
         }
@@ -191,11 +193,11 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
             case .success(let response):
                 if let metadata = response.metadata,
                     metadata.hasError() {
-                    print("fetchUserWishList(forUsername) error: ", metadata.description())
+                    logger.error("fetchUserWishList(forUsername) error: \(metadata.description())")
                 }
                 completion(response)
             case .failure(let error):
-                print("fetchUserWishList(forUsername) failure: ", error.localizedDescription)
+                logger.error("fetchUserWishList(forUsername) failure: \(error.localizedDescription)")
                 completion(nil)
             }
         }
@@ -232,11 +234,11 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
             case .success(let response):
                 if let metadata = response.metadata,
                     metadata.hasError() {
-                    print("fetchUserFriends(forUsername) error: ", metadata.description())
+                    logger.error("fetchUserFriends(forUsername) error: \(metadata.description())")
                 }
                 completion(response)
             case .failure(let error):
-                print("fetchUserFriends(forUsername) failure: ", error.localizedDescription)
+                logger.error("fetchUserFriends(forUsername) failure: \(error.localizedDescription)")
                 completion(nil)
             }
         }
