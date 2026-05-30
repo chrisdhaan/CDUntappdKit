@@ -33,8 +33,8 @@ An Alamofire `URLRequestConvertible` enum. Each case represents an API endpoint 
 ### CDUntappdOAuthRouter
 Same pattern as `CDUntappdRouter`, but for the OAuth authorization and token exchange endpoints.
 
-### CDUntappdOAuthViewController (iOS only)
-A `UIViewController` wrapping `WKWebView` that presents the Untappd OAuth login page and intercepts the redirect callback.
+### CDUntappdOAuthViewController (iOS and visionOS)
+A `UIViewController` wrapping `WKWebView` that presents the Untappd OAuth login page and intercepts the redirect callback. Available on iOS and visionOS via `#if os(iOS) || os(visionOS)` platform guard.
 
 ## Request Lifecycle
 
