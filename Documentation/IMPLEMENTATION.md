@@ -844,7 +844,7 @@ bundle lock
 
 Pins the Ruby version to match the Homebrew-installed Ruby on the CI macOS runners, ensuring consistent gem compilation. Update this value if the runner image changes its default Ruby version.
 
-### 6.4 Add .bundle/ to .gitignore
+### 6.4 Add .bundle/ to .gitignore ✅
 
 The `.bundle/` directory contains machine-specific Bundler configuration (SQLite3 build path, cache settings). It must not be committed. This is already included in the updated `.gitignore` from Section 5.2.
 
