@@ -1356,7 +1356,7 @@ In addition to the SPM manifest (Section 3), add a `CDUntappdKitTests` target to
 - Include the `Tests/CDUntappdKitTests/` folder.
 - Have the same deployment target as the main library target for each platform scheme.
 
-### 11.8 Update CI SPM Job
+### 11.8 Update CI SPM Job ✅
 
 Once tests exist, change the SPM CI job from:
 ```yaml
