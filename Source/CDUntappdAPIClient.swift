@@ -26,11 +26,14 @@
 //
 
 import Alamofire
+import os.log
 #if !os(OSX)
     import UIKit
 #else
     import Foundation
 #endif
+
+private let logger = Logger(subsystem: CDUntappdKitBundleIdentifier, category: "APIClient")
 
 /// The primary API client for interacting with the Untappd API.
 ///
@@ -135,6 +138,7 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
 
         if let metadata = response.metadata,
            metadata.hasError() {
+            logger.error("fetchUserInfo API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -173,6 +177,7 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
 
         if let metadata = response.metadata,
            metadata.hasError() {
+            logger.error("fetchUserWishList API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -208,6 +213,7 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
 
         if let metadata = response.metadata,
            metadata.hasError() {
+            logger.error("fetchUserFriends API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
