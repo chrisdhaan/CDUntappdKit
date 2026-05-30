@@ -1375,7 +1375,7 @@ run: set -o pipefail && swift test -c debug 2>&1 | xcbeautify --renderer github-
 
 CDMarkdownKit 3.1.0 migrated from Jazzy to DocC. CDUntappdKit skips Jazzy entirely and adopts DocC directly. Jazzy is **not** added to the Gemfile and `.jazzy.yaml` is **not** created.
 
-### 12.1 Add swift-docc-plugin to Package.swift
+### 12.1 Add swift-docc-plugin to Package.swift ✅
 
 This is already included in Section 3.2. The `swift-docc-plugin` dependency enables `swift package generate-documentation` and `swift package preview-documentation` commands without requiring a separate tool installation.
 
