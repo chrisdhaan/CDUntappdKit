@@ -1349,7 +1349,7 @@ struct CDUntappdOAuthClientTests {
 }
 ```
 
-### 11.7 Add Test Target to Xcode Project
+### 11.7 Add Test Target to Xcode Project ✅
 
 In addition to the SPM manifest (Section 3), add a `CDUntappdKitTests` target to `CDUntappdKit.xcodeproj`. This allows tests to be run from Xcode's Test navigator in addition to `swift test`. The test target should:
 - Depend on the `CDUntappdKit` framework target.

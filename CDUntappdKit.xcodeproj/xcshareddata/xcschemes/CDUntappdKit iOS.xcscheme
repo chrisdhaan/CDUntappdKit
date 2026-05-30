@@ -1,76 +1,31 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Scheme
-   LastUpgradeVersion = "2640"
-   version = "1.3">
-   <BuildAction
-      parallelizeBuildables = "YES"
-      buildImplicitDependencies = "YES">
+<?xml version='1.0' encoding='UTF-8'?>
+<Scheme LastUpgradeVersion='2640' version='1.3'>
+   <BuildAction buildImplicitDependencies='YES' parallelizeBuildables='YES'>
       <BuildActionEntries>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B267912D1F350723008635CD"
-               BuildableName = "CDUntappdKit.framework"
-               BlueprintName = "CDUntappdKit iOS"
-               ReferencedContainer = "container:CDUntappdKit.xcodeproj">
+         <BuildActionEntry buildForAnalyzing='YES' buildForArchiving='YES' buildForProfiling='YES' buildForRunning='YES' buildForTesting='YES'>
+            <BuildableReference BlueprintIdentifier='B267912D1F350723008635CD' BlueprintName='CDUntappdKit iOS' BuildableIdentifier='primary' BuildableName='CDUntappdKit.framework' ReferencedContainer='container:CDUntappdKit.xcodeproj'>
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
-   <TestAction
-      buildConfiguration = "Debug"
-      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
-      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+   <TestAction buildConfiguration='Debug' selectedDebuggerIdentifier='Xcode.DebuggerFoundation.Debugger.LLDB' selectedLauncherIdentifier='Xcode.DebuggerFoundation.Launcher.LLDB' shouldUseLaunchSchemeArgsEnv='YES'>
       <Testables>
-      </Testables>
+      <TestableReference skipped='NO'><BuildableReference BlueprintIdentifier='0975C270F255817E130906CA' BlueprintName='CDUntappdKitTests' BuildableIdentifier='primary' BuildableName='CDUntappdKitTests.xctest' ReferencedContainer='container:CDUntappdKit.xcodeproj'/></TestableReference></Testables>
    </TestAction>
-   <LaunchAction
-      buildConfiguration = "Debug"
-      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
-      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      launchStyle = "0"
-      useCustomWorkingDirectory = "NO"
-      ignoresPersistentStateOnLaunch = "NO"
-      debugDocumentVersioning = "YES"
-      debugServiceExtension = "internal"
-      allowLocationSimulation = "YES">
+   <LaunchAction allowLocationSimulation='YES' buildConfiguration='Debug' debugDocumentVersioning='YES' debugServiceExtension='internal' ignoresPersistentStateOnLaunch='NO' launchStyle='0' selectedDebuggerIdentifier='Xcode.DebuggerFoundation.Debugger.LLDB' selectedLauncherIdentifier='Xcode.DebuggerFoundation.Launcher.LLDB' useCustomWorkingDirectory='NO'>
       <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B267912D1F350723008635CD"
-            BuildableName = "CDUntappdKit.framework"
-            BlueprintName = "CDUntappdKit iOS"
-            ReferencedContainer = "container:CDUntappdKit.xcodeproj">
+         <BuildableReference BlueprintIdentifier='B267912D1F350723008635CD' BlueprintName='CDUntappdKit iOS' BuildableIdentifier='primary' BuildableName='CDUntappdKit.framework' ReferencedContainer='container:CDUntappdKit.xcodeproj'>
          </BuildableReference>
       </MacroExpansion>
    </LaunchAction>
-   <ProfileAction
-      buildConfiguration = "Release"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      savedToolIdentifier = ""
-      useCustomWorkingDirectory = "NO"
-      debugDocumentVersioning = "YES">
+   <ProfileAction buildConfiguration='Release' debugDocumentVersioning='YES' savedToolIdentifier='' shouldUseLaunchSchemeArgsEnv='YES' useCustomWorkingDirectory='NO'>
       <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B267912D1F350723008635CD"
-            BuildableName = "CDUntappdKit.framework"
-            BlueprintName = "CDUntappdKit iOS"
-            ReferencedContainer = "container:CDUntappdKit.xcodeproj">
+         <BuildableReference BlueprintIdentifier='B267912D1F350723008635CD' BlueprintName='CDUntappdKit iOS' BuildableIdentifier='primary' BuildableName='CDUntappdKit.framework' ReferencedContainer='container:CDUntappdKit.xcodeproj'>
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>
-   <AnalyzeAction
-      buildConfiguration = "Debug">
+   <AnalyzeAction buildConfiguration='Debug'>
    </AnalyzeAction>
-   <ArchiveAction
-      buildConfiguration = "Release"
-      revealArchiveInOrganizer = "YES">
+   <ArchiveAction buildConfiguration='Release' revealArchiveInOrganizer='YES'>
    </ArchiveAction>
 </Scheme>
