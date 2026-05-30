@@ -1255,7 +1255,7 @@ struct CDUntappdUserTests {
 
 Create JSON fixture files under `Tests/CDUntappdKitTests/Fixtures/` by capturing real Untappd API responses (with personal data anonymized) or constructing minimal valid JSON that matches each model's `CodingKeys`.
 
-### 11.4 Router Tests
+### 11.4 Router Tests ✅
 
 Test that the router constructs correct URLs and HTTP methods:
 

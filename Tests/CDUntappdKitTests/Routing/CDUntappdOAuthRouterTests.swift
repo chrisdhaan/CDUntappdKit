@@ -29,4 +29,53 @@ import Foundation
 
 @Suite("CDUntappdOAuthRouter Tests")
 struct CDUntappdOAuthRouterTests {
+
+    @Test
+    func authorizeRouteUsesGET() throws {
+        let parameters: [String: Any] = ["client_id": "test", "response_type": "code"]
+        let request = try CDUntappdOAuthRouter.authorize(parameters: parameters).asURLRequest()
+        #expect(request.httpMethod == "GET")
+    }
+
+    @Test
+    func authorizeRouteContainsPath() throws {
+        let parameters: [String: Any] = ["client_id": "test", "response_type": "code"]
+        let request = try CDUntappdOAuthRouter.authorize(parameters: parameters).asURLRequest()
+        #expect(request.url?.absoluteString.contains("authorize") == true)
+    }
+
+    @Test
+    func authorizeRouteUsesUntappdOAuthBase() throws {
+        let parameters: [String: Any] = ["client_id": "test", "response_type": "code"]
+        let request = try CDUntappdOAuthRouter.authorize(parameters: parameters).asURLRequest()
+        #expect(request.url?.absoluteString.contains("untappd.com/oauth/") == true)
+    }
+
+    @Test
+    func authorizeRouteContainsClientId() throws {
+        let parameters: [String: Any] = ["client_id": "test123", "response_type": "code"]
+        let request = try CDUntappdOAuthRouter.authorize(parameters: parameters).asURLRequest()
+        #expect(request.url?.query?.contains("client_id=test123") == true)
+    }
+
+    @Test
+    func authorizeRouteContainsResponseType() throws {
+        let parameters: [String: Any] = ["client_id": "test", "response_type": "code"]
+        let request = try CDUntappdOAuthRouter.authorize(parameters: parameters).asURLRequest()
+        #expect(request.url?.query?.contains("response_type=code") == true)
+    }
+
+    @Test
+    func authorizeRouteIncludesAllQueryParameters() throws {
+        let parameters: [String: Any] = [
+            "client_id": "id123",
+            "response_type": "code",
+            "redirect_url": "myapp://oauth"
+        ]
+        let request = try CDUntappdOAuthRouter.authorize(parameters: parameters).asURLRequest()
+        #expect(request.url?.query != nil)
+        #expect(request.url?.query?.contains("client_id") == true)
+        #expect(request.url?.query?.contains("response_type") == true)
+        #expect(request.url?.query?.contains("redirect_url") == true)
+    }
 }
