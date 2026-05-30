@@ -25,11 +25,7 @@
 //  THE SOFTWARE.
 //
 
-#if !os(OSX)
-    import UIKit
-#else
-    import Foundation
-#endif
+import Foundation
 
 /// Represents an Untappd user.
 public struct CDUntappdUser: Decodable, Sendable {

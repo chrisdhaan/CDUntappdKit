@@ -25,13 +25,8 @@
 //  THE SOFTWARE.
 //
 
-#if !os(OSX)
-    import UIKit
-#else
-    import Foundation
-#endif
-
 import Alamofire
+import Foundation
 
 /// Routes for Untappd API endpoints.
 ///

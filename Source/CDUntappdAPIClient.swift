@@ -26,11 +26,10 @@
 //
 
 import Alamofire
+import Foundation
 import os.log
-#if !os(OSX)
+#if os(iOS) || os(visionOS)
     import UIKit
-#else
-    import Foundation
 #endif
 
 private let logger = Logger(subsystem: CDUntappdKitBundleIdentifier, category: "APIClient")

@@ -23,11 +23,7 @@
 //  THE SOFTWARE.
 //
 
-#if !os(OSX)
-    import UIKit
-#else
-    import Foundation
-#endif
+import Foundation
 
 /// Represents an Untappd achievement badge.
 public struct CDUntappdBadge: Decodable, Sendable {

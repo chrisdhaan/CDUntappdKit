@@ -25,13 +25,8 @@
 //  THE SOFTWARE.
 //
 
-#if !os(OSX)
-    import UIKit
-#else
-    import Foundation
-#endif
-
 import Alamofire
+import Foundation
 import os.log
 
 private let logger = Logger(subsystem: CDUntappdKitBundleIdentifier, category: "OAuthClient")
