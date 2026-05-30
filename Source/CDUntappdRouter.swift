@@ -102,7 +102,7 @@ public enum CDUntappdRouter: URLRequestConvertible {
         }
     }
 
-    func asURLRequest() throws -> URLRequest {
+    public func asURLRequest() throws -> URLRequest {
         let url = try CDUntappdURL.base.asURL()
 
         var urlRequest = URLRequest(url: url.appendingPathComponent(path))

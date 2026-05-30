@@ -1530,7 +1530,7 @@ public class CDUntappdAPIClient: NSObject {
 
 DocC supports `- Parameter`, `- Returns`, `- Throws`, and `- Note:` / `- Warning:` callouts. Use double-backtick symbol references (`` ``CDUntappdKitError`` ``) wherever linking to another type.
 
-### 12.4 Generate docs/ (Static Hosting)
+### 12.4 Generate docs/ (Static Hosting) ✅
 
 Run locally after completing 12.2 and 12.3:
 

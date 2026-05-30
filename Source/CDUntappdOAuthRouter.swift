@@ -55,7 +55,7 @@ public enum CDUntappdOAuthRouter: URLRequestConvertible {
         }
     }
 
-    func asURLRequest() throws -> URLRequest {
+    public func asURLRequest() throws -> URLRequest {
         let url = try CDUntappdURL.oAuth.asURL()
 
         var urlRequest = URLRequest(url: url.appendingPathComponent(path))
