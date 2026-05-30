@@ -88,6 +88,7 @@
                                                    self.onAuthorization?(false, nil)
                                                }
                                            })
+                return
             }
 
             decisionHandler(.allow)
