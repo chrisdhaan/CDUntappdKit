@@ -905,7 +905,7 @@ Search for `LastUpgradeCheck` and `LastUpgradeVersion`. Update all occurrences f
 
 Also set `BuildIndependentTargetsInParallel = YES` in the project-level build settings to enable parallel target builds.
 
-### 8.2 Update Deployment Targets in Xcode Project
+### 8.2 Update Deployment Targets in Xcode Project ✅
 
 All four platform targets (iOS, macOS, tvOS, watchOS) and any Example app targets must have their deployment targets updated:
 
