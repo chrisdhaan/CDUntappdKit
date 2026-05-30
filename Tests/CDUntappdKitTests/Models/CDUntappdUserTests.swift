@@ -86,7 +86,7 @@ struct CDUntappdUserTests {
     }
 
     @Test
-    func userDecodingIsSupported() throws {
+    func decodesOptionalFieldsAsNilWhenAbsent() throws {
         let json = """
         {
           "uid": 1,
@@ -94,6 +94,7 @@ struct CDUntappdUserTests {
         }
         """.data(using: .utf8)!
         let user = try JSONDecoder().decode(CDUntappdUser.self, from: json)
-        #expect(user != nil)
+        #expect(user.firstName == nil)
+        #expect(user.lastName == nil)
     }
 }
