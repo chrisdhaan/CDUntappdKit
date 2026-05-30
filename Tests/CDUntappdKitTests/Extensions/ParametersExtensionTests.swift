@@ -29,4 +29,97 @@ import Foundation
 
 @Suite("Parameters Extension Tests")
 struct ParametersExtensionTests {
+
+    @Test
+    func userInfoParametersWithCompactTrue() {
+        let params = [String: Any].userInfoParameters(isCompact: true)
+        #expect(params["compact"] as? String == "true")
+    }
+
+    @Test
+    func userInfoParametersWithCompactFalse() {
+        let params = [String: Any].userInfoParameters(isCompact: false)
+        #expect(params["compact"] as? Bool == false)
+    }
+
+    @Test
+    func userInfoParametersReturnsParameters() {
+        let params = [String: Any].userInfoParameters(isCompact: true)
+        #expect(params.isEmpty == false)
+    }
+
+    @Test
+    func userWishListParametersWithAllValues() {
+        let params = [String: Any].userWishListParameters(withOffset: 10, limit: 20,
+                                                          sort: .highestABV)
+        #expect(params["offset"] as? Int == 10)
+        #expect(params["limit"] as? Int == 20)
+        let sortValue = params["sort"] as? CDUntappdUserWishListSortType
+        #expect(sortValue == .highestABV)
+    }
+
+    @Test
+    func userWishListParametersWithNilOffset() {
+        let params = [String: Any].userWishListParameters(withOffset: nil, limit: 20,
+                                                          sort: .highestABV)
+        #expect(params["offset"] == nil)
+        #expect(params["limit"] as? Int == 20)
+    }
+
+    @Test
+    func userWishListParametersWithNilLimit() {
+        let params = [String: Any].userWishListParameters(withOffset: 10, limit: nil,
+                                                          sort: .highestABV)
+        #expect(params["offset"] as? Int == 10)
+        #expect(params["limit"] == nil)
+    }
+
+    @Test
+    func userWishListParametersWithNilSort() {
+        let params = [String: Any].userWishListParameters(withOffset: 10, limit: 20,
+                                                          sort: nil)
+        #expect(params["offset"] as? Int == 10)
+        #expect(params["limit"] as? Int == 20)
+        #expect(params["sort"] == nil)
+    }
+
+    @Test
+    func userWishListParametersWithAllNil() {
+        let params = [String: Any].userWishListParameters(withOffset: nil, limit: nil,
+                                                          sort: nil)
+        #expect(params.isEmpty == true)
+    }
+
+    @Test
+    func userFriendsParametersWithAllValues() {
+        let params = [String: Any].userFriendsParameters(withOffset: 5, limit: 15)
+        #expect(params["offset"] as? Int == 5)
+        #expect(params["limit"] as? Int == 15)
+    }
+
+    @Test
+    func userFriendsParametersWithNilOffset() {
+        let params = [String: Any].userFriendsParameters(withOffset: nil, limit: 15)
+        #expect(params["offset"] == nil)
+        #expect(params["limit"] as? Int == 15)
+    }
+
+    @Test
+    func userFriendsParametersWithNilLimit() {
+        let params = [String: Any].userFriendsParameters(withOffset: 5, limit: nil)
+        #expect(params["offset"] as? Int == 5)
+        #expect(params["limit"] == nil)
+    }
+
+    @Test
+    func userFriendsParametersWithAllNil() {
+        let params = [String: Any].userFriendsParameters(withOffset: nil, limit: nil)
+        #expect(params.isEmpty == true)
+    }
+
+    @Test
+    func userFriendsParametersWithZeroOffset() {
+        let params = [String: Any].userFriendsParameters(withOffset: 0, limit: 10)
+        #expect(params["offset"] as? Int == 0)
+    }
 }

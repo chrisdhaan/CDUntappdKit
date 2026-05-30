@@ -1293,7 +1293,7 @@ struct CDUntappdRouterTests {
 }
 ```
 
-### 11.5 Extension Tests
+### 11.5 Extension Tests ✅
 
 ```swift
 @Suite("String Extension Tests")

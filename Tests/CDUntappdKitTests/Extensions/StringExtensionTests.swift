@@ -29,4 +29,46 @@ import Foundation
 
 @Suite("String Extension Tests")
 struct StringExtensionTests {
+
+    @Test
+    func fromBoolReturnsTrueString() {
+        let result = String.fromBool(value: true)
+        #expect(result == "true")
+    }
+
+    @Test
+    func fromBoolReturnsFalseString() {
+        let result = String.fromBool(value: false)
+        #expect(result == "false")
+    }
+
+    @Test
+    func pathAppendsUsernameCorrectly() {
+        let result = String.path("user/info", forUsername: "testuser")
+        #expect(result == "user/info/testuser")
+    }
+
+    @Test
+    func pathWithoutUsernameReturnsBasePath() {
+        let result = String.path("user/info", forUsername: nil)
+        #expect(result == "user/info")
+    }
+
+    @Test
+    func pathAppendsEmptyStringUsername() {
+        let result = String.path("user/info", forUsername: "")
+        #expect(result == "user/info/")
+    }
+
+    @Test
+    func pathWithComplexPath() {
+        let result = String.path("v4/user/wishlist", forUsername: "john_doe")
+        #expect(result == "v4/user/wishlist/john_doe")
+    }
+
+    @Test
+    func pathWithSpecialCharactersInUsername() {
+        let result = String.path("user/info", forUsername: "user-123")
+        #expect(result == "user/info/user-123")
+    }
 }
