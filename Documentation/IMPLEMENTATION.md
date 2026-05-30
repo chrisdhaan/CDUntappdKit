@@ -918,7 +918,7 @@ All four platform targets (iOS, macOS, tvOS, watchOS) and any Example app target
 
 Update `IPHONEOS_DEPLOYMENT_TARGET`, `MACOSX_DEPLOYMENT_TARGET`, `TVOS_DEPLOYMENT_TARGET`, and `WATCHOS_DEPLOYMENT_TARGET` in `project.pbxproj`.
 
-### 8.3 Add SwiftLint Build Phase
+### 8.3 Add SwiftLint Build Phase ✅
 
 Add a SwiftLint run script build phase to all four library schemes. The script must:
 1. Export Homebrew's bin path so `which swiftlint` resolves correctly.

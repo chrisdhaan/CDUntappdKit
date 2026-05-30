@@ -727,7 +727,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\nswiftlint lint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\ncd \"$SRCROOT\"\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 		B2409D01286B9EE10001AE66 /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -745,7 +745,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\nswiftlint lint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\ncd \"$SRCROOT\"\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 		B2409D08286BA0430001AE66 /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -763,7 +763,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\nswiftlint lint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\ncd \"$SRCROOT\"\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 		B2409D0C286BA2370001AE66 /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -781,7 +781,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\nswiftlint lint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\ncd \"$SRCROOT\"\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -958,7 +958,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.christopherdehaan.CDUntappdKit;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
-			};
+			ENABLE_USER_SCRIPT_SANDBOXING = NO;
+		};
 			name = Debug;
 		};
 		B22019601FD2030900A2BE3F /* Release */ = {
@@ -1012,7 +1013,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
-			};
+			ENABLE_USER_SCRIPT_SANDBOXING = NO;
+		};
 			name = Debug;
 		};
 		B22019CD1FD207F700A2BE3F /* Release */ = {
@@ -1095,7 +1097,8 @@
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 				WATCHOS_DEPLOYMENT_TARGET = 4.0;
-			};
+			ENABLE_USER_SCRIPT_SANDBOXING = NO;
+		};
 			name = Debug;
 		};
 		B26791351F350723008635CD /* Release */ = {
@@ -1158,7 +1161,8 @@
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 				WATCHOS_DEPLOYMENT_TARGET = 4.0;
-			};
+			ENABLE_USER_SCRIPT_SANDBOXING = NO;
+		};
 			name = Release;
 		};
 		B26791371F350723008635CD /* Debug */ = {
