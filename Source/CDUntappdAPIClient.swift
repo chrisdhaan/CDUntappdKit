@@ -115,7 +115,7 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
     ///   - compact: Pass `true` to omit checkins, media, and recent brews. Defaults to `false` for full response.
     /// - Returns: The decoded ``CDUntappdUserInfoResponse``.
     /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func fetchUserInfo(forUsername username: String?,
                               compact: Bool) async throws -> CDUntappdUserInfoResponse {
         assert(
@@ -149,7 +149,7 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
     ///   - sort: How to sort results. Defaults to `nil` (date order).
     /// - Returns: The decoded ``CDUntappdUserWishListResponse``.
     /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func fetchUserWishList(forUsername username: String?,
                                   offset: Int?,
                                   limit: Int?,
@@ -186,7 +186,7 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
     ///   - limit: Maximum number of results to return (max 25, default 25). Defaults to `nil`.
     /// - Returns: The decoded ``CDUntappdUserFriendsResponse``.
     /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func fetchUserFriends(forUsername username: String?,
                                  offset: Int?,
                                  limit: Int?) async throws -> CDUntappdUserFriendsResponse {
