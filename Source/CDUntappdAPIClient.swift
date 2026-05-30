@@ -69,7 +69,7 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
     ///
     /// This method displays a ``CDUntappdOAuthViewController`` with a `WKWebView`-based OAuth flow.
     /// On iOS and visionOS only.
-#if os(iOS)
+#if os(iOS) || os(visionOS)
     @available(iOSApplicationExtension, unavailable)
     public func authenticate() {
         if let tvc = UIApplication.topViewController(),

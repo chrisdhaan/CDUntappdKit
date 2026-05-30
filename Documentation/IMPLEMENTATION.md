@@ -1983,7 +1983,7 @@ Already covered in Section 3.2 — `.visionOS(.v1)` is added to the platforms ar
 
 Already covered in Section 4 — `s.visionos.deployment_target = '1.0'` and `s.visionos.framework = 'UIKit'`.
 
-### 16.3 Update Source File Platform Guards
+### 16.3 Update Source File Platform Guards ✅
 
 Several source files use `#if os(iOS) || os(tvOS) || os(watchOS)` guards for UIKit imports. Add `|| os(visionOS)` to each:
 
