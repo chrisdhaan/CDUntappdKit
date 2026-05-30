@@ -826,7 +826,7 @@ gem "cocoapods"
 
 This pins the CocoaPods gem for reproducible CI builds. Note: unlike the original 3.0.0 plan, the `jazzy` gem is **not included** — CDMarkdownKit 3.1.0 migrated from Jazzy to DocC, so CDUntappdKit skips Jazzy entirely and goes straight to DocC (Section 12).
 
-### 6.2 Generate Gemfile.lock
+### 6.2 Generate Gemfile.lock ✅
 
 After creating the Gemfile, run `bundle lock` locally to generate `Gemfile.lock`. Commit both files. This ensures CI uses exactly the same gem versions as local development.
 
