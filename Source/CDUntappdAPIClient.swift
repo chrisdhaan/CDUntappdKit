@@ -233,10 +233,12 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
     }
 
     ///
-    /// Cancels any in progress or pending API requests.
+    /// Deprecated: With async/await, use Swift's structured concurrency cancellation instead.
+    /// Call `Task.cancel()` on the Task that wraps the async API call to cancel it.
     ///
     /// - returns: Void
     ///
+    @available(*, deprecated, message: "Use Task.cancel() with async/await API instead")
     public func cancelAllPendingAPIRequests() {
         self.manager.session.getTasksWithCompletionHandler { (dataTasks, uploadTasks, downloadTasks) in
             dataTasks.forEach { $0.cancel() }

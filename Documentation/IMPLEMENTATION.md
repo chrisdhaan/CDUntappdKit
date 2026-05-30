@@ -1148,7 +1148,7 @@ public func authorize() async throws -> String {
 
 This is a more advanced change. If it introduces too much complexity, the OAuth flow can remain callback-based for 2.0.0 and be migrated in a future release.
 
-### 10.4 Cancel API Requests
+### 10.4 Cancel API Requests ✅
 
 The current `cancelAllPendingAPIRequests()` is synchronous. With async/await, callers use Swift's structured concurrency cancellation (`Task.cancel()`). Deprecate `cancelAllPendingAPIRequests()` or remove it. Document that callers should cancel the `Task` that wraps the async call.
 
