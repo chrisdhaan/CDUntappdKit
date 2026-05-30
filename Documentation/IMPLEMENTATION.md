@@ -69,7 +69,7 @@ github: chrisdhaan
 
 This adds a "Sponsor" button to the repository on GitHub.
 
-### 1.2 Replace ISSUE_TEMPLATE.md with Directory Structure
+### 1.2 Replace ISSUE_TEMPLATE.md with Directory Structure ✅
 
 **Delete:** `.github/ISSUE_TEMPLATE.md`
 
