@@ -37,3 +37,6 @@ playground.xcworkspace
 
 # Bundler
 .bundle/
+
+# Local planning documents
+Documentation/IMPROVEMENTS.md
