@@ -26,7 +26,6 @@
 //
 
 import Alamofire
-import os
 #if !os(OSX)
     import UIKit
 #else
@@ -36,7 +35,6 @@ import os
 @MainActor
 public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
 
-    private let logger = Logger(subsystem: "me.christopherdehaan.CDUntappdKit", category: "API")
     private lazy var manager: Alamofire.Session = {
         return Alamofire.Session()
     }()
@@ -88,7 +86,6 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
                     oAuthViewController.onAuthorization = { (_, error) in
 
                         if let error = error {
-                            logger.error("authorize() failure: \(error.localizedDescription)")
                         }
                         UIApplication.topViewController()?.dismiss(animated: true, completion: nil)
                     }
@@ -132,6 +129,7 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
     ///
     /// - throws: CDUntappdKitError if the request fails or the response is invalid.
     ///
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     public func fetchUserInfo(forUsername username: String?,
                               compact: Bool) async throws -> CDUntappdUserInfoResponse {
         assert(username != nil || self.isAuthenticated(), "Either user authentication or a username are required to query the Untappd API user info endpoint.")
@@ -148,7 +146,6 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
         
         if let metadata = response.metadata,
             metadata.hasError() {
-            logger.error("fetchUserInfo(forUsername) error: \(metadata.description())")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -168,6 +165,7 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
     ///
     /// - throws: CDUntappdKitError if the request fails or the response is invalid.
     ///
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     public func fetchUserWishList(forUsername username: String?,
                                   offset: Int?,
                                   limit: Int?,
@@ -188,7 +186,6 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
         
         if let metadata = response.metadata,
             metadata.hasError() {
-            logger.error("fetchUserWishList(forUsername) error: \(metadata.description())")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -207,6 +204,7 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
     ///
     /// - throws: CDUntappdKitError if the request fails or the response is invalid.
     ///
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     public func fetchUserFriends(forUsername username: String?,
                                  offset: Int?,
                                  limit: Int?) async throws -> CDUntappdUserFriendsResponse {
@@ -225,7 +223,6 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
         
         if let metadata = response.metadata,
             metadata.hasError() {
-            logger.error("fetchUserFriends(forUsername) error: \(metadata.description())")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 

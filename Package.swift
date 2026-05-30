@@ -63,6 +63,8 @@ let package = Package(name: "CDUntappdKit",
                                         ]),
                                 .testTarget(
                                     name: "CDUntappdKitTests",
-                                    dependencies: ["CDUntappdKit"]
+                                    dependencies: ["CDUntappdKit"],
+                                    path: "Tests/CDUntappdKitTests",
+                                    resources: [.process("Fixtures")]
                                 )],
                       swiftLanguageModes: [.v5])

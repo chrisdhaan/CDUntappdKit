@@ -33,7 +33,7 @@
 
 import Alamofire
 
-enum CDUntappdRouter: any URLRequestConvertible {
+enum CDUntappdRouter: URLRequestConvertible {
 
     // Info / Search
     case userInfo(username: String?, parameters: Parameters)

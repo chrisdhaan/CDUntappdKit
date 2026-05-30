@@ -1,8 +1,6 @@
 //
-//  CDUntappdOAuthRouter.swift
-//  CDUntappdKit
-//
-//  Created by Christopher de Haan on 8/8/17.
+//  StringExtensionTests.swift
+//  CDUntappdKitTests
 //
 //  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //
@@ -25,44 +23,10 @@
 //  THE SOFTWARE.
 //
 
-#if !os(OSX)
-    import UIKit
-#else
-    import Foundation
-#endif
+import Testing
+import Foundation
+@testable import CDUntappdKit
 
-import Alamofire
-
-enum CDUntappdOAuthRouter: URLRequestConvertible {
-
-    case authorize(parameters: Parameters)
-
-    var method: HTTPMethod {
-        switch self {
-        case .authorize(parameters: _):
-            return .get
-        }
-    }
-
-    var path: String {
-        switch self {
-        case .authorize(parameters: _):
-            return "authorize"
-        }
-    }
-
-    func asURLRequest() throws -> URLRequest {
-        let url = try CDUntappdURL.oAuth.asURL()
-
-        var urlRequest = URLRequest(url: url.appendingPathComponent(path))
-        urlRequest.httpMethod = method.rawValue
-
-        switch self {
-        case .authorize(let parameters):
-            urlRequest = try URLEncoding.default.encode(urlRequest,
-                                                        with: parameters)
-        }
-
-        return urlRequest
-    }
+@Suite("String Extension Tests")
+struct StringExtensionTests {
 }

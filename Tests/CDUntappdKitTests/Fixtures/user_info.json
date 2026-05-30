@@ -1,0 +1,27 @@
+{
+  "response": {
+    "user": {
+      "uid": 1,
+      "user_name": "DehaanSolo",
+      "first_name": "Christopher",
+      "last_name": "de Haan",
+      "user_avatar": "https://example.com/avatar.jpg",
+      "user_avatar_hd": "https://example.com/avatar_hd.jpg",
+      "user_cover_photo": "https://example.com/cover.jpg",
+      "user_type": "user",
+      "stats": {
+        "total_beers": 1000,
+        "total_badges": 50,
+        "total_friends": 100,
+        "total_checkins": 2000
+      }
+    }
+  },
+  "meta": {
+    "code": 200,
+    "response_time": {
+      "time": 100,
+      "measure": "ms"
+    }
+  }
+}

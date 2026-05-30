@@ -1,0 +1,26 @@
+{
+  "response": {
+    "user": {
+      "uid": 1,
+      "user_name": "DehaanSolo",
+      "first_name": "Christopher",
+      "last_name": "de Haan"
+    },
+    "friends": [
+      {
+        "uid": 2,
+        "user_name": "TestFriend",
+        "first_name": "Test",
+        "last_name": "Friend",
+        "user_avatar": "https://example.com/friend_avatar.jpg"
+      }
+    ]
+  },
+  "meta": {
+    "code": 200,
+    "response_time": {
+      "time": 100,
+      "measure": "ms"
+    }
+  }
+}
