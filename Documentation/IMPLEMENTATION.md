@@ -856,7 +856,7 @@ The `.bundle/` directory contains machine-specific Bundler configuration (SQLite
 
 Apple requires a privacy manifest for SDKs distributed via the App Store. CDUntappdKit makes network requests (Untappd API) and stores a token in `UserDefaults`. The privacy manifest declares these practices.
 
-### 7.1 Create PrivacyInfo.xcprivacy
+### 7.1 Create PrivacyInfo.xcprivacy ✅
 
 **File:** `Source/PrivacyInfo.xcprivacy`
 
