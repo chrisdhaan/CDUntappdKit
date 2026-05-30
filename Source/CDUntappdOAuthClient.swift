@@ -41,6 +41,8 @@ private let logger = Logger(subsystem: CDUntappdKitBundleIdentifier, category: "
 /// Manages access tokens stored in UserDefaults and adds them to API requests.
 public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
 
+    private let session = Alamofire.Session()
+
     /// Your Untappd application client ID.
     public let clientId: String!
     /// Your Untappd application client secret. Do not share this value.
@@ -85,7 +87,7 @@ public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
                                       "response_type": "code",
                                       "redirect_url": redirectUrl,
                                       "code": code]
-            Alamofire.Session()
+            self.session
                 .request(CDUntappdOAuthRouter.authorize(parameters: params))
                 .responseDecodable { (response: DataResponse<CDUntappdOAuthCredential, AFError>) in
                     switch response.result {
