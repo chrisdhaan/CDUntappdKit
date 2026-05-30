@@ -2130,7 +2130,7 @@ swiftformat Source Tests --lint
 
 `--lint` mode exits non-zero if any file would be changed, without modifying files. This enforces that all committed code passes the formatter.
 
-### 17.4 Update .swiftlint.yml
+### 17.4 Update .swiftlint.yml ✅
 
 SwiftLint and SwiftFormat enforce complementary rules. Verify that no rules conflict — specifically, that SwiftLint's `line_length` warning threshold (149) matches SwiftFormat's `--maxwidth 149`. Review after running both tools on the same source.
 

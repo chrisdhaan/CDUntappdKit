@@ -4,8 +4,8 @@ included: # paths to include during linting. `--path` is ignored if present.
   - Source
   - Example/Source
 excluded: # paths to ignore during linting. Takes precedence over `included`.
-  - Carthage
   - Example/Resources
+  - .build
 
 # configurable rules can be customized from this configuration file.
 # colon behavior when specifying types or defining dictionaries
@@ -31,10 +31,10 @@ identifier_name:
     - id
 # number of characters allowed in a line
 line_length:
-  error: 200
+  error: 160
   ignores_comments: true
   ignores_function_declarations: true
-  warning: 195
+  warning: 149
 # number of lines allowed in a type declaration
 type_body_length:
   error: 450
