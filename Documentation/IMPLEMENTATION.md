@@ -1320,7 +1320,7 @@ struct StringExtensionTests {
 }
 ```
 
-### 11.6 OAuth Client Tests
+### 11.6 OAuth Client Tests ✅
 
 Test that `CDUntappdOAuthClient` correctly stores and retrieves tokens from `UserDefaults`:
 
