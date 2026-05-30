@@ -27,7 +27,7 @@ Task {
     do {
         let response = try await client.fetchUserInfo(forUsername: "DehaanSolo",
                                                       compact: false)
-        print(response.user?.userName ?? "")
+        print(response.user?.username ?? "")
     } catch {
         print(error)
     }
