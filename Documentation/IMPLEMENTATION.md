@@ -1217,7 +1217,7 @@ Because CDUntappdKit makes real network calls, tests are divided into:
 
 All tests use Swift Testing (`import Testing`).
 
-### 11.3 Model Decoding Tests
+### 11.3 Model Decoding Tests ✅
 
 Each model test verifies:
 1. That the model decodes correctly from a fixture JSON file.

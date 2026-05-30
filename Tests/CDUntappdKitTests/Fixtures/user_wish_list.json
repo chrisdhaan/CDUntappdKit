@@ -1,34 +1,21 @@
 {
   "response": {
-    "user": {
-      "uid": 1,
-      "user_name": "DehaanSolo",
-      "first_name": "Christopher",
-      "last_name": "de Haan"
-    },
-    "beers": [
-      {
-        "beer": {
-          "bid": 1,
-          "beer_name": "Example IPA",
-          "beer_label": "https://example.com/beer.jpg",
-          "beer_abv": 6.5,
-          "beer_ibu": 65,
-          "beer_slug": "example-ipa",
-          "brewery": {
-            "brewery_id": 1,
-            "brewery_name": "Example Brewery",
-            "brewery_slug": "example-brewery"
+    "beers": {
+      "items": [
+        {
+          "beer": {
+            "bid": 1,
+            "beer_name": "Example IPA",
+            "beer_label": "https://example.com/beer.jpg",
+            "beer_abv": 6.5,
+            "beer_ibu": 65,
+            "beer_slug": "example-ipa"
           }
         }
-      }
-    ]
+      ]
+    }
   },
   "meta": {
-    "code": 200,
-    "response_time": {
-      "time": 100,
-      "measure": "ms"
-    }
+    "code": 200
   }
 }

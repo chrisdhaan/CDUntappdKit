@@ -29,4 +29,17 @@ import Foundation
 
 @Suite("CDUntappdVenue Tests")
 struct CDUntappdVenueTests {
+
+    @Test
+    func venueDecodingIsSupported() throws {
+        let json = """
+        {
+          "venue_id": 1,
+          "venue_name": "Test Venue"
+        }
+        """.data(using: .utf8)!
+        let venue = try JSONDecoder().decode(CDUntappdVenue.self, from: json)
+        #expect(venue.id == 1)
+        #expect(venue.name == "Test Venue")
+    }
 }

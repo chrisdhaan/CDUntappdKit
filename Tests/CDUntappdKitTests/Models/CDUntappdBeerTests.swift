@@ -29,4 +29,56 @@ import Foundation
 
 @Suite("CDUntappdBeer Tests")
 struct CDUntappdBeerTests {
+
+    @Test
+    func decodesBeerNameCorrectly() throws {
+        let json = """
+        {
+          "bid": 1,
+          "beer_name": "Example IPA",
+          "beer_abv": 6.5,
+          "beer_ibu": 65
+        }
+        """.data(using: .utf8)!
+        let beer = try JSONDecoder().decode(CDUntappdBeer.self, from: json)
+        #expect(beer.name == "Example IPA")
+    }
+
+    @Test
+    func decodesBeerIdCorrectly() throws {
+        let json = """
+        {
+          "bid": 1,
+          "beer_name": "Example IPA"
+        }
+        """.data(using: .utf8)!
+        let beer = try JSONDecoder().decode(CDUntappdBeer.self, from: json)
+        #expect(beer.id == 1)
+    }
+
+    @Test
+    func decodesBeerAbvCorrectly() throws {
+        let json = """
+        {
+          "bid": 1,
+          "beer_name": "Example IPA",
+          "beer_abv": 6.5
+        }
+        """.data(using: .utf8)!
+        let beer = try JSONDecoder().decode(CDUntappdBeer.self, from: json)
+        #expect(beer.abv == 6.5)
+    }
+
+    @Test
+    func decodesBeerIbuCorrectly() throws {
+        let json = """
+        {
+          "bid": 1,
+          "beer_name": "Example IPA",
+          "beer_ibu": 65
+        }
+        """.data(using: .utf8)!
+        let beer = try JSONDecoder().decode(CDUntappdBeer.self, from: json)
+        #expect(beer.ibu == 65)
+    }
 }

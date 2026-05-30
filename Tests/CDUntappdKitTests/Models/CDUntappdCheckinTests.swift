@@ -29,4 +29,17 @@ import Foundation
 
 @Suite("CDUntappdCheckin Tests")
 struct CDUntappdCheckinTests {
+
+    @Test
+    func checkinDecodingIsSupported() throws {
+        let json = """
+        {
+          "checkin_id": 1,
+          "checkin_comment": "Great beer!"
+        }
+        """.data(using: .utf8)!
+        let checkin = try JSONDecoder().decode(CDUntappdCheckin.self, from: json)
+        #expect(checkin.id == 1)
+        #expect(checkin.comment == "Great beer!")
+    }
 }

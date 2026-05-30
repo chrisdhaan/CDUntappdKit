@@ -1,12 +1,6 @@
 {
   "response": {
-    "user": {
-      "uid": 1,
-      "user_name": "DehaanSolo",
-      "first_name": "Christopher",
-      "last_name": "de Haan"
-    },
-    "friends": [
+    "items": [
       {
         "uid": 2,
         "user_name": "TestFriend",
@@ -17,10 +11,6 @@
     ]
   },
   "meta": {
-    "code": 200,
-    "response_time": {
-      "time": 100,
-      "measure": "ms"
-    }
+    "code": 200
   }
 }

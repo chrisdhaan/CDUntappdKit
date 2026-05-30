@@ -29,4 +29,43 @@ import Foundation
 
 @Suite("CDUntappdBrewery Tests")
 struct CDUntappdBreweryTests {
+
+    @Test
+    func decodesBreweryNameCorrectly() throws {
+        let json = """
+        {
+          "brewery_id": 1,
+          "brewery_name": "Example Brewery",
+          "brewery_slug": "example-brewery"
+        }
+        """.data(using: .utf8)!
+        let brewery = try JSONDecoder().decode(CDUntappdBrewery.self, from: json)
+        #expect(brewery.name == "Example Brewery")
+    }
+
+    @Test
+    func decodesBreweryIdCorrectly() throws {
+        let json = """
+        {
+          "brewery_id": 1,
+          "brewery_name": "Example Brewery",
+          "brewery_slug": "example-brewery"
+        }
+        """.data(using: .utf8)!
+        let brewery = try JSONDecoder().decode(CDUntappdBrewery.self, from: json)
+        #expect(brewery.id == 1)
+    }
+
+    @Test
+    func decodesBrewerySlugCorrectly() throws {
+        let json = """
+        {
+          "brewery_id": 1,
+          "brewery_name": "Example Brewery",
+          "brewery_slug": "example-brewery"
+        }
+        """.data(using: .utf8)!
+        let brewery = try JSONDecoder().decode(CDUntappdBrewery.self, from: json)
+        #expect(brewery.slug == "example-brewery")
+    }
 }

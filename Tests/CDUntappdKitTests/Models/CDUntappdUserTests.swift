@@ -30,4 +30,70 @@ import Foundation
 @Suite("CDUntappdUser Tests")
 @MainActor
 struct CDUntappdUserTests {
+
+    @Test
+    func decodesUsernameCorrectly() throws {
+        let json = """
+        {
+          "uid": 1,
+          "user_name": "DehaanSolo",
+          "first_name": "Christopher",
+          "last_name": "de Haan"
+        }
+        """.data(using: .utf8)!
+        let user = try JSONDecoder().decode(CDUntappdUser.self, from: json)
+        #expect(user.username == "DehaanSolo")
+    }
+
+    @Test
+    func decodesFirstNameCorrectly() throws {
+        let json = """
+        {
+          "uid": 1,
+          "user_name": "DehaanSolo",
+          "first_name": "Christopher",
+          "last_name": "de Haan"
+        }
+        """.data(using: .utf8)!
+        let user = try JSONDecoder().decode(CDUntappdUser.self, from: json)
+        #expect(user.firstName == "Christopher")
+    }
+
+    @Test
+    func decodesLastNameCorrectly() throws {
+        let json = """
+        {
+          "uid": 1,
+          "user_name": "DehaanSolo",
+          "first_name": "Christopher",
+          "last_name": "de Haan"
+        }
+        """.data(using: .utf8)!
+        let user = try JSONDecoder().decode(CDUntappdUser.self, from: json)
+        #expect(user.lastName == "de Haan")
+    }
+
+    @Test
+    func decodesUidCorrectly() throws {
+        let json = """
+        {
+          "uid": 1,
+          "user_name": "DehaanSolo"
+        }
+        """.data(using: .utf8)!
+        let user = try JSONDecoder().decode(CDUntappdUser.self, from: json)
+        #expect(user.uid == 1)
+    }
+
+    @Test
+    func userDecodingIsSupported() throws {
+        let json = """
+        {
+          "uid": 1,
+          "user_name": "DehaanSolo"
+        }
+        """.data(using: .utf8)!
+        let user = try JSONDecoder().decode(CDUntappdUser.self, from: json)
+        #expect(user != nil)
+    }
 }

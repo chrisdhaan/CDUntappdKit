@@ -29,4 +29,31 @@ import Foundation
 
 @Suite("CDUntappdMetadata Tests")
 struct CDUntappdMetadataTests {
+
+    let fixtureURL = Bundle.module.url(forResource: "user_info", withExtension: "json")!
+
+    @Test
+    func decodesMetadataCodeCorrectly() throws {
+        let data = try Data(contentsOf: fixtureURL)
+        let response = try JSONDecoder().decode(CDUntappdUserInfoResponse.self, from: data)
+        #expect(response.metadata?.code == 200)
+    }
+
+    @Test
+    func hasErrorReturnsFalseForSuccessCode() throws {
+        let data = try Data(contentsOf: fixtureURL)
+        let response = try JSONDecoder().decode(CDUntappdUserInfoResponse.self, from: data)
+        #expect(response.metadata?.hasError() == false)
+    }
+
+    @Test
+    func metadataDecodingIsSupported() throws {
+        let json = """
+        {
+          "code": 200
+        }
+        """.data(using: .utf8)!
+        let metadata = try JSONDecoder().decode(CDUntappdMetadata.self, from: json)
+        #expect(metadata.code == 200)
+    }
 }

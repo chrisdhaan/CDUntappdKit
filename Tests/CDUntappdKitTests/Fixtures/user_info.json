@@ -8,7 +8,6 @@
       "user_avatar": "https://example.com/avatar.jpg",
       "user_avatar_hd": "https://example.com/avatar_hd.jpg",
       "user_cover_photo": "https://example.com/cover.jpg",
-      "user_type": "user",
       "stats": {
         "total_beers": 1000,
         "total_badges": 50,
@@ -18,10 +17,6 @@
     }
   },
   "meta": {
-    "code": 200,
-    "response_time": {
-      "time": 100,
-      "measure": "ms"
-    }
+    "code": 200
   }
 }
