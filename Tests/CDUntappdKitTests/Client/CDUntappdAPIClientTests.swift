@@ -29,4 +29,31 @@ import Testing
 
 @Suite("CDUntappdAPIClient Tests")
 @MainActor
-struct CDUntappdAPIClientTests {}
+struct CDUntappdAPIClientTests {
+
+    let client = CDUntappdAPIClient(
+        clientId: "test_id",
+        clientSecret: "test_secret",
+        redirectUrl: "testapp://oauth"
+    )
+
+    @Test
+    func isNotAuthenticatedWithoutStoredToken() {
+        UserDefaults.standard.removeObject(forKey: CDUntappdDefaults.accessToken)
+        #expect(client.isAuthenticated() == false)
+    }
+
+    @Test
+    func isAuthenticatedWhenTokenIsStored() {
+        UserDefaults.standard.set("fake_token", forKey: CDUntappdDefaults.accessToken)
+        #expect(client.isAuthenticated() == true)
+        UserDefaults.standard.removeObject(forKey: CDUntappdDefaults.accessToken)
+    }
+
+    @Test
+    func unauthenticateClearsStoredToken() {
+        UserDefaults.standard.set("fake_token", forKey: CDUntappdDefaults.accessToken)
+        client.unauthenticate()
+        #expect(client.isAuthenticated() == false)
+    }
+}
