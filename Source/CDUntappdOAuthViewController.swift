@@ -30,7 +30,8 @@ import Alamofire
 import UIKit
 import WebKit
 
-class CDUntappdOAuthViewController: UIViewController {
+@MainActor
+public class CDUntappdOAuthViewController: UIViewController {
 
     var oAuthClient: CDUntappdOAuthClient!
     var onAuthorization: ((Bool, Error?) -> Void)?

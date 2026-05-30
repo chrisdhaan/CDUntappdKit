@@ -995,7 +995,7 @@ public struct CDUntappdUser: Decodable, Sendable { ... }
 
 Also add `Sendable` to the `CDUntappdUserWishListSortType` enum in `CDUntappdEnums.swift`.
 
-### 9.3 Mark CDUntappdOAuthViewController with @MainActor
+### 9.3 Mark CDUntappdOAuthViewController with @MainActor ✅
 
 `CDUntappdOAuthViewController` is a `UIViewController` subclass and must always run on the main actor. Add `@MainActor` to its class declaration:
 
