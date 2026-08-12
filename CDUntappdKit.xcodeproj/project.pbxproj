@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D2CD00693FC5416D966D1C18 /* CDUntappdOAuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7070D1F3B810400FAA6EF /* CDUntappdOAuthViewController.swift */; };
+		0912344186C84E778EE9B032 /* CDUntappdOAuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7070D1F3B810400FAA6EF /* CDUntappdOAuthViewController.swift */; };
+		817AEF7F09B545868697FAB2 /* CDUntappdOAuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7070D1F3B810400FAA6EF /* CDUntappdOAuthViewController.swift */; };
+		B6B92BDB55024543847DDC64 /* UIApplication+CDUntappdKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7070B1F3B800C00FAA6EF /* UIApplication+CDUntappdKit.swift */; };
+		AE5B303502844CE1908DD5F1 /* UIApplication+CDUntappdKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7070B1F3B800C00FAA6EF /* UIApplication+CDUntappdKit.swift */; };
+		ED532774644A4D6ABF868416 /* UIApplication+CDUntappdKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7070B1F3B800C00FAA6EF /* UIApplication+CDUntappdKit.swift */; };
 		3A8CF389E4204A9991956404 /* CDUntappdKitError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A2A4E8039346F6AA88B0CF /* CDUntappdKitError.swift */; };
 		2B9572ACA4D84700B9162C30 /* CDUntappdKitError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A2A4E8039346F6AA88B0CF /* CDUntappdKitError.swift */; };
 		E360E006E8CC4E159A12E3DE /* CDUntappdKitError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A2A4E8039346F6AA88B0CF /* CDUntappdKitError.swift */; };
@@ -806,6 +812,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				817AEF7F09B545868697FAB2 /* CDUntappdOAuthViewController.swift in Sources */,
+				ED532774644A4D6ABF868416 /* UIApplication+CDUntappdKit.swift in Sources */,
 				B79A93F141A24A93BB38650A /* CDUntappdKitError.swift in Sources */,
 				B22019701FD203EF00A2BE3F /* Parameters+CDUntappdKit.swift in Sources */,
 				B22019711FD203EF00A2BE3F /* String+CDUntappdKit.swift in Sources */,
@@ -846,6 +854,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0912344186C84E778EE9B032 /* CDUntappdOAuthViewController.swift in Sources */,
+				AE5B303502844CE1908DD5F1 /* UIApplication+CDUntappdKit.swift in Sources */,
 				E360E006E8CC4E159A12E3DE /* CDUntappdKitError.swift in Sources */,
 				B22019A31FD207AE00A2BE3F /* Parameters+CDUntappdKit.swift in Sources */,
 				B22019A41FD207AE00A2BE3F /* String+CDUntappdKit.swift in Sources */,
@@ -886,6 +896,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D2CD00693FC5416D966D1C18 /* CDUntappdOAuthViewController.swift in Sources */,
+				B6B92BDB55024543847DDC64 /* UIApplication+CDUntappdKit.swift in Sources */,
 				2B9572ACA4D84700B9162C30 /* CDUntappdKitError.swift in Sources */,
 				B22019D51FD2129200A2BE3F /* Parameters+CDUntappdKit.swift in Sources */,
 				B22019D61FD2129200A2BE3F /* String+CDUntappdKit.swift in Sources */,
