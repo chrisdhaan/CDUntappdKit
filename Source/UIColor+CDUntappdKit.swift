@@ -25,6 +25,12 @@
 //  THE SOFTWARE.
 //
 
+#if os(iOS) || os(tvOS) || os(watchOS) || os(visionOS)
+    import UIKit
+#elseif os(macOS)
+    import Cocoa
+#endif
+
 public extension CDColor {
 
     /// Returns the Untappd brand brown color.

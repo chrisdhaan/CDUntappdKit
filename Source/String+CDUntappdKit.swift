@@ -25,6 +25,8 @@
 //  THE SOFTWARE.
 //
 
+import Foundation
+
 extension String {
 
     /// Converts a boolean value to its lowercase string representation.
