@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A8CF389E4204A9991956404 /* CDUntappdKitError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A2A4E8039346F6AA88B0CF /* CDUntappdKitError.swift */; };
+		2B9572ACA4D84700B9162C30 /* CDUntappdKitError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A2A4E8039346F6AA88B0CF /* CDUntappdKitError.swift */; };
+		E360E006E8CC4E159A12E3DE /* CDUntappdKitError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A2A4E8039346F6AA88B0CF /* CDUntappdKitError.swift */; };
+		B79A93F141A24A93BB38650A /* CDUntappdKitError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A2A4E8039346F6AA88B0CF /* CDUntappdKitError.swift */; };
+		10E6D03AC9E248FBA6A2A78E /* CDUntappdKitError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A2A4E8039346F6AA88B0CF /* CDUntappdKitError.swift */; };
 		513BDCD1FE364CF0BB6CBF09 /* CDUntappdAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20537181F398A0000338826 /* CDUntappdAPIClient.swift */; };
 		214EC1E8362D417DB49D4862 /* CDUntappdBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28180D01FCCE38100806E4C /* CDUntappdBadge.swift */; };
 		8A01D57EB1344D53B8939A87 /* CDUntappdKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2409D0D286BA5330001AE66 /* CDUntappdKit.swift */; };
@@ -226,6 +231,7 @@
 		B2B7070D1F3B810400FAA6EF /* CDUntappdOAuthViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDUntappdOAuthViewController.swift; sourceTree = "<group>"; };
 		B2C4A0381FCE2F2000B253A2 /* UIColor+CDUntappdKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+CDUntappdKit.swift"; sourceTree = "<group>"; };
 		B2D6C3E11F43D5BE0067279A /* CDUntappdOAuthClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDUntappdOAuthClient.swift; sourceTree = "<group>"; };
+		81A2A4E8039346F6AA88B0CF /* CDUntappdKitError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDUntappdKitError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -274,6 +280,7 @@
 				B20537171F398A0000338826 /* CDUntappdConstants.swift */,
 				B20537191F398A0000338826 /* CDUntappdEnums.swift */,
 				B20537161F398A0000338826 /* CDUntappdRouter.swift */,
+				81A2A4E8039346F6AA88B0CF /* CDUntappdKitError.swift */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -757,6 +764,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				10E6D03AC9E248FBA6A2A78E /* CDUntappdKitError.swift in Sources */,
 				513BDCD1FE364CF0BB6CBF09 /* CDUntappdAPIClient.swift in Sources */,
 				214EC1E8362D417DB49D4862 /* CDUntappdBadge.swift in Sources */,
 				8A01D57EB1344D53B8939A87 /* CDUntappdKit.swift in Sources */,
@@ -798,6 +806,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B79A93F141A24A93BB38650A /* CDUntappdKitError.swift in Sources */,
 				B22019701FD203EF00A2BE3F /* Parameters+CDUntappdKit.swift in Sources */,
 				B22019711FD203EF00A2BE3F /* String+CDUntappdKit.swift in Sources */,
 				B22019731FD203EF00A2BE3F /* UIColor+CDUntappdKit.swift in Sources */,
@@ -837,6 +846,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E360E006E8CC4E159A12E3DE /* CDUntappdKitError.swift in Sources */,
 				B22019A31FD207AE00A2BE3F /* Parameters+CDUntappdKit.swift in Sources */,
 				B22019A41FD207AE00A2BE3F /* String+CDUntappdKit.swift in Sources */,
 				B22019A51FD207AE00A2BE3F /* UIColor+CDUntappdKit.swift in Sources */,
@@ -876,6 +886,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B9572ACA4D84700B9162C30 /* CDUntappdKitError.swift in Sources */,
 				B22019D51FD2129200A2BE3F /* Parameters+CDUntappdKit.swift in Sources */,
 				B22019D61FD2129200A2BE3F /* String+CDUntappdKit.swift in Sources */,
 				B22019D71FD2129200A2BE3F /* UIColor+CDUntappdKit.swift in Sources */,
@@ -915,6 +926,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A8CF389E4204A9991956404 /* CDUntappdKitError.swift in Sources */,
 				B205371C1F398A0000338826 /* CDUntappdAPIClient.swift in Sources */,
 				B28180D11FCCE38100806E4C /* CDUntappdBadge.swift in Sources */,
 				B2409D0E286BA5330001AE66 /* CDUntappdKit.swift in Sources */,
