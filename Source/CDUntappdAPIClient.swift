@@ -32,6 +32,7 @@ import os.log
     import UIKit
 #endif
 
+@available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, visionOS 1.0, *)
 private let logger = Logger(subsystem: CDUntappdKitBundleIdentifier, category: "APIClient")
 
 /// The primary API client for interacting with the Untappd API.
@@ -137,7 +138,9 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            logger.error("fetchUserInfo API error: \(metadata.description(), privacy: .public)")
+            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, visionOS 1.0, *) {
+                logger.error("fetchUserInfo API error: \(metadata.description(), privacy: .public)")
+            }
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -176,7 +179,9 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            logger.error("fetchUserWishList API error: \(metadata.description(), privacy: .public)")
+            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, visionOS 1.0, *) {
+                logger.error("fetchUserWishList API error: \(metadata.description(), privacy: .public)")
+            }
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -212,7 +217,9 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            logger.error("fetchUserFriends API error: \(metadata.description(), privacy: .public)")
+            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, visionOS 1.0, *) {
+                logger.error("fetchUserFriends API error: \(metadata.description(), privacy: .public)")
+            }
             throw CDUntappdKitError.apiError(metadata.description())
         }
 

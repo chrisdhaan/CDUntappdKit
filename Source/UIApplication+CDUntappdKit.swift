@@ -32,12 +32,20 @@
 
         @available(iOSApplicationExtension, unavailable)
         class func topViewController(_ base: UIViewController? = {
-            guard let scene = UIApplication.shared.connectedScenes
-                .compactMap({ $0 as? UIWindowScene })
-                .first(where: { $0.activationState == .foregroundActive }),
-                let window = scene.windows.first(where: { $0.isKeyWindow })
-            else { return nil }
-            return window.rootViewController
+            if #available(iOS 13.0, *) {
+                guard let scene = UIApplication.shared.connectedScenes
+                    .compactMap({ $0 as? UIWindowScene })
+                    .first(where: { $0.activationState == .foregroundActive }),
+                    let window = scene.windows.first(where: { $0.isKeyWindow })
+                else { return nil }
+                return window.rootViewController
+            } else {
+                #if os(iOS)
+                    return UIApplication.shared.keyWindow?.rootViewController
+                #else
+                    return nil
+                #endif
+            }
         }()) -> UIViewController? {
 
             if let navigationController = base as? UINavigationController {

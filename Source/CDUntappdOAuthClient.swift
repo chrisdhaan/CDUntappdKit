@@ -29,6 +29,7 @@ import Alamofire
 import Foundation
 import os.log
 
+@available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, visionOS 1.0, *)
 private let logger = Logger(subsystem: CDUntappdKitBundleIdentifier, category: "OAuthClient")
 
 /// Handles OAuth 2.0 authentication with the Untappd API.
@@ -93,7 +94,9 @@ public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
                         defaults.synchronize()
                         completion(true, nil)
                     case let .failure(error):
-                        logger.error("OAuth authorization failed: \(error.localizedDescription, privacy: .public)")
+                        if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, visionOS 1.0, *) {
+                            logger.error("OAuth authorization failed: \(error.localizedDescription, privacy: .public)")
+                        }
                         completion(false, error)
                     }
                 }
