@@ -48,7 +48,9 @@
             self.view.addSubview(webView)
             self.webView = webView
 
-            let urlString = CDUntappdURL.oAuth + "authenticate/?client_id=" + self.oAuthClient.clientId + "&response_type=code&redirect_url=" + self.oAuthClient.redirectUrl
+            let urlString = CDUntappdURL.oAuth
+                + "authenticate/?client_id=" + self.oAuthClient.clientId
+                + "&response_type=code&redirect_url=" + self.oAuthClient.redirectUrl
             let url = URL(string: urlString)
             if let url {
                 let urlRequest = URLRequest(url: url)
