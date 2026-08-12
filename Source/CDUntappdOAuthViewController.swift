@@ -40,7 +40,7 @@
 
         // MARK: - Lifecycle Methods
 
-        override func viewDidLoad() {
+        override public func viewDidLoad() {
             super.viewDidLoad()
 
             let webView = WKWebView(frame: self.view.frame)
@@ -60,9 +60,9 @@
     // MARK: - WKNavigationDelegate Methods
 
     extension CDUntappdOAuthViewController: WKNavigationDelegate {
-        func webView(_ webView: WKWebView,
-                     decidePolicyFor navigationAction: WKNavigationAction,
-                     decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        public func webView(_ webView: WKWebView,
+                            decidePolicyFor navigationAction: WKNavigationAction,
+                            decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
 
             let scheme = self.oAuthClient.redirectUrl + "?code="
             if let url = navigationAction.request.url?.absoluteString,
