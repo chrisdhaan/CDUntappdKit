@@ -68,7 +68,7 @@ bundle exec pod lib lint --allow-warnings
 | Job | Runner | Purpose |
 |-----|--------|---------|
 | iOS (×5) | macos-26 + macos-15 | Build all iOS Xcode versions |
-| macOS (×6) | macos-26 + macos-15 | Build all macOS Xcode versions |
+| macOS (×11) | macos-26 + macos-15 | Build all macOS Xcode versions |
 | tvOS (×5) | macos-26 + macos-15 | Build all tvOS Xcode versions |
 | watchOS (×5) | macos-26 + macos-15 | Build all watchOS Xcode versions |
 | visionOS (×4) | macos-26 | Build all visionOS Xcode versions |
