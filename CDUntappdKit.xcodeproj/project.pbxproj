@@ -474,6 +474,7 @@
 				5F093C59302D124C00AC238A /* Headers */,
 				5F093C5C302D124C00AC238A /* Resources */,
 				5F093C72302D171800AC238A /* SwiftLint */,
+				3FC2C6F546454084BC5C8D9B /* Swift Format */,
 			);
 			buildRules = (
 			);
@@ -496,6 +497,7 @@
 				B22019571FD2030900A2BE3F /* Headers */,
 				B22019581FD2030900A2BE3F /* Resources */,
 				B2409D0C286BA2370001AE66 /* SwiftLint */,
+				AD91A3FE607E488A9A0E913D /* Swift Format */,
 			);
 			buildRules = (
 			);
@@ -518,6 +520,7 @@
 				B22019931FD206F700A2BE3F /* Headers */,
 				B22019941FD206F700A2BE3F /* Resources */,
 				B2409D08286BA0430001AE66 /* SwiftLint */,
+				799200E6C4F64410A97C9DFB /* Swift Format */,
 			);
 			buildRules = (
 			);
@@ -540,6 +543,7 @@
 				B22019C31FD207F700A2BE3F /* Headers */,
 				B22019C41FD207F700A2BE3F /* Resources */,
 				B2409D01286B9EE10001AE66 /* SwiftLint */,
+				C869DAFE95EA4122B97E76CA /* Swift Format */,
 			);
 			buildRules = (
 			);
@@ -562,6 +566,7 @@
 				B267912B1F350723008635CD /* Headers */,
 				B267912C1F350723008635CD /* Resources */,
 				B2409CFB286B9BA50001AE66 /* SwiftLint */,
+				99418C15304841AC8212E17D /* Swift Format */,
 			);
 			buildRules = (
 			);
@@ -691,6 +696,25 @@
 			shellPath = /bin/sh;
 			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\ncd \"$SRCROOT\"\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
+		3FC2C6F546454084BC5C8D9B /* Swift Format */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Swift Format";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftformat >/dev/null; then\n    cd \"$SRCROOT\" && swiftformat Source Tests --lint\nelse\n    echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
+		};
 		B2409CFB286B9BA50001AE66 /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -708,6 +732,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\ncd \"$SRCROOT\"\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+		99418C15304841AC8212E17D /* Swift Format */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Swift Format";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftformat >/dev/null; then\n    cd \"$SRCROOT\" && swiftformat Source Tests --lint\nelse\n    echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
 		};
 		B2409D01286B9EE10001AE66 /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -727,6 +770,25 @@
 			shellPath = /bin/sh;
 			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\ncd \"$SRCROOT\"\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
+		C869DAFE95EA4122B97E76CA /* Swift Format */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Swift Format";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftformat >/dev/null; then\n    cd \"$SRCROOT\" && swiftformat Source Tests --lint\nelse\n    echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
+		};
 		B2409D08286BA0430001AE66 /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -745,6 +807,25 @@
 			shellPath = /bin/sh;
 			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\ncd \"$SRCROOT\"\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
+		799200E6C4F64410A97C9DFB /* Swift Format */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Swift Format";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftformat >/dev/null; then\n    cd \"$SRCROOT\" && swiftformat Source Tests --lint\nelse\n    echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
+		};
 		B2409D0C286BA2370001AE66 /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -762,6 +843,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\ncd \"$SRCROOT\"\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+		AD91A3FE607E488A9A0E913D /* Swift Format */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Swift Format";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftformat >/dev/null; then\n    cd \"$SRCROOT\" && swiftformat Source Tests --lint\nelse\n    echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
