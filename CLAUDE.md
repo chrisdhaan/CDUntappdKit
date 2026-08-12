@@ -13,6 +13,7 @@ Swift wrapper for the Untappd API. Supports iOS 12+, macOS 10.13+, tvOS 12+, wat
 | `Resources/` | OAuth storyboard |
 | `Documentation/` | Usage guide, architecture, migration guide |
 | `docs/` | DocC-generated API reference (served by GitHub Pages) |
+| `scripts/generate-docs.sh` | Regenerates `docs/` (handles Jekyll/`.nojekyll`, index.html redirect, 404.html) |
 | `Package.swift` | SPM manifest (swift-tools-version:6.0) |
 | `CDUntappdKit.podspec` | CocoaPods spec |
 | `.github/workflows/ci.yml` | GitHub Actions CI |
@@ -46,12 +47,8 @@ Key classes:
 swift build
 swift test
 
-# DocC docs (generates docs/ directory)
-swift package --disable-sandbox generate-documentation \
-  --target CDUntappdKit \
-  --output-path docs \
-  --transform-for-static-hosting \
-  --hosting-base-path CDUntappdKit
+# DocC docs (generates docs/ directory, fixes up Jekyll/index.html/404.html)
+bash scripts/generate-docs.sh
 
 # Format source before committing
 swiftformat Source Tests
