@@ -29,10 +29,14 @@ import Foundation
 
 /// Errors thrown by CDUntappdKit.
 public enum CDUntappdKitError: Error, Sendable {
-    /// The Alamofire session manager is not initialized (OAuth not configured).
-    case sessionUnavailable
-    /// The API returned an error response.
+    /// The request could not be constructed (e.g. an invalid URL from route parameters).
+    case invalidRequest(underlying: any Error & Sendable)
+    /// A transport-level failure occurred (no connection, timed out, etc).
+    case networkFailure(underlying: any Error & Sendable)
+    /// The API returned a non-2xx HTTP status code.
+    case httpError(statusCode: Int, data: Data)
+    /// The response body could not be decoded into the expected type.
+    case decodingFailed(underlying: any Error & Sendable)
+    /// The API returned a 2xx response whose body describes an application-level error.
     case apiError(String)
-    /// The response could not be decoded.
-    case decodingFailed(any Error & Sendable)
 }
