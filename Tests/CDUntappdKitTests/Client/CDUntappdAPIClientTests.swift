@@ -27,7 +27,7 @@ import Foundation
 import Testing
 @testable import CDUntappdKit
 
-@Suite("CDUntappdAPIClient Tests")
+@Suite("CDUntappdAPIClient Tests", .serialized)
 @MainActor
 struct CDUntappdAPIClientTests {
 
@@ -55,5 +55,35 @@ struct CDUntappdAPIClientTests {
         UserDefaults.standard.set("fake_token", forKey: CDUntappdDefaults.accessToken)
         client.unauthenticate()
         #expect(client.isAuthenticated() == false)
+    }
+
+    @Test
+    func fetchUserInfoDecodesSuccessfulResponse() async throws {
+        let json = """
+        {"meta": {"code": 200}, "response": {"user": {"user_name": "testuser"}}}
+        """
+        CDUntappdMockURLProtocol.stub = .init(statusCode: 200, data: Data(json.utf8))
+        let client = CDUntappdAPIClient(
+            clientId: "test_id",
+            clientSecret: "test_secret",
+            redirectUrl: "testapp://oauth",
+            urlSession: CDUntappdMockURLProtocol.makeSession()
+        )
+        let response = try await client.fetchUserInfo(forUsername: "testuser", compact: false)
+        #expect(response.user?.username == "testuser")
+    }
+
+    @Test
+    func fetchUserInfoThrowsOnHTTPError() async throws {
+        CDUntappdMockURLProtocol.stub = .init(statusCode: 500, data: Data())
+        let client = CDUntappdAPIClient(
+            clientId: "test_id",
+            clientSecret: "test_secret",
+            redirectUrl: "testapp://oauth",
+            urlSession: CDUntappdMockURLProtocol.makeSession()
+        )
+        await #expect(throws: CDUntappdKitError.self) {
+            _ = try await client.fetchUserInfo(forUsername: "testuser", compact: false)
+        }
     }
 }
