@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import CDUntappdKit
 
-@Suite("CDUntappdURLSession Tests")
+@Suite("CDUntappdURLSession Tests", .serialized)
 struct CDUntappdURLSessionTests {
 
     private struct Fixture: Decodable, Equatable {

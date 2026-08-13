@@ -18,8 +18,8 @@ final class CDUntappdMockURLProtocol: URLProtocol, @unchecked Sendable {
     }
 
     /// Set before making a request through a session configured with this protocol.
-    /// Not thread-safe across concurrent test cases by design — Swift Testing runs
-    /// each `@Test` in its own process-wide serialized invocation for this suite.
+    /// Not thread-safe; this static var is safe only because `CDUntappdURLSessionTests`
+    /// uses the `.serialized` trait. Any other test suite consuming this mock must do the same.
     nonisolated(unsafe) static var stub: Stub = Stub()
 
     static func makeSession() -> URLSession {
