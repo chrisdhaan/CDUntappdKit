@@ -29,10 +29,10 @@
 import PackageDescription
 
 let package = Package(name: "CDUntappdKit",
-                      platforms: [.iOS(.v12),
-                                  .macOS(.v10_13),
-                                  .tvOS(.v12),
-                                  .watchOS(.v4),
+                      platforms: [.iOS(.v15),
+                                  .macOS(.v12),
+                                  .tvOS(.v15),
+                                  .watchOS(.v8),
                                   .visionOS(.v1)],
                       products: [.library(name: "CDUntappdKit",
                                           targets: ["CDUntappdKit"]),
