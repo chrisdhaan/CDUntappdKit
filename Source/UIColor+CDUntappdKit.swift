@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 11/28/17.
 //
-//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,19 +25,29 @@
 //  THE SOFTWARE.
 //
 
+#if os(iOS) || os(tvOS) || os(watchOS) || os(visionOS)
+    import UIKit
+#elseif os(macOS)
+    import Cocoa
+#endif
+
 public extension CDColor {
 
+    /// Returns the Untappd brand brown color.
+    /// - Returns: A `CDColor` with RGB(202, 102, 26).
     class func untappdBrown() -> CDColor {
-        return CDColor(red: (202.0/255.0),
-                       green: (102.0/255.0),
-                       blue: (26.0/255.0),
-                       alpha: 1.0)
+        CDColor(red: 202.0 / 255.0,
+                green: 102.0 / 255.0,
+                blue: 26.0 / 255.0,
+                alpha: 1.0)
     }
 
+    /// Returns the Untappd brand yellow color.
+    /// - Returns: A `CDColor` with RGB(253, 191, 45).
     class func untappdYellow() -> CDColor {
-        return CDColor(red: (253.0/255.0),
-                       green: (191.0/255.0),
-                       blue: (45.0/255.0),
-                       alpha: 1.0)
+        CDColor(red: 253.0 / 255.0,
+                green: 191.0 / 255.0,
+                blue: 45.0 / 255.0,
+                alpha: 1.0)
     }
 }

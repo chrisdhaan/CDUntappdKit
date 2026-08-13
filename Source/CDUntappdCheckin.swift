@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 11/27/17.
 //
-//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,14 +25,22 @@
 //  THE SOFTWARE.
 //
 
-public struct CDUntappdCheckin: Decodable {
+/// Represents an Untappd check-in (beer visit record).
+public struct CDUntappdCheckin: Decodable, Sendable {
 
+    /// The unique check-in identifier.
     public var id: Int?
+    /// The user's comment on the check-in.
     public var comment: String?
+    /// The user's rating for the beer (0–5).
     public var rating: Double?
+    /// The user who made the check-in.
     public var user: CDUntappdUser?
+    /// The brewery associated with the beer.
     public var brewery: CDUntappdBrewery?
+    /// The beer that was checked in.
     public var beer: CDUntappdBeer?
+    /// The venue where the check-in occurred.
     public var venue: CDUntappdVenue?
 //    public var toasts: [CDUntappdToast]?
 //    public var comments: [CDUntappdComment]?
@@ -41,19 +49,47 @@ public struct CDUntappdCheckin: Decodable {
     public var source: CDUntappdSource?
     public var createdAt: String?
 
-    enum CodingKeys: String, CodingKey {
+    private enum RootKeys: String, CodingKey {
         case id = "checkin_id"
         case comment = "checkin_comment"
         case rating = "rating_score"
-        case user = "user"
-        case brewery = "brewery"
-        case beer = "beer"
-        case venue = "venue"
-//        case toasts = "toasts.items"
-//        case comments = "comments.items"
-        case badges = "badges.items"
-        case media = "media.items"
-        case source = "source"
+        case user
+        case brewery
+        case beer
+        case venue
+//        case toasts
+//        case comments
+        case badges
+        case media
+        case source
         case createdAt = "created_at"
+    }
+
+    private enum ItemsKeys: String, CodingKey {
+        case items
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let root = try decoder.container(keyedBy: RootKeys.self)
+        id = try root.decodeIfPresent(Int.self, forKey: .id)
+        comment = try root.decodeIfPresent(String.self, forKey: .comment)
+        rating = try root.decodeIfPresent(Double.self, forKey: .rating)
+        user = try root.decodeIfPresent(CDUntappdUser.self, forKey: .user)
+        brewery = try root.decodeIfPresent(CDUntappdBrewery.self, forKey: .brewery)
+        beer = try root.decodeIfPresent(CDUntappdBeer.self, forKey: .beer)
+        venue = try root.decodeIfPresent(CDUntappdVenue.self, forKey: .venue)
+        source = try root.decodeIfPresent(CDUntappdSource.self, forKey: .source)
+        createdAt = try root.decodeIfPresent(String.self, forKey: .createdAt)
+
+        if let badgesContainer = try? root.nestedContainer(keyedBy: ItemsKeys.self, forKey: .badges) {
+            badges = try badgesContainer.decodeIfPresent([CDUntappdBadge].self, forKey: .items)
+        } else {
+            badges = nil
+        }
+        if let mediaContainer = try? root.nestedContainer(keyedBy: ItemsKeys.self, forKey: .media) {
+            media = try mediaContainer.decodeIfPresent([CDUntappdMedia].self, forKey: .items)
+        } else {
+            media = nil
+        }
     }
 }

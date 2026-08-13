@@ -23,31 +23,59 @@
 //  THE SOFTWARE.
 //
 
-#if !os(OSX)
-    import UIKit
-#else
-    import Foundation
-#endif
+import Foundation
 
-public struct CDUntappdBadge: Decodable {
+/// Represents an Untappd achievement badge.
+public struct CDUntappdBadge: Decodable, Sendable {
 
+    /// The badge's unique identifier.
     public let id: Int?
+    /// The badge's name.
     public let name: String?
+    /// The badge's description.
     public let description: String?
+    /// The badge's small image.
     public let smallImage: URL?
+    /// The badge's medium image.
     public let mediumImage: URL?
+    /// The badge's large image.
     public let largeImage: URL?
+    /// The user's badge instance identifier.
     public let userBadgeId: Int?
+    /// When the user earned the badge.
     public let createdAt: String?
 
-    enum CodingKeys: String, CodingKey {
+    private enum RootKeys: String, CodingKey {
         case id = "badge_id"
         case name = "badge_name"
         case description = "badge_description"
-        case smallImage = "badge_image.sm"
-        case mediumImage = "badge_image.md"
-        case largeImage = "badge_image.lg"
+        case badgeImage = "badge_image"
         case userBadgeId = "user_badge_id"
         case createdAt = "created_at"
+    }
+
+    private enum BadgeImageKeys: String, CodingKey {
+        case small = "sm"
+        case medium = "md"
+        case large = "lg"
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let root = try decoder.container(keyedBy: RootKeys.self)
+        id = try root.decodeIfPresent(Int.self, forKey: .id)
+        name = try root.decodeIfPresent(String.self, forKey: .name)
+        description = try root.decodeIfPresent(String.self, forKey: .description)
+        userBadgeId = try root.decodeIfPresent(Int.self, forKey: .userBadgeId)
+        createdAt = try root.decodeIfPresent(String.self, forKey: .createdAt)
+
+        if let imageContainer = try? root.nestedContainer(keyedBy: BadgeImageKeys.self, forKey: .badgeImage) {
+            smallImage = try imageContainer.decodeIfPresent(URL.self, forKey: .small)
+            mediumImage = try imageContainer.decodeIfPresent(URL.self, forKey: .medium)
+            largeImage = try imageContainer.decodeIfPresent(URL.self, forKey: .large)
+        } else {
+            smallImage = nil
+            mediumImage = nil
+            largeImage = nil
+        }
     }
 }

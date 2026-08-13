@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 8/4/17.
 //
-//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -27,19 +27,19 @@
 
 let CDUntappdKitBundleIdentifier = "com.christopherdehaan.CDUntappdKit"
 
-struct CDUntappdURL {
+enum CDUntappdURL {
     static let oAuth = "https://untappd.com/oauth/"
-    static let base  = "https://api.untappd.com/v4/"
+    static let base = "https://api.untappd.com/v4/"
 }
 
-struct CDUntappdDefaults {
+enum CDUntappdDefaults {
     static let accessToken = "CDUntappdAccessToken"
 }
 
-struct CDUntappdStoryboardIdentifier {
+enum CDUntappdStoryboardIdentifier {
     static let oAuth = "CDUntappdOAuth"
 }
 
-struct CDUntappdNavigationControllerIdentifier {
+enum CDUntappdNavigationControllerIdentifier {
     static let oAuth = "CDUntappdOAuthNavigationController"
 }

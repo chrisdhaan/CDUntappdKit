@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 11/30/17.
 //
-//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,13 +25,27 @@
 //  THE SOFTWARE.
 //
 
-public struct CDUntappdUserFriendsResponse: Decodable {
+public struct CDUntappdUserFriendsResponse: Decodable, Sendable {
 
     public var metadata: CDUntappdMetadata?
     public var friends: [CDUntappdFriend]?
 
-    enum CodingKeys: String, CodingKey {
+    private enum RootKeys: String, CodingKey {
         case metadata = "meta"
-        case friends = "response.items"
+        case response
+    }
+
+    private enum ResponseKeys: String, CodingKey {
+        case items
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let root = try decoder.container(keyedBy: RootKeys.self)
+        metadata = try root.decodeIfPresent(CDUntappdMetadata.self, forKey: .metadata)
+        if let responseContainer = try? root.nestedContainer(keyedBy: ResponseKeys.self, forKey: .response) {
+            friends = try responseContainer.decodeIfPresent([CDUntappdFriend].self, forKey: .items)
+        } else {
+            friends = nil
+        }
     }
 }

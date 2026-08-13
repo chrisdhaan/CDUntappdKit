@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 6/28/22.
 //
-//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -29,8 +29,8 @@ import Foundation
 
 // Enforce minimum Swift version for all platforms and build systems.
 #if swift(<5.3)
-#error("CDUntappdKit doesn't support Swift versions below 5.3.")
+    #error("CDUntappdKit doesn't support Swift versions below 5.3.")
 #endif
 
 /// Current CDUntappdKit version. Necessary since SPM doesn't use dynamic libraries. Plus this will be more accurate.
-let version = "1.1.0"
+let version = "2.0.0"

@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 8/4/17.
 //
-//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,18 +25,20 @@
 //  THE SOFTWARE.
 //
 
-#if !os(OSX)
-    import UIKit
-#else
-    import Foundation
-#endif
+import Foundation
 
-public struct CDUntappdUser: Decodable {
+/// Represents an Untappd user.
+public struct CDUntappdUser: Decodable, Sendable {
 
+    /// The unique user identifier.
     public var id: Int?
+    /// The unique user ID (alias for `id`).
     public var uid: Int?
+    /// The user's display name.
     public var username: String?
+    /// The user's first name.
     public var firstName: String?
+    /// The user's last name.
     public var lastName: String?
     public var userAvatar: URL?
     public var userAvatatHd: URL?
@@ -60,9 +62,9 @@ public struct CDUntappdUser: Decodable {
     public var dateJoined: String?
     public var settings: CDUntappdSettings?
 
-    enum CodingKeys: String, CodingKey {
-        case id = "id"
-        case uid = "uid"
+    private enum RootKeys: String, CodingKey {
+        case id
+        case uid
         case username = "user_name"
         case firstName = "first_name"
         case lastName = "last_name"
@@ -70,22 +72,65 @@ public struct CDUntappdUser: Decodable {
         case userAvatatHd = "user_avatar_hd"
         case userCoverPhoto = "user_cover_photo"
         case userCoverPhotoOffset = "user_cover_photo_offset"
-        case location = "location"
-        case bio = "bio"
+        case location
+        case bio
         case website = "url"
         case untappdUrl = "untappd_url"
         case isPrivate = "is_private"
         case isModerator = "is_moderator"
         case isSupporter = "is_supporter"
-        case relationship = "relationship"
+        case relationship
         case accountType = "account_type"
         case blockStatus = "block_status"
-        case stats = "stats"
-        case checkins = "checkins.items"
-        case recentBrews = "recent_brews.items"
-        case media = "media"
-        case contact = "contact"
+        case stats
+        case checkins
+        case recentBrews = "recent_brews"
+        case media
+        case contact
         case dateJoined = "date_joined"
-        case settings = "settings"
+        case settings
+    }
+
+    private enum ItemsKeys: String, CodingKey {
+        case items
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let root = try decoder.container(keyedBy: RootKeys.self)
+        id = try root.decodeIfPresent(Int.self, forKey: .id)
+        uid = try root.decodeIfPresent(Int.self, forKey: .uid)
+        username = try root.decodeIfPresent(String.self, forKey: .username)
+        firstName = try root.decodeIfPresent(String.self, forKey: .firstName)
+        lastName = try root.decodeIfPresent(String.self, forKey: .lastName)
+        userAvatar = try root.decodeIfPresent(URL.self, forKey: .userAvatar)
+        userAvatatHd = try root.decodeIfPresent(URL.self, forKey: .userAvatatHd)
+        userCoverPhoto = try root.decodeIfPresent(URL.self, forKey: .userCoverPhoto)
+        userCoverPhotoOffset = try root.decodeIfPresent(Int.self, forKey: .userCoverPhotoOffset)
+        location = try root.decodeIfPresent(String.self, forKey: .location)
+        bio = try root.decodeIfPresent(String.self, forKey: .bio)
+        website = try root.decodeIfPresent(URL.self, forKey: .website)
+        untappdUrl = try root.decodeIfPresent(URL.self, forKey: .untappdUrl)
+        isPrivate = try root.decodeIfPresent(Bool.self, forKey: .isPrivate)
+        isModerator = try root.decodeIfPresent(Bool.self, forKey: .isModerator)
+        isSupporter = try root.decodeIfPresent(Bool.self, forKey: .isSupporter)
+        relationship = try root.decodeIfPresent(String.self, forKey: .relationship)
+        accountType = try root.decodeIfPresent(String.self, forKey: .accountType)
+        blockStatus = try root.decodeIfPresent(String.self, forKey: .blockStatus)
+        stats = try root.decodeIfPresent(CDUntappdStats.self, forKey: .stats)
+        media = try root.decodeIfPresent([CDUntappdMedia].self, forKey: .media)
+        contact = try root.decodeIfPresent(CDUntappdContact.self, forKey: .contact)
+        dateJoined = try root.decodeIfPresent(String.self, forKey: .dateJoined)
+        settings = try root.decodeIfPresent(CDUntappdSettings.self, forKey: .settings)
+
+        if let checkinsContainer = try? root.nestedContainer(keyedBy: ItemsKeys.self, forKey: .checkins) {
+            checkins = try checkinsContainer.decodeIfPresent([CDUntappdCheckin].self, forKey: .items)
+        } else {
+            checkins = nil
+        }
+        if let recentBrewsContainer = try? root.nestedContainer(keyedBy: ItemsKeys.self, forKey: .recentBrews) {
+            recentBrews = try recentBrewsContainer.decodeIfPresent([CDUntappdRecentBrew].self, forKey: .items)
+        } else {
+            recentBrews = nil
+        }
     }
 }

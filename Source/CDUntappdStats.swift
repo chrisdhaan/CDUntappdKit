@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 8/4/17.
 //
-//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,14 +25,22 @@
 //  THE SOFTWARE.
 //
 
-public struct CDUntappdStats: Decodable {
+/// Represents user statistics on Untappd.
+public struct CDUntappdStats: Decodable, Sendable {
 
+    /// The number of badges earned.
     public var totalBadges: Int?
+    /// The number of friends.
     public var totalFriends: Int?
+    /// The total number of check-ins.
     public var totalCheckins: Int?
+    /// The number of unique beers consumed.
     public var totalBeers: Int?
+    /// The number of beers created by the user.
     public var totalCreatedBeers: Int?
+    /// The number of people the user follows.
     public var totalFollowings: Int?
+    /// The number of photos uploaded.
     public var totalPhotos: Int?
 
     enum CodingKeys: String, CodingKey {

@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 11/27/17.
 //
-//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,19 +25,22 @@
 //  THE SOFTWARE.
 //
 
-#if !os(OSX)
-    import UIKit
-#else
-    import Foundation
-#endif
+import Foundation
 
-public struct CDUntappdBeer: Decodable {
+/// Represents an Untappd beer.
+public struct CDUntappdBeer: Decodable, Sendable {
 
+    /// The unique beer identifier.
     public var id: Int?
+    /// The beer's name.
     public var name: String?
+    /// The beer's description.
     public var description: String?
+    /// The beer's style category.
     public var style: String?
+    /// The beer's alcohol by volume percentage.
     public var abv: Double?
+    /// The beer's International Bitterness Units value.
     public var ibu: Double?
     public var rating: Double?
     public var overallRating: Double?

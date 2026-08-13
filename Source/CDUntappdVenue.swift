@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 11/27/17.
 //
-//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,18 +25,20 @@
 //  THE SOFTWARE.
 //
 
-#if !os(OSX)
-    import UIKit
-#else
-    import Foundation
-#endif
+import Foundation
 
-public struct CDUntappdVenue: Decodable {
+/// Represents an Untappd venue (establishment).
+public struct CDUntappdVenue: Decodable, Sendable {
 
+    /// The unique venue identifier.
     public var id: Int?
+    /// The venue's name.
     public var name: String?
+    /// Whether the venue is verified by Untappd.
     public var isVerified: Bool?
+    /// The parent category identifier.
     public var parentCategoryId: String?
+    /// The venue's primary category.
     public var primaryCategory: String?
     public var categories: [CDUntappdCategory]?
     public var smallIcon: URL?
@@ -54,26 +56,114 @@ public struct CDUntappdVenue: Decodable {
     public var twitterHandle: String?
     public var website: URL?
 
-    enum CodingKeys: String, CodingKey {
+    private enum RootKeys: String, CodingKey {
         case id = "venue_id"
         case name = "venue_name"
         case isVerified = "is_verified"
         case parentCategoryId = "parent_category_id"
         case primaryCategory = "primary_category"
-        case categories = "categories.items"
-        case smallIcon = "venue_icon.sm"
-        case mediumIcon = "venue_icon.md"
-        case largeIcon = "venue_icon.lg"
+        case categories
+        case venueIcon = "venue_icon"
         case slug = "venue_slug"
-        case latitude = "location.lat"
-        case longitude = "location.lng"
-        case address = "location.venue_address"
-        case city = "location.venue_city"
-        case state = "location.venue_state"
-        case country = "location.venue_country"
-        case foursqaureId = "foursquare.foursquare_id"
-        case foursqaureUrl = "foursquare.foursquare_url"
-        case twitterHandle = "contact.twitter"
-        case website = "contact.venue_url"
+        case location
+        case foursquare
+        case contact
+    }
+
+    private enum ItemsKeys: String, CodingKey {
+        case items
+    }
+
+    private enum IconKeys: String, CodingKey {
+        case small = "sm"
+        case medium = "md"
+        case large = "lg"
+    }
+
+    private enum LocationKeys: String, CodingKey {
+        case lat
+        case lng
+        case address = "venue_address"
+        case city = "venue_city"
+        case state = "venue_state"
+        case country = "venue_country"
+    }
+
+    private enum FoursquareKeys: String, CodingKey {
+        case id = "foursquare_id"
+        case url = "foursquare_url"
+    }
+
+    private enum ContactKeys: String, CodingKey {
+        case twitter
+        case url = "venue_url"
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let root = try decoder.container(keyedBy: RootKeys.self)
+        id = try root.decodeIfPresent(Int.self, forKey: .id)
+        name = try root.decodeIfPresent(String.self, forKey: .name)
+        isVerified = Self.decodeLenientBool(from: root, forKey: .isVerified)
+        parentCategoryId = try root.decodeIfPresent(String.self, forKey: .parentCategoryId)
+        primaryCategory = try root.decodeIfPresent(String.self, forKey: .primaryCategory)
+        slug = try root.decodeIfPresent(String.self, forKey: .slug)
+
+        if let categoriesContainer = try? root.nestedContainer(keyedBy: ItemsKeys.self, forKey: .categories) {
+            categories = try categoriesContainer.decodeIfPresent([CDUntappdCategory].self, forKey: .items)
+        } else {
+            categories = nil
+        }
+
+        if let iconContainer = try? root.nestedContainer(keyedBy: IconKeys.self, forKey: .venueIcon) {
+            smallIcon = try iconContainer.decodeIfPresent(URL.self, forKey: .small)
+            mediumIcon = try iconContainer.decodeIfPresent(URL.self, forKey: .medium)
+            largeIcon = try iconContainer.decodeIfPresent(URL.self, forKey: .large)
+        } else {
+            smallIcon = nil
+            mediumIcon = nil
+            largeIcon = nil
+        }
+
+        if let locationContainer = try? root.nestedContainer(keyedBy: LocationKeys.self, forKey: .location) {
+            latitude = try locationContainer.decodeIfPresent(Double.self, forKey: .lat)
+            longitude = try locationContainer.decodeIfPresent(Double.self, forKey: .lng)
+            address = try locationContainer.decodeIfPresent(String.self, forKey: .address)
+            city = try locationContainer.decodeIfPresent(String.self, forKey: .city)
+            state = try locationContainer.decodeIfPresent(String.self, forKey: .state)
+            country = try locationContainer.decodeIfPresent(String.self, forKey: .country)
+        } else {
+            latitude = nil
+            longitude = nil
+            address = nil
+            city = nil
+            state = nil
+            country = nil
+        }
+
+        if let foursquareContainer = try? root.nestedContainer(keyedBy: FoursquareKeys.self, forKey: .foursquare) {
+            foursqaureId = try foursquareContainer.decodeIfPresent(String.self, forKey: .id)
+            foursqaureUrl = try foursquareContainer.decodeIfPresent(URL.self, forKey: .url)
+        } else {
+            foursqaureId = nil
+            foursqaureUrl = nil
+        }
+
+        if let contactContainer = try? root.nestedContainer(keyedBy: ContactKeys.self, forKey: .contact) {
+            twitterHandle = try contactContainer.decodeIfPresent(String.self, forKey: .twitter)
+            website = try contactContainer.decodeIfPresent(URL.self, forKey: .url)
+        } else {
+            twitterHandle = nil
+            website = nil
+        }
+    }
+
+    /// Untappd returns this flag as either a JSON boolean or a `1`/`0` integer
+    /// depending on endpoint; decode leniently rather than throwing on the integer form.
+    private static func decodeLenientBool(from container: KeyedDecodingContainer<RootKeys>,
+                                          forKey key: RootKeys) -> Bool? {
+        if let intValue = try? container.decodeIfPresent(Int.self, forKey: key) {
+            return intValue == 1
+        }
+        return (try? container.decodeIfPresent(Bool.self, forKey: key)) ?? nil
     }
 }

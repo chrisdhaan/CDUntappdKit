@@ -1,0 +1,21 @@
+{
+  "response": {
+    "beers": {
+      "items": [
+        {
+          "beer": {
+            "bid": 1,
+            "beer_name": "Example IPA",
+            "beer_label": "https://example.com/beer.jpg",
+            "beer_abv": 6.5,
+            "beer_ibu": 65,
+            "beer_slug": "example-ipa"
+          }
+        }
+      ]
+    }
+  },
+  "meta": {
+    "code": 200
+  }
+}

@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 8/9/17.
 //
-//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,29 +25,44 @@
 //  THE SOFTWARE.
 //
 
-#if os(iOS)
-import UIKit
+#if os(iOS) || os(visionOS)
+    import UIKit
 
-extension UIApplication {
+    internal extension UIApplication {
 
-    @available(iOSApplicationExtension, unavailable)
-    class func topViewController(controller: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
-
-        if let navigationController = controller as? UINavigationController {
-            return topViewController(controller: navigationController.visibleViewController)
-        }
-
-        if let tabController = controller as? UITabBarController {
-            if let selected = tabController.selectedViewController {
-                return topViewController(controller: selected)
+        @available(iOSApplicationExtension, unavailable)
+        class func topViewController(_ base: UIViewController? = {
+            if #available(iOS 13.0, *) {
+                guard let scene = UIApplication.shared.connectedScenes
+                    .compactMap({ $0 as? UIWindowScene })
+                    .first(where: { $0.activationState == .foregroundActive }),
+                    let window = scene.windows.first(where: { $0.isKeyWindow })
+                else { return nil }
+                return window.rootViewController
+            } else {
+                #if os(iOS)
+                    return UIApplication.shared.keyWindow?.rootViewController
+                #else
+                    return nil
+                #endif
             }
-        }
+        }()) -> UIViewController? {
 
-        if let presented = controller?.presentedViewController {
-            return topViewController(controller: presented)
-        }
+            if let navigationController = base as? UINavigationController {
+                return topViewController(navigationController.visibleViewController)
+            }
 
-        return controller
+            if let tabController = base as? UITabBarController {
+                if let selected = tabController.selectedViewController {
+                    return topViewController(selected)
+                }
+            }
+
+            if let presented = base?.presentedViewController {
+                return topViewController(presented)
+            }
+
+            return base
+        }
     }
-}
 #endif

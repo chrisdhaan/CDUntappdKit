@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 8/8/17.
 //
-//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,40 +25,39 @@
 //  THE SOFTWARE.
 //
 
-#if !os(OSX)
-    import UIKit
-#else
-    import Foundation
-#endif
-
 import Alamofire
+import Foundation
 
-enum CDUntappdOAuthRouter: URLRequestConvertible {
+/// Routes for Untappd OAuth endpoints.
+///
+/// Used internally to construct HTTP requests for OAuth authentication.
+public enum CDUntappdOAuthRouter: URLRequestConvertible {
 
+    /// The OAuth authorization endpoint.
     case authorize(parameters: Parameters)
 
     var method: HTTPMethod {
         switch self {
-        case .authorize(parameters: _):
-            return .get
+        case .authorize:
+            .get
         }
     }
 
     var path: String {
         switch self {
-        case .authorize(parameters: _):
-            return "authorize"
+        case .authorize:
+            "authorize"
         }
     }
 
-    func asURLRequest() throws -> URLRequest {
+    public func asURLRequest() throws -> URLRequest {
         let url = try CDUntappdURL.oAuth.asURL()
 
         var urlRequest = URLRequest(url: url.appendingPathComponent(path))
         urlRequest.httpMethod = method.rawValue
 
         switch self {
-        case .authorize(let parameters):
+        case let .authorize(parameters):
             urlRequest = try URLEncoding.default.encode(urlRequest,
                                                         with: parameters)
         }

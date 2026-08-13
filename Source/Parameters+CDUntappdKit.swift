@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 11/21/17.
 //
-//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -29,6 +29,9 @@ import Alamofire
 
 extension Dictionary where Key: ExpressibleByStringLiteral, Value: Any {
 
+    /// Builds parameters for the user info API endpoint.
+    /// - Parameter isCompact: Pass `true` for a compact response omitting extended fields.
+    /// - Returns: A parameters dictionary with the `compact` key set.
     static func userInfoParameters(isCompact compact: Bool) -> Parameters {
         var params: Parameters = [:]
 
@@ -37,32 +40,43 @@ extension Dictionary where Key: ExpressibleByStringLiteral, Value: Any {
         return params
     }
 
+    /// Builds parameters for the user wish list API endpoint.
+    /// - Parameters:
+    ///   - offset: Zero-based offset for pagination. Pass `nil` to omit.
+    ///   - limit: Maximum number of results (max 50). Pass `nil` to omit.
+    ///   - sort: How to sort results. Pass `nil` to omit.
+    /// - Returns: A parameters dictionary with the provided values.
     static func userWishListParameters(withOffset offset: Int?,
                                        limit: Int?,
                                        sort: CDUntappdUserWishListSortType?) -> Parameters {
         var params: Parameters = [:]
 
-        if let offset = offset {
+        if let offset {
             params["offset"] = offset
         }
-        if let limit = limit {
+        if let limit {
             params["limit"] = limit
         }
-        if let sort = sort {
+        if let sort {
             params["sort"] = sort
         }
 
         return params
     }
 
+    /// Builds parameters for the user friends API endpoint.
+    /// - Parameters:
+    ///   - offset: Zero-based offset for pagination. Pass `nil` to omit.
+    ///   - limit: Maximum number of results (max 25). Pass `nil` to omit.
+    /// - Returns: A parameters dictionary with the provided values.
     static func userFriendsParameters(withOffset offset: Int?,
                                       limit: Int?) -> Parameters {
         var params: Parameters = [:]
 
-        if let offset = offset {
+        if let offset {
             params["offset"] = offset
         }
-        if let limit = limit {
+        if let limit {
             params["limit"] = limit
         }
 

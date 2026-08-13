@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 11/30/17.
 //
-//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,17 +25,38 @@
 //  THE SOFTWARE.
 //
 
-public struct CDUntappdFriend: Decodable {
+/// Represents a friendship relationship on Untappd.
+public struct CDUntappdFriend: Decodable, Sendable {
 
+    /// A unique hash for the friendship.
     public var friendshipHash: String?
+    /// The friend's user information.
     public var user: CDUntappdUser?
+    /// Mutual friends between the two users.
     public var mutualFriends: [CDUntappdFriend]?
+    /// When the friendship was established.
     public var createdAt: String?
 
-    enum CodingKeys: String, CodingKey {
+    private enum RootKeys: String, CodingKey {
         case friendshipHash = "friendship_hash"
-        case user = "user"
-        case mutualFriends = "mutual_friends.items"
+        case user
+        case mutualFriends = "mutual_friends"
         case createdAt = "created_at"
+    }
+
+    private enum MutualFriendsKeys: String, CodingKey {
+        case items
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let root = try decoder.container(keyedBy: RootKeys.self)
+        friendshipHash = try root.decodeIfPresent(String.self, forKey: .friendshipHash)
+        user = try root.decodeIfPresent(CDUntappdUser.self, forKey: .user)
+        createdAt = try root.decodeIfPresent(String.self, forKey: .createdAt)
+        if let mutualContainer = try? root.nestedContainer(keyedBy: MutualFriendsKeys.self, forKey: .mutualFriends) {
+            mutualFriends = try mutualContainer.decodeIfPresent([CDUntappdFriend].self, forKey: .items)
+        } else {
+            mutualFriends = nil
+        }
     }
 }

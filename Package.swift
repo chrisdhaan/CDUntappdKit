@@ -1,11 +1,11 @@
-// swift-tools-version:5.6
+// swift-tools-version:6.0
 //
 //  Package.swift
 //  CDUntappdKit
 //
 //  Created by Christopher de Haan on 05/07/2017.
 //
-//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -28,33 +28,43 @@
 
 import PackageDescription
 
-let package = Package(
-    name: "CDUntappdKit",
-    platforms: [
-        .macOS(.v10_12),
-        .iOS(.v10),
-        .tvOS(.v10),
-        .watchOS(.v3)
-    ],
-    products: [
-        .library(
-            name: "CDUntappdKit",
-            targets: ["CDUntappdKit"])
-    ],
-    dependencies: [
-        .package(
-            url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.6.1"))
-    ],
-    targets: [
-        .target(
-            name: "CDUntappdKit",
-            dependencies: [
-                .product(name: "Alamofire", package: "Alamofire")
-            ],
-            path: "Source",
-            exclude: ["Info.plist"],
-            linkerSettings: [
-                .linkedFramework("UIKit", .when(platforms: [.iOS, .tvOS]))
-            ])
-    ],
-    swiftLanguageVersions: [.v5])
+let package = Package(name: "CDUntappdKit",
+                      platforms: [.iOS(.v12),
+                                  .macOS(.v10_13),
+                                  .tvOS(.v12),
+                                  .watchOS(.v4),
+                                  .visionOS(.v1)],
+                      products: [.library(name: "CDUntappdKit",
+                                          targets: ["CDUntappdKit"]),
+                                 .library(name: "CDUntappdKitDynamic",
+                                          type: .dynamic,
+                                          targets: ["CDUntappdKit"])],
+                      dependencies: [
+                          .package(url: "https://github.com/Alamofire/Alamofire.git",
+                                   .upToNextMajor(from: "5.9.0")),
+                          .package(url: "https://github.com/apple/swift-docc-plugin",
+                                   from: "1.3.0")
+                      ],
+                      targets: [.target(name: "CDUntappdKit",
+                                        dependencies: [
+                                            .product(name: "Alamofire", package: "Alamofire")
+                                        ],
+                                        path: "Source",
+                                        exclude: ["Info.plist"],
+                                        resources: [.process("PrivacyInfo.xcprivacy")],
+                                        swiftSettings: [
+                                            .enableUpcomingFeature("ExistentialAny")
+                                        ],
+                                        linkerSettings: [
+                                            .linkedFramework("UIKit",
+                                                             .when(platforms: [.iOS, .tvOS, .visionOS])),
+                                            .linkedFramework("Cocoa",
+                                                             .when(platforms: [.macOS]))
+                                        ]),
+                                .testTarget(
+                                    name: "CDUntappdKitTests",
+                                    dependencies: ["CDUntappdKit"],
+                                    path: "Tests/CDUntappdKitTests",
+                                    resources: [.process("Fixtures")]
+                                )],
+                      swiftLanguageModes: [.v5])

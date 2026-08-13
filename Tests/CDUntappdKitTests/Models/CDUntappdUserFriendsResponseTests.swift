@@ -1,11 +1,8 @@
-// swift-tools-version:5.4
 //
-//  Package.swift
-//  CDUntappdKit
+//  CDUntappdUserFriendsResponseTests.swift
+//  CDUntappdKitTests
 //
-//  Created by Christopher de Haan on 06/30/2022.
-//
-//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,35 +23,30 @@
 //  THE SOFTWARE.
 //
 
-import PackageDescription
+import Foundation
+import Testing
+@testable import CDUntappdKit
 
-let package = Package(
-    name: "CDUntappdKit",
-    platforms: [
-        .macOS(.v10_12),
-        .iOS(.v10),
-        .tvOS(.v10),
-        .watchOS(.v3)
-    ],
-    products: [
-        .library(
-            name: "CDUntappdKit",
-            targets: ["CDUntappdKit"])
-    ],
-    dependencies: [
-        .package(
-            url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.6.1"))
-    ],
-    targets: [
-        .target(
-            name: "CDUntappdKit",
-            dependencies: [
-                .product(name: "Alamofire", package: "Alamofire")
-            ],
-            path: "Source",
-            exclude: ["Info.plist"],
-            linkerSettings: [
-                .linkedFramework("UIKit", .when(platforms: [.iOS, .tvOS]))
-            ])
-    ],
-    swiftLanguageVersions: [.v5])
+@Suite("CDUntappdUserFriendsResponse Tests")
+struct CDUntappdUserFriendsResponseTests {
+
+    @Test
+    func decodesNestedFriendsFromRealisticResponseShape() throws {
+        let url = try #require(Bundle.module.url(forResource: "user_friends", withExtension: "json"))
+        let data = try Data(contentsOf: url)
+        let response = try JSONDecoder().decode(CDUntappdUserFriendsResponse.self, from: data)
+        #expect(response.friends != nil)
+        #expect(response.friends?.first?.user?.username == "TestFriend")
+    }
+
+    @Test
+    func friendsIsNilWhenResponseKeyIsAbsent() throws {
+        let json = """
+        {
+          "meta": { "code": 200 }
+        }
+        """.data(using: .utf8)!
+        let response = try JSONDecoder().decode(CDUntappdUserFriendsResponse.self, from: json)
+        #expect(response.friends == nil)
+    }
+}

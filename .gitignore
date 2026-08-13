@@ -35,5 +35,8 @@ playground.xcworkspace
 # Swift Package Manager
 .build/
 
-# Carthage
-Carthage/Build
+# Local planning documents
+Documentation/IMPROVEMENTS.md
+Documentation/API_SCHEMA.md
+docs/superpowers/
+.superpowers/

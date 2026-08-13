@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 11/30/17.
 //
-//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,13 +25,30 @@
 //  THE SOFTWARE.
 //
 
-public struct CDUntappdWishList: Decodable {
+/// Represents a user's Untappd wish list.
+public struct CDUntappdWishList: Decodable, Sendable {
 
+    /// The beers on the wish list.
     public var items: [CDUntappdWishListItem]?
+    /// When the wish list was last updated.
     public var updatedAt: String?
 
-    enum CodingKeys: String, CodingKey {
-        case items = "beers.items"
+    private enum RootKeys: String, CodingKey {
+        case beers
         case updatedAt = "updated_at"
+    }
+
+    private enum BeersKeys: String, CodingKey {
+        case items
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let root = try decoder.container(keyedBy: RootKeys.self)
+        updatedAt = try root.decodeIfPresent(String.self, forKey: .updatedAt)
+        if let beersContainer = try? root.nestedContainer(keyedBy: BeersKeys.self, forKey: .beers) {
+            items = try beersContainer.decodeIfPresent([CDUntappdWishListItem].self, forKey: .items)
+        } else {
+            items = nil
+        }
     }
 }

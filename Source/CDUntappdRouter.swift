@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 8/4/17.
 //
-//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,42 +25,49 @@
 //  THE SOFTWARE.
 //
 
-#if !os(OSX)
-    import UIKit
-#else
-    import Foundation
-#endif
-
 import Alamofire
+import Foundation
 
-enum CDUntappdRouter: URLRequestConvertible {
+/// Routes for Untappd API endpoints.
+///
+/// Used internally to construct HTTP requests for the Untappd API.
+public enum CDUntappdRouter: URLRequestConvertible {
 
-    // Info / Search
+    /// Fetch user information by username.
     case userInfo(username: String?, parameters: Parameters)
+    /// Fetch a user's wish list of beers.
     case userWishList(username: String?, parameters: Parameters)
+    /// Fetch a user's friends list.
     case userFriends(username: String?, parameters: Parameters)
+    /// Fetch a user's badges.
     case userBadges(username: String?, parameters: Parameters)
+    /// Fetch beers a user has checked in.
     case userBeers(username: String?, parameters: Parameters)
+    /// Fetch brewery information by ID.
     case breweryInfo(breweryId: Int, parameters: Parameters)
+    /// Fetch beer information by ID.
     case beerInfo(bid: Int, parameters: Parameters)
+    /// Fetch venue information by ID.
     case venueInfo(venueId: Int, parameters: Parameters)
+    /// Search for beers.
     case beerSearch(parameters: Parameters)
+    /// Search for breweries.
     case brewerySearch(parameters: Parameters)
 
     var method: HTTPMethod {
         switch self {
         // Info / Search
-        case .userInfo(username: _, parameters: _),
-             .userWishList(username: _, parameters: _),
-             .userFriends(username: _, parameters: _),
-             .userBadges(username: _, parameters: _),
-             .userBeers(username: _, parameters: _),
-             .breweryInfo(breweryId: _, parameters: _),
-             .beerInfo(bid: _, parameters: _),
-             .venueInfo(venueId: _, parameters: _),
-             .beerSearch(parameters: _),
-             .brewerySearch(parameters: _):
-            return .get
+        case .userInfo,
+             .userWishList,
+             .userFriends,
+             .userBadges,
+             .userBeers,
+             .breweryInfo,
+             .beerInfo,
+             .venueInfo,
+             .beerSearch,
+             .brewerySearch:
+            .get
         }
     }
 
@@ -68,29 +75,29 @@ enum CDUntappdRouter: URLRequestConvertible {
         switch self {
         // Info / Search
         case .userInfo(let username, parameters: _):
-            return String.path("user/info", forUsername: username)
+            String.path("user/info", forUsername: username)
         case .userWishList(let username, parameters: _):
-            return String.path("user/wishlist", forUsername: username)
+            String.path("user/wishlist", forUsername: username)
         case .userFriends(let username, parameters: _):
-            return String.path("user/friends", forUsername: username)
+            String.path("user/friends", forUsername: username)
         case .userBadges(let username, parameters: _):
-            return String.path("user/badges", forUsername: username)
+            String.path("user/badges", forUsername: username)
         case .userBeers(let username, parameters: _):
-            return String.path("user/beers", forUsername: username)
+            String.path("user/beers", forUsername: username)
         case .breweryInfo(let breweryId, parameters: _):
-            return "brewery/info/\(breweryId)"
+            "brewery/info/\(breweryId)"
         case .beerInfo(let bid, parameters: _):
-            return "beer/info/\(bid)"
+            "beer/info/\(bid)"
         case .venueInfo(let venueId, parameters: _):
-            return "venue/info/\(venueId)"
-        case .beerSearch(parameters: _):
-            return "search/beer"
-        case .brewerySearch(parameters: _):
-            return "search/brewery"
+            "venue/info/\(venueId)"
+        case .beerSearch:
+            "search/beer"
+        case .brewerySearch:
+            "search/brewery"
         }
     }
 
-    func asURLRequest() throws -> URLRequest {
+    public func asURLRequest() throws -> URLRequest {
         let url = try CDUntappdURL.base.asURL()
 
         var urlRequest = URLRequest(url: url.appendingPathComponent(path))
@@ -110,8 +117,8 @@ enum CDUntappdRouter: URLRequestConvertible {
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
         case .venueInfo(venueId: _, let parameters):
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
-        case .beerSearch(let parameters),
-             .brewerySearch(let parameters):
+        case let .beerSearch(parameters),
+             let .brewerySearch(parameters):
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
         }
 

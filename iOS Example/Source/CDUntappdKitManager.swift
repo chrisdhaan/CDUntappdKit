@@ -4,7 +4,7 @@
 //
 //  Created by Christopher de Haan on 8/15/17.
 //
-//  Copyright © 2016-2022 Christopher de Haan <contact@christopherdehaan.me>
+//  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -29,11 +29,11 @@ import CDUntappdKit
 import UIKit
 
 final class CDUntappdKitManager: NSObject {
-    
+
     static let shared = CDUntappdKitManager()
-    
+
     var apiClient: CDUntappdAPIClient!
-    
+
     func configure() {
         // How to authorize using your clientId and clientSecret
         self.apiClient = CDUntappdAPIClient(clientId: "BDCFF6FA3CF64AC57585386B4051EB5A716F3FBD",
