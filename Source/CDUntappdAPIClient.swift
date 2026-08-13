@@ -85,9 +85,7 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
                 ) as? UINavigationController {
                     if let oAuthViewController = oAuthNavigationController.topViewController as? CDUntappdOAuthViewController {
                         oAuthViewController.oAuthClient = self.oAuthClient
-                        oAuthViewController.onAuthorization = { _, error in
-
-                            if let error {}
+                        oAuthViewController.onAuthorization = { _, _ in
                             UIApplication.topViewController()?.dismiss(animated: true, completion: nil)
                         }
                     }

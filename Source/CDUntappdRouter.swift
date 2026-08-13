@@ -57,16 +57,16 @@ public enum CDUntappdRouter: URLRequestConvertible {
     var method: HTTPMethod {
         switch self {
         // Info / Search
-        case .userInfo(username: _, parameters: _),
-             .userWishList(username: _, parameters: _),
-             .userFriends(username: _, parameters: _),
-             .userBadges(username: _, parameters: _),
-             .userBeers(username: _, parameters: _),
-             .breweryInfo(breweryId: _, parameters: _),
-             .beerInfo(bid: _, parameters: _),
-             .venueInfo(venueId: _, parameters: _),
-             .beerSearch(parameters: _),
-             .brewerySearch(parameters: _):
+        case .userInfo,
+             .userWishList,
+             .userFriends,
+             .userBadges,
+             .userBeers,
+             .breweryInfo,
+             .beerInfo,
+             .venueInfo,
+             .beerSearch,
+             .brewerySearch:
             .get
         }
     }
@@ -90,9 +90,9 @@ public enum CDUntappdRouter: URLRequestConvertible {
             "beer/info/\(bid)"
         case .venueInfo(let venueId, parameters: _):
             "venue/info/\(venueId)"
-        case .beerSearch(parameters: _):
+        case .beerSearch:
             "search/beer"
-        case .brewerySearch(parameters: _):
+        case .brewerySearch:
             "search/brewery"
         }
     }

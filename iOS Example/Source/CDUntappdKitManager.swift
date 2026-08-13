@@ -29,11 +29,11 @@ import CDUntappdKit
 import UIKit
 
 final class CDUntappdKitManager: NSObject {
-    
+
     static let shared = CDUntappdKitManager()
-    
+
     var apiClient: CDUntappdAPIClient!
-    
+
     func configure() {
         // How to authorize using your clientId and clientSecret
         self.apiClient = CDUntappdAPIClient(clientId: "BDCFF6FA3CF64AC57585386B4051EB5A716F3FBD",

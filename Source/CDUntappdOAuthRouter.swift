@@ -38,14 +38,14 @@ public enum CDUntappdOAuthRouter: URLRequestConvertible {
 
     var method: HTTPMethod {
         switch self {
-        case .authorize(parameters: _):
+        case .authorize:
             .get
         }
     }
 
     var path: String {
         switch self {
-        case .authorize(parameters: _):
+        case .authorize:
             "authorize"
         }
     }

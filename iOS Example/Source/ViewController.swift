@@ -28,41 +28,26 @@
 import UIKit
 
 class ViewController: UIViewController {
-    
+
     @IBOutlet weak private var tableView: UITableView!
-    
-    // MARK: - Lifecycle Methods
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+
 }
 
 // MARK: - UITableViewDataSource Methods
 
 extension ViewController: UITableViewDataSource {
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CDUntappdEndpointCell", for: indexPath)
-        
+
         switch indexPath.row {
         case 0:
             cell.backgroundColor = UIColor.untappdYellow()
@@ -79,10 +64,10 @@ extension ViewController: UITableViewDataSource {
         default:
             break
         }
-        
+
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case 0:
@@ -96,7 +81,7 @@ extension ViewController: UITableViewDataSource {
 // MARK: - UITableView Delegate Methods
 
 extension ViewController: UITableViewDelegate {
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row {
         case 0:
@@ -145,7 +130,7 @@ extension ViewController: UITableViewDelegate {
             break
         }
     }
-    
+
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0.1
     }
