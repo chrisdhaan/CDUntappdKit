@@ -76,7 +76,7 @@ struct CDUntappdOAuthClientTests {
         let token = "stored_access_token"
         UserDefaults.standard.set(token, forKey: "CDUntappdAccessToken")
 
-        var parameters: [String: Any] = ["param1": "value1"]
+        let parameters: [String: Any] = ["param1": "value1"]
         let result = client.addTokens(toParameters: parameters)
 
         #expect(result["access_token"] as? String == token)
@@ -90,7 +90,7 @@ struct CDUntappdOAuthClientTests {
         let client = CDUntappdOAuthClient(clientId: "test_id", clientSecret: "test_secret",
                                           redirectUrl: "test://callback")
 
-        var parameters: [String: Any] = ["param1": "value1"]
+        let parameters: [String: Any] = ["param1": "value1"]
         let result = client.addTokens(toParameters: parameters)
 
         #expect(result["client_id"] as? String == "test_id")
@@ -106,7 +106,7 @@ struct CDUntappdOAuthClientTests {
         let token = "access_token_xyz"
         UserDefaults.standard.set(token, forKey: "CDUntappdAccessToken")
 
-        var parameters: [String: Any] = [:]
+        let parameters: [String: Any] = [:]
         let result = client.addTokens(toParameters: parameters)
 
         #expect(result["access_token"] as? String == token)
