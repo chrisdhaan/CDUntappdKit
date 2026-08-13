@@ -12,7 +12,7 @@ All notable changes to this project will be documented in this file.
 
 ## [2.0.0](https://github.com/chrisdhaan/CDUntappdKit/releases/tag/2.0.0)
 
-Released on 2026-05-30.
+Released on 2026-08-14.
 
 ### Added
 
