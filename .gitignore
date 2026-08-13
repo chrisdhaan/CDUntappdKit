@@ -35,9 +35,6 @@ playground.xcworkspace
 # Swift Package Manager
 .build/
 
-# Bundler
-.bundle/
-
 # Local planning documents
 Documentation/IMPROVEMENTS.md
 Documentation/API_SCHEMA.md

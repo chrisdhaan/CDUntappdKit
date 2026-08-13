@@ -17,6 +17,9 @@
     <a href="https://www.swift.org/package-manager">
         <img src="https://img.shields.io/badge/Swift_Package_Manager-compatible-orange?style=flat" alt="Swift Package Manager Compatible">
     </a>
+    <a href="https://github.com/chrisdhaan/CDUntappdKit/blob/master/LICENSE">
+        <img src="https://img.shields.io/github/license/chrisdhaan/CDUntappdKit.svg" alt="License">
+    </a>
 </p>
 
 An extensive Swift wrapper for the Untappd API with async/await support and comprehensive unit tests.
@@ -93,6 +96,8 @@ Task {
 ## Documentation
 
 For complete usage examples, authentication flow details, error handling, and advanced topics, see [Documentation/Usage.md](Documentation/Usage.md).
+
+Upgrading from 1.x? See the [2.0 Migration Guide](Documentation/CDUntappdKit%202.0%20Migration%20Guide.md).
 
 API reference is available at https://chrisdhaan.github.io/CDUntappdKit/documentation/cduntappdkit/
 

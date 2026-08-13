@@ -185,7 +185,7 @@ CDUntappdKit 2.0 no longer supports Carthage. You must migrate to Swift Package 
 
 ### Migrate from Carthage
 
-#### Option 1: Swift Package Manager (Recommended)
+#### Swift Package Manager
 
 1. **Remove Carthage:**
    ```bash
@@ -208,7 +208,7 @@ CDUntappdKit 2.0 no longer supports Carthage. You must migrate to Swift Package 
 
 ## CocoaPods Removed
 
-CDUntappdKit 2.0 drops CocoaPods as a distribution channel (CocoaPods trunk is being deprecated in 2026). Swift Package Manager is now the only supported install method — see [Swift Package Manager](#option-1-swift-package-manager-recommended) above.
+CDUntappdKit 2.0 drops CocoaPods as a distribution channel (CocoaPods trunk is being deprecated in 2026). Swift Package Manager is now the only supported install method — see [Swift Package Manager](#swift-package-manager) above.
 
 ---
 
@@ -275,11 +275,7 @@ CDUntappdKit 2.0 requires Alamofire 5.9 or later (up from 5.6.1 in 1.x).
 
 ### What to Check
 
-If your project **separately pins Alamofire**, ensure there's no version conflict:
-
-#### Swift Package Manager
-
-In your `Package.swift`, Alamofire should be `5.9` or higher:
+If your project **separately pins Alamofire** in `Package.swift`, ensure there's no version conflict — it should be `5.9` or higher:
 
 ```swift
 dependencies: [

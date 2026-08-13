@@ -41,8 +41,8 @@ Released on 2026-05-30.
 
 - Completion handler API (replaced by async/await — breaking change)
 - Carthage support (use Swift Package Manager)
+- CocoaPods support (CocoaPods trunk is deprecating in 2026; use Swift Package Manager)
 - Versioned Package manifests (Package@swift-5.3.swift through Package@swift-5.5.swift)
-- CocoaPods support — Swift Package Manager is now the only supported distribution channel (CocoaPods trunk is being deprecated in 2026)
 
 ---
 
