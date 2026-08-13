@@ -375,7 +375,7 @@ jobs:
   codeql:
     name: CodeQL
     runs-on: macos-15
-    timeout-minutes: 20
+    timeout-minutes: 30
     permissions:
       security-events: write
     steps:
