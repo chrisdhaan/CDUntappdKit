@@ -127,9 +127,10 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
         var params = Parameters.userInfoParameters(isCompact: compact)
         params = self.oAuthClient.addTokens(toParameters: params)
 
+        let router = CDUntappdRouter.userInfo(username: username,
+                                              parameters: params)
         let response = try await self.manager
-            .request(CDUntappdRouter.userInfo(username: username,
-                                              parameters: params))
+            .request(router.asURLRequest())
             .validate()
             .serializingDecodable(CDUntappdUserInfoResponse.self)
             .value
@@ -168,9 +169,10 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
                                                        sort: sort)
         params = self.oAuthClient.addTokens(toParameters: params)
 
+        let router = CDUntappdRouter.userWishList(username: username,
+                                                  parameters: params)
         let response = try await self.manager
-            .request(CDUntappdRouter.userWishList(username: username,
-                                                  parameters: params))
+            .request(router.asURLRequest())
             .validate()
             .serializingDecodable(CDUntappdUserWishListResponse.self)
             .value
@@ -206,9 +208,10 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
                                                       limit: limit)
         params = self.oAuthClient.addTokens(toParameters: params)
 
+        let router = CDUntappdRouter.userFriends(username: username,
+                                                 parameters: params)
         let response = try await self.manager
-            .request(CDUntappdRouter.userFriends(username: username,
-                                                 parameters: params))
+            .request(router.asURLRequest())
             .validate()
             .serializingDecodable(CDUntappdUserFriendsResponse.self)
             .value

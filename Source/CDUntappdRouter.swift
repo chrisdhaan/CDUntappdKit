@@ -25,13 +25,12 @@
 //  THE SOFTWARE.
 //
 
-import Alamofire
 import Foundation
 
 /// Routes for Untappd API endpoints.
 ///
 /// Used internally to construct HTTP requests for the Untappd API.
-public enum CDUntappdRouter: URLRequestConvertible {
+public enum CDUntappdRouter {
 
     /// Fetch user information by username.
     case userInfo(username: String?, parameters: Parameters)
@@ -54,26 +53,8 @@ public enum CDUntappdRouter: URLRequestConvertible {
     /// Search for breweries.
     case brewerySearch(parameters: Parameters)
 
-    var method: HTTPMethod {
-        switch self {
-        // Info / Search
-        case .userInfo,
-             .userWishList,
-             .userFriends,
-             .userBadges,
-             .userBeers,
-             .breweryInfo,
-             .beerInfo,
-             .venueInfo,
-             .beerSearch,
-             .brewerySearch:
-            .get
-        }
-    }
-
     var path: String {
         switch self {
-        // Info / Search
         case .userInfo(let username, parameters: _):
             String.path("user/info", forUsername: username)
         case .userWishList(let username, parameters: _):
@@ -97,31 +78,29 @@ public enum CDUntappdRouter: URLRequestConvertible {
         }
     }
 
-    public func asURLRequest() throws -> URLRequest {
-        let url = try CDUntappdURL.base.asURL()
-
-        var urlRequest = URLRequest(url: url.appendingPathComponent(path))
-        urlRequest.httpMethod = method.rawValue
-
+    var parameters: Parameters {
         switch self {
-        // Info / Search
-        case .userInfo(username: _, let parameters),
-             .userWishList(username: _, let parameters),
-             .userFriends(username: _, let parameters),
-             .userBadges(username: _, let parameters),
-             .userBeers(username: _, let parameters):
-            urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
-        case .breweryInfo(breweryId: _, let parameters):
-            urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
-        case .beerInfo(bid: _, let parameters):
-            urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
-        case .venueInfo(venueId: _, let parameters):
-            urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
-        case let .beerSearch(parameters),
+        case let .userInfo(username: _, parameters),
+             let .userWishList(username: _, parameters),
+             let .userFriends(username: _, parameters),
+             let .userBadges(username: _, parameters),
+             let .userBeers(username: _, parameters),
+             let .breweryInfo(breweryId: _, parameters),
+             let .beerInfo(bid: _, parameters),
+             let .venueInfo(venueId: _, parameters),
+             let .beerSearch(parameters),
              let .brewerySearch(parameters):
-            urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
+            parameters
         }
+    }
 
-        return urlRequest
+    public func asURLRequest() throws -> URLRequest {
+        guard let url = URL(string: CDUntappdURL.base) else {
+            throw CDUntappdKitError.invalidRequest(underlying: URLError(.badURL))
+        }
+        return try CDUntappdParameterEncoding.urlRequest(
+            for: url.appendingPathComponent(path),
+            parameters: parameters
+        )
     }
 }
