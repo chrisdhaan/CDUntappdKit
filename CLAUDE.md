@@ -15,10 +15,8 @@ Swift wrapper for the Untappd API. Supports iOS 12+, macOS 10.13+, tvOS 12+, wat
 | `docs/` | DocC-generated API reference (served by GitHub Pages) |
 | `scripts/generate-docs.sh` | Regenerates `docs/` (handles Jekyll/`.nojekyll`, index.html redirect, 404.html) |
 | `Package.swift` | SPM manifest (swift-tools-version:6.0) |
-| `CDUntappdKit.podspec` | CocoaPods spec |
 | `.github/workflows/ci.yml` | GitHub Actions CI |
 | `.swiftformat` | SwiftFormat configuration |
-| `Gemfile` | Ruby gem dependencies (CocoaPods) |
 
 ## Platform Support
 
@@ -55,9 +53,6 @@ swiftformat Source Tests
 
 # Check formatting (CI mode)
 swiftformat Source Tests --lint
-
-# Pod lint
-bundle exec pod lib lint --allow-warnings
 ```
 
 ## CI Jobs
@@ -70,7 +65,6 @@ bundle exec pod lib lint --allow-warnings
 | watchOS (×5) | macos-26 + macos-15 | Build all watchOS Xcode versions |
 | visionOS (×4) | macos-26 | Build all visionOS Xcode versions |
 | Catalyst | macos-15 | Catalyst build |
-| CocoaPods | macos-15 | pod lib lint |
 | SPM | macos-15 | swift test |
 | SwiftLint | macos-15 | Strict lint enforcement |
 | SwiftFormat | macos-15 | Format check (`--lint` mode) |

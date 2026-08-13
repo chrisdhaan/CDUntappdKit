@@ -37,18 +37,6 @@ targets: [
 
 Then in your Xcode project, go to **File** > **Add Packages**, paste the URL, and select version 2.0.0 or later.
 
-### CocoaPods
-
-Add to your `Podfile`:
-
-```ruby
-target 'MyApp' do
-  pod 'CDUntappdKit', '~> 2.0'
-end
-```
-
-Run `pod install` to fetch and integrate the dependency.
-
 ### Git Submodule
 
 Clone the repository as a submodule:

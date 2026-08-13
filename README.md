@@ -14,14 +14,8 @@
     <a href="https://www.swift.org">
         <img src="https://img.shields.io/badge/Swift-5.3+-orange?style=flat" alt="Swift Versions">
     </a>
-    <a href="http://cocoapods.org/pods/CDUntappdKit">
-        <img src="https://img.shields.io/cocoapods/v/CDUntappdKit.svg?style=flat" alt="CocoaPods Compatible">
-    </a>
     <a href="https://www.swift.org/package-manager">
         <img src="https://img.shields.io/badge/Swift_Package_Manager-compatible-orange?style=flat" alt="Swift Package Manager Compatible">
-    </a>
-    <a href="http://cocoapods.org/pods/CDUntappdKit">
-        <img src="https://img.shields.io/cocoapods/l/CDUntappdKit.svg?style=flat" alt="License">
     </a>
 </p>
 
@@ -59,14 +53,6 @@ Add CDUntappdKit to your `Package.swift`:
 dependencies: [
     .package(url: "https://github.com/chrisdhaan/CDUntappdKit.git", .upToNextMajor(from: "2.0.0"))
 ]
-```
-
-### CocoaPods
-
-Add to your `Podfile`:
-
-```ruby
-pod 'CDUntappdKit', '~> 2.0'
 ```
 
 ### Git Submodule

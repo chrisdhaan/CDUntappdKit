@@ -33,7 +33,6 @@ Released on 2026-05-30.
 - Deployment targets: iOS 12.0+, macOS 10.13+, tvOS 12.0+, watchOS 4.0+
 - Swift Package Manager: `swift-tools-version` 5.6 → 6.0, `swiftLanguageModes: [.v5]`, removed versioned Package manifests
 - Alamofire dependency: pinned 5.6.1 → upToNextMajor 5.9.0
-- CocoaPods: deployment targets, `swift_versions: ['5']`, `cocoapods_version >= 1.13.0`, `resource_bundles` for PrivacyInfo
 - CI/CD: macOS-26/macos-15 runners, Xcode 26.1.1–26.4.1 + 16.4, xcbeautify output formatting, GitHub Actions v4, SwiftFormat + DocC build jobs
 - Error logging: `print()` replaced with `os.log` structured logging
 - Copyright year: 2022 → 2026
@@ -41,8 +40,9 @@ Released on 2026-05-30.
 ### Removed
 
 - Completion handler API (replaced by async/await — breaking change)
-- Carthage support (use Swift Package Manager or CocoaPods)
+- Carthage support (use Swift Package Manager)
 - Versioned Package manifests (Package@swift-5.3.swift through Package@swift-5.5.swift)
+- CocoaPods support — Swift Package Manager is now the only supported distribution channel (CocoaPods trunk is being deprecated in 2026)
 
 ---
 

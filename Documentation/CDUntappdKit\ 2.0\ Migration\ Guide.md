@@ -180,7 +180,7 @@ This provides much better visibility into what went wrong.
 
 ## Carthage Removed
 
-CDUntappdKit 2.0 no longer supports Carthage. You must migrate to Swift Package Manager or CocoaPods.
+CDUntappdKit 2.0 no longer supports Carthage. You must migrate to Swift Package Manager.
 
 ### Migrate from Carthage
 
@@ -203,39 +203,9 @@ CDUntappdKit 2.0 no longer supports Carthage. You must migrate to Swift Package 
    import CDUntappdKit
    ```
 
-#### Option 2: CocoaPods
+### CocoaPods No Longer Supported
 
-1. **Remove Carthage:**
-   ```bash
-   rm Cartfile Cartfile.resolved
-   rm -rf Carthage/
-   ```
-
-2. **Install CocoaPods (if needed):**
-   ```bash
-   sudo gem install cocoapods
-   ```
-
-3. **Create a Podfile:**
-   ```bash
-   cd /path/to/your/project
-   pod init
-   ```
-
-4. **Add CDUntappdKit to your Podfile:**
-   ```ruby
-   pod 'CDUntappdKit', '~> 2.0'
-   ```
-
-5. **Install dependencies:**
-   ```bash
-   pod install
-   ```
-
-6. **Open the generated `.xcworkspace`:**
-   ```bash
-   open YourProject.xcworkspace
-   ```
+CDUntappdKit 2.0 drops CocoaPods as a distribution channel (CocoaPods trunk is being deprecated in 2026). Swift Package Manager is now the only supported install method — see "Option 1" above.
 
 ---
 
@@ -312,14 +282,6 @@ In your `Package.swift`, Alamofire should be `5.9` or higher:
 dependencies: [
     .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.9.0"))
 ]
-```
-
-#### CocoaPods
-
-In your `Podfile`, Alamofire should be `5.9` or higher:
-
-```ruby
-pod 'Alamofire', '~> 5.9'
 ```
 
 ### Why the Update?
