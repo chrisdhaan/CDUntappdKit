@@ -3,56 +3,47 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D2CD00693FC5416D966D1C18 /* CDUntappdOAuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7070D1F3B810400FAA6EF /* CDUntappdOAuthViewController.swift */; };
 		0912344186C84E778EE9B032 /* CDUntappdOAuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7070D1F3B810400FAA6EF /* CDUntappdOAuthViewController.swift */; };
-		817AEF7F09B545868697FAB2 /* CDUntappdOAuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7070D1F3B810400FAA6EF /* CDUntappdOAuthViewController.swift */; };
-		B6B92BDB55024543847DDC64 /* UIApplication+CDUntappdKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7070B1F3B800C00FAA6EF /* UIApplication+CDUntappdKit.swift */; };
-		AE5B303502844CE1908DD5F1 /* UIApplication+CDUntappdKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7070B1F3B800C00FAA6EF /* UIApplication+CDUntappdKit.swift */; };
-		ED532774644A4D6ABF868416 /* UIApplication+CDUntappdKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7070B1F3B800C00FAA6EF /* UIApplication+CDUntappdKit.swift */; };
-		3A8CF389E4204A9991956404 /* CDUntappdKitError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A2A4E8039346F6AA88B0CF /* CDUntappdKitError.swift */; };
-		2B9572ACA4D84700B9162C30 /* CDUntappdKitError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A2A4E8039346F6AA88B0CF /* CDUntappdKitError.swift */; };
-		E360E006E8CC4E159A12E3DE /* CDUntappdKitError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A2A4E8039346F6AA88B0CF /* CDUntappdKitError.swift */; };
-		B79A93F141A24A93BB38650A /* CDUntappdKitError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A2A4E8039346F6AA88B0CF /* CDUntappdKitError.swift */; };
-		10E6D03AC9E248FBA6A2A78E /* CDUntappdKitError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A2A4E8039346F6AA88B0CF /* CDUntappdKitError.swift */; };
-		513BDCD1FE364CF0BB6CBF09 /* CDUntappdAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20537181F398A0000338826 /* CDUntappdAPIClient.swift */; };
-		214EC1E8362D417DB49D4862 /* CDUntappdBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28180D01FCCE38100806E4C /* CDUntappdBadge.swift */; };
-		8A01D57EB1344D53B8939A87 /* CDUntappdKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2409D0D286BA5330001AE66 /* CDUntappdKit.swift */; };
-		B7FB237B8EB24EB78E14FD5E /* CDUntappdUserWishListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20143BE1FD0C2D4005FCBC8 /* CDUntappdUserWishListResponse.swift */; };
-		B59A30D9334B402FB2C9D934 /* CDUntappdConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20537171F398A0000338826 /* CDUntappdConstants.swift */; };
-		CAA783654F674767AB6AD9C1 /* CDUntappdVenue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28180CC1FCCDA1500806E4C /* CDUntappdVenue.swift */; };
-		585231DB9D53420EBDD722AD /* CDUntappdContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205370E1F3989E400338826 /* CDUntappdContact.swift */; };
 		0BEE538DB9D44050A9D14278 /* CDColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22019F41FD21A7800A2BE3F /* CDColor.swift */; };
+		10E6D03AC9E248FBA6A2A78E /* CDUntappdKitError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A2A4E8039346F6AA88B0CF /* CDUntappdKitError.swift */; };
+		214EC1E8362D417DB49D4862 /* CDUntappdBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28180D01FCCE38100806E4C /* CDUntappdBadge.swift */; };
+		27B5128AE8384FDEBEA0AD5F /* CDUntappdOAuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7070D1F3B810400FAA6EF /* CDUntappdOAuthViewController.swift */; };
+		285D2A0A50CE41999425ED1A /* CDUntappdOAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D6C3E11F43D5BE0067279A /* CDUntappdOAuthClient.swift */; };
+		2B9572ACA4D84700B9162C30 /* CDUntappdKitError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A2A4E8039346F6AA88B0CF /* CDUntappdKitError.swift */; };
+		2D5E2DE2C13B4886B0DC8E78 /* CDUntappdBrewery.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28180C41FCCD0BE00806E4C /* CDUntappdBrewery.swift */; };
+		31273D2090A84ABD915BEEA7 /* CDUntappdCheckin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28180C81FCCD5CB00806E4C /* CDUntappdCheckin.swift */; };
+		33C91DA110E648BD92BDA64D /* CDUntappdCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28180CE1FCCDE5600806E4C /* CDUntappdCategory.swift */; };
+		39B18756EE29458DA8A85707 /* Parameters+CDUntappdKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20232B21FC4D3DD00C33B69 /* Parameters+CDUntappdKit.swift */; };
+		3A8CF389E4204A9991956404 /* CDUntappdKitError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A2A4E8039346F6AA88B0CF /* CDUntappdKitError.swift */; };
+		3AAFBF700CA841458812117D /* CDUntappdUserInfoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20232BB1FC4D99D00C33B69 /* CDUntappdUserInfoResponse.swift */; };
 		43ED87EDD98248D7B3A984D7 /* CDUntappdBeer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28180C61FCCD0C700806E4C /* CDUntappdBeer.swift */; };
+		513BDCD1FE364CF0BB6CBF09 /* CDUntappdAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20537181F398A0000338826 /* CDUntappdAPIClient.swift */; };
+		53532188F0E342E79B2F07AB /* CDUntappdUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20537101F3989E400338826 /* CDUntappdUser.swift */; };
 		5593689E695242F6BA873EB3 /* CDUntappdEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20537191F398A0000338826 /* CDUntappdEnums.swift */; };
 		581AA650291945D7A8558F59 /* CDUntappdMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20232BD1FC4DC6800C33B69 /* CDUntappdMetadata.swift */; };
-		285D2A0A50CE41999425ED1A /* CDUntappdOAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D6C3E11F43D5BE0067279A /* CDUntappdOAuthClient.swift */; };
-		A0CD199778964C67ABF43A81 /* CDUntappdOAuthCredential.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E00B41F3A82AF00302663 /* CDUntappdOAuthCredential.swift */; };
-		AF91F57238D44E9DA396FC2B /* CDUntappdFriend.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20143E51FD0D109005FCBC8 /* CDUntappdFriend.swift */; };
-		874554AB2C4A40ECBDFCBB31 /* CDUntappdOAuthRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E00B21F3A81E100302663 /* CDUntappdOAuthRouter.swift */; };
-		27B5128AE8384FDEBEA0AD5F /* CDUntappdOAuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7070D1F3B810400FAA6EF /* CDUntappdOAuthViewController.swift */; };
-		33C91DA110E648BD92BDA64D /* CDUntappdCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28180CE1FCCDE5600806E4C /* CDUntappdCategory.swift */; };
-		E456D4500A0A495894543533 /* CDUntappdRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20537161F398A0000338826 /* CDUntappdRouter.swift */; };
+		585231DB9D53420EBDD722AD /* CDUntappdContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205370E1F3989E400338826 /* CDUntappdContact.swift */; };
+		5FB441CC302E39AB002DC9A5 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = F59C90AD08A94FA2B43F90AB /* Alamofire */; };
+		5FB441CD302E39AB002DC9A5 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8D2EEAC3BECD4569B009EC43 /* Alamofire */; };
+		5FB441CE302E39AB002DC9A5 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 9D1E34FA247F4ADB8914D8A3 /* Alamofire */; };
+		5FB441CF302E39AB002DC9A5 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7C221186C96348CD9B0178FC /* Alamofire */; };
+		5FB441D0302E39AB002DC9A5 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = AE29C36AF5CE48F78222B1EC /* Alamofire */; };
 		7AA431ED994349A9B05EE76B /* CDUntappdMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28180D21FCCE49800806E4C /* CDUntappdMedia.swift */; };
-		31273D2090A84ABD915BEEA7 /* CDUntappdCheckin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28180C81FCCD5CB00806E4C /* CDUntappdCheckin.swift */; };
-		91237AD48515403F908B604F /* CDUntappdWishListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20143C91FD0C482005FCBC8 /* CDUntappdWishListItem.swift */; };
-		B8C2AC1AE4404079ACF52095 /* CDUntappdSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28180CA1FCCD95E00806E4C /* CDUntappdSource.swift */; };
-		F1813F7F06074341868B7A4D /* CDUntappdSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20537111F3989E400338826 /* CDUntappdSettings.swift */; };
-		93130342E0BE4484B9450D23 /* UIColor+CDUntappdKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C4A0381FCE2F2000B253A2 /* UIColor+CDUntappdKit.swift */; };
-		B2E12D0A2DA941F19801CE2D /* CDUntappdStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205370F1F3989E400338826 /* CDUntappdStats.swift */; };
-		53532188F0E342E79B2F07AB /* CDUntappdUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20537101F3989E400338826 /* CDUntappdUser.swift */; };
-		3AAFBF700CA841458812117D /* CDUntappdUserInfoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20232BB1FC4D99D00C33B69 /* CDUntappdUserInfoResponse.swift */; };
 		7B2551887E3644F49294B441 /* CDUntappdRecentBrew.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28180BB1FCCCFF500806E4C /* CDUntappdRecentBrew.swift */; };
-		EEC5722218404D0F860D20EE /* String+CDUntappdKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26791821F350A10008635CD /* String+CDUntappdKit.swift */; };
-		2D5E2DE2C13B4886B0DC8E78 /* CDUntappdBrewery.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28180C41FCCD0BE00806E4C /* CDUntappdBrewery.swift */; };
-		881A854D88EA4E6382B17BEF /* CDUntappdUserFriendsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20143E31FD0D0A8005FCBC8 /* CDUntappdUserFriendsResponse.swift */; };
-		A36A58B29E664B2CB71EBD6D /* UIApplication+CDUntappdKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7070B1F3B800C00FAA6EF /* UIApplication+CDUntappdKit.swift */; };
-		BF4BFB5699BF43D4943F1E11 /* CDUntappdWishList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20143C71FD0C3D7005FCBC8 /* CDUntappdWishList.swift */; };
-		39B18756EE29458DA8A85707 /* Parameters+CDUntappdKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20232B21FC4D3DD00C33B69 /* Parameters+CDUntappdKit.swift */; };
 		7E317CB3952B43828464A875 /* CDUntappdOAuth.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B2B707091F3B7E6700FAA6EF /* CDUntappdOAuth.storyboard */; };
+		817AEF7F09B545868697FAB2 /* CDUntappdOAuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7070D1F3B810400FAA6EF /* CDUntappdOAuthViewController.swift */; };
+		874554AB2C4A40ECBDFCBB31 /* CDUntappdOAuthRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E00B21F3A81E100302663 /* CDUntappdOAuthRouter.swift */; };
+		881A854D88EA4E6382B17BEF /* CDUntappdUserFriendsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20143E31FD0D0A8005FCBC8 /* CDUntappdUserFriendsResponse.swift */; };
+		8A01D57EB1344D53B8939A87 /* CDUntappdKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2409D0D286BA5330001AE66 /* CDUntappdKit.swift */; };
+		91237AD48515403F908B604F /* CDUntappdWishListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20143C91FD0C482005FCBC8 /* CDUntappdWishListItem.swift */; };
+		93130342E0BE4484B9450D23 /* UIColor+CDUntappdKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C4A0381FCE2F2000B253A2 /* UIColor+CDUntappdKit.swift */; };
+		A0CD199778964C67ABF43A81 /* CDUntappdOAuthCredential.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E00B41F3A82AF00302663 /* CDUntappdOAuthCredential.swift */; };
+		A36A58B29E664B2CB71EBD6D /* UIApplication+CDUntappdKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7070B1F3B800C00FAA6EF /* UIApplication+CDUntappdKit.swift */; };
+		AE5B303502844CE1908DD5F1 /* UIApplication+CDUntappdKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7070B1F3B800C00FAA6EF /* UIApplication+CDUntappdKit.swift */; };
+		AF91F57238D44E9DA396FC2B /* CDUntappdFriend.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20143E51FD0D109005FCBC8 /* CDUntappdFriend.swift */; };
 		B20143BF1FD0C2D4005FCBC8 /* CDUntappdUserWishListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20143BE1FD0C2D4005FCBC8 /* CDUntappdUserWishListResponse.swift */; };
 		B20143C81FD0C3D7005FCBC8 /* CDUntappdWishList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20143C71FD0C3D7005FCBC8 /* CDUntappdWishList.swift */; };
 		B20143CA1FD0C482005FCBC8 /* CDUntappdWishListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20143C91FD0C482005FCBC8 /* CDUntappdWishListItem.swift */; };
@@ -184,10 +175,25 @@
 		B2B7070E1F3B810400FAA6EF /* CDUntappdOAuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7070D1F3B810400FAA6EF /* CDUntappdOAuthViewController.swift */; };
 		B2C4A0391FCE2F2000B253A2 /* UIColor+CDUntappdKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C4A0381FCE2F2000B253A2 /* UIColor+CDUntappdKit.swift */; };
 		B2D6C3E21F43D5BE0067279A /* CDUntappdOAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D6C3E11F43D5BE0067279A /* CDUntappdOAuthClient.swift */; };
+		B2E12D0A2DA941F19801CE2D /* CDUntappdStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205370F1F3989E400338826 /* CDUntappdStats.swift */; };
+		B59A30D9334B402FB2C9D934 /* CDUntappdConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20537171F398A0000338826 /* CDUntappdConstants.swift */; };
+		B6B92BDB55024543847DDC64 /* UIApplication+CDUntappdKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7070B1F3B800C00FAA6EF /* UIApplication+CDUntappdKit.swift */; };
+		B79A93F141A24A93BB38650A /* CDUntappdKitError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A2A4E8039346F6AA88B0CF /* CDUntappdKitError.swift */; };
+		B7FB237B8EB24EB78E14FD5E /* CDUntappdUserWishListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20143BE1FD0C2D4005FCBC8 /* CDUntappdUserWishListResponse.swift */; };
+		B8C2AC1AE4404079ACF52095 /* CDUntappdSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28180CA1FCCD95E00806E4C /* CDUntappdSource.swift */; };
+		BF4BFB5699BF43D4943F1E11 /* CDUntappdWishList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20143C71FD0C3D7005FCBC8 /* CDUntappdWishList.swift */; };
+		CAA783654F674767AB6AD9C1 /* CDUntappdVenue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28180CC1FCCDA1500806E4C /* CDUntappdVenue.swift */; };
+		D2CD00693FC5416D966D1C18 /* CDUntappdOAuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7070D1F3B810400FAA6EF /* CDUntappdOAuthViewController.swift */; };
+		E360E006E8CC4E159A12E3DE /* CDUntappdKitError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A2A4E8039346F6AA88B0CF /* CDUntappdKitError.swift */; };
+		E456D4500A0A495894543533 /* CDUntappdRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20537161F398A0000338826 /* CDUntappdRouter.swift */; };
+		ED532774644A4D6ABF868416 /* UIApplication+CDUntappdKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7070B1F3B800C00FAA6EF /* UIApplication+CDUntappdKit.swift */; };
+		EEC5722218404D0F860D20EE /* String+CDUntappdKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26791821F350A10008635CD /* String+CDUntappdKit.swift */; };
+		F1813F7F06074341868B7A4D /* CDUntappdSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20537111F3989E400338826 /* CDUntappdSettings.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5F093C5E302D124C00AC238A /* CDUntappdKit_visionOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CDUntappdKit_visionOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5F093C5E302D124C00AC238A /* CDUntappdKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CDUntappdKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		81A2A4E8039346F6AA88B0CF /* CDUntappdKitError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDUntappdKitError.swift; sourceTree = "<group>"; };
 		B20143BE1FD0C2D4005FCBC8 /* CDUntappdUserWishListResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDUntappdUserWishListResponse.swift; sourceTree = "<group>"; };
 		B20143C71FD0C3D7005FCBC8 /* CDUntappdWishList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDUntappdWishList.swift; sourceTree = "<group>"; };
 		B20143C91FD0C482005FCBC8 /* CDUntappdWishListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDUntappdWishListItem.swift; sourceTree = "<group>"; };
@@ -236,7 +242,6 @@
 		B2B7070D1F3B810400FAA6EF /* CDUntappdOAuthViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDUntappdOAuthViewController.swift; sourceTree = "<group>"; };
 		B2C4A0381FCE2F2000B253A2 /* UIColor+CDUntappdKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+CDUntappdKit.swift"; sourceTree = "<group>"; };
 		B2D6C3E11F43D5BE0067279A /* CDUntappdOAuthClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDUntappdOAuthClient.swift; sourceTree = "<group>"; };
-		81A2A4E8039346F6AA88B0CF /* CDUntappdKitError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDUntappdKitError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -244,6 +249,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5FB441CF302E39AB002DC9A5 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,6 +257,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5FB441D0302E39AB002DC9A5 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,6 +265,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5FB441CE302E39AB002DC9A5 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,6 +273,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5FB441CD302E39AB002DC9A5 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,6 +281,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5FB441CC302E39AB002DC9A5 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -364,7 +374,7 @@
 				B220195A1FD2030900A2BE3F /* CDUntappdKit.framework */,
 				B22019961FD206F700A2BE3F /* CDUntappdKit.framework */,
 				B22019C61FD207F700A2BE3F /* CDUntappdKit.framework */,
-				5F093C5E302D124C00AC238A /* CDUntappdKit_visionOS.framework */,
+				5F093C5E302D124C00AC238A /* CDUntappdKit.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -483,7 +493,7 @@
 				7C221186C96348CD9B0178FC /* Alamofire */,
 			);
 			productName = CDUntappdKit;
-			productReference = 5F093C5E302D124C00AC238A /* CDUntappdKit_visionOS.framework */;
+			productReference = 5F093C5E302D124C00AC238A /* CDUntappdKit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		B22019591FD2030900A2BE3F /* CDUntappdKit watchOS */ = {
@@ -676,24 +686,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		5F093C72302D171800AC238A /* SwiftLint */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = SwiftLint;
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\ncd \"$SRCROOT\"\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
-		};
 		3FC2C6F546454084BC5C8D9B /* Swift Format */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -713,81 +705,7 @@
 			shellPath = /bin/sh;
 			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftformat >/dev/null; then\n    cd \"$SRCROOT\" && swiftformat Source Tests --lint\nelse\n    echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
 		};
-		B2409CFB286B9BA50001AE66 /* SwiftLint */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = SwiftLint;
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\ncd \"$SRCROOT\"\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
-		};
-		99418C15304841AC8212E17D /* Swift Format */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Swift Format";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftformat >/dev/null; then\n    cd \"$SRCROOT\" && swiftformat Source Tests --lint\nelse\n    echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
-		};
-		B2409D01286B9EE10001AE66 /* SwiftLint */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = SwiftLint;
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\ncd \"$SRCROOT\"\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
-		};
-		C869DAFE95EA4122B97E76CA /* Swift Format */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Swift Format";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftformat >/dev/null; then\n    cd \"$SRCROOT\" && swiftformat Source Tests --lint\nelse\n    echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
-		};
-		B2409D08286BA0430001AE66 /* SwiftLint */ = {
+		5F093C72302D171800AC238A /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -824,6 +742,98 @@
 			shellPath = /bin/sh;
 			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftformat >/dev/null; then\n    cd \"$SRCROOT\" && swiftformat Source Tests --lint\nelse\n    echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
 		};
+		99418C15304841AC8212E17D /* Swift Format */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Swift Format";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftformat >/dev/null; then\n    cd \"$SRCROOT\" && swiftformat Source Tests --lint\nelse\n    echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
+		};
+		AD91A3FE607E488A9A0E913D /* Swift Format */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Swift Format";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftformat >/dev/null; then\n    cd \"$SRCROOT\" && swiftformat Source Tests --lint\nelse\n    echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
+		};
+		B2409CFB286B9BA50001AE66 /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\ncd \"$SRCROOT\"\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+		B2409D01286B9EE10001AE66 /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\ncd \"$SRCROOT\"\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+		B2409D08286BA0430001AE66 /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\ncd \"$SRCROOT\"\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
 		B2409D0C286BA2370001AE66 /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -842,7 +852,7 @@
 			shellPath = /bin/sh;
 			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\ncd \"$SRCROOT\"\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
-		AD91A3FE607E488A9A0E913D /* Swift Format */ = {
+		C869DAFE95EA4122B97E76CA /* Swift Format */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -1107,8 +1117,6 @@
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.christopherdehaan.CDUntappdKit;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = xros;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -1156,8 +1164,6 @@
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.christopherdehaan.CDUntappdKit;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = xros;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -1513,6 +1519,7 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		84651104A29F4AD99F2A7372 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -1525,7 +1532,7 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		F59C90AD08A94FA2B43F90AB /* Alamofire */ = {
+		7C221186C96348CD9B0178FC /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 84651104A29F4AD99F2A7372 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
@@ -1545,13 +1552,12 @@
 			package = 84651104A29F4AD99F2A7372 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
-		7C221186C96348CD9B0178FC /* Alamofire */ = {
+		F59C90AD08A94FA2B43F90AB /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 84651104A29F4AD99F2A7372 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
 /* End XCSwiftPackageProductDependency section */
-
 	};
 	rootObject = B26791251F350723008635CD /* Project object */;
 }
