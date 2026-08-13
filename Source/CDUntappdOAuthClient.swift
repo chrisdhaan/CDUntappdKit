@@ -83,23 +83,28 @@ public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
                                       "response_type": "code",
                                       "redirect_url": redirectUrl,
                                       "code": code]
-            self.session
-                .request(CDUntappdOAuthRouter.authorize(parameters: params))
-                .responseDecodable { (response: DataResponse<CDUntappdOAuthCredential, AFError>) in
-                    switch response.result {
-                    case let .success(oAuthCredential):
-                        let defaults = UserDefaults.standard
-                        // Save access token
-                        defaults.set(oAuthCredential.accessToken, forKey: CDUntappdDefaults.accessToken)
-                        defaults.synchronize()
-                        completion(true, nil)
-                    case let .failure(error):
-                        if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, visionOS 1.0, *) {
-                            logger.error("OAuth authorization failed: \(error.localizedDescription, privacy: .public)")
+            do {
+                let router = CDUntappdOAuthRouter.authorize(parameters: params)
+                try self.session
+                    .request(router.asURLRequest())
+                    .responseDecodable { (response: DataResponse<CDUntappdOAuthCredential, AFError>) in
+                        switch response.result {
+                        case let .success(oAuthCredential):
+                            let defaults = UserDefaults.standard
+                            // Save access token
+                            defaults.set(oAuthCredential.accessToken, forKey: CDUntappdDefaults.accessToken)
+                            defaults.synchronize()
+                            completion(true, nil)
+                        case let .failure(error):
+                            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, visionOS 1.0, *) {
+                                logger.error("OAuth authorization failed: \(error.localizedDescription, privacy: .public)")
+                            }
+                            completion(false, error)
                         }
-                        completion(false, error)
                     }
-                }
+            } catch {
+                completion(false, error)
+            }
         } else {
             completion(false, nil)
         }
