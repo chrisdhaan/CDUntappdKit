@@ -25,8 +25,6 @@
 //  THE SOFTWARE.
 //
 
-import Alamofire
-
 extension Dictionary where Key: ExpressibleByStringLiteral, Value: Any {
 
     /// Builds parameters for the user info API endpoint.
