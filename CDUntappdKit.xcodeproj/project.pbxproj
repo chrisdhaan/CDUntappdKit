@@ -212,7 +212,6 @@
 		B2409CC8286A50120001AE66 /* ci.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; name = ci.yml; path = .github/workflows/ci.yml; sourceTree = "<group>"; };
 		B2409CC9286A50310001AE66 /* PULL_REQUEST_TEMPLATE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = PULL_REQUEST_TEMPLATE.md; path = .github/PULL_REQUEST_TEMPLATE.md; sourceTree = "<group>"; };
 		B2409D0D286BA5330001AE66 /* CDUntappdKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDUntappdKit.swift; sourceTree = "<group>"; };
-		B260A9731FC531140043FC0B /* CDUntappdKit.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CDUntappdKit.podspec; sourceTree = "<group>"; };
 		B260A9741FC531140043FC0B /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		B260A9751FC531140043FC0B /* Package.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		B260A97B1FC531A50043FC0B /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
@@ -341,7 +340,6 @@
 			isa = PBXGroup;
 			children = (
 				B2409CC0286A50010001AE66 /* .swiftlint.yml */,
-				B260A9731FC531140043FC0B /* CDUntappdKit.podspec */,
 				B2409CC8286A50120001AE66 /* ci.yml */,
 				B260A9741FC531140043FC0B /* LICENSE */,
 				B260A9751FC531140043FC0B /* Package.swift */,
