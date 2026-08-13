@@ -57,12 +57,35 @@ struct CDUntappdAPIClientTests {
         #expect(client.isAuthenticated() == false)
     }
 
+    /// `CDUntappdAPIClient.fetchUserInfo` builds its own `URLRequest` internally via
+    /// `CDUntappdRouter`, so the test can't attach a stub to that specific request instance
+    /// the way `CDUntappdURLSessionTests` does (`URLProtocol.setProperty` is tied to request
+    /// object identity, and a separately-built "equivalent" request is a different object).
+    /// Instead, replicate the exact same parameter-building the client does internally
+    /// (`Parameters.userInfoParameters` + `CDUntappdOAuthClient.addTokens` +
+    /// `CDUntappdRouter.userInfo(...).asURLRequest()`) to compute the identical `URL`, then
+    /// register the stub against that `URL` — safe under concurrent test execution since
+    /// `CDUntappdMockURLProtocol.register(stub:for:)` is lock-protected and each test clears
+    /// the stored access token first, so both tests key off the same deterministic
+    /// "not authenticated" request.
+    private func expectedFetchUserInfoURL(forUsername username: String, compact: Bool) throws -> URL {
+        var params = Parameters.userInfoParameters(isCompact: compact)
+        let oAuthClient = CDUntappdOAuthClient(clientId: "test_id",
+                                               clientSecret: "test_secret",
+                                               redirectUrl: "testapp://oauth")
+        params = oAuthClient.addTokens(toParameters: params)
+        let request = try CDUntappdRouter.userInfo(username: username, parameters: params).asURLRequest()
+        return try #require(request.url)
+    }
+
     @Test
     func fetchUserInfoDecodesSuccessfulResponse() async throws {
+        UserDefaults.standard.removeObject(forKey: CDUntappdDefaults.accessToken)
         let json = """
         {"meta": {"code": 200}, "response": {"user": {"user_name": "testuser"}}}
         """
-        CDUntappdMockURLProtocol.stub = .init(statusCode: 200, data: Data(json.utf8))
+        let url = try expectedFetchUserInfoURL(forUsername: "testuser", compact: false)
+        CDUntappdMockURLProtocol.register(stub: .init(statusCode: 200, data: Data(json.utf8)), for: url)
         let client = CDUntappdAPIClient(
             clientId: "test_id",
             clientSecret: "test_secret",
@@ -75,7 +98,9 @@ struct CDUntappdAPIClientTests {
 
     @Test
     func fetchUserInfoThrowsOnHTTPError() async throws {
-        CDUntappdMockURLProtocol.stub = .init(statusCode: 500, data: Data())
+        UserDefaults.standard.removeObject(forKey: CDUntappdDefaults.accessToken)
+        let url = try expectedFetchUserInfoURL(forUsername: "testuser", compact: false)
+        CDUntappdMockURLProtocol.register(stub: .init(statusCode: 500, data: Data()), for: url)
         let client = CDUntappdAPIClient(
             clientId: "test_id",
             clientSecret: "test_secret",
