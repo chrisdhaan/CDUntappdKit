@@ -42,4 +42,78 @@ struct CDUntappdVenueTests {
         #expect(venue.id == 1)
         #expect(venue.name == "Test Venue")
     }
+
+    @Test
+    func decodesNestedFieldsFromRealisticShape() throws {
+        let json = """
+        {
+          "venue_id": 1,
+          "venue_name": "Test Venue",
+          "categories": {
+            "items": [
+              { "category_name": "Bar" }
+            ]
+          },
+          "venue_icon": {
+            "sm": "https://example.com/icon_sm.jpg",
+            "md": "https://example.com/icon_md.jpg",
+            "lg": "https://example.com/icon_lg.jpg"
+          },
+          "location": {
+            "lat": 40.7128,
+            "lng": -74.0060,
+            "venue_address": "123 Main St",
+            "venue_city": "New York",
+            "venue_state": "NY",
+            "venue_country": "United States"
+          },
+          "foursquare": {
+            "foursquare_id": "abc123",
+            "foursquare_url": "https://foursquare.com/v/abc123"
+          },
+          "contact": {
+            "twitter": "test_venue",
+            "venue_url": "https://test-venue.com"
+          }
+        }
+        """.data(using: .utf8)!
+        let venue = try JSONDecoder().decode(CDUntappdVenue.self, from: json)
+        #expect(venue.categories?.count == 1)
+        #expect(venue.smallIcon?.absoluteString == "https://example.com/icon_sm.jpg")
+        #expect(venue.latitude == 40.7128)
+        #expect(venue.address == "123 Main St")
+        #expect(venue.foursqaureId == "abc123")
+        #expect(venue.twitterHandle == "test_venue")
+        #expect(venue.website?.absoluteString == "https://test-venue.com")
+    }
+
+    @Test
+    func decodesIsVerifiedFromIntegerOrBoolean() throws {
+        let intJSON = """
+        { "venue_id": 1, "is_verified": 1 }
+        """.data(using: .utf8)!
+        let venueFromInt = try JSONDecoder().decode(CDUntappdVenue.self, from: intJSON)
+        #expect(venueFromInt.isVerified == true)
+
+        let boolJSON = """
+        { "venue_id": 1, "is_verified": false }
+        """.data(using: .utf8)!
+        let venueFromBool = try JSONDecoder().decode(CDUntappdVenue.self, from: boolJSON)
+        #expect(venueFromBool.isVerified == false)
+    }
+
+    @Test
+    func nestedFieldsAreNilWhenKeysAreAbsent() throws {
+        let json = """
+        {
+          "venue_id": 1,
+          "venue_name": "Test Venue"
+        }
+        """.data(using: .utf8)!
+        let venue = try JSONDecoder().decode(CDUntappdVenue.self, from: json)
+        #expect(venue.categories == nil)
+        #expect(venue.latitude == nil)
+        #expect(venue.foursqaureId == nil)
+        #expect(venue.website == nil)
+    }
 }

@@ -29,7 +29,20 @@ struct CDUntappdOAuthCredential: Decodable {
 
     var accessToken: String?
 
-    enum CodingKeys: String, CodingKey {
-        case accessToken = "response.access_token"
+    private enum RootKeys: String, CodingKey {
+        case response
+    }
+
+    private enum ResponseKeys: String, CodingKey {
+        case accessToken = "access_token"
+    }
+
+    init(from decoder: any Decoder) throws {
+        let root = try decoder.container(keyedBy: RootKeys.self)
+        if let responseContainer = try? root.nestedContainer(keyedBy: ResponseKeys.self, forKey: .response) {
+            accessToken = try responseContainer.decodeIfPresent(String.self, forKey: .accessToken)
+        } else {
+            accessToken = nil
+        }
     }
 }

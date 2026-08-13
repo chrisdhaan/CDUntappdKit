@@ -30,8 +30,22 @@ public struct CDUntappdUserInfoResponse: Decodable, Sendable {
     public var metadata: CDUntappdMetadata?
     public var user: CDUntappdUser?
 
-    enum CodingKeys: String, CodingKey {
+    private enum RootKeys: String, CodingKey {
         case metadata = "meta"
-        case user = "response.user"
+        case response
+    }
+
+    private enum ResponseKeys: String, CodingKey {
+        case user
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let root = try decoder.container(keyedBy: RootKeys.self)
+        metadata = try root.decodeIfPresent(CDUntappdMetadata.self, forKey: .metadata)
+        if let responseContainer = try? root.nestedContainer(keyedBy: ResponseKeys.self, forKey: .response) {
+            user = try responseContainer.decodeIfPresent(CDUntappdUser.self, forKey: .user)
+        } else {
+            user = nil
+        }
     }
 }

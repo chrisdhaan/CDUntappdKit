@@ -1,5 +1,5 @@
 //
-//  CDUntappdCheckinTests.swift
+//  CDUntappdUserInfoResponseTests.swift
 //  CDUntappdKitTests
 //
 //  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
@@ -27,53 +27,34 @@ import Foundation
 import Testing
 @testable import CDUntappdKit
 
-@Suite("CDUntappdCheckin Tests")
-struct CDUntappdCheckinTests {
+@Suite("CDUntappdUserInfoResponse Tests")
+struct CDUntappdUserInfoResponseTests {
 
     @Test
-    func checkinDecodingIsSupported() throws {
-        let json = """
-        {
-          "checkin_id": 1,
-          "checkin_comment": "Great beer!"
-        }
-        """.data(using: .utf8)!
-        let checkin = try JSONDecoder().decode(CDUntappdCheckin.self, from: json)
-        #expect(checkin.id == 1)
-        #expect(checkin.comment == "Great beer!")
+    func decodesNestedUserFromRealisticResponseShape() throws {
+        let url = try #require(Bundle.module.url(forResource: "user_info", withExtension: "json"))
+        let data = try Data(contentsOf: url)
+        let response = try JSONDecoder().decode(CDUntappdUserInfoResponse.self, from: data)
+        #expect(response.user != nil)
+        #expect(response.user?.username == "DehaanSolo")
     }
 
     @Test
-    func decodesNestedBadgesAndMediaFromRealisticShape() throws {
-        let json = """
-        {
-          "checkin_id": 1,
-          "badges": {
-            "items": [
-              { "badge_id": 1, "badge_name": "Example Badge" }
-            ]
-          },
-          "media": {
-            "items": [
-              { "photo_id": 1 }
-            ]
-          }
-        }
-        """.data(using: .utf8)!
-        let checkin = try JSONDecoder().decode(CDUntappdCheckin.self, from: json)
-        #expect(checkin.badges?.first?.name == "Example Badge")
-        #expect(checkin.media?.first?.id == 1)
+    func decodesMetadataAlongsideUser() throws {
+        let url = try #require(Bundle.module.url(forResource: "user_info", withExtension: "json"))
+        let data = try Data(contentsOf: url)
+        let response = try JSONDecoder().decode(CDUntappdUserInfoResponse.self, from: data)
+        #expect(response.metadata != nil)
     }
 
     @Test
-    func badgesAndMediaAreNilWhenKeysAreAbsent() throws {
+    func userIsNilWhenResponseKeyIsAbsent() throws {
         let json = """
         {
-          "checkin_id": 1
+          "meta": { "code": 200 }
         }
         """.data(using: .utf8)!
-        let checkin = try JSONDecoder().decode(CDUntappdCheckin.self, from: json)
-        #expect(checkin.badges == nil)
-        #expect(checkin.media == nil)
+        let response = try JSONDecoder().decode(CDUntappdUserInfoResponse.self, from: json)
+        #expect(response.user == nil)
     }
 }

@@ -33,8 +33,22 @@ public struct CDUntappdWishList: Decodable, Sendable {
     /// When the wish list was last updated.
     public var updatedAt: String?
 
-    enum CodingKeys: String, CodingKey {
-        case items = "beers.items"
+    private enum RootKeys: String, CodingKey {
+        case beers
         case updatedAt = "updated_at"
+    }
+
+    private enum BeersKeys: String, CodingKey {
+        case items
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let root = try decoder.container(keyedBy: RootKeys.self)
+        updatedAt = try root.decodeIfPresent(String.self, forKey: .updatedAt)
+        if let beersContainer = try? root.nestedContainer(keyedBy: BeersKeys.self, forKey: .beers) {
+            items = try beersContainer.decodeIfPresent([CDUntappdWishListItem].self, forKey: .items)
+        } else {
+            items = nil
+        }
     }
 }

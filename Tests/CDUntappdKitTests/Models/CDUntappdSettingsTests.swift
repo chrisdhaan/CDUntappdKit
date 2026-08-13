@@ -1,5 +1,5 @@
 //
-//  CDUntappdCheckinTests.swift
+//  CDUntappdSettingsTests.swift
 //  CDUntappdKitTests
 //
 //  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
@@ -27,53 +27,47 @@ import Foundation
 import Testing
 @testable import CDUntappdKit
 
-@Suite("CDUntappdCheckin Tests")
-struct CDUntappdCheckinTests {
+@Suite("CDUntappdSettings Tests")
+struct CDUntappdSettingsTests {
 
     @Test
-    func checkinDecodingIsSupported() throws {
+    func decodesNestedSettingsFromRealisticShape() throws {
         let json = """
         {
-          "checkin_id": 1,
-          "checkin_comment": "Great beer!"
-        }
-        """.data(using: .utf8)!
-        let checkin = try JSONDecoder().decode(CDUntappdCheckin.self, from: json)
-        #expect(checkin.id == 1)
-        #expect(checkin.comment == "Great beer!")
-    }
-
-    @Test
-    func decodesNestedBadgesAndMediaFromRealisticShape() throws {
-        let json = """
-        {
-          "checkin_id": 1,
-          "badges": {
-            "items": [
-              { "badge_id": 1, "badge_name": "Example Badge" }
-            ]
+          "badge": {
+            "badges_to_facebook": true,
+            "badges_to_twitter": false
           },
-          "media": {
-            "items": [
-              { "photo_id": 1 }
-            ]
-          }
+          "checkin": {
+            "checkin_to_facebook": true,
+            "checkin_to_twitter": false,
+            "checkin_to_foursquare": true
+          },
+          "navigation": {
+            "default_to_checkin": true
+          },
+          "email_address": "test@example.com"
         }
         """.data(using: .utf8)!
-        let checkin = try JSONDecoder().decode(CDUntappdCheckin.self, from: json)
-        #expect(checkin.badges?.first?.name == "Example Badge")
-        #expect(checkin.media?.first?.id == 1)
+        let settings = try JSONDecoder().decode(CDUntappdSettings.self, from: json)
+        #expect(settings.badgesToFacebook == true)
+        #expect(settings.badgesToTwitter == false)
+        #expect(settings.checkinToFacebook == true)
+        #expect(settings.checkinToFoursquare == true)
+        #expect(settings.defaultToCheckin == true)
+        #expect(settings.emailAddress == "test@example.com")
     }
 
     @Test
-    func badgesAndMediaAreNilWhenKeysAreAbsent() throws {
+    func settingsAreNilWhenParentKeysAreAbsent() throws {
         let json = """
         {
-          "checkin_id": 1
+          "email_address": "test@example.com"
         }
         """.data(using: .utf8)!
-        let checkin = try JSONDecoder().decode(CDUntappdCheckin.self, from: json)
-        #expect(checkin.badges == nil)
-        #expect(checkin.media == nil)
+        let settings = try JSONDecoder().decode(CDUntappdSettings.self, from: json)
+        #expect(settings.badgesToFacebook == nil)
+        #expect(settings.checkinToFacebook == nil)
+        #expect(settings.defaultToCheckin == nil)
     }
 }

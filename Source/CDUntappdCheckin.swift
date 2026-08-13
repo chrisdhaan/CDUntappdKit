@@ -49,7 +49,7 @@ public struct CDUntappdCheckin: Decodable, Sendable {
     public var source: CDUntappdSource?
     public var createdAt: String?
 
-    enum CodingKeys: String, CodingKey {
+    private enum RootKeys: String, CodingKey {
         case id = "checkin_id"
         case comment = "checkin_comment"
         case rating = "rating_score"
@@ -57,11 +57,39 @@ public struct CDUntappdCheckin: Decodable, Sendable {
         case brewery
         case beer
         case venue
-//        case toasts = "toasts.items"
-//        case comments = "comments.items"
-        case badges = "badges.items"
-        case media = "media.items"
+//        case toasts
+//        case comments
+        case badges
+        case media
         case source
         case createdAt = "created_at"
+    }
+
+    private enum ItemsKeys: String, CodingKey {
+        case items
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let root = try decoder.container(keyedBy: RootKeys.self)
+        id = try root.decodeIfPresent(Int.self, forKey: .id)
+        comment = try root.decodeIfPresent(String.self, forKey: .comment)
+        rating = try root.decodeIfPresent(Double.self, forKey: .rating)
+        user = try root.decodeIfPresent(CDUntappdUser.self, forKey: .user)
+        brewery = try root.decodeIfPresent(CDUntappdBrewery.self, forKey: .brewery)
+        beer = try root.decodeIfPresent(CDUntappdBeer.self, forKey: .beer)
+        venue = try root.decodeIfPresent(CDUntappdVenue.self, forKey: .venue)
+        source = try root.decodeIfPresent(CDUntappdSource.self, forKey: .source)
+        createdAt = try root.decodeIfPresent(String.self, forKey: .createdAt)
+
+        if let badgesContainer = try? root.nestedContainer(keyedBy: ItemsKeys.self, forKey: .badges) {
+            badges = try badgesContainer.decodeIfPresent([CDUntappdBadge].self, forKey: .items)
+        } else {
+            badges = nil
+        }
+        if let mediaContainer = try? root.nestedContainer(keyedBy: ItemsKeys.self, forKey: .media) {
+            media = try mediaContainer.decodeIfPresent([CDUntappdMedia].self, forKey: .items)
+        } else {
+            media = nil
+        }
     }
 }

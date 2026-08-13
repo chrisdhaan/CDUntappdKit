@@ -1,5 +1,5 @@
 //
-//  CDUntappdCheckinTests.swift
+//  CDUntappdFriendTests.swift
 //  CDUntappdKitTests
 //
 //  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
@@ -27,53 +27,39 @@ import Foundation
 import Testing
 @testable import CDUntappdKit
 
-@Suite("CDUntappdCheckin Tests")
-struct CDUntappdCheckinTests {
+@Suite("CDUntappdFriend Tests")
+struct CDUntappdFriendTests {
 
     @Test
-    func checkinDecodingIsSupported() throws {
+    func decodesNestedMutualFriendsFromRealisticShape() throws {
         let json = """
         {
-          "checkin_id": 1,
-          "checkin_comment": "Great beer!"
-        }
-        """.data(using: .utf8)!
-        let checkin = try JSONDecoder().decode(CDUntappdCheckin.self, from: json)
-        #expect(checkin.id == 1)
-        #expect(checkin.comment == "Great beer!")
-    }
-
-    @Test
-    func decodesNestedBadgesAndMediaFromRealisticShape() throws {
-        let json = """
-        {
-          "checkin_id": 1,
-          "badges": {
+          "friendship_hash": "abc123",
+          "user": { "uid": 1, "user_name": "DehaanSolo" },
+          "mutual_friends": {
+            "count": 1,
             "items": [
-              { "badge_id": 1, "badge_name": "Example Badge" }
+              { "user": { "uid": 2, "user_name": "MutualFriend" } }
             ]
           },
-          "media": {
-            "items": [
-              { "photo_id": 1 }
-            ]
-          }
+          "created_at": "Thu, 01 Jan 2015 00:00:00 +0000"
         }
         """.data(using: .utf8)!
-        let checkin = try JSONDecoder().decode(CDUntappdCheckin.self, from: json)
-        #expect(checkin.badges?.first?.name == "Example Badge")
-        #expect(checkin.media?.first?.id == 1)
+        let friend = try JSONDecoder().decode(CDUntappdFriend.self, from: json)
+        #expect(friend.mutualFriends != nil)
+        #expect(friend.mutualFriends?.first?.user?.username == "MutualFriend")
     }
 
     @Test
-    func badgesAndMediaAreNilWhenKeysAreAbsent() throws {
+    func mutualFriendsIsNilWhenKeyIsAbsent() throws {
         let json = """
         {
-          "checkin_id": 1
+          "friendship_hash": "abc123",
+          "user": { "uid": 1, "user_name": "DehaanSolo" }
         }
         """.data(using: .utf8)!
-        let checkin = try JSONDecoder().decode(CDUntappdCheckin.self, from: json)
-        #expect(checkin.badges == nil)
-        #expect(checkin.media == nil)
+        let friend = try JSONDecoder().decode(CDUntappdFriend.self, from: json)
+        #expect(friend.mutualFriends == nil)
+        #expect(friend.user?.username == "DehaanSolo")
     }
 }

@@ -97,4 +97,40 @@ struct CDUntappdUserTests {
         #expect(user.firstName == nil)
         #expect(user.lastName == nil)
     }
+
+    @Test
+    func decodesNestedCheckinsAndRecentBrewsFromRealisticShape() throws {
+        let json = """
+        {
+          "uid": 1,
+          "user_name": "DehaanSolo",
+          "checkins": {
+            "items": [
+              { "checkin_id": 1, "checkin_comment": "Great beer!" }
+            ]
+          },
+          "recent_brews": {
+            "items": [
+              { "beer": { "bid": 1, "beer_name": "Example IPA" } }
+            ]
+          }
+        }
+        """.data(using: .utf8)!
+        let user = try JSONDecoder().decode(CDUntappdUser.self, from: json)
+        #expect(user.checkins?.first?.id == 1)
+        #expect(user.recentBrews?.first?.beer?.name == "Example IPA")
+    }
+
+    @Test
+    func checkinsAndRecentBrewsAreNilWhenKeysAreAbsent() throws {
+        let json = """
+        {
+          "uid": 1,
+          "user_name": "DehaanSolo"
+        }
+        """.data(using: .utf8)!
+        let user = try JSONDecoder().decode(CDUntappdUser.self, from: json)
+        #expect(user.checkins == nil)
+        #expect(user.recentBrews == nil)
+    }
 }

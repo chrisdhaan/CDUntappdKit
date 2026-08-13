@@ -1,8 +1,6 @@
 //
-//  CDUntappdUserFriendsResponse.swift
-//  CDUntappdKit
-//
-//  Created by Christopher de Haan on 11/30/17.
+//  CDUntappdUserFriendsResponseTests.swift
+//  CDUntappdKitTests
 //
 //  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //
@@ -25,27 +23,30 @@
 //  THE SOFTWARE.
 //
 
-public struct CDUntappdUserFriendsResponse: Decodable, Sendable {
+import Foundation
+import Testing
+@testable import CDUntappdKit
 
-    public var metadata: CDUntappdMetadata?
-    public var friends: [CDUntappdFriend]?
+@Suite("CDUntappdUserFriendsResponse Tests")
+struct CDUntappdUserFriendsResponseTests {
 
-    private enum RootKeys: String, CodingKey {
-        case metadata = "meta"
-        case response
+    @Test
+    func decodesNestedFriendsFromRealisticResponseShape() throws {
+        let url = try #require(Bundle.module.url(forResource: "user_friends", withExtension: "json"))
+        let data = try Data(contentsOf: url)
+        let response = try JSONDecoder().decode(CDUntappdUserFriendsResponse.self, from: data)
+        #expect(response.friends != nil)
+        #expect(response.friends?.first?.user?.username == "TestFriend")
     }
 
-    private enum ResponseKeys: String, CodingKey {
-        case items
-    }
-
-    public init(from decoder: any Decoder) throws {
-        let root = try decoder.container(keyedBy: RootKeys.self)
-        metadata = try root.decodeIfPresent(CDUntappdMetadata.self, forKey: .metadata)
-        if let responseContainer = try? root.nestedContainer(keyedBy: ResponseKeys.self, forKey: .response) {
-            friends = try responseContainer.decodeIfPresent([CDUntappdFriend].self, forKey: .items)
-        } else {
-            friends = nil
+    @Test
+    func friendsIsNilWhenResponseKeyIsAbsent() throws {
+        let json = """
+        {
+          "meta": { "code": 200 }
         }
+        """.data(using: .utf8)!
+        let response = try JSONDecoder().decode(CDUntappdUserFriendsResponse.self, from: json)
+        #expect(response.friends == nil)
     }
 }

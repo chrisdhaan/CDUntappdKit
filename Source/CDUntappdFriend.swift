@@ -37,10 +37,26 @@ public struct CDUntappdFriend: Decodable, Sendable {
     /// When the friendship was established.
     public var createdAt: String?
 
-    enum CodingKeys: String, CodingKey {
+    private enum RootKeys: String, CodingKey {
         case friendshipHash = "friendship_hash"
         case user
-        case mutualFriends = "mutual_friends.items"
+        case mutualFriends = "mutual_friends"
         case createdAt = "created_at"
+    }
+
+    private enum MutualFriendsKeys: String, CodingKey {
+        case items
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let root = try decoder.container(keyedBy: RootKeys.self)
+        friendshipHash = try root.decodeIfPresent(String.self, forKey: .friendshipHash)
+        user = try root.decodeIfPresent(CDUntappdUser.self, forKey: .user)
+        createdAt = try root.decodeIfPresent(String.self, forKey: .createdAt)
+        if let mutualContainer = try? root.nestedContainer(keyedBy: MutualFriendsKeys.self, forKey: .mutualFriends) {
+            mutualFriends = try mutualContainer.decodeIfPresent([CDUntappdFriend].self, forKey: .items)
+        } else {
+            mutualFriends = nil
+        }
     }
 }

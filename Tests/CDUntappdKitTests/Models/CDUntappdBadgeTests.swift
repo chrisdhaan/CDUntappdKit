@@ -1,5 +1,5 @@
 //
-//  CDUntappdCheckinTests.swift
+//  CDUntappdBadgeTests.swift
 //  CDUntappdKitTests
 //
 //  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
@@ -27,53 +27,40 @@ import Foundation
 import Testing
 @testable import CDUntappdKit
 
-@Suite("CDUntappdCheckin Tests")
-struct CDUntappdCheckinTests {
+@Suite("CDUntappdBadge Tests")
+struct CDUntappdBadgeTests {
 
     @Test
-    func checkinDecodingIsSupported() throws {
+    func decodesNestedBadgeImagesFromRealisticShape() throws {
         let json = """
         {
-          "checkin_id": 1,
-          "checkin_comment": "Great beer!"
-        }
-        """.data(using: .utf8)!
-        let checkin = try JSONDecoder().decode(CDUntappdCheckin.self, from: json)
-        #expect(checkin.id == 1)
-        #expect(checkin.comment == "Great beer!")
-    }
-
-    @Test
-    func decodesNestedBadgesAndMediaFromRealisticShape() throws {
-        let json = """
-        {
-          "checkin_id": 1,
-          "badges": {
-            "items": [
-              { "badge_id": 1, "badge_name": "Example Badge" }
-            ]
-          },
-          "media": {
-            "items": [
-              { "photo_id": 1 }
-            ]
+          "badge_id": 1,
+          "badge_name": "Example Badge",
+          "badge_image": {
+            "sm": "https://example.com/badge_sm.jpg",
+            "md": "https://example.com/badge_md.jpg",
+            "lg": "https://example.com/badge_lg.jpg"
           }
         }
         """.data(using: .utf8)!
-        let checkin = try JSONDecoder().decode(CDUntappdCheckin.self, from: json)
-        #expect(checkin.badges?.first?.name == "Example Badge")
-        #expect(checkin.media?.first?.id == 1)
+        let badge = try JSONDecoder().decode(CDUntappdBadge.self, from: json)
+        #expect(badge.smallImage?.absoluteString == "https://example.com/badge_sm.jpg")
+        #expect(badge.mediumImage?.absoluteString == "https://example.com/badge_md.jpg")
+        #expect(badge.largeImage?.absoluteString == "https://example.com/badge_lg.jpg")
     }
 
     @Test
-    func badgesAndMediaAreNilWhenKeysAreAbsent() throws {
+    func imagesAreNilWhenBadgeImageKeyIsAbsent() throws {
         let json = """
         {
-          "checkin_id": 1
+          "badge_id": 1,
+          "badge_name": "Example Badge"
         }
         """.data(using: .utf8)!
-        let checkin = try JSONDecoder().decode(CDUntappdCheckin.self, from: json)
-        #expect(checkin.badges == nil)
-        #expect(checkin.media == nil)
+        let badge = try JSONDecoder().decode(CDUntappdBadge.self, from: json)
+        #expect(badge.smallImage == nil)
+        #expect(badge.mediumImage == nil)
+        #expect(badge.largeImage == nil)
+        #expect(badge.name == "Example Badge")
     }
 }

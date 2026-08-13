@@ -41,17 +41,44 @@ public struct CDUntappdMedia: Decodable, Sendable {
     public var venue: CDUntappdVenue?
     public var createdAt: String?
 
-    enum CodingKeys: String, CodingKey {
+    private enum RootKeys: String, CodingKey {
         case id = "photo_id"
-        case originalImage = "photo.photo_img_og"
-        case smallImage = "photo.photo_img_sm"
-        case mediumImage = "photo.photo_img_md"
-        case largeImage = "photo.photo_img_lg"
+        case photo
         case checkInId = "checkin_id"
         case user
         case brewery
         case beer
         case venue
         case createdAt = "created_at"
+    }
+
+    private enum PhotoKeys: String, CodingKey {
+        case original = "photo_img_og"
+        case small = "photo_img_sm"
+        case medium = "photo_img_md"
+        case large = "photo_img_lg"
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let root = try decoder.container(keyedBy: RootKeys.self)
+        id = try root.decodeIfPresent(Int.self, forKey: .id)
+        checkInId = try root.decodeIfPresent(Int.self, forKey: .checkInId)
+        user = try root.decodeIfPresent(CDUntappdUser.self, forKey: .user)
+        brewery = try root.decodeIfPresent(CDUntappdBrewery.self, forKey: .brewery)
+        beer = try root.decodeIfPresent(CDUntappdBeer.self, forKey: .beer)
+        venue = try root.decodeIfPresent(CDUntappdVenue.self, forKey: .venue)
+        createdAt = try root.decodeIfPresent(String.self, forKey: .createdAt)
+
+        if let photoContainer = try? root.nestedContainer(keyedBy: PhotoKeys.self, forKey: .photo) {
+            originalImage = try photoContainer.decodeIfPresent(URL.self, forKey: .original)
+            smallImage = try photoContainer.decodeIfPresent(URL.self, forKey: .small)
+            mediumImage = try photoContainer.decodeIfPresent(URL.self, forKey: .medium)
+            largeImage = try photoContainer.decodeIfPresent(URL.self, forKey: .large)
+        } else {
+            originalImage = nil
+            smallImage = nil
+            mediumImage = nil
+            largeImage = nil
+        }
     }
 }

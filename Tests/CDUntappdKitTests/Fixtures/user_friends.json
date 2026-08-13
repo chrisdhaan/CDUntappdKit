@@ -2,11 +2,15 @@
   "response": {
     "items": [
       {
-        "uid": 2,
-        "user_name": "TestFriend",
-        "first_name": "Test",
-        "last_name": "Friend",
-        "user_avatar": "https://example.com/friend_avatar.jpg"
+        "friendship_hash": "abc123",
+        "user": {
+          "uid": 2,
+          "user_name": "TestFriend",
+          "first_name": "Test",
+          "last_name": "Friend",
+          "user_avatar": "https://example.com/friend_avatar.jpg"
+        },
+        "created_at": "Thu, 01 Jan 2015 00:00:00 +0000"
       }
     ]
   },
