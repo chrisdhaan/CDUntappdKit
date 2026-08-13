@@ -41,7 +41,7 @@ enum CDUntappdParameterEncoding {
         }
 
         if !parameters.isEmpty {
-            components.queryItems = parameters.map { key, value in
+            components.queryItems = parameters.sorted { $0.key < $1.key }.map { key, value in
                 let stringValue: String = if let boolValue = value as? Bool {
                     boolValue ? "1" : "0"
                 } else {
