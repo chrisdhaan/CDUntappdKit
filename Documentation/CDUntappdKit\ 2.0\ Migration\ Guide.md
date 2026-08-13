@@ -8,6 +8,7 @@ Guide for upgrading from CDUntappdKit 1.x to 2.0. Version 2.0 is a major release
 - [Completion Handlers Replaced with Async/Await](#completion-handlers-replaced-with-asyncawait)
 - [Error Handling Changes](#error-handling-changes)
 - [Carthage Removed](#carthage-removed)
+- [CocoaPods Removed](#cocoapods-removed)
 - [Cancellation Pattern Changed](#cancellation-pattern-changed)
 - [Alamofire Version Updated](#alamofire-version-updated)
 
@@ -203,9 +204,11 @@ CDUntappdKit 2.0 no longer supports Carthage. You must migrate to Swift Package 
    import CDUntappdKit
    ```
 
-### CocoaPods No Longer Supported
+---
 
-CDUntappdKit 2.0 drops CocoaPods as a distribution channel (CocoaPods trunk is being deprecated in 2026). Swift Package Manager is now the only supported install method — see "Option 1" above.
+## CocoaPods Removed
+
+CDUntappdKit 2.0 drops CocoaPods as a distribution channel (CocoaPods trunk is being deprecated in 2026). Swift Package Manager is now the only supported install method — see [Swift Package Manager](#option-1-swift-package-manager-recommended) above.
 
 ---
 
@@ -307,6 +310,7 @@ If you don't separately pin Alamofire, CDUntappdKit 2.0 will automatically use 5
 | **API style** | Completion handlers | async/await |
 | **Error handling** | nil returns | Thrown errors |
 | **Carthage** | Supported | Removed |
+| **CocoaPods** | Supported | Removed |
 | **Cancellation** | `cancelAllPendingAPIRequests()` | `Task.cancel()` |
 | **Alamofire** | 5.6.1 | 5.9+ |
 
