@@ -359,7 +359,7 @@ currentTask = Task {
 currentTask?.cancel()
 ```
 
-When a task is cancelled while awaiting a network request, `Alamofire` automatically cancels the underlying `URLSessionTask`. The async call throws `CancellationError`.
+When a task is cancelled while awaiting a network request, the underlying `URLSessionTask` is cancelled. The async call throws `CancellationError`.
 
 **Note:** The deprecated method `cancelAllPendingAPIRequests()` is no longer available. Use `Task.cancel()` instead for fine-grained control.
 
