@@ -27,9 +27,26 @@ import Foundation
 import Testing
 @testable import CDUntappdKit
 
-@Suite("CDUntappdOAuthClient Tests")
+@Suite("CDUntappdOAuthClient Tests", .serialized)
 @MainActor
 struct CDUntappdOAuthClientTests {
+
+    /// `CDUntappdOAuthClient.authorize` builds its own `URLRequest` internally via
+    /// `CDUntappdOAuthRouter`, so tests can't attach a stub to a specific request instance
+    /// (`URLProtocol.setProperty` is tied to request object identity). Instead, replicate the
+    /// exact same parameter-building the client does internally to compute the identical
+    /// `URL`, then register the stub against that `URL`. Each test passes a distinct `code`
+    /// so concurrently-running tests never collide on the same registered entry.
+    private func expectedAuthorizeURL(clientId: String, clientSecret: String,
+                                      redirectUrl: String, code: String) throws -> URL {
+        let params: Parameters = ["client_id": clientId,
+                                  "client_secret": clientSecret,
+                                  "response_type": "code",
+                                  "redirect_url": redirectUrl,
+                                  "code": code]
+        let request = try CDUntappdOAuthRouter.authorize(parameters: params).asURLRequest()
+        return try #require(request.url)
+    }
 
     @Test
     func isNotAuthorizedInitially() {
@@ -153,5 +170,61 @@ struct CDUntappdOAuthClientTests {
 
         UserDefaults.standard.removeObject(forKey: "CDUntappdAccessToken")
         #expect(client.isAuthorized() == false)
+    }
+
+    @Test
+    func authorizeStoresAccessTokenOnSuccess() async throws {
+        UserDefaults.standard.removeObject(forKey: "CDUntappdAccessToken")
+        let url = try expectedAuthorizeURL(clientId: "test", clientSecret: "test",
+                                           redirectUrl: "test://callback", code: "auth_code_success")
+        CDUntappdMockURLProtocol.register(
+            stub: .init(statusCode: 200, data: Data(#"{"response": {"access_token": "new_token_456"}}"#.utf8)),
+            for: url
+        )
+        let client = CDUntappdOAuthClient(
+            clientId: "test", clientSecret: "test", redirectUrl: "test://callback",
+            urlSession: CDUntappdMockURLProtocol.makeSession()
+        )
+        let result = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Bool?, Error>) in
+            client.authorize(withCode: "auth_code_success") { success, error in
+                if let error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: success)
+                }
+            }
+        }
+        #expect(result == true)
+        #expect(UserDefaults.standard.string(forKey: "CDUntappdAccessToken") == "new_token_456")
+        UserDefaults.standard.removeObject(forKey: "CDUntappdAccessToken")
+    }
+
+    @Test
+    func authorizeReportsFailureOnHTTPError() async throws {
+        let url = try expectedAuthorizeURL(clientId: "test", clientSecret: "test",
+                                           redirectUrl: "test://callback", code: "auth_code_http_error")
+        CDUntappdMockURLProtocol.register(stub: .init(statusCode: 401, data: Data()), for: url)
+        let client = CDUntappdOAuthClient(
+            clientId: "test", clientSecret: "test", redirectUrl: "test://callback",
+            urlSession: CDUntappdMockURLProtocol.makeSession()
+        )
+        let (success, error) = await withCheckedContinuation { (continuation: CheckedContinuation<(Bool?, Error?), Never>) in
+            client.authorize(withCode: "auth_code_http_error") { success, error in
+                continuation.resume(returning: (success, error))
+            }
+        }
+        #expect(success == false)
+        #expect(error != nil)
+    }
+
+    @Test
+    func authorizeReturnsFalseImmediatelyForEmptyCode() {
+        let client = CDUntappdOAuthClient(clientId: "test", clientSecret: "test",
+                                          redirectUrl: "test://callback")
+        var capturedSuccess: Bool?
+        client.authorize(withCode: "") { success, _ in
+            capturedSuccess = success
+        }
+        #expect(capturedSuccess == false)
     }
 }

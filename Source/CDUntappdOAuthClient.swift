@@ -25,7 +25,6 @@
 //  THE SOFTWARE.
 //
 
-import Alamofire
 import Foundation
 import os.log
 
@@ -37,7 +36,7 @@ private let logger = Logger(subsystem: CDUntappdKitBundleIdentifier, category: "
 /// Manages access tokens stored in UserDefaults and adds them to API requests.
 public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
 
-    private let session = Alamofire.Session()
+    private let session: URLSession
 
     /// Your Untappd application client ID.
     public let clientId: String!
@@ -53,9 +52,18 @@ public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
     ///   - clientId: Your Untappd application client ID.
     ///   - clientSecret: Your Untappd application client secret.
     ///   - redirectUrl: The OAuth redirect URL registered with your application.
-    public init(clientId: String!,
-                clientSecret: String!,
-                redirectUrl: String!) {
+    public convenience init(clientId: String!,
+                            clientSecret: String!,
+                            redirectUrl: String!) {
+        self.init(clientId: clientId, clientSecret: clientSecret,
+                  redirectUrl: redirectUrl, urlSession: .shared)
+    }
+
+    /// Creates an OAuth client with an injected `URLSession`, for testing.
+    init(clientId: String!,
+         clientSecret: String!,
+         redirectUrl: String!,
+         urlSession: URLSession) {
         assert((clientId != nil && clientId != "") &&
             (clientSecret != nil && clientSecret != "") &&
             (redirectUrl != nil && redirectUrl != ""),
@@ -63,6 +71,7 @@ public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
         self.clientId = clientId
         self.clientSecret = clientSecret
         self.redirectUrl = redirectUrl
+        self.session = urlSession
     }
 
     // MARK: - Authorization Methods
@@ -73,41 +82,66 @@ public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
     ///   - code: The authorization code received from the OAuth provider.
     ///   - completion: A closure called with the result. Passes `true` and `nil` on success, `false` and an error on failure.
     public func authorize(withCode code: String!, completion: @escaping (Bool?, (any Error)?) -> Void) {
-        if let clientId = self.clientId,
-           let clientSecret = self.clientSecret,
-           let redirectUrl = self.redirectUrl,
-           let code,
-           code != "" {
-            let params: Parameters = ["client_id": clientId,
-                                      "client_secret": clientSecret,
-                                      "response_type": "code",
-                                      "redirect_url": redirectUrl,
-                                      "code": code]
-            do {
-                let router = CDUntappdOAuthRouter.authorize(parameters: params)
-                try self.session
-                    .request(router.asURLRequest())
-                    .responseDecodable { (response: DataResponse<CDUntappdOAuthCredential, AFError>) in
-                        switch response.result {
-                        case let .success(oAuthCredential):
-                            let defaults = UserDefaults.standard
-                            // Save access token
-                            defaults.set(oAuthCredential.accessToken, forKey: CDUntappdDefaults.accessToken)
-                            defaults.synchronize()
-                            completion(true, nil)
-                        case let .failure(error):
-                            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, visionOS 1.0, *) {
-                                logger.error("OAuth authorization failed: \(error.localizedDescription, privacy: .public)")
-                            }
-                            completion(false, error)
-                        }
-                    }
-            } catch {
-                completion(false, error)
-            }
-        } else {
+        guard let clientId = self.clientId,
+              let clientSecret = self.clientSecret,
+              let redirectUrl = self.redirectUrl,
+              let code, code != "" else {
             completion(false, nil)
+            return
         }
+
+        let params: Parameters = ["client_id": clientId,
+                                  "client_secret": clientSecret,
+                                  "response_type": "code",
+                                  "redirect_url": redirectUrl,
+                                  "code": code]
+
+        let urlRequest: URLRequest
+        do {
+            urlRequest = try CDUntappdOAuthRouter.authorize(parameters: params).asURLRequest()
+        } catch {
+            completion(false, error)
+            return
+        }
+
+        self.session.dataTask(with: urlRequest) { data, response, error in
+            // URLSession delivers dataTask completions on a background delegate queue by
+            // default. Alamofire's responseDecodable (what this replaces) delivered on
+            // .main by default, and this method's doc contract / existing callers may
+            // assume main-thread delivery — dispatch explicitly to preserve that behavior.
+            if let error {
+                if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, visionOS 1.0, *) {
+                    logger.error("OAuth authorization failed: \(error.localizedDescription, privacy: .public)")
+                }
+                DispatchQueue.main.async { completion(false, CDUntappdKitError.networkFailure(underlying: error)) }
+                return
+            }
+            guard let httpResponse = response as? HTTPURLResponse else {
+                DispatchQueue.main.async {
+                    completion(false, CDUntappdKitError.networkFailure(underlying: URLError(.badServerResponse)))
+                }
+                return
+            }
+            guard (200 ..< 300).contains(httpResponse.statusCode) else {
+                DispatchQueue.main.async {
+                    completion(false, CDUntappdKitError.httpError(statusCode: httpResponse.statusCode,
+                                                                  data: data ?? Data()))
+                }
+                return
+            }
+            do {
+                let oAuthCredential = try JSONDecoder().decode(CDUntappdOAuthCredential.self, from: data ?? Data())
+                let defaults = UserDefaults.standard
+                defaults.set(oAuthCredential.accessToken, forKey: CDUntappdDefaults.accessToken)
+                defaults.synchronize()
+                DispatchQueue.main.async { completion(true, nil) }
+            } catch {
+                if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, visionOS 1.0, *) {
+                    logger.error("OAuth authorization failed: \(error.localizedDescription, privacy: .public)")
+                }
+                DispatchQueue.main.async { completion(false, CDUntappdKitError.decodingFailed(underlying: error)) }
+            }
+        }.resume()
     }
 
     /// Checks if an access token is stored.
