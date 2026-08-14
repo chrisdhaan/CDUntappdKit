@@ -63,16 +63,8 @@ struct CDUntappdURLSessionTests {
         do {
             let _: Fixture = try await session.perform(stubbedRequest)
             Issue.record("Expected .decodingFailed to be thrown")
-        } catch is CDUntappdKitError {
-            // expected — specifically .decodingFailed, checked via case match below
-        }
-        let stubbedRequest2 = CDUntappdMockURLProtocol.stubbing(
-            request,
-            with: .init(statusCode: 200, data: Data("not json".utf8))
-        )
-        let session2 = CDUntappdURLSession(session: CDUntappdMockURLProtocol.makeSession())
-        await #expect(throws: CDUntappdKitError.self) {
-            let _: Fixture = try await session2.perform(stubbedRequest2)
+        } catch let CDUntappdKitError.decodingFailed(underlying) {
+            #expect(underlying is DecodingError)
         }
     }
 }

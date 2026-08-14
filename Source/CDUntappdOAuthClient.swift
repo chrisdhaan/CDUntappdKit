@@ -56,7 +56,7 @@ public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
                             clientSecret: String!,
                             redirectUrl: String!) {
         self.init(clientId: clientId, clientSecret: clientSecret,
-                  redirectUrl: redirectUrl, urlSession: .shared)
+                  redirectUrl: redirectUrl, urlSession: URLSession(configuration: .default))
     }
 
     /// Creates an OAuth client with an injected `URLSession`, for testing.

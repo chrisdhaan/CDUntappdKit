@@ -66,10 +66,9 @@ extension SharedUserDefaultsTests {
         /// Instead, replicate the exact same parameter-building the client does internally
         /// (`Parameters.userInfoParameters` + `CDUntappdOAuthClient.addTokens` +
         /// `CDUntappdRouter.userInfo(...).asURLRequest()`) to compute the identical `URL`, then
-        /// register the stub against that `URL` — safe under concurrent test execution since
-        /// `CDUntappdMockURLProtocol.register(stub:for:)` is lock-protected and each test clears
-        /// the stored access token first, so both tests key off the same deterministic
-        /// "not authenticated" request.
+        /// register the stub against that `URL`. Each call site passes a distinct `username` so
+        /// concurrently-running tests never collide on the same registered entry, per
+        /// `CDUntappdMockURLProtocol`'s documented contract.
         private func expectedFetchUserInfoURL(forUsername username: String, compact: Bool) throws -> URL {
             var params = Parameters.userInfoParameters(isCompact: compact)
             let oAuthClient = CDUntappdOAuthClient(clientId: "test_id",
@@ -86,7 +85,7 @@ extension SharedUserDefaultsTests {
             let json = """
             {"meta": {"code": 200}, "response": {"user": {"user_name": "testuser"}}}
             """
-            let url = try expectedFetchUserInfoURL(forUsername: "testuser", compact: false)
+            let url = try expectedFetchUserInfoURL(forUsername: "testuser-success", compact: false)
             CDUntappdMockURLProtocol.register(stub: .init(statusCode: 200, data: Data(json.utf8)), for: url)
             let client = CDUntappdAPIClient(
                 clientId: "test_id",
@@ -94,14 +93,14 @@ extension SharedUserDefaultsTests {
                 redirectUrl: "testapp://oauth",
                 urlSession: CDUntappdMockURLProtocol.makeSession()
             )
-            let response = try await client.fetchUserInfo(forUsername: "testuser", compact: false)
+            let response = try await client.fetchUserInfo(forUsername: "testuser-success", compact: false)
             #expect(response.user?.username == "testuser")
         }
 
         @Test
         func fetchUserInfoThrowsOnHTTPError() async throws {
             UserDefaults.standard.removeObject(forKey: CDUntappdDefaults.accessToken)
-            let url = try expectedFetchUserInfoURL(forUsername: "testuser", compact: false)
+            let url = try expectedFetchUserInfoURL(forUsername: "testuser-http-error", compact: false)
             CDUntappdMockURLProtocol.register(stub: .init(statusCode: 500, data: Data()), for: url)
             let client = CDUntappdAPIClient(
                 clientId: "test_id",
@@ -109,8 +108,11 @@ extension SharedUserDefaultsTests {
                 redirectUrl: "testapp://oauth",
                 urlSession: CDUntappdMockURLProtocol.makeSession()
             )
-            await #expect(throws: CDUntappdKitError.self) {
-                _ = try await client.fetchUserInfo(forUsername: "testuser", compact: false)
+            do {
+                _ = try await client.fetchUserInfo(forUsername: "testuser-http-error", compact: false)
+                Issue.record("Expected .httpError to be thrown")
+            } catch let CDUntappdKitError.httpError(statusCode, _) {
+                #expect(statusCode == 500)
             }
         }
     }

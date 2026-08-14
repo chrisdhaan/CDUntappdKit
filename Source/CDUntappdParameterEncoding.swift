@@ -35,20 +35,37 @@ public typealias Parameters = [String: Any]
 /// value is rendered with `String(describing:)`.
 enum CDUntappdParameterEncoding {
 
+    /// Matches Alamofire's `CharacterSet.afURLQueryAllowed` — RFC 3986's query-allowed set minus
+    /// the general and sub-delimiters Alamofire additionally escapes for safety. `URLComponents`'s
+    /// default `queryItems` escaping does not escape this wider set (notably it leaves `+` alone,
+    /// which servers commonly form-decode as a literal space), so the query string is built and
+    /// percent-encoded manually below instead of relying on `queryItems`.
+    private static let queryAllowedCharacters: CharacterSet = {
+        let generalDelimitersToEncode = ":#[]@"
+        let subDelimitersToEncode = "!$&'()*+,;="
+        let encodableDelimiters = CharacterSet(charactersIn: generalDelimitersToEncode + subDelimitersToEncode)
+        return CharacterSet.urlQueryAllowed.subtracting(encodableDelimiters)
+    }()
+
     static func urlRequest(for url: URL, parameters: Parameters) throws -> URLRequest {
         guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             throw CDUntappdKitError.invalidRequest(underlying: URLError(.badURL))
         }
 
         if !parameters.isEmpty {
-            components.queryItems = parameters.sorted { $0.key < $1.key }.map { key, value in
-                let stringValue: String = if let boolValue = value as? Bool {
-                    boolValue ? "1" : "0"
-                } else {
-                    String(describing: value)
+            components.percentEncodedQuery = parameters
+                .sorted { $0.key < $1.key }
+                .map { key, value -> String in
+                    let stringValue: String = if let boolValue = value as? Bool {
+                        boolValue ? "1" : "0"
+                    } else {
+                        String(describing: value)
+                    }
+                    let encodedKey = key.addingPercentEncoding(withAllowedCharacters: queryAllowedCharacters) ?? key
+                    let encodedValue = stringValue.addingPercentEncoding(withAllowedCharacters: queryAllowedCharacters) ?? stringValue
+                    return "\(encodedKey)=\(encodedValue)"
                 }
-                return URLQueryItem(name: key, value: stringValue)
-            }
+                .joined(separator: "&")
         }
 
         guard let requestURL = components.url else {

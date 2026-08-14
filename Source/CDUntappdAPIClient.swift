@@ -57,7 +57,7 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
         self.init(clientId: clientId,
                   clientSecret: clientSecret,
                   redirectUrl: redirectUrl,
-                  urlSession: .shared)
+                  urlSession: URLSession(configuration: .default))
     }
 
     init(clientId: String!,

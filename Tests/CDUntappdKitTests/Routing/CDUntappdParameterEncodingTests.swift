@@ -42,4 +42,38 @@ struct CDUntappdParameterEncodingTests {
         let request = try CDUntappdParameterEncoding.urlRequest(for: baseURL, parameters: [:])
         #expect(request.url?.query == nil)
     }
+
+    /// Matches Alamofire's `URLEncoding.default` behavior: `+` must be percent-encoded to
+    /// `%2B`. Left unescaped (as `URLComponents`'s default `queryItems` escaping would leave
+    /// it), a server following the form-decoding convention interprets a literal `+` as a
+    /// space, silently corrupting the value (e.g. a search for "Founders + Friends").
+    @Test
+    func encodesPlusSignAsPercentTwoB() throws {
+        let request = try CDUntappdParameterEncoding.urlRequest(for: baseURL, parameters: ["q": "Founders + Friends"])
+        let requestURL = try #require(request.url)
+        let query = try #require(requestURL.query)
+        #expect(query.contains("%2B"))
+        #expect(!query.contains("q=Founders + Friends"))
+        // A literal `+` left in a query string is form-decoded as a space by many servers —
+        // guard against that specific corruption, not just "some encoding happened".
+        #expect(!query.contains("+"))
+    }
+
+    /// Alamofire's `URLEncoding.default` additionally escapes RFC 3986 sub-delimiters that
+    /// `URLComponents`'s default escaping leaves alone. Spot-check a couple of them.
+    @Test
+    func encodesAlamofireReservedSubDelimiters() throws {
+        let request = try CDUntappdParameterEncoding.urlRequest(for: baseURL, parameters: ["q": "a;b,c:d"])
+        let requestURL = try #require(request.url)
+        let query = try #require(requestURL.query)
+        #expect(query.contains("a%3Bb%2Cc%3Ad"))
+    }
+
+    @Test
+    func encodedQueryDecodesBackToOriginalValue() throws {
+        let request = try CDUntappdParameterEncoding.urlRequest(for: baseURL, parameters: ["q": "Founders + Friends"])
+        let requestURL = try #require(request.url)
+        let components = try #require(URLComponents(url: requestURL, resolvingAgainstBaseURL: false))
+        #expect(components.queryItems?.first(where: { $0.name == "q" })?.value == "Founders + Friends")
+    }
 }

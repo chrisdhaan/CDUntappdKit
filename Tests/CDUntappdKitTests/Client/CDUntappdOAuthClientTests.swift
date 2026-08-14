@@ -216,7 +216,12 @@ extension SharedUserDefaultsTests {
                 }
             }
             #expect(success == false)
-            #expect(error != nil)
+            switch error {
+            case let CDUntappdKitError.httpError(statusCode, _)?:
+                #expect(statusCode == 401)
+            default:
+                Issue.record("Expected .httpError(statusCode: 401, _) to be thrown, got \(String(describing: error))")
+            }
         }
 
         @Test
