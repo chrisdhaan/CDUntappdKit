@@ -29,10 +29,10 @@
 import PackageDescription
 
 let package = Package(name: "CDUntappdKit",
-                      platforms: [.iOS(.v12),
-                                  .macOS(.v10_13),
-                                  .tvOS(.v12),
-                                  .watchOS(.v4),
+                      platforms: [.iOS(.v15),
+                                  .macOS(.v12),
+                                  .tvOS(.v15),
+                                  .watchOS(.v8),
                                   .visionOS(.v1)],
                       products: [.library(name: "CDUntappdKit",
                                           targets: ["CDUntappdKit"]),
@@ -40,15 +40,10 @@ let package = Package(name: "CDUntappdKit",
                                           type: .dynamic,
                                           targets: ["CDUntappdKit"])],
                       dependencies: [
-                          .package(url: "https://github.com/Alamofire/Alamofire.git",
-                                   .upToNextMajor(from: "5.9.0")),
                           .package(url: "https://github.com/apple/swift-docc-plugin",
                                    from: "1.3.0")
                       ],
                       targets: [.target(name: "CDUntappdKit",
-                                        dependencies: [
-                                            .product(name: "Alamofire", package: "Alamofire")
-                                        ],
                                         path: "Source",
                                         exclude: ["Info.plist"],
                                         resources: [.process("PrivacyInfo.xcprivacy")],

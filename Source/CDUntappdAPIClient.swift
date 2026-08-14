@@ -25,7 +25,6 @@
 //  THE SOFTWARE.
 //
 
-import Alamofire
 import Foundation
 import os.log
 #if os(iOS) || os(visionOS)
@@ -42,7 +41,7 @@ private let logger = Logger(subsystem: CDUntappdKitBundleIdentifier, category: "
 @MainActor
 public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
 
-    private lazy var manager: Alamofire.Session = Alamofire.Session()
+    private let session: CDUntappdURLSession
     private let oAuthClient: CDUntappdOAuthClient!
 
     // MARK: - Initializers
@@ -52,9 +51,19 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
     ///   - clientId: Your Untappd application client ID.
     ///   - clientSecret: Your Untappd application client secret. Do not share this key.
     ///   - redirectUrl: The OAuth redirect URL registered with your application.
-    public init(clientId: String!,
-                clientSecret: String!,
-                redirectUrl: String!) {
+    public convenience init(clientId: String!,
+                            clientSecret: String!,
+                            redirectUrl: String!) {
+        self.init(clientId: clientId,
+                  clientSecret: clientSecret,
+                  redirectUrl: redirectUrl,
+                  urlSession: URLSession(configuration: .default))
+    }
+
+    init(clientId: String!,
+         clientSecret: String!,
+         redirectUrl: String!,
+         urlSession: URLSession) {
         assert((clientId != nil && clientId != "") &&
             (clientSecret != nil && clientSecret != "") &&
             (redirectUrl != nil && redirectUrl != ""),
@@ -62,6 +71,7 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
         self.oAuthClient = CDUntappdOAuthClient(clientId: clientId,
                                                 clientSecret: clientSecret,
                                                 redirectUrl: redirectUrl)
+        self.session = CDUntappdURLSession(session: urlSession)
         super.init()
     }
 
@@ -127,12 +137,9 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
         var params = Parameters.userInfoParameters(isCompact: compact)
         params = self.oAuthClient.addTokens(toParameters: params)
 
-        let response = try await self.manager
-            .request(CDUntappdRouter.userInfo(username: username,
-                                              parameters: params))
-            .validate()
-            .serializingDecodable(CDUntappdUserInfoResponse.self)
-            .value
+        let request = try CDUntappdRouter.userInfo(username: username,
+                                                   parameters: params).asURLRequest()
+        let response: CDUntappdUserInfoResponse = try await self.session.perform(request)
 
         if let metadata = response.metadata,
            metadata.hasError() {
@@ -168,12 +175,9 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
                                                        sort: sort)
         params = self.oAuthClient.addTokens(toParameters: params)
 
-        let response = try await self.manager
-            .request(CDUntappdRouter.userWishList(username: username,
-                                                  parameters: params))
-            .validate()
-            .serializingDecodable(CDUntappdUserWishListResponse.self)
-            .value
+        let request = try CDUntappdRouter.userWishList(username: username,
+                                                       parameters: params).asURLRequest()
+        let response: CDUntappdUserWishListResponse = try await self.session.perform(request)
 
         if let metadata = response.metadata,
            metadata.hasError() {
@@ -206,12 +210,9 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
                                                       limit: limit)
         params = self.oAuthClient.addTokens(toParameters: params)
 
-        let response = try await self.manager
-            .request(CDUntappdRouter.userFriends(username: username,
-                                                 parameters: params))
-            .validate()
-            .serializingDecodable(CDUntappdUserFriendsResponse.self)
-            .value
+        let request = try CDUntappdRouter.userFriends(username: username,
+                                                      parameters: params).asURLRequest()
+        let response: CDUntappdUserFriendsResponse = try await self.session.perform(request)
 
         if let metadata = response.metadata,
            metadata.hasError() {
@@ -229,10 +230,6 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
     /// With async/await, call `Task.cancel()` on the task that wraps the async API call.
     @available(*, deprecated, message: "Use Task.cancel() with async/await API instead")
     public func cancelAllPendingAPIRequests() {
-        self.manager.session.getTasksWithCompletionHandler { dataTasks, uploadTasks, downloadTasks in
-            dataTasks.forEach { $0.cancel() }
-            uploadTasks.forEach { $0.cancel() }
-            downloadTasks.forEach { $0.cancel() }
-        }
+        Task { await self.session.cancelAllTasks() }
     }
 }

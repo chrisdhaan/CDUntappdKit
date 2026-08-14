@@ -1,6 +1,6 @@
 # CDUntappdKit
 
-Swift wrapper for the Untappd API. Supports iOS 12+, macOS 10.13+, tvOS 12+, watchOS 4+.
+Swift wrapper for the Untappd API. Supports iOS 15+, macOS 12+, tvOS 15+, watchOS 8+.
 
 ## Repository Layout
 
@@ -22,10 +22,10 @@ Swift wrapper for the Untappd API. Supports iOS 12+, macOS 10.13+, tvOS 12+, wat
 
 | Platform | Minimum | Reason |
 |----------|---------|--------|
-| iOS | 12.0 | os.log, async URLSession back-deployment floor |
-| macOS | 10.13 | os.log availability |
-| tvOS | 12.0 | Matches iOS |
-| watchOS | 4.0 | SPM minimum expressible without deprecation warnings |
+| iOS | 15.0 | Native URLSession async/await (`data(for:)`, `allTasks`) requires no back-deployment shim |
+| macOS | 12.0 | Matches iOS's URLSession async/await floor |
+| tvOS | 15.0 | Matches iOS |
+| watchOS | 8.0 | Matches iOS's URLSession async/await floor |
 | visionOS | 1.0 | UIKit-based; matches CDMarkdownKit 3.1.0 precedent |
 
 ## Architecture
@@ -35,7 +35,7 @@ See `Documentation/ARCHITECTURE.md` for the full design overview.
 Key classes:
 - `CDUntappdAPIClient` — Primary public API client, `@MainActor`
 - `CDUntappdOAuthClient` — OAuth token management via UserDefaults
-- `CDUntappdRouter` — Alamofire `URLRequestConvertible` enum
+- `CDUntappdRouter` — Enum encoding Untappd API endpoints as `URLRequest`s
 - `CDUntappdOAuthViewController` — iOS WKWebView-based OAuth flow
 
 ## Building

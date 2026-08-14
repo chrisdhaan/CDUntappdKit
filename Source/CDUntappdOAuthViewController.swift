@@ -26,7 +26,6 @@
 //
 
 #if os(iOS) || os(visionOS)
-    import Alamofire
     import UIKit
     import WebKit
 

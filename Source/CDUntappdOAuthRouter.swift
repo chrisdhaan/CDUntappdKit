@@ -25,23 +25,15 @@
 //  THE SOFTWARE.
 //
 
-import Alamofire
 import Foundation
 
 /// Routes for Untappd OAuth endpoints.
 ///
 /// Used internally to construct HTTP requests for OAuth authentication.
-public enum CDUntappdOAuthRouter: URLRequestConvertible {
+public enum CDUntappdOAuthRouter {
 
     /// The OAuth authorization endpoint.
     case authorize(parameters: Parameters)
-
-    var method: HTTPMethod {
-        switch self {
-        case .authorize:
-            .get
-        }
-    }
 
     var path: String {
         switch self {
@@ -51,17 +43,15 @@ public enum CDUntappdOAuthRouter: URLRequestConvertible {
     }
 
     public func asURLRequest() throws -> URLRequest {
-        let url = try CDUntappdURL.oAuth.asURL()
-
-        var urlRequest = URLRequest(url: url.appendingPathComponent(path))
-        urlRequest.httpMethod = method.rawValue
-
+        guard let url = URL(string: CDUntappdURL.oAuth) else {
+            throw CDUntappdKitError.invalidRequest(underlying: URLError(.badURL))
+        }
         switch self {
         case let .authorize(parameters):
-            urlRequest = try URLEncoding.default.encode(urlRequest,
-                                                        with: parameters)
+            return try CDUntappdParameterEncoding.urlRequest(
+                for: url.appendingPathComponent(path),
+                parameters: parameters
+            )
         }
-
-        return urlRequest
     }
 }

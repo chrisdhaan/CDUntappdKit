@@ -229,8 +229,12 @@ Task {
         // Handle success
     } catch let error as CDUntappdKitError {
         switch error {
-        case .sessionUnavailable:
-            print("OAuth client not configured")
+        case .invalidRequest(let underlyingError):
+            print("Request could not be constructed: \(underlyingError)")
+        case .networkFailure(let underlyingError):
+            print("Network request failed: \(underlyingError)")
+        case .httpError(let statusCode, let data):
+            print("HTTP error \(statusCode)")
         case .apiError(let message):
             print("API error: \(message)")
         case .decodingFailed(let underlyingError):
@@ -244,7 +248,9 @@ Task {
 
 ### Error Cases
 
-- **`sessionUnavailable`** — The Alamofire session failed to initialize. Check your OAuth credentials.
+- **`invalidRequest(Error)`** — The request could not be constructed (e.g. an invalid URL from route parameters).
+- **`networkFailure(Error)`** — A transport-level failure occurred (no connection, timed out, etc).
+- **`httpError(statusCode: Int, data: Data)`** — The API returned a non-2xx HTTP status code.
 - **`apiError(String)`** — The Untappd API returned an error response (invalid username, rate limit, etc.).
 - **`decodingFailed(Error)`** — The response body couldn't be decoded into the expected model.
 
@@ -353,7 +359,7 @@ currentTask = Task {
 currentTask?.cancel()
 ```
 
-When a task is cancelled while awaiting a network request, `Alamofire` automatically cancels the underlying `URLSessionTask`. The async call throws `CancellationError`.
+When a task is cancelled while awaiting a network request, the underlying `URLSessionTask` is cancelled. The async call throws `CancellationError`.
 
 **Note:** The deprecated method `cancelAllPendingAPIRequests()` is no longer available. Use `Task.cancel()` instead for fine-grained control.
 
