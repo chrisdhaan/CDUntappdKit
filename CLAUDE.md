@@ -1,6 +1,6 @@
 # CDUntappdKit
 
-Swift wrapper for the Untappd API. Supports iOS 12+, macOS 10.13+, tvOS 12+, watchOS 4+.
+Swift wrapper for the Untappd API. Supports iOS 15+, macOS 12+, tvOS 15+, watchOS 8+.
 
 ## Repository Layout
 
@@ -35,7 +35,7 @@ See `Documentation/ARCHITECTURE.md` for the full design overview.
 Key classes:
 - `CDUntappdAPIClient` — Primary public API client, `@MainActor`
 - `CDUntappdOAuthClient` — OAuth token management via UserDefaults
-- `CDUntappdRouter` — Alamofire `URLRequestConvertible` enum
+- `CDUntappdRouter` — Enum encoding Untappd API endpoints as `URLRequest`s
 - `CDUntappdOAuthViewController` — iOS WKWebView-based OAuth flow
 
 ## Building

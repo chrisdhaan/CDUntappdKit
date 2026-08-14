@@ -154,12 +154,8 @@ Task {
         // Success path
     } catch let error as CDUntappdKitError {
         switch error {
-        case .invalidRequest(let underlyingError):
-            print("Request could not be constructed: \(underlyingError)")
-        case .networkFailure(let underlyingError):
-            print("Network request failed: \(underlyingError)")
-        case .httpError(let statusCode, let data):
-            print("HTTP error \(statusCode)")
+        case .sessionUnavailable:
+            print("OAuth credentials not configured")
         case .apiError(let message):
             print("API error: \(message)")
         case .decodingFailed(let underlyingError):
@@ -175,9 +171,7 @@ Task {
 
 All errors thrown are now `CDUntappdKitError`:
 
-- **`invalidRequest(Error)`** — The request could not be constructed (e.g. an invalid URL)
-- **`networkFailure(Error)`** — A transport-level failure occurred (no connection, timed out, etc)
-- **`httpError(statusCode: Int, data: Data)`** — The API returned a non-2xx HTTP status code
+- **`sessionUnavailable`** — Alamofire session failed to initialize
 - **`apiError(String)`** — Untappd API returned an error (invalid username, rate limit, etc.)
 - **`decodingFailed(Error)`** — Response couldn't be decoded into the model
 
