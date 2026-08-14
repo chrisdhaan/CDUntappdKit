@@ -40,15 +40,10 @@ let package = Package(name: "CDUntappdKit",
                                           type: .dynamic,
                                           targets: ["CDUntappdKit"])],
                       dependencies: [
-                          .package(url: "https://github.com/Alamofire/Alamofire.git",
-                                   .upToNextMajor(from: "5.9.0")),
                           .package(url: "https://github.com/apple/swift-docc-plugin",
                                    from: "1.3.0")
                       ],
                       targets: [.target(name: "CDUntappdKit",
-                                        dependencies: [
-                                            .product(name: "Alamofire", package: "Alamofire")
-                                        ],
                                         path: "Source",
                                         exclude: ["Info.plist"],
                                         resources: [.process("PrivacyInfo.xcprivacy")],
