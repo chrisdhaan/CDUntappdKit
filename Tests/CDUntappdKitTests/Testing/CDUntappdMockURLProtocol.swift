@@ -4,9 +4,9 @@ import Foundation
 /// for testing `CDUntappdURLSession` and callers that build a `URLSession` around it,
 /// without making a real network call.
 ///
-/// Two ways to attach a stub, both free of the single shared mutable slot Task 5's
-/// original design used (a `static var stub`), which races whenever more than one
-/// `@Suite` exercises this mock concurrently — Swift Testing's `.serialized` trait only
+/// Two ways to attach a stub, both free of the data race a single shared mutable slot
+/// (a `static var stub`) would have: that design races whenever more than one `@Suite`
+/// exercises this mock concurrently — Swift Testing's `.serialized` trait only
 /// serializes a suite's own tests against each other, never against a different suite:
 ///
 /// 1. `stubbing(_:with:)` attaches the stub directly to a specific `URLRequest` instance
