@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-Part of the v3.0.0 "Networking & Concurrency Modernization" release (in progress — this covers [#18](https://github.com/chrisdhaan/CDUntappdKit/issues/18) only; several sibling issues are still to come before v3.0.0 ships).
+Part of the v3.0.0 "Networking & Concurrency Modernization" release (in progress — this covers the Alamofire removal only; several related changes are still to come before v3.0.0 ships).
 
 ### Added
 
@@ -26,7 +26,7 @@ Part of the v3.0.0 "Networking & Concurrency Modernization" release (in progress
 - Deployment targets: iOS 15.0+, macOS 12.0+, tvOS 15.0+, watchOS 8.0+ (visionOS unchanged at 1.0+) — required for native `URLSession` async/await support with no back-deployment shim
 - `CDUntappdKitError`: restructured to `.invalidRequest(underlying:)`, `.networkFailure(underlying:)`, `.httpError(statusCode:data:)`, `.decodingFailed(underlying:)` (now carries a labeled `underlying:` parameter), `.apiError(String)` (unchanged)
 - `CDUntappdRouter` / `CDUntappdOAuthRouter`: no longer conform to `Alamofire.URLRequestConvertible`; `asURLRequest()` shape unchanged
-- `CDUntappdOAuthClient.authorize(withCode:completion:)`: now backed by `URLSession.dataTask` internally; signature unchanged (completion-handler based — async/await conversion is tracked separately as [#6](https://github.com/chrisdhaan/CDUntappdKit/issues/6))
+- `CDUntappdOAuthClient.authorize(withCode:completion:)`: now backed by `URLSession.dataTask` internally; signature unchanged (still completion-handler based — async/await conversion is planned separately)
 
 ### Removed
 
