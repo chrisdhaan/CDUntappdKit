@@ -4,16 +4,18 @@ All notable changes to this project will be documented in this file.
 
 ## Table of Contents
 
-- [Unreleased](#unreleased)
+- [3.0.0](#300)
 - [2.0.0](#200)
 - [1.1.0](#110)
 - [1.0.0](#100)
 
 ---
 
-## [Unreleased]
+## [3.0.0](https://github.com/chrisdhaan/CDUntappdKit/releases/tag/3.0.0)
 
-Part of the v3.0.0 "Networking & Concurrency Modernization" release (in progress — this covers the Alamofire removal, the Keychain OAuth storage migration, and the Swift 6 concurrency audit; several related changes are still to come before v3.0.0 ships).
+Released on 2026-08-15.
+
+"Networking & Concurrency Modernization" — replaces Alamofire with native `URLSession`, migrates OAuth token storage to the Keychain, and completes a full Swift 6 concurrency audit.
 
 ### Added
 
