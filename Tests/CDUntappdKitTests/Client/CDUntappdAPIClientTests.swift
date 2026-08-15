@@ -184,5 +184,64 @@ extension SharedKeychainTests {
                 #expect(statusCode == 500)
             }
         }
+
+        /// Mirrors `expectedFetchUserInfoURL` above — see its doc comment for why this
+        /// replication is necessary instead of attaching a stub to a specific `URLRequest`.
+        private func expectedFetchUserFriendsURL(forUsername username: String,
+                                                 offset: Int?,
+                                                 limit: Int?) throws -> URL {
+            var params = Parameters.userFriendsParameters(withOffset: offset, limit: limit)
+            let oAuthClient = CDUntappdOAuthClient(clientId: "test_id",
+                                                   clientSecret: "test_secret",
+                                                   redirectUrl: "testapp://oauth")
+            params = oAuthClient.addTokens(toParameters: params)
+            let request = try CDUntappdRouter.userFriends(username: username, parameters: params).asURLRequest()
+            return try #require(request.url)
+        }
+
+        @Test
+        func fetchUserFriendsDecodesSuccessfulResponse() async throws {
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
+            let json = """
+            {"meta": {"code": 200}, "response": {"items": [{"user": {"user_name": "TestFriend"}}]}}
+            """
+            let url = try expectedFetchUserFriendsURL(forUsername: "testuser-friends-success",
+                                                       offset: nil,
+                                                       limit: nil)
+            CDUntappdMockURLProtocol.register(stub: .init(statusCode: 200, data: Data(json.utf8)), for: url)
+            let client = CDUntappdAPIClient(
+                clientId: "test_id",
+                clientSecret: "test_secret",
+                redirectUrl: "testapp://oauth",
+                urlSession: CDUntappdMockURLProtocol.makeSession()
+            )
+            let response = try await client.fetchUserFriends(forUsername: "testuser-friends-success",
+                                                              offset: nil,
+                                                              limit: nil)
+            #expect(response.friends?.first?.user?.username == "TestFriend")
+        }
+
+        @Test
+        func fetchUserFriendsThrowsOnHTTPError() async throws {
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
+            let url = try expectedFetchUserFriendsURL(forUsername: "testuser-friends-http-error",
+                                                       offset: nil,
+                                                       limit: nil)
+            CDUntappdMockURLProtocol.register(stub: .init(statusCode: 500, data: Data()), for: url)
+            let client = CDUntappdAPIClient(
+                clientId: "test_id",
+                clientSecret: "test_secret",
+                redirectUrl: "testapp://oauth",
+                urlSession: CDUntappdMockURLProtocol.makeSession()
+            )
+            do {
+                _ = try await client.fetchUserFriends(forUsername: "testuser-friends-http-error",
+                                                       offset: nil,
+                                                       limit: nil)
+                Issue.record("Expected .httpError to be thrown")
+            } catch let CDUntappdKitError.httpError(statusCode, _) {
+                #expect(statusCode == 500)
+            }
+        }
     }
 }
