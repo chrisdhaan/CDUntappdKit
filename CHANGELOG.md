@@ -20,6 +20,7 @@ Part of the v3.0.0 "Networking & Concurrency Modernization" release (in progress
 - Internal `CDUntappdURLSession` actor: a native `URLSession`-backed request/decode pipeline
 - Internal `CDUntappdParameterEncoding` query encoder, replicating Alamofire's prior wire behavior (deterministic key-sorted, numeric-bool-encoded, percent-encoded query strings)
 - Test-target-only `CDUntappdMockURLProtocol` for network-mocked test coverage of the new pipeline
+- End-to-end test coverage for `fetchUserWishList`/`fetchUserFriends` against `CDUntappdMockURLProtocol` (previously only `fetchUserInfo` had it) — 145 tests across 26 suites
 - Internal `CDUntappdKeychain` wrapper around Keychain Services for storing the OAuth access token
 
 ### Updated
