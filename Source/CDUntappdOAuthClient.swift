@@ -33,7 +33,7 @@ private let logger = Logger(subsystem: CDUntappdKitBundleIdentifier, category: "
 
 /// Handles OAuth 2.0 authentication with the Untappd API.
 ///
-/// Manages access tokens stored in UserDefaults and adds them to API requests.
+/// Manages access tokens stored in the Keychain and adds them to API requests.
 public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
 
     private let session: URLSession
@@ -131,9 +131,7 @@ public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
             }
             do {
                 let oAuthCredential = try JSONDecoder().decode(CDUntappdOAuthCredential.self, from: data ?? Data())
-                let defaults = UserDefaults.standard
-                defaults.set(oAuthCredential.accessToken, forKey: CDUntappdDefaults.accessToken)
-                defaults.synchronize()
+                Self.storeAccessToken(from: oAuthCredential)
                 DispatchQueue.main.async { completion(true, nil) }
             } catch {
                 if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, visionOS 1.0, *) {
@@ -144,26 +142,30 @@ public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
         }.resume()
     }
 
-    /// Checks if an access token is stored.
-    /// - Returns: `true` if an access token exists in UserDefaults.
-    public func isAuthorized() -> Bool {
-        let defaults = UserDefaults.standard
-        if defaults.string(forKey: CDUntappdDefaults.accessToken) != nil {
-            return true
+    /// Stores the credential's access token in the Keychain, or clears any previously stored
+    /// token if the response didn't include one - matching the prior `UserDefaults.set(nil,
+    /// forKey:)` behavior, which is equivalent to `removeObject(forKey:)`.
+    private static func storeAccessToken(from credential: CDUntappdOAuthCredential) {
+        let keychainWriteSucceeded: Bool = if let token = credential.accessToken {
+            CDUntappdKeychain.set(token, forKey: CDUntappdDefaults.accessToken)
         } else {
-            return false
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
         }
+        if !keychainWriteSucceeded, #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, visionOS 1.0, *) {
+            logger.error("Failed to store OAuth access token in the Keychain.")
+        }
+    }
+
+    /// Checks if an access token is stored.
+    /// - Returns: `true` if an access token exists in the Keychain.
+    public func isAuthorized() -> Bool {
+        CDUntappdKeychain.string(forKey: CDUntappdDefaults.accessToken) != nil
     }
 
     /// Returns the stored access token.
     /// - Returns: The access token string, or `nil` if no token is stored.
     public func accessToken() -> String? {
-        let defaults = UserDefaults.standard
-        if let accessToken = defaults.string(forKey: CDUntappdDefaults.accessToken) {
-            return accessToken
-        } else {
-            return nil
-        }
+        CDUntappdKeychain.string(forKey: CDUntappdDefaults.accessToken)
     }
 
     /// Adds authentication tokens to API request parameters.

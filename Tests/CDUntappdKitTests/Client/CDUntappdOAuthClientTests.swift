@@ -27,7 +27,7 @@ import Foundation
 import Testing
 @testable import CDUntappdKit
 
-extension SharedUserDefaultsTests {
+extension SharedKeychainTests {
 
     @Suite("CDUntappdOAuthClient Tests")
     @MainActor
@@ -52,7 +52,7 @@ extension SharedUserDefaultsTests {
 
         @Test
         func isNotAuthorizedInitially() {
-            UserDefaults.standard.removeObject(forKey: "CDUntappdAccessToken")
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
             let client = CDUntappdOAuthClient(clientId: "test", clientSecret: "test",
                                               redirectUrl: "test://callback")
             #expect(client.isAuthorized() == false)
@@ -60,17 +60,17 @@ extension SharedUserDefaultsTests {
 
         @Test
         func isAuthorizedAfterStoringToken() {
-            UserDefaults.standard.removeObject(forKey: "CDUntappdAccessToken")
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
             let client = CDUntappdOAuthClient(clientId: "test", clientSecret: "test",
                                               redirectUrl: "test://callback")
-            UserDefaults.standard.set("fake_token_123", forKey: "CDUntappdAccessToken")
+            CDUntappdKeychain.set("fake_token_123", forKey: CDUntappdDefaults.accessToken)
             #expect(client.isAuthorized() == true)
-            UserDefaults.standard.removeObject(forKey: "CDUntappdAccessToken")
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
         }
 
         @Test
         func accessTokenReturnsNilWhenNotAuthorized() {
-            UserDefaults.standard.removeObject(forKey: "CDUntappdAccessToken")
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
             let client = CDUntappdOAuthClient(clientId: "test", clientSecret: "test",
                                               redirectUrl: "test://callback")
             #expect(client.accessToken() == nil)
@@ -78,34 +78,34 @@ extension SharedUserDefaultsTests {
 
         @Test
         func accessTokenReturnsStoredToken() {
-            UserDefaults.standard.removeObject(forKey: "CDUntappdAccessToken")
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
             let client = CDUntappdOAuthClient(clientId: "test", clientSecret: "test",
                                               redirectUrl: "test://callback")
             let expectedToken = "test_token_abc123"
-            UserDefaults.standard.set(expectedToken, forKey: "CDUntappdAccessToken")
+            CDUntappdKeychain.set(expectedToken, forKey: CDUntappdDefaults.accessToken)
             #expect(client.accessToken() == expectedToken)
-            UserDefaults.standard.removeObject(forKey: "CDUntappdAccessToken")
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
         }
 
         @Test
         func addTokensIncludesAccessTokenWhenAuthorized() {
-            UserDefaults.standard.removeObject(forKey: "CDUntappdAccessToken")
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
             let client = CDUntappdOAuthClient(clientId: "test_id", clientSecret: "test_secret",
                                               redirectUrl: "test://callback")
             let token = "stored_access_token"
-            UserDefaults.standard.set(token, forKey: "CDUntappdAccessToken")
+            CDUntappdKeychain.set(token, forKey: CDUntappdDefaults.accessToken)
 
             let parameters: [String: Any] = ["param1": "value1"]
             let result = client.addTokens(toParameters: parameters)
 
             #expect(result["access_token"] as? String == token)
             #expect(result["param1"] as? String == "value1")
-            UserDefaults.standard.removeObject(forKey: "CDUntappdAccessToken")
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
         }
 
         @Test
         func addTokensIncludesClientCredentialsWhenNotAuthorized() {
-            UserDefaults.standard.removeObject(forKey: "CDUntappdAccessToken")
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
             let client = CDUntappdOAuthClient(clientId: "test_id", clientSecret: "test_secret",
                                               redirectUrl: "test://callback")
 
@@ -119,11 +119,11 @@ extension SharedUserDefaultsTests {
 
         @Test
         func addTokensPrefersAccessTokenOverClientCredentials() {
-            UserDefaults.standard.removeObject(forKey: "CDUntappdAccessToken")
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
             let client = CDUntappdOAuthClient(clientId: "test_id", clientSecret: "test_secret",
                                               redirectUrl: "test://callback")
             let token = "access_token_xyz"
-            UserDefaults.standard.set(token, forKey: "CDUntappdAccessToken")
+            CDUntappdKeychain.set(token, forKey: CDUntappdDefaults.accessToken)
 
             let parameters: [String: Any] = [:]
             let result = client.addTokens(toParameters: parameters)
@@ -131,7 +131,7 @@ extension SharedUserDefaultsTests {
             #expect(result["access_token"] as? String == token)
             #expect(result["client_id"] == nil)
             #expect(result["client_secret"] == nil)
-            UserDefaults.standard.removeObject(forKey: "CDUntappdAccessToken")
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
         }
 
         @Test
@@ -144,39 +144,39 @@ extension SharedUserDefaultsTests {
         }
 
         @Test
-        func multipleClientsShareUserDefaults() {
-            UserDefaults.standard.removeObject(forKey: "CDUntappdAccessToken")
+        func multipleClientsShareKeychain() {
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
 
             let client1 = CDUntappdOAuthClient(clientId: "id1", clientSecret: "secret1",
                                                redirectUrl: "app1://oauth")
             let client2 = CDUntappdOAuthClient(clientId: "id2", clientSecret: "secret2",
                                                redirectUrl: "app2://oauth")
 
-            UserDefaults.standard.set("shared_token", forKey: "CDUntappdAccessToken")
+            CDUntappdKeychain.set("shared_token", forKey: CDUntappdDefaults.accessToken)
 
             #expect(client1.isAuthorized() == true)
             #expect(client2.isAuthorized() == true)
             #expect(client1.accessToken() == client2.accessToken())
 
-            UserDefaults.standard.removeObject(forKey: "CDUntappdAccessToken")
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
         }
 
         @Test
         func clearingTokenRemovesAuthorization() {
-            UserDefaults.standard.removeObject(forKey: "CDUntappdAccessToken")
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
             let client = CDUntappdOAuthClient(clientId: "test", clientSecret: "test",
                                               redirectUrl: "test://callback")
 
-            UserDefaults.standard.set("temporary_token", forKey: "CDUntappdAccessToken")
+            CDUntappdKeychain.set("temporary_token", forKey: CDUntappdDefaults.accessToken)
             #expect(client.isAuthorized() == true)
 
-            UserDefaults.standard.removeObject(forKey: "CDUntappdAccessToken")
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
             #expect(client.isAuthorized() == false)
         }
 
         @Test
         func authorizeStoresAccessTokenOnSuccess() async throws {
-            UserDefaults.standard.removeObject(forKey: "CDUntappdAccessToken")
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
             let url = try expectedAuthorizeURL(clientId: "test", clientSecret: "test",
                                                redirectUrl: "test://callback", code: "auth_code_success")
             CDUntappdMockURLProtocol.register(
@@ -197,8 +197,34 @@ extension SharedUserDefaultsTests {
                 }
             }
             #expect(result == true)
-            #expect(UserDefaults.standard.string(forKey: "CDUntappdAccessToken") == "new_token_456")
-            UserDefaults.standard.removeObject(forKey: "CDUntappdAccessToken")
+            #expect(CDUntappdKeychain.string(forKey: CDUntappdDefaults.accessToken) == "new_token_456")
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
+        }
+
+        @Test
+        func authorizeClearsStaleTokenWhenResponseHasNoAccessToken() async throws {
+            CDUntappdKeychain.set("stale_token", forKey: CDUntappdDefaults.accessToken)
+            let url = try expectedAuthorizeURL(clientId: "test", clientSecret: "test",
+                                               redirectUrl: "test://callback", code: "auth_code_no_token")
+            CDUntappdMockURLProtocol.register(
+                stub: .init(statusCode: 200, data: Data(#"{"response": {}}"#.utf8)),
+                for: url
+            )
+            let client = CDUntappdOAuthClient(
+                clientId: "test", clientSecret: "test", redirectUrl: "test://callback",
+                urlSession: CDUntappdMockURLProtocol.makeSession()
+            )
+            let result = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Bool?, Error>) in
+                client.authorize(withCode: "auth_code_no_token") { success, error in
+                    if let error {
+                        continuation.resume(throwing: error)
+                    } else {
+                        continuation.resume(returning: success)
+                    }
+                }
+            }
+            #expect(result == true)
+            #expect(CDUntappdKeychain.string(forKey: CDUntappdDefaults.accessToken) == nil)
         }
 
         @Test

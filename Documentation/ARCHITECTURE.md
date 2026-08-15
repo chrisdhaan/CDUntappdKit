@@ -23,9 +23,7 @@ Manages the OAuth credential lifecycle.
 Responsibilities:
 - Constructs the Untappd authorization URL
 - Parses the OAuth callback to extract the access token
-- Stores and retrieves the token from `UserDefaults`
-
-**Note:** UserDefaults is used for simplicity. A production-grade implementation should use the Keychain.
+- Stores and retrieves the token from the Keychain via the internal `CDUntappdKeychain` wrapper
 
 ### CDUntappdRouter
 An enum where each case represents an API endpoint and knows how to construct its `URLRequest` via `asURLRequest()`.

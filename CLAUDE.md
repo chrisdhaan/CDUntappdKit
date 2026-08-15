@@ -73,7 +73,6 @@ swiftformat Source Tests --lint
 
 ## Known Limitations / Tech Debt
 
-- OAuth token stored in `UserDefaults` — should migrate to Keychain
 - Only 3 of 20+ Untappd endpoints are implemented
 - No watchOS OAuth flow (WKWebView unavailable on watchOS)
 - No visionOS OAuth flow — `authenticate()` is `#if os(iOS) || os(visionOS)` but the UIApplication-based top-view-controller lookup may need a visionOS-specific window scene approach
