@@ -39,4 +39,6 @@ public enum CDUntappdKitError: Error, Sendable {
     case decodingFailed(underlying: any Error & Sendable)
     /// The API returned a 2xx response whose body describes an application-level error.
     case apiError(String)
+    /// A required precondition (e.g. a non-empty OAuth client ID or authorization code) wasn't met, so no request was sent.
+    case invalidCredentials(String)
 }

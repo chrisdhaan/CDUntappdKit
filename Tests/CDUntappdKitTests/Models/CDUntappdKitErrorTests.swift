@@ -65,4 +65,14 @@ struct CDUntappdKitErrorTests {
         }
         #expect(message == "invalid_access_token")
     }
+
+    @Test
+    func invalidCredentialsCarriesMessage() {
+        let error = CDUntappdKitError.invalidCredentials("A clientId is required.")
+        guard case let .invalidCredentials(message) = error else {
+            Issue.record("Expected .invalidCredentials")
+            return
+        }
+        #expect(message == "A clientId is required.")
+    }
 }
