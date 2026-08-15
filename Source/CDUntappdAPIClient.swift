@@ -106,16 +106,14 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
     #endif
 
     /// Checks whether the client has an active access token.
-    /// - Returns: `true` if an access token is stored in UserDefaults.
+    /// - Returns: `true` if an access token is stored in the Keychain.
     public func isAuthenticated() -> Bool {
         self.oAuthClient.isAuthorized()
     }
 
-    /// Clears the stored access token from UserDefaults.
+    /// Clears the stored access token from the Keychain.
     public func unauthenticate() {
-        let userDefaults = UserDefaults.standard
-        userDefaults.removeObject(forKey: CDUntappdDefaults.accessToken)
-        userDefaults.synchronize()
+        CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
     }
 
     // MARK: - Untappd API Methods

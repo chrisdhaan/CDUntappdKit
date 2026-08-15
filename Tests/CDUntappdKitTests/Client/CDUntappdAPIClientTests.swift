@@ -27,7 +27,7 @@ import Foundation
 import Testing
 @testable import CDUntappdKit
 
-extension SharedUserDefaultsTests {
+extension SharedKeychainTests {
 
     @Suite("CDUntappdAPIClient Tests")
     @MainActor
@@ -41,20 +41,20 @@ extension SharedUserDefaultsTests {
 
         @Test
         func isNotAuthenticatedWithoutStoredToken() {
-            UserDefaults.standard.removeObject(forKey: CDUntappdDefaults.accessToken)
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
             #expect(client.isAuthenticated() == false)
         }
 
         @Test
         func isAuthenticatedWhenTokenIsStored() {
-            UserDefaults.standard.set("fake_token", forKey: CDUntappdDefaults.accessToken)
+            CDUntappdKeychain.set("fake_token", forKey: CDUntappdDefaults.accessToken)
             #expect(client.isAuthenticated() == true)
-            UserDefaults.standard.removeObject(forKey: CDUntappdDefaults.accessToken)
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
         }
 
         @Test
         func unauthenticateClearsStoredToken() {
-            UserDefaults.standard.set("fake_token", forKey: CDUntappdDefaults.accessToken)
+            CDUntappdKeychain.set("fake_token", forKey: CDUntappdDefaults.accessToken)
             client.unauthenticate()
             #expect(client.isAuthenticated() == false)
         }
@@ -81,7 +81,7 @@ extension SharedUserDefaultsTests {
 
         @Test
         func fetchUserInfoDecodesSuccessfulResponse() async throws {
-            UserDefaults.standard.removeObject(forKey: CDUntappdDefaults.accessToken)
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
             let json = """
             {"meta": {"code": 200}, "response": {"user": {"user_name": "testuser"}}}
             """
@@ -99,7 +99,7 @@ extension SharedUserDefaultsTests {
 
         @Test
         func fetchUserInfoThrowsOnHTTPError() async throws {
-            UserDefaults.standard.removeObject(forKey: CDUntappdDefaults.accessToken)
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
             let url = try expectedFetchUserInfoURL(forUsername: "testuser-http-error", compact: false)
             CDUntappdMockURLProtocol.register(stub: .init(statusCode: 500, data: Data()), for: url)
             let client = CDUntappdAPIClient(

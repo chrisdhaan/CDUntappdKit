@@ -79,7 +79,7 @@ On iOS and visionOS, call `authenticate()` to present a web view with the OAuth 
 client.authenticate()
 ```
 
-This displays a `CDUntappdOAuthViewController` with an embedded `WKWebView`. The user logs in, grants permissions, and is redirected back to your app. The access token is automatically saved to `UserDefaults`.
+This displays a `CDUntappdOAuthViewController` with an embedded `WKWebView`. The user logs in, grants permissions, and is redirected back to your app. The access token is automatically saved to the Keychain.
 
 ### Check Authorization Status
 
@@ -118,7 +118,7 @@ To sign out the user, clear the stored token:
 client.unauthenticate()
 ```
 
-This removes the access token from `UserDefaults`. Subsequent API calls will use client credentials instead.
+This removes the access token from the Keychain. Subsequent API calls will use client credentials instead.
 
 ---
 
@@ -311,24 +311,11 @@ let yellowColor = NSColor.untappdYellow()
 
 ### watchOS Limitations
 
-On watchOS, the OAuth authentication flow is not available because `WKWebView` is not supported. You have two options:
+On watchOS, the OAuth authentication flow is not available because `WKWebView` is not supported.
 
-1. **Use Client Credentials Only** — Call API methods without calling `authenticate()`. Requests will use your `clientId` and `clientSecret` instead of an access token. This limits you to public data.
+**Use Client Credentials Only** — Call API methods without calling `authenticate()`. Requests will use your `clientId` and `clientSecret` instead of an access token. This limits you to public data.
 
-2. **Authenticate on iOS, Sync to watchOS** — Have your iOS app authenticate and store the access token in a shared location (like `UserDefaults` with app groups). Your watchOS app can then read the token and use authenticated endpoints.
-
-Example for option 2:
-
-```swift
-// iOS app
-client.authenticate() // Token stored in UserDefaults
-
-// watchOS app
-if client.isAuthorized() {
-    // Use authenticated endpoints
-    let response = try await client.fetchUserInfo(forUsername: nil, compact: false)
-}
-```
+The access token is stored in the Keychain, which is not automatically shared between an iOS app and its paired watchOS app — that requires a Keychain access group shared via the `com.apple.security.application-groups` entitlement, which this library does not currently configure. Authenticating on iOS will not make `isAuthorized()` return `true` on watchOS.
 
 ### macOS, tvOS, iOS, visionOS
 

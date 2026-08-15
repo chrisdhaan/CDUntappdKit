@@ -13,13 +13,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-Part of the v3.0.0 "Networking & Concurrency Modernization" release (in progress — this covers the Alamofire removal only; several related changes are still to come before v3.0.0 ships).
+Part of the v3.0.0 "Networking & Concurrency Modernization" release (in progress — this covers the Alamofire removal and the Keychain OAuth storage migration; several related changes are still to come before v3.0.0 ships).
 
 ### Added
 
 - Internal `CDUntappdURLSession` actor: a native `URLSession`-backed request/decode pipeline
 - Internal `CDUntappdParameterEncoding` query encoder, replicating Alamofire's prior wire behavior (deterministic key-sorted, numeric-bool-encoded, percent-encoded query strings)
 - Test-target-only `CDUntappdMockURLProtocol` for network-mocked test coverage of the new pipeline
+- Internal `CDUntappdKeychain` wrapper around Keychain Services for storing the OAuth access token
 
 ### Updated
 
@@ -27,6 +28,7 @@ Part of the v3.0.0 "Networking & Concurrency Modernization" release (in progress
 - `CDUntappdKitError`: restructured to `.invalidRequest(underlying:)`, `.networkFailure(underlying:)`, `.httpError(statusCode:data:)`, `.decodingFailed(underlying:)` (now carries a labeled `underlying:` parameter), `.apiError(String)` (unchanged)
 - `CDUntappdRouter` / `CDUntappdOAuthRouter`: no longer conform to `Alamofire.URLRequestConvertible`; `asURLRequest()` shape unchanged
 - `CDUntappdOAuthClient.authorize(withCode:completion:)`: now backed by `URLSession.dataTask` internally; signature unchanged (still completion-handler based — async/await conversion is planned separately)
+- OAuth access token now stored in the Keychain instead of `UserDefaults`; `CDUntappdOAuthClient`/`CDUntappdAPIClient` public API is unchanged
 
 ### Removed
 
