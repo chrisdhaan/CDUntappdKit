@@ -143,9 +143,9 @@ extension SharedKeychainTests {
             {"meta": {"code": 200}, "response": {"beers": {"items": [{"beer": {"beer_name": "Example IPA"}}]}}}
             """
             let url = try expectedFetchUserWishListURL(forUsername: "testuser-wishlist-success",
-                                                        offset: nil,
-                                                        limit: nil,
-                                                        sort: nil)
+                                                       offset: nil,
+                                                       limit: nil,
+                                                       sort: nil)
             CDUntappdMockURLProtocol.register(stub: .init(statusCode: 200, data: Data(json.utf8)), for: url)
             let client = CDUntappdAPIClient(
                 clientId: "test_id",
@@ -154,9 +154,9 @@ extension SharedKeychainTests {
                 urlSession: CDUntappdMockURLProtocol.makeSession()
             )
             let response = try await client.fetchUserWishList(forUsername: "testuser-wishlist-success",
-                                                               offset: nil,
-                                                               limit: nil,
-                                                               sort: nil)
+                                                              offset: nil,
+                                                              limit: nil,
+                                                              sort: nil)
             #expect(response.wishList?.items?.first?.beer?.name == "Example IPA")
         }
 
@@ -164,9 +164,9 @@ extension SharedKeychainTests {
         func fetchUserWishListThrowsOnHTTPError() async throws {
             CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
             let url = try expectedFetchUserWishListURL(forUsername: "testuser-wishlist-http-error",
-                                                        offset: nil,
-                                                        limit: nil,
-                                                        sort: nil)
+                                                       offset: nil,
+                                                       limit: nil,
+                                                       sort: nil)
             CDUntappdMockURLProtocol.register(stub: .init(statusCode: 500, data: Data()), for: url)
             let client = CDUntappdAPIClient(
                 clientId: "test_id",
@@ -176,9 +176,9 @@ extension SharedKeychainTests {
             )
             do {
                 _ = try await client.fetchUserWishList(forUsername: "testuser-wishlist-http-error",
-                                                        offset: nil,
-                                                        limit: nil,
-                                                        sort: nil)
+                                                       offset: nil,
+                                                       limit: nil,
+                                                       sort: nil)
                 Issue.record("Expected .httpError to be thrown")
             } catch let CDUntappdKitError.httpError(statusCode, _) {
                 #expect(statusCode == 500)
@@ -206,8 +206,8 @@ extension SharedKeychainTests {
             {"meta": {"code": 200}, "response": {"items": [{"user": {"user_name": "TestFriend"}}]}}
             """
             let url = try expectedFetchUserFriendsURL(forUsername: "testuser-friends-success",
-                                                       offset: nil,
-                                                       limit: nil)
+                                                      offset: nil,
+                                                      limit: nil)
             CDUntappdMockURLProtocol.register(stub: .init(statusCode: 200, data: Data(json.utf8)), for: url)
             let client = CDUntappdAPIClient(
                 clientId: "test_id",
@@ -216,8 +216,8 @@ extension SharedKeychainTests {
                 urlSession: CDUntappdMockURLProtocol.makeSession()
             )
             let response = try await client.fetchUserFriends(forUsername: "testuser-friends-success",
-                                                              offset: nil,
-                                                              limit: nil)
+                                                             offset: nil,
+                                                             limit: nil)
             #expect(response.friends?.first?.user?.username == "TestFriend")
         }
 
@@ -225,8 +225,8 @@ extension SharedKeychainTests {
         func fetchUserFriendsThrowsOnHTTPError() async throws {
             CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
             let url = try expectedFetchUserFriendsURL(forUsername: "testuser-friends-http-error",
-                                                       offset: nil,
-                                                       limit: nil)
+                                                      offset: nil,
+                                                      limit: nil)
             CDUntappdMockURLProtocol.register(stub: .init(statusCode: 500, data: Data()), for: url)
             let client = CDUntappdAPIClient(
                 clientId: "test_id",
@@ -236,8 +236,8 @@ extension SharedKeychainTests {
             )
             do {
                 _ = try await client.fetchUserFriends(forUsername: "testuser-friends-http-error",
-                                                       offset: nil,
-                                                       limit: nil)
+                                                      offset: nil,
+                                                      limit: nil)
                 Issue.record("Expected .httpError to be thrown")
             } catch let CDUntappdKitError.httpError(statusCode, _) {
                 #expect(statusCode == 500)
