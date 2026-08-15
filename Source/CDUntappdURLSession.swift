@@ -64,10 +64,20 @@ actor CDUntappdURLSession {
         }
     }
 
+    /// Cancels all in-flight requests and suspends until they've actually finished cancelling —
+    /// not just until cancellation has been requested.
+    ///
+    /// Polls for up to ~5 seconds (500 attempts, 10ms apart); if tasks are still outstanding
+    /// after that, returns anyway on a best-effort basis rather than suspending indefinitely.
     func cancelAllTasks() async {
-        let tasks = await session.allTasks
-        for task in tasks {
+        for task in await session.allTasks {
             task.cancel()
+        }
+
+        var remainingPollAttempts = 500
+        while remainingPollAttempts > 0, await !session.allTasks.isEmpty {
+            remainingPollAttempts -= 1
+            try? await Task.sleep(nanoseconds: 10_000_000)
         }
     }
 }

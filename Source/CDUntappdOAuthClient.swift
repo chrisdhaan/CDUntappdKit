@@ -34,16 +34,16 @@ private let logger = Logger(subsystem: CDUntappdKitBundleIdentifier, category: "
 /// Handles OAuth 2.0 authentication with the Untappd API.
 ///
 /// Manages access tokens stored in the Keychain and adds them to API requests.
-public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
+public final class CDUntappdOAuthClient: NSObject, Sendable {
 
     private let session: CDUntappdURLSession
 
     /// Your Untappd application client ID.
-    public let clientId: String!
+    public let clientId: String
     /// Your Untappd application client secret. Do not share this value.
-    public let clientSecret: String!
+    public let clientSecret: String
     /// The OAuth redirect URL registered with your Untappd application.
-    public let redirectUrl: String!
+    public let redirectUrl: String
 
     // MARK: - Initializers
 
@@ -52,22 +52,20 @@ public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
     ///   - clientId: Your Untappd application client ID.
     ///   - clientSecret: Your Untappd application client secret.
     ///   - redirectUrl: The OAuth redirect URL registered with your application.
-    public convenience init(clientId: String!,
-                            clientSecret: String!,
-                            redirectUrl: String!) {
+    public convenience init(clientId: String,
+                            clientSecret: String,
+                            redirectUrl: String) {
         self.init(clientId: clientId, clientSecret: clientSecret,
                   redirectUrl: redirectUrl, urlSession: URLSession(configuration: .default))
     }
 
     /// Creates an OAuth client with an injected `URLSession`, for testing.
-    init(clientId: String!,
-         clientSecret: String!,
-         redirectUrl: String!,
+    init(clientId: String,
+         clientSecret: String,
+         redirectUrl: String,
          urlSession: URLSession) {
-        assert((clientId != nil && clientId != "") &&
-            (clientSecret != nil && clientSecret != "") &&
-            (redirectUrl != nil && redirectUrl != ""),
-            "A clientId, clientSecret, and redirectUrl are required to query the Untappdd Developers API oauth endpoint.")
+        precondition(!clientId.isEmpty && !clientSecret.isEmpty && !redirectUrl.isEmpty,
+                     "A clientId, clientSecret, and redirectUrl are required to query the Untappdd Developers API oauth endpoint.")
         self.clientId = clientId
         self.clientSecret = clientSecret
         self.redirectUrl = redirectUrl
@@ -83,9 +81,9 @@ public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
     ///   `code` is empty, the network request fails, or the response can't be decoded.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func authorize(withCode code: String) async throws {
-        guard let clientId, !clientId.isEmpty,
-              let clientSecret, !clientSecret.isEmpty,
-              let redirectUrl, !redirectUrl.isEmpty,
+        guard !clientId.isEmpty,
+              !clientSecret.isEmpty,
+              !redirectUrl.isEmpty,
               !code.isEmpty
         else {
             throw CDUntappdKitError.invalidCredentials(
@@ -112,7 +110,7 @@ public class CDUntappdOAuthClient: NSObject, @unchecked Sendable {
     ///     `nil` on success, `false` and an error on failure.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     @available(*, deprecated, renamed: "authorize(withCode:)")
-    public func authorize(withCode code: String!, completion: @escaping (Bool?, (any Error)?) -> Void) {
+    public func authorize(withCode code: String!, completion: @escaping @Sendable (Bool?, (any Error)?) -> Void) {
         Task { @MainActor in
             do {
                 try await self.authorize(withCode: code ?? "")

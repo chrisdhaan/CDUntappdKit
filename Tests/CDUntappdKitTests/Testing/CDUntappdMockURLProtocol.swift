@@ -27,11 +27,15 @@ final class CDUntappdMockURLProtocol: URLProtocol, @unchecked Sendable {
         let statusCode: Int
         let data: Data
         let error: Error?
+        /// Delays the response, to give a test a window in which the request is genuinely
+        /// in-flight (e.g. to exercise cancellation).
+        let delay: TimeInterval
 
-        init(statusCode: Int = 200, data: Data = Data(), error: Error? = nil) {
+        init(statusCode: Int = 200, data: Data = Data(), error: Error? = nil, delay: TimeInterval = 0) {
             self.statusCode = statusCode
             self.data = data
             self.error = error
+            self.delay = delay
         }
     }
 
@@ -86,6 +90,18 @@ final class CDUntappdMockURLProtocol: URLProtocol, @unchecked Sendable {
             client?.urlProtocol(self, didFailWithError: URLError(.unknown))
             return
         }
+        guard stub.delay > 0 else {
+            respond(with: stub)
+            return
+        }
+        DispatchQueue.global().asyncAfter(deadline: .now() + stub.delay) { [weak self] in
+            self?.respond(with: stub)
+        }
+    }
+
+    override func stopLoading() {}
+
+    private func respond(with stub: Stub) {
         if let error = stub.error {
             client?.urlProtocol(self, didFailWithError: error)
             return
@@ -100,6 +116,4 @@ final class CDUntappdMockURLProtocol: URLProtocol, @unchecked Sendable {
         client?.urlProtocol(self, didLoad: stub.data)
         client?.urlProtocolDidFinishLoading(self)
     }
-
-    override func stopLoading() {}
 }

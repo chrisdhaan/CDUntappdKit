@@ -39,10 +39,10 @@ private let logger = Logger(subsystem: CDUntappdKitBundleIdentifier, category: "
 /// Create one instance per application and hold a strong reference to it.
 /// All methods are `@MainActor` — call them from the main thread or from a `Task`.
 @MainActor
-public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
+public class CDUntappdAPIClient {
 
     private let session: CDUntappdURLSession
-    private let oAuthClient: CDUntappdOAuthClient!
+    private let oAuthClient: CDUntappdOAuthClient
 
     // MARK: - Initializers
 
@@ -51,28 +51,25 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
     ///   - clientId: Your Untappd application client ID.
     ///   - clientSecret: Your Untappd application client secret. Do not share this key.
     ///   - redirectUrl: The OAuth redirect URL registered with your application.
-    public convenience init(clientId: String!,
-                            clientSecret: String!,
-                            redirectUrl: String!) {
+    public convenience init(clientId: String,
+                            clientSecret: String,
+                            redirectUrl: String) {
         self.init(clientId: clientId,
                   clientSecret: clientSecret,
                   redirectUrl: redirectUrl,
                   urlSession: URLSession(configuration: .default))
     }
 
-    init(clientId: String!,
-         clientSecret: String!,
-         redirectUrl: String!,
+    init(clientId: String,
+         clientSecret: String,
+         redirectUrl: String,
          urlSession: URLSession) {
-        assert((clientId != nil && clientId != "") &&
-            (clientSecret != nil && clientSecret != "") &&
-            (redirectUrl != nil && redirectUrl != ""),
-            "A clientId, clientSecret, and redirectUrl are required to query the Untappd Developers API oauth endpoint.")
+        precondition(!clientId.isEmpty && !clientSecret.isEmpty && !redirectUrl.isEmpty,
+                     "A clientId, clientSecret, and redirectUrl are required to query the Untappd Developers API oauth endpoint.")
         self.oAuthClient = CDUntappdOAuthClient(clientId: clientId,
                                                 clientSecret: clientSecret,
                                                 redirectUrl: redirectUrl)
         self.session = CDUntappdURLSession(session: urlSession)
-        super.init()
     }
 
     // MARK: - Authentication Methods
@@ -127,7 +124,7 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func fetchUserInfo(forUsername username: String?,
                               compact: Bool) async throws -> CDUntappdUserInfoResponse {
-        assert(
+        precondition(
             username != nil || self.isAuthenticated(),
             "Either user authentication or a username are required to query the Untappd API user info endpoint."
         )
@@ -163,7 +160,7 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
                                   offset: Int?,
                                   limit: Int?,
                                   sort: CDUntappdUserWishListSortType?) async throws -> CDUntappdUserWishListResponse {
-        assert(
+        precondition(
             username != nil || self.isAuthenticated(),
             "Either user authentication or a username are required to query the Untappd API user wish list endpoint."
         )
@@ -199,7 +196,7 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
     public func fetchUserFriends(forUsername username: String?,
                                  offset: Int?,
                                  limit: Int?) async throws -> CDUntappdUserFriendsResponse {
-        assert(
+        precondition(
             username != nil || self.isAuthenticated(),
             "Either user authentication or a username are required to query the Untappd API user friends endpoint."
         )
@@ -226,8 +223,11 @@ public class CDUntappdAPIClient: NSObject, @unchecked Sendable {
     /// Deprecated: Use Swift structured concurrency instead.
     ///
     /// With async/await, call `Task.cancel()` on the task that wraps the async API call.
+    ///
+    /// Suspends until all in-flight requests have actually finished cancelling, not just until
+    /// cancellation has been requested.
     @available(*, deprecated, message: "Use Task.cancel() with async/await API instead")
-    public func cancelAllPendingAPIRequests() {
-        Task { await self.session.cancelAllTasks() }
+    public func cancelAllPendingAPIRequests() async {
+        await self.session.cancelAllTasks()
     }
 }
