@@ -67,4 +67,28 @@ struct CDUntappdURLSessionTests {
             #expect(underlying is DecodingError)
         }
     }
+
+    @Test
+    func cancelAllTasksWaitsUntilInFlightTaskIsActuallyCancelled() async throws {
+        let urlSession = CDUntappdMockURLProtocol.makeSession()
+        let stubbedRequest = CDUntappdMockURLProtocol.stubbing(
+            request,
+            with: .init(statusCode: 200, data: Data(#"{"value":"ok"}"#.utf8), delay: 0.5)
+        )
+        let session = CDUntappdURLSession(session: urlSession)
+
+        let performTask = Task<Fixture?, Never> {
+            try? await session.perform(stubbedRequest) as Fixture?
+        }
+
+        while await urlSession.allTasks.isEmpty {
+            try await Task.sleep(nanoseconds: 1_000_000)
+        }
+
+        await session.cancelAllTasks()
+
+        #expect(await urlSession.allTasks.isEmpty)
+        let result = await performTask.value
+        #expect(result == nil)
+    }
 }

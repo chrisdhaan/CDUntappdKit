@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-Part of the v3.0.0 "Networking & Concurrency Modernization" release (in progress — this covers the Alamofire removal and the Keychain OAuth storage migration; several related changes are still to come before v3.0.0 ships).
+Part of the v3.0.0 "Networking & Concurrency Modernization" release (in progress — this covers the Alamofire removal, the Keychain OAuth storage migration, and the Swift 6 concurrency audit; several related changes are still to come before v3.0.0 ships).
 
 ### Added
 
@@ -30,11 +30,16 @@ Part of the v3.0.0 "Networking & Concurrency Modernization" release (in progress
 - `CDUntappdOAuthClient.authorize(withCode:)`: now `async throws -> Void`, backed by the shared `CDUntappdURLSession` pipeline; this closes the last callback-based API in the library. The prior `authorize(withCode:completion:)` signature is kept as a `@available(*, deprecated, renamed:)` shim for one release cycle
 - `CDUntappdOAuthViewController`: drives the new async `authorize(withCode:)` via `Task` instead of the completion-handler form
 - OAuth access token now stored in the Keychain instead of `UserDefaults`; `CDUntappdOAuthClient`/`CDUntappdAPIClient` public API is unchanged
+- The library now builds under full Swift 6 language mode (`Package.swift`'s `swiftLanguageModes` and the Xcode project's `SWIFT_VERSION` both moved from 5 to 6), with `@unchecked Sendable` removed from `CDUntappdAPIClient` and `CDUntappdOAuthClient` in favor of real, compiler-verified `Sendable` conformance (`CDUntappdOAuthClient` is now `final`, a requirement for a non-`@MainActor` class to conform to `Sendable` without an escape hatch)
+- `CDUntappdAPIClient`/`CDUntappdOAuthClient` initializer parameters (`clientId`, `clientSecret`, `redirectUrl`) changed from implicitly-unwrapped `String!` to plain `String` — passing `nil` no longer compiles
+- Input validation (`clientId`/`clientSecret`/`redirectUrl`/username-or-authentication checks) switched from `assert` to `precondition`, so it's enforced in Release builds too, not just Debug
+- `cancelAllPendingAPIRequests()` is now `async` and suspends until in-flight requests have actually finished cancelling, not just until cancellation has been requested
 
 ### Removed
 
 - Alamofire dependency (removed from `Package.swift` and `CDUntappdKit.xcodeproj`)
 - `CDUntappdKitError.sessionUnavailable` case (dead code, never thrown)
+- `NSObject` inheritance from `CDUntappdAPIClient` (no Objective-C runtime features were used)
 
 ---
 

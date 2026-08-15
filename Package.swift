@@ -62,4 +62,4 @@ let package = Package(name: "CDUntappdKit",
                                     path: "Tests/CDUntappdKitTests",
                                     resources: [.process("Fixtures")]
                                 )],
-                      swiftLanguageModes: [.v5])
+                      swiftLanguageModes: [.v6])
