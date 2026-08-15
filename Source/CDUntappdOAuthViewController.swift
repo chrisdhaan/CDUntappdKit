@@ -75,20 +75,15 @@
                     let code = String(url[range.upperBound...]).trimmingCharacters(in: .whitespacesAndNewlines)
                     authorizationCode = code
                 }
-                self.oAuthClient.authorize(withCode: authorizationCode,
-                                           completion: { successful, error in
-
-                                               if let error {
-                                                   self.onAuthorization?(false, error)
-                                               }
-
-                                               if let successful,
-                                                  successful == true {
-                                                   self.onAuthorization?(true, nil)
-                                               } else {
-                                                   self.onAuthorization?(false, nil)
-                                               }
-                                           })
+                Task { [weak self] in
+                    guard let self else { return }
+                    do {
+                        try await self.oAuthClient.authorize(withCode: authorizationCode)
+                        self.onAuthorization?(true, nil)
+                    } catch {
+                        self.onAuthorization?(false, error)
+                    }
+                }
                 return
             }
 

@@ -25,9 +25,10 @@ Part of the v3.0.0 "Networking & Concurrency Modernization" release (in progress
 ### Updated
 
 - Deployment targets: iOS 15.0+, macOS 12.0+, tvOS 15.0+, watchOS 8.0+ (visionOS unchanged at 1.0+) — required for native `URLSession` async/await support with no back-deployment shim
-- `CDUntappdKitError`: restructured to `.invalidRequest(underlying:)`, `.networkFailure(underlying:)`, `.httpError(statusCode:data:)`, `.decodingFailed(underlying:)` (now carries a labeled `underlying:` parameter), `.apiError(String)` (unchanged)
+- `CDUntappdKitError`: restructured to `.invalidRequest(underlying:)`, `.networkFailure(underlying:)`, `.httpError(statusCode:data:)`, `.decodingFailed(underlying:)` (now carries a labeled `underlying:` parameter), `.apiError(String)` (unchanged); added `.invalidCredentials(String)` for OAuth preflight validation failures
 - `CDUntappdRouter` / `CDUntappdOAuthRouter`: no longer conform to `Alamofire.URLRequestConvertible`; `asURLRequest()` shape unchanged
-- `CDUntappdOAuthClient.authorize(withCode:completion:)`: now backed by `URLSession.dataTask` internally; signature unchanged (still completion-handler based — async/await conversion is planned separately)
+- `CDUntappdOAuthClient.authorize(withCode:)`: now `async throws -> Void`, backed by the shared `CDUntappdURLSession` pipeline; this closes the last callback-based API in the library. The prior `authorize(withCode:completion:)` signature is kept as a `@available(*, deprecated, renamed:)` shim for one release cycle
+- `CDUntappdOAuthViewController`: drives the new async `authorize(withCode:)` via `Task` instead of the completion-handler form
 - OAuth access token now stored in the Keychain instead of `UserDefaults`; `CDUntappdOAuthClient`/`CDUntappdAPIClient` public API is unchanged
 
 ### Removed
