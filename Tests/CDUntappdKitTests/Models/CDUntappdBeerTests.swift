@@ -81,4 +81,19 @@ struct CDUntappdBeerTests {
         let beer = try JSONDecoder().decode(CDUntappdBeer.self, from: json)
         #expect(beer.ibu == 65)
     }
+
+    @Test
+    func decodesIsInProductionFromIntegerOrBoolean() throws {
+        let intJSON = """
+        { "bid": 1, "is_in_production": 1 }
+        """.data(using: .utf8)!
+        let beerFromInt = try JSONDecoder().decode(CDUntappdBeer.self, from: intJSON)
+        #expect(beerFromInt.isInProduction == true)
+
+        let boolJSON = """
+        { "bid": 1, "is_in_production": false }
+        """.data(using: .utf8)!
+        let beerFromBool = try JSONDecoder().decode(CDUntappdBeer.self, from: boolJSON)
+        #expect(beerFromBool.isInProduction == false)
+    }
 }

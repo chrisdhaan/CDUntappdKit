@@ -67,4 +67,32 @@ public struct CDUntappdBeer: Decodable, Sendable {
         case isOnWishList = "wish_list"
         case createdAt = "created_at"
     }
+
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decodeIfPresent(Int.self, forKey: .id)
+        name = try container.decodeIfPresent(String.self, forKey: .name)
+        description = try container.decodeIfPresent(String.self, forKey: .description)
+        style = try container.decodeIfPresent(String.self, forKey: .style)
+        abv = try container.decodeIfPresent(Double.self, forKey: .abv)
+        ibu = try container.decodeIfPresent(Double.self, forKey: .ibu)
+        rating = try container.decodeIfPresent(Double.self, forKey: .rating)
+        overallRating = try container.decodeIfPresent(Double.self, forKey: .overallRating)
+        totalRatings = try container.decodeIfPresent(Int.self, forKey: .totalRatings)
+        label = try container.decodeIfPresent(URL.self, forKey: .label)
+        hasHad = try container.decodeIfPresent(Bool.self, forKey: .hasHad)
+        isOnWishList = try container.decodeIfPresent(Bool.self, forKey: .isOnWishList)
+        createdAt = try container.decodeIfPresent(String.self, forKey: .createdAt)
+        isInProduction = Self.decodeLenientBool(from: container, forKey: .isInProduction)
+    }
+
+    /// Untappd returns this flag as either a JSON boolean or a `1`/`0` integer
+    /// depending on endpoint; decode leniently rather than throwing on the integer form.
+    private static func decodeLenientBool(from container: KeyedDecodingContainer<CodingKeys>,
+                                          forKey key: CodingKeys) -> Bool? {
+        if let intValue = try? container.decodeIfPresent(Int.self, forKey: key) {
+            return intValue == 1
+        }
+        return (try? container.decodeIfPresent(Bool.self, forKey: key)) ?? nil
+    }
 }

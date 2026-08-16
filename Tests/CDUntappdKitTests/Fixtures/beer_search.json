@@ -1,0 +1,24 @@
+{
+  "meta": {
+    "code": 200
+  },
+  "response": {
+    "beers": {
+      "count": 1,
+      "items": [
+        {
+          "beer": {
+            "bid": 22,
+            "beer_name": "Search Result IPA",
+            "beer_label": "https://example.com/search_beer.jpg",
+            "beer_abv": 7.2
+          },
+          "brewery": {
+            "brewery_id": 33,
+            "brewery_name": "Search Result Brewery"
+          }
+        }
+      ]
+    }
+  }
+}
