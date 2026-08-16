@@ -162,7 +162,7 @@ Errors surface directly from `async throws` — there is no `nil`-on-error patte
 ## Thread Safety
 
 - `CDUntappdAPIClient` is `@MainActor` — call its methods from the main thread or from a `Task`. Its internal `CDUntappdURLSession` actor is `Sendable` by construction (all actors are), so holding a reference to it across the `@MainActor` boundary is safe without extra annotation.
-- `CDUntappdOAuthClient` is `final class ...: NSObject, Sendable` — a real, compiler-verified conformance, not `@unchecked`. `NSObject` inheritance was removed from `CDUntappdAPIClient` during the v3.0.0 concurrency audit (issue #11); `CDUntappdOAuthClient` still inherits it and doesn't appear to need to (no `@objc`/`override`/KVO usage found) — that audit's scope only verified `CDUntappdAPIClient`, so this is an unverified cleanup candidate, not a confirmed requirement.
+- `CDUntappdOAuthClient` is `final class CDUntappdOAuthClient: Sendable` — a real, compiler-verified conformance, not `@unchecked`. `NSObject` inheritance was removed from `CDUntappdAPIClient` during the v3.0.0 concurrency audit (issue #11); `CDUntappdOAuthClient` still inherited it until v3.1.0, when it was confirmed unnecessary (no `@objc`/`override`/KVO usage anywhere in the class or its call sites, including `CDUntappdOAuthViewController`) and removed.
 - `CDUntappdURLSession` is a Swift `actor` — its mutable state (in-flight `URLSessionTask`s tracked for cancellation) is serialized automatically by the actor runtime.
 - Create one `CDUntappdAPIClient` instance per application and hold a strong reference to it, rather than constructing one per request.
 
