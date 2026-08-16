@@ -192,4 +192,47 @@ extension Dictionary where Key: ExpressibleByStringLiteral, Value: Any {
 
         return params
     }
+
+    /// Builds parameters for the check-in activity feed API endpoints.
+    /// - Parameters:
+    ///   - maxId: Return checkins with ID ≤ maxId (older). Pass `nil` to omit.
+    ///   - minId: Return checkins with ID ≥ minId (newer). Pass `nil` to omit.
+    ///   - limit: Maximum number of results. Pass `nil` to omit.
+    /// - Returns: A parameters dictionary with the provided values.
+    static func activityFeedParameters(maxId: Int?,
+                                       minId: Int?,
+                                       limit: Int?) -> Parameters {
+        var params: Parameters = [:]
+
+        if let maxId {
+            params["max_id"] = maxId
+        }
+        if let minId {
+            params["min_id"] = minId
+        }
+        if let limit {
+            params["limit"] = limit
+        }
+
+        return params
+    }
+
+    /// Builds parameters for the notifications API endpoint.
+    /// - Parameters:
+    ///   - offset: Zero-based offset for pagination. Pass `nil` to omit.
+    ///   - limit: Maximum number of results (max 25). Pass `nil` to omit.
+    /// - Returns: A parameters dictionary with the provided values.
+    static func notificationsParameters(withOffset offset: Int?,
+                                        limit: Int?) -> Parameters {
+        var params: Parameters = [:]
+
+        if let offset {
+            params["offset"] = offset
+        }
+        if let limit {
+            params["limit"] = limit
+        }
+
+        return params
+    }
 }

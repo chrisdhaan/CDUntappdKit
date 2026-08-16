@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "code": 200
+  },
+  "response": {
+    "items": [
+      {
+        "notification_id": 1,
+        "type": "toast",
+        "created_at": "Thu, 01 Jan 2015 00:00:00 +0000",
+        "user": {
+          "uid": 10,
+          "user_name": "testuser",
+          "first_name": "Test"
+        },
+        "checkin": {
+          "checkin_id": 100,
+          "checkin_comment": "Cheers!"
+        }
+      }
+    ]
+  }
+}

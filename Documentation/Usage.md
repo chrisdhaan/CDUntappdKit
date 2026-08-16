@@ -354,46 +354,24 @@ When a task is cancelled while awaiting a network request, the underlying `URLSe
 
 ## Unimplemented Endpoints
 
-The following Untappd API endpoints are not yet implemented in CDUntappdKit. Contributions are welcome!
-
-### Activity & Notifications
-- Activity Feed (`/activity/feed`)
-- User Activity Feed (`/user/activity/{username}`)
-- The Pub / Local Activity (`/thepub`)
-- Venue Activity Feed (`/venue/{id}/activity`)
-- Beer Activity Feed (`/beer/{id}/activity`)
-- Brewery Activity Feed (`/brewery/{id}/activity`)
-- Notifications (`/user/notifications`)
-
-### User Operations
-- User Badges (`/user/badges/{username}`)
-- User Beers (`/user/beers/{username}`)
-- Pending Friends (`/user/friends/pending`)
-- Add Friend (`/user/friends/add/{username}`)
-- Remove Friend (`/user/friends/remove/{username}`)
-- Accept Friend (`/user/friends/accept/{username}`)
-- Reject Friend (`/user/friends/reject/{username}`)
-
-### Beer & Brewery Info
-- Beer Info (`/beer/{id}`)
-- Brewery Info (`/brewery/{id}`)
-- Beer Search (`/search/beer`)
-- Brewery Search (`/search/brewery`)
+The following Untappd API endpoints are not yet implemented in CDUntappdKit — all 11 are the write/action endpoints tracked in [issue #28](https://github.com/chrisdhaan/CDUntappdKit/issues/28) and require an `access_token` (no `client_id`/`client_secret` fallback). Every other documented Untappd endpoint is implemented as of v3.1.0 — see `Documentation/API_SCHEMA.md` for the full, verified list including real paths and response shapes. Contributions are welcome!
 
 ### Check-in & Social
-- Create Check-in (`/checkin/add`)
-- Get Check-in (`/checkin/{id}`)
-- Toast/Un-toast (`/checkin/{id}/toast`)
-- Add Comment (`/checkin/{id}/comment`)
-- Remove Comment (`/comment/{id}`)
+- Checkin (`POST /v4/checkin/add`)
+- Toast / Un-toast (`POST /v4/checkin/toast/{CHECKIN_ID}`)
+- Add Comment (`POST /v4/checkin/addcomment/{CHECKIN_ID}`)
+- Remove Comment (`POST /v4/checkin/deletecomment/{COMMENT_ID}`)
 
-### Wish List & User Content
-- Add to Wish List (`/user/wishlist/add`)
-- Remove from Wish List (`/user/wishlist/remove`)
+### Friends
+- Pending Friends (`GET /v4/user/pending`)
+- Add Friend (`GET /v4/friend/request/{TARGET_ID}`)
+- Remove Friend (`GET /v4/friend/remove/{TARGET_ID}`)
+- Accept Friend (`GET /v4/friend/accept/{TARGET_ID}`)
+- Reject Friend (`GET /v4/friend/reject/{TARGET_ID}`)
 
-### Venue & Location
-- Venue Info (`/venue/{id}`)
-- Foursquare Lookup (`/venue/foursquare/lookup`)
+### Wish List
+- Add to Wish List (`GET /v4/user/wishlist/add`)
+- Remove from Wish List (`GET /v4/user/wishlist/delete`)
 
 ### How to Contribute
 

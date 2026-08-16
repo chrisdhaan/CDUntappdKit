@@ -12,7 +12,7 @@
         <img src="https://img.shields.io/github/release/chrisdhaan/CDUntappdKit.svg" alt="GitHub Release">
     </a>
     <a href="https://www.swift.org">
-        <img src="https://img.shields.io/badge/Swift-5.3+-orange?style=flat" alt="Swift Versions">
+        <img src="https://img.shields.io/badge/Swift-6.0+-orange?style=flat" alt="Swift Versions">
     </a>
     <a href="https://www.swift.org/package-manager">
         <img src="https://img.shields.io/badge/Swift_Package_Manager-compatible-orange?style=flat" alt="Swift Package Manager Compatible">
@@ -27,10 +27,10 @@ An extensive Swift wrapper for the Untappd API with async/await support and comp
 ## Features
 
 - **Authentication** — OAuth 2.0 via `CDUntappdOAuthViewController`
-- **API Endpoints** — User Info, Wish List, Friends, Badges, Beers, Beer Info, Brewery Info, Venue Info, Beer Search, Brewery Search
+- **API Endpoints** — User Info, Wish List, Friends, Badges, Beers, Beer Info, Brewery Info, Venue Info, Beer Search, Brewery Search, Activity Feed, User/Beer/Brewery/Venue Activity Feed, Notifications, Foursquare Lookup
 - **Async/Await API** — Modern Swift concurrency support
 - **Swift 6 Safety** — `@MainActor` and `Sendable` annotations
-- **Comprehensive Tests** — 77 unit tests covering all functionality
+- **Comprehensive Tests** — 178 unit tests covering all functionality
 - **Brand Assets** — Untappd brown and yellow colors
 - **Multi-Platform** — iOS, macOS, tvOS, watchOS, visionOS
 - **Documentation** — DocC API reference with interactive search
@@ -39,12 +39,12 @@ An extensive Swift wrapper for the Untappd API with async/await support and comp
 
 | Platform | Minimum |
 |----------|---------|
-| iOS | 12.0+ |
-| macOS | 10.13+ |
-| tvOS | 12.0+ |
-| watchOS | 4.0+ |
+| iOS | 15.0+ |
+| macOS | 12.0+ |
+| tvOS | 15.0+ |
+| watchOS | 8.0+ |
 | visionOS | 1.0+ |
-| Swift | 5.3+ |
+| Swift | 6.0+ |
 
 ## Installation
 

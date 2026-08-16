@@ -31,7 +31,7 @@ Responsibilities:
 An internal, non-public wrapper around Keychain Services (`SecItemAdd`/`SecItemCopyMatching`/`SecItemUpdate`/`SecItemDelete`) used to persist the OAuth access token. Replaced `UserDefaults` storage in v3.0.0 — `UserDefaults` is unencrypted and world-readable on a rooted device, which doesn't meet the App Store Review Guidelines' (§2.3.12) expectations for credential storage.
 
 ### CDUntappdRouter
-An enum where each case represents an API endpoint and knows how to construct its `URLRequest` via `asURLRequest()`. As of v3.1.0, 10 cases exist, all `GET`; every case has a corresponding public method on `CDUntappdAPIClient`.
+An enum where each case represents an API endpoint and knows how to construct its `URLRequest` via `asURLRequest()`. As of v3.1.0, 17 cases exist, all `GET`; every case has a corresponding public method on `CDUntappdAPIClient`.
 
 ### CDUntappdOAuthRouter
 Same pattern as `CDUntappdRouter`, but for the OAuth authorization and token exchange endpoints.
@@ -72,7 +72,7 @@ This is deliberately simple compared to some other native-URLSession API client 
 
 ## Model Hierarchy
 
-Every response envelope pairs a `CDUntappdMetadata?` (the `meta` envelope, shared across all endpoints) with the endpoint's payload. As of v3.1.0 (10 implemented endpoints):
+Every response envelope pairs a `CDUntappdMetadata?` (the `meta` envelope, shared across all endpoints) with the endpoint's payload. As of v3.1.0 (17 implemented endpoints):
 
 ```
 CDUntappdUserInfoResponse
@@ -115,6 +115,23 @@ CDUntappdBeerSearchResponse
 
 CDUntappdBrewerySearchResponse
   └── [CDUntappdBrewery]         ← flat, no item wrapper
+
+CDUntappdActivityFeedResponse   ← shared by Activity/User/Beer/Brewery/Venue Activity Feed
+  └── [CDUntappdCheckin]
+        ├── CDUntappdUser
+        ├── CDUntappdBrewery
+        ├── CDUntappdBeer
+        ├── CDUntappdVenue
+        ├── [CDUntappdBadge]
+        └── [CDUntappdMedia]
+
+CDUntappdNotificationsResponse
+  └── [CDUntappdNotification]
+        ├── CDUntappdUser
+        └── CDUntappdCheckin
+
+CDUntappdFoursquareLookupResponse
+  └── CDUntappdVenue
 ```
 
 All model types are `struct`, `Decodable`, and `Sendable`. Response envelopes whose JSON nests payload data more than one level below `response` (e.g. `response.badges.items`) use a custom `init(from:)` with nested `KeyedDecodingContainer`s rather than a dotted-string `CodingKey` raw value — Swift's `Codable` does not treat `"response.badges.items"` as a path, only as a literal key name, so a dotted raw value silently decodes to `nil` against the real API instead of throwing. `Documentation/API_SCHEMA.md` tracks this as [Schema Issue #1](API_SCHEMA.md#schema-issue-1--dotted-path-codingkeys) and is the canonical reference for each endpoint's real response shape.
