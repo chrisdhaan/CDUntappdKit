@@ -653,6 +653,58 @@ public class CDUntappdAPIClient {
         return response
     }
 
+    /// Posts a new beer check-in.
+    /// - Parameters:
+    ///   - bid: The Untappd beer ID to check in.
+    ///   - gmtOffset: Hours offset from GMT (e.g. `"-5"`).
+    ///   - timezone: Timezone abbreviation (e.g. `"EST"`).
+    ///   - foursquareId: Foursquare venue ID. Pass `nil` to omit.
+    ///   - latitude: Location latitude. Pass `nil` to omit.
+    ///   - longitude: Location longitude. Pass `nil` to omit.
+    ///   - shout: Optional comment, max 140 characters. Pass `nil` to omit.
+    ///   - rating: Rating from 1.0–5.0 in 0.5 increments. Pass `nil` to omit.
+    ///   - facebook: Pass `true` to cross-post to Facebook. Defaults to `false`.
+    ///   - twitter: Pass `true` to cross-post to Twitter. Defaults to `false`.
+    ///   - foursquare: Pass `true` to cross-post to Foursquare (requires lat/lng). Defaults to `false`.
+    /// - Returns: The decoded ``CDUntappdCheckinResponse``.
+    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
+    public func addCheckin(bid: Int,
+                           gmtOffset: String,
+                           timezone: String,
+                           foursquareId: String?,
+                           latitude: Double?,
+                           longitude: Double?,
+                           shout: String?,
+                           rating: Double?,
+                           facebook: Bool = false,
+                           twitter: Bool = false,
+                           foursquare: Bool = false) async throws -> CDUntappdCheckinResponse {
+        precondition(
+            self.isAuthenticated(),
+            "Authentication is required to post an Untappd check-in."
+        )
+
+        var params = Parameters.checkinParameters(bid: bid, gmtOffset: gmtOffset, timezone: timezone,
+                                                  foursquareId: foursquareId, latitude: latitude,
+                                                  longitude: longitude, shout: shout, rating: rating,
+                                                  facebook: facebook, twitter: twitter, foursquare: foursquare)
+        params = self.oAuthClient.addTokens(toParameters: params)
+
+        let request = try CDUntappdRouter.addCheckin(parameters: params).asURLRequest()
+        let response: CDUntappdCheckinResponse = try await self.session.perform(request)
+
+        if let metadata = response.metadata,
+           metadata.hasError() {
+            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
+                logger.error("addCheckin API error: \(metadata.description(), privacy: .public)")
+            }
+            throw CDUntappdKitError.apiError(metadata.description())
+        }
+
+        return response
+    }
+
     /// Deprecated: Use Swift structured concurrency instead.
     ///
     /// With async/await, call `Task.cancel()` on the task that wraps the async API call.

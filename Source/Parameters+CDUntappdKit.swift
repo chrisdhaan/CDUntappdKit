@@ -235,4 +235,55 @@ extension Dictionary where Key: ExpressibleByStringLiteral, Value: Any {
 
         return params
     }
+
+    /// Builds parameters for the checkin add API endpoint.
+    /// - Parameters:
+    ///   - bid: The Untappd beer ID to check in.
+    ///   - gmtOffset: Hours offset from GMT (e.g. `"-5"`).
+    ///   - timezone: Timezone abbreviation (e.g. `"EST"`).
+    ///   - foursquareId: Foursquare venue ID. Pass `nil` to omit.
+    ///   - latitude: Location latitude. Pass `nil` to omit.
+    ///   - longitude: Location longitude. Pass `nil` to omit.
+    ///   - shout: Optional comment, max 140 characters. Pass `nil` to omit.
+    ///   - rating: Rating from 1.0–5.0 in 0.5 increments. Pass `nil` to omit.
+    ///   - facebook: Pass `true` to cross-post to Facebook.
+    ///   - twitter: Pass `true` to cross-post to Twitter.
+    ///   - foursquare: Pass `true` to cross-post to Foursquare (requires lat/lng).
+    /// - Returns: A parameters dictionary with the provided values.
+    static func checkinParameters(bid: Int,
+                                  gmtOffset: String,
+                                  timezone: String,
+                                  foursquareId: String?,
+                                  latitude: Double?,
+                                  longitude: Double?,
+                                  shout: String?,
+                                  rating: Double?,
+                                  facebook: Bool,
+                                  twitter: Bool,
+                                  foursquare: Bool) -> Parameters {
+        var params: Parameters = [
+            "bid": bid,
+            "gmt_offset": gmtOffset,
+            "timezone": timezone,
+            "facebook": facebook ? "on" : "off",
+            "twitter": twitter ? "on" : "off",
+            "foursquare": foursquare ? "on" : "off",
+        ]
+        if let foursquareId {
+            params["foursquare_id"] = foursquareId
+        }
+        if let latitude {
+            params["geolat"] = latitude
+        }
+        if let longitude {
+            params["geolng"] = longitude
+        }
+        if let shout {
+            params["shout"] = shout
+        }
+        if let rating {
+            params["rating"] = rating
+        }
+        return params
+    }
 }
