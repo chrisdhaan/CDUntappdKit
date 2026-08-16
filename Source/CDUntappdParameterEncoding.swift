@@ -47,25 +47,34 @@ enum CDUntappdParameterEncoding {
         return CharacterSet.urlQueryAllowed.subtracting(encodableDelimiters)
     }()
 
+    /// Builds a `key=value&key2=value2`-style string, sorted by key, using `queryAllowedCharacters`
+    /// escaping. Shared by both the query-string (`GET`) and httpBody (`POST`) encoders below —
+    /// the two differ only in *where* this string ends up on the request, not how it's built.
+    private static func encodedQueryString(from parameters: Parameters) -> String {
+        parameters
+            .sorted { $0.key < $1.key }
+            .map { key, value -> String in
+                let stringValue: String = if let boolValue = value as? Bool {
+                    boolValue ? "1" : "0"
+                } else {
+                    String(describing: value)
+                }
+                let encodedKey = key.addingPercentEncoding(withAllowedCharacters: queryAllowedCharacters) ?? key
+                let encodedValue = stringValue.addingPercentEncoding(withAllowedCharacters: queryAllowedCharacters) ?? stringValue
+                return "\(encodedKey)=\(encodedValue)"
+            }
+            .joined(separator: "&")
+    }
+
+    /// Builds a `GET` request with URL-encoded query parameters. Replaces Alamofire's
+    /// `URLEncoding.default`, matching its existing wire behavior.
     static func urlRequest(for url: URL, parameters: Parameters) throws -> URLRequest {
         guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             throw CDUntappdKitError.invalidRequest(underlying: URLError(.badURL))
         }
 
         if !parameters.isEmpty {
-            components.percentEncodedQuery = parameters
-                .sorted { $0.key < $1.key }
-                .map { key, value -> String in
-                    let stringValue: String = if let boolValue = value as? Bool {
-                        boolValue ? "1" : "0"
-                    } else {
-                        String(describing: value)
-                    }
-                    let encodedKey = key.addingPercentEncoding(withAllowedCharacters: queryAllowedCharacters) ?? key
-                    let encodedValue = stringValue.addingPercentEncoding(withAllowedCharacters: queryAllowedCharacters) ?? stringValue
-                    return "\(encodedKey)=\(encodedValue)"
-                }
-                .joined(separator: "&")
+            components.percentEncodedQuery = encodedQueryString(from: parameters)
         }
 
         guard let requestURL = components.url else {
@@ -74,6 +83,17 @@ enum CDUntappdParameterEncoding {
 
         var urlRequest = URLRequest(url: requestURL)
         urlRequest.httpMethod = "GET"
+        return urlRequest
+    }
+
+    /// Builds a `POST` request with form-URL-encoded parameters in the httpBody. Replaces
+    /// Alamofire's `URLEncoding.httpBody`, which uses the same escaping as `URLEncoding.default`
+    /// (see `encodedQueryString(from:)`), just written to the body instead of the query string.
+    static func httpBodyRequest(for url: URL, parameters: Parameters) throws -> URLRequest {
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        urlRequest.httpBody = Data(encodedQueryString(from: parameters).utf8)
         return urlRequest
     }
 }
