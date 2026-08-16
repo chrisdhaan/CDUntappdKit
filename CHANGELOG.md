@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## Table of Contents
 
-- [3.1.0](#310)
+- [Unreleased](#unreleased)
 - [3.0.0](#300)
 - [2.0.0](#200)
 - [1.1.0](#110)
@@ -12,11 +12,9 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [3.1.0](https://github.com/chrisdhaan/CDUntappdKit/releases/tag/3.1.0)
+## [Unreleased]
 
-Released on 2026-08-16.
-
-"Expanded Endpoint Coverage" — implements the 7 `CDUntappdRouter` cases that previously had no corresponding `CDUntappdAPIClient` method. Every router case is now backed by a public async/await API method.
+"Expanded Endpoint Coverage" — implements the 7 `CDUntappdRouter` cases that previously had no corresponding `CDUntappdAPIClient` method. Every router case is now backed by a public async/await API method. Part of v3.1.0, which will not be tagged/released until the sibling Feed & Notification Endpoints (#27) and Action Endpoints (#28) work has also merged.
 
 ### Added
 
