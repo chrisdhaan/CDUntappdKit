@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-"Expanded Endpoint Coverage" — implements the 7 `CDUntappdRouter` cases that previously had no corresponding `CDUntappdAPIClient` method. Every router case is now backed by a public async/await API method. Part of v3.1.0, which will not be tagged/released until the sibling Feed & Notification Endpoints (#27) and Action Endpoints (#28) work has also merged.
+"Expanded Endpoint Coverage" — implements every `CDUntappdRouter` case that previously had no corresponding `CDUntappdAPIClient` method, across two batches (#3, #27). Every `GET` router case is now backed by a public async/await API method. Part of v3.1.0, which will not be tagged/released until the sibling Action Endpoints (#28) work has also merged.
 
 ### Added
 
@@ -26,7 +26,17 @@ All notable changes to this project will be documented in this file.
 - `CDUntappdAPIClient.searchBeers(query:offset:limit:sort:)` — beer search
 - `CDUntappdAPIClient.searchBreweries(query:offset:)` — brewery search
 - `CDUntappdUserBeersSortType` / `CDUntappdBeerSearchSortType` — endpoint-specific sort options for the two new endpoints that take a `sort` parameter (each accepts a different subset of values than `CDUntappdUserWishListSortType`, per the Untappd API docs)
-- 15 new tests (model decode coverage for the 7 new response types, plus a lenient-bool decode case for `CDUntappdBeer.isInProduction`) — 160 tests across 33 suites
+- `CDUntappdAPIClient.fetchActivityFeed(maxId:minId:limit:)` — authenticated user's friend check-in feed
+- `CDUntappdAPIClient.fetchUserActivityFeed(forUsername:maxId:minId:limit:)` — a specific user's check-in history
+- `CDUntappdAPIClient.fetchBeerActivityFeed(forBid:maxId:minId:limit:)` — recent check-ins for a beer
+- `CDUntappdAPIClient.fetchBreweryActivityFeed(forBreweryId:maxId:minId:limit:)` — recent check-ins for a brewery
+- `CDUntappdAPIClient.fetchVenueActivityFeed(forVenueId:maxId:minId:limit:)` — recent check-ins at a venue
+- `CDUntappdAPIClient.fetchNotifications(offset:limit:)` — authenticated user's toast and comment notifications
+- `CDUntappdAPIClient.lookupVenue(byFoursquareId:)` — look up an Untappd venue by its Foursquare v2 venue ID
+- `CDUntappdActivityFeedResponse` — shared response model for the five check-in activity feed endpoints above
+- `CDUntappdNotification` / `CDUntappdNotificationsResponse` — notifications response models
+- `CDUntappdFoursquareLookupResponse` — Foursquare lookup response model, wraps the existing `CDUntappdVenue`
+- 33 new tests across both batches (15 for #3, 18 for #27 — model decode coverage for all 10 new response types plus router path/method coverage for the 7 newest cases) — 178 tests across 37 suites
 
 ### Fixed
 

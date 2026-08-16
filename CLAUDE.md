@@ -6,7 +6,7 @@ Swift wrapper for the Untappd API. Supports iOS 15+, macOS 12+, tvOS 15+, watchO
 
 | Path | Purpose |
 |------|---------|
-| `Source/` | Library source — 35 Swift files |
+| `Source/` | Library source — 50 Swift files |
 | `Source/CDUntappdKit.docc/` | DocC documentation catalog |
 | `Tests/CDUntappdKitTests/` | Swift Testing unit tests |
 | `iOS Example/` | Demo app (requires valid Untappd credentials) |
@@ -73,6 +73,6 @@ swiftformat Source Tests --lint
 
 ## Known Limitations / Tech Debt
 
-- Only 3 of 20+ Untappd endpoints are implemented
+- 17 of 28 Untappd endpoints are implemented — the 11 remaining are the write/action endpoints (checkin, toast, comments, friend requests, wish list add/remove), tracked in [issue #28](https://github.com/chrisdhaan/CDUntappdKit/issues/28)
 - No watchOS OAuth flow (WKWebView unavailable on watchOS)
 - No visionOS OAuth flow — `authenticate()` is `#if os(iOS) || os(visionOS)` but the UIApplication-based top-view-controller lookup may need a visionOS-specific window scene approach
