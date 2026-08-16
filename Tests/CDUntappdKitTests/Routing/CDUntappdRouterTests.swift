@@ -401,4 +401,11 @@ struct CDUntappdRouterTests {
         let request = try CDUntappdRouter.removeFromWishList(parameters: parameters).asURLRequest()
         #expect(request.url?.absoluteString.contains("user/wishlist/delete") == true)
     }
+
+    @Test
+    func addToWishListRouteContainsBidParameter() throws {
+        let parameters: [String: Any] = ["access_token": "test", "bid": 55]
+        let request = try CDUntappdRouter.addToWishList(parameters: parameters).asURLRequest()
+        #expect(request.url?.query?.contains("bid=55") == true)
+    }
 }

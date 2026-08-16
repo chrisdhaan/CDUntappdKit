@@ -923,6 +923,62 @@ public class CDUntappdAPIClient {
         return response
     }
 
+    /// Adds a beer to the authenticated user's wish list.
+    /// - Parameter bid: The Untappd beer ID to add.
+    /// - Returns: The decoded ``CDUntappdActionResultResponse``.
+    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
+    public func addToWishList(bid: Int) async throws -> CDUntappdActionResultResponse {
+        precondition(
+            self.isAuthenticated(),
+            "Authentication is required to add a beer to the Untappd wish list."
+        )
+
+        var params = Parameters.wishListActionParameters(bid: bid)
+        params = self.oAuthClient.addTokens(toParameters: params)
+
+        let request = try CDUntappdRouter.addToWishList(parameters: params).asURLRequest()
+        let response: CDUntappdActionResultResponse = try await self.session.perform(request)
+
+        if let metadata = response.metadata,
+           metadata.hasError() {
+            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
+                logger.error("addToWishList API error: \(metadata.description(), privacy: .public)")
+            }
+            throw CDUntappdKitError.apiError(metadata.description())
+        }
+
+        return response
+    }
+
+    /// Removes a beer from the authenticated user's wish list.
+    /// - Parameter bid: The Untappd beer ID to remove.
+    /// - Returns: The decoded ``CDUntappdActionResultResponse``.
+    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
+    public func removeFromWishList(bid: Int) async throws -> CDUntappdActionResultResponse {
+        precondition(
+            self.isAuthenticated(),
+            "Authentication is required to remove a beer from the Untappd wish list."
+        )
+
+        var params = Parameters.wishListActionParameters(bid: bid)
+        params = self.oAuthClient.addTokens(toParameters: params)
+
+        let request = try CDUntappdRouter.removeFromWishList(parameters: params).asURLRequest()
+        let response: CDUntappdActionResultResponse = try await self.session.perform(request)
+
+        if let metadata = response.metadata,
+           metadata.hasError() {
+            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
+                logger.error("removeFromWishList API error: \(metadata.description(), privacy: .public)")
+            }
+            throw CDUntappdKitError.apiError(metadata.description())
+        }
+
+        return response
+    }
+
     /// Deprecated: Use Swift structured concurrency instead.
     ///
     /// With async/await, call `Task.cancel()` on the task that wraps the async API call.

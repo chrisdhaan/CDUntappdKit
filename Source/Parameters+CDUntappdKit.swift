@@ -312,4 +312,11 @@ extension Dictionary where Key: ExpressibleByStringLiteral, Value: Any {
 
         return params
     }
+
+    /// Builds parameters for the add/remove wish list API endpoints.
+    /// - Parameter bid: The Untappd beer ID to add or remove.
+    /// - Returns: A parameters dictionary with the `bid` key set.
+    static func wishListActionParameters(bid: Int) -> Parameters {
+        ["bid": bid]
+    }
 }
