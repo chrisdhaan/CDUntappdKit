@@ -91,4 +91,30 @@ struct CDUntappdURLSessionTests {
         let result = await performTask.value
         #expect(result == nil)
     }
+
+    @Test
+    func performVoidSucceedsFor2xxStatusWithoutDecoding() async throws {
+        let stubbedRequest = CDUntappdMockURLProtocol.stubbing(
+            request,
+            with: .init(statusCode: 204, data: Data())
+        )
+        let session = CDUntappdURLSession(session: CDUntappdMockURLProtocol.makeSession())
+        try await session.perform(stubbedRequest)
+    }
+
+    @Test
+    func performVoidThrowsHTTPErrorForNon2xxStatus() async throws {
+        let stubbedRequest = CDUntappdMockURLProtocol.stubbing(
+            request,
+            with: .init(statusCode: 404, data: Data("not found".utf8))
+        )
+        let session = CDUntappdURLSession(session: CDUntappdMockURLProtocol.makeSession())
+        do {
+            try await session.perform(stubbedRequest)
+            Issue.record("Expected .httpError to be thrown")
+        } catch let CDUntappdKitError.httpError(statusCode, data) {
+            #expect(statusCode == 404)
+            #expect(data == Data("not found".utf8))
+        }
+    }
 }

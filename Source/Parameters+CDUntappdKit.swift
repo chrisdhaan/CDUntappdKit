@@ -286,4 +286,11 @@ extension Dictionary where Key: ExpressibleByStringLiteral, Value: Any {
         }
         return params
     }
+
+    /// Builds parameters for the add comment API endpoint.
+    /// - Parameter comment: The comment text, max 140 characters.
+    /// - Returns: A parameters dictionary with the `comment` key set.
+    static func addCommentParameters(comment: String) -> Parameters {
+        ["comment": comment]
+    }
 }

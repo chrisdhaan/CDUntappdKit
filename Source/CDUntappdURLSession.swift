@@ -64,6 +64,26 @@ actor CDUntappdURLSession {
         }
     }
 
+    /// Performs a request that returns no body (e.g. an HTTP 204 response), validating only the
+    /// status code. Used for endpoints like `removeComment` where there's nothing to decode.
+    func perform(_ request: URLRequest) async throws {
+        let data: Data
+        let response: URLResponse
+        do {
+            (data, response) = try await session.data(for: request)
+        } catch {
+            throw CDUntappdKitError.networkFailure(underlying: error)
+        }
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw CDUntappdKitError.networkFailure(underlying: URLError(.badServerResponse))
+        }
+
+        guard (200 ..< 300).contains(httpResponse.statusCode) else {
+            throw CDUntappdKitError.httpError(statusCode: httpResponse.statusCode, data: data)
+        }
+    }
+
     /// Cancels all in-flight requests and suspends until they've actually finished cancelling —
     /// not just until cancellation has been requested.
     ///

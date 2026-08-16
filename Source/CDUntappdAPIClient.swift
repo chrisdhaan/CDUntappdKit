@@ -705,6 +705,81 @@ public class CDUntappdAPIClient {
         return response
     }
 
+    /// Toggles a toast on a check-in (calling it again removes the toast).
+    /// - Parameter checkinId: The Untappd check-in ID to toast.
+    /// - Returns: The decoded ``CDUntappdToastResponse``.
+    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
+    public func toast(checkinId: Int) async throws -> CDUntappdToastResponse {
+        precondition(
+            self.isAuthenticated(),
+            "Authentication is required to toast an Untappd check-in."
+        )
+
+        var params = Parameters()
+        params = self.oAuthClient.addTokens(toParameters: params)
+
+        let request = try CDUntappdRouter.toast(checkinId: checkinId, parameters: params).asURLRequest()
+        let response: CDUntappdToastResponse = try await self.session.perform(request)
+
+        if let metadata = response.metadata,
+           metadata.hasError() {
+            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
+                logger.error("toast API error: \(metadata.description(), privacy: .public)")
+            }
+            throw CDUntappdKitError.apiError(metadata.description())
+        }
+
+        return response
+    }
+
+    /// Adds a comment to a check-in.
+    /// - Parameters:
+    ///   - checkinId: The Untappd check-in ID to comment on.
+    ///   - comment: The comment text, max 140 characters.
+    /// - Returns: The decoded ``CDUntappdAddCommentResponse``.
+    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
+    public func addComment(toCheckinId checkinId: Int, comment: String) async throws -> CDUntappdAddCommentResponse {
+        precondition(
+            self.isAuthenticated(),
+            "Authentication is required to comment on an Untappd check-in."
+        )
+
+        var params = Parameters.addCommentParameters(comment: comment)
+        params = self.oAuthClient.addTokens(toParameters: params)
+
+        let request = try CDUntappdRouter.addComment(checkinId: checkinId, parameters: params).asURLRequest()
+        let response: CDUntappdAddCommentResponse = try await self.session.perform(request)
+
+        if let metadata = response.metadata,
+           metadata.hasError() {
+            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
+                logger.error("addComment API error: \(metadata.description(), privacy: .public)")
+            }
+            throw CDUntappdKitError.apiError(metadata.description())
+        }
+
+        return response
+    }
+
+    /// Removes a comment from a check-in.
+    /// - Parameter commentId: The Untappd comment ID to remove.
+    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
+    public func removeComment(commentId: Int) async throws {
+        precondition(
+            self.isAuthenticated(),
+            "Authentication is required to remove an Untappd check-in comment."
+        )
+
+        var params = Parameters()
+        params = self.oAuthClient.addTokens(toParameters: params)
+
+        let request = try CDUntappdRouter.deleteComment(commentId: commentId, parameters: params).asURLRequest()
+        try await self.session.perform(request)
+    }
+
     /// Deprecated: Use Swift structured concurrency instead.
     ///
     /// With async/await, call `Task.cancel()` on the task that wraps the async API call.
