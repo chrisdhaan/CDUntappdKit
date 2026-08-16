@@ -34,7 +34,7 @@ private let logger = Logger(subsystem: CDUntappdKitBundleIdentifier, category: "
 /// Handles OAuth 2.0 authentication with the Untappd API.
 ///
 /// Manages access tokens stored in the Keychain and adds them to API requests.
-public final class CDUntappdOAuthClient: NSObject, Sendable {
+public final class CDUntappdOAuthClient: Sendable {
 
     private let session: CDUntappdURLSession
 

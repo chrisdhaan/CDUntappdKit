@@ -27,7 +27,7 @@ An extensive Swift wrapper for the Untappd API with async/await support and comp
 ## Features
 
 - **Authentication** — OAuth 2.0 via `CDUntappdOAuthViewController`
-- **User Endpoints** — User Info, Wish List, Friends
+- **API Endpoints** — User Info, Wish List, Friends, Badges, Beers, Beer Info, Brewery Info, Venue Info, Beer Search, Brewery Search
 - **Async/Await API** — Modern Swift concurrency support
 - **Swift 6 Safety** — `@MainActor` and `Sendable` annotations
 - **Comprehensive Tests** — 77 unit tests covering all functionality

@@ -1,0 +1,17 @@
+{
+  "meta": {
+    "code": 200
+  },
+  "response": {
+    "breweries": {
+      "count": 1,
+      "items": [
+        {
+          "brewery_id": 44,
+          "brewery_name": "Search Result Brewery",
+          "brewery_slug": "search-result-brewery"
+        }
+      ]
+    }
+  }
+}

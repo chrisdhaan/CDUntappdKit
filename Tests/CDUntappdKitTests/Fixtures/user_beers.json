@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "code": 200
+  },
+  "response": {
+    "beers": {
+      "count": 1,
+      "total_count": 1,
+      "items": [
+        {
+          "count": 3,
+          "first_created_at": "Thu, 01 Jan 2015 00:00:00 +0000",
+          "recent_created_at": "Fri, 02 Jan 2015 00:00:00 +0000",
+          "beer": {
+            "bid": 1,
+            "beer_name": "Example IPA",
+            "beer_label": "https://example.com/beer.jpg",
+            "beer_abv": 6.5,
+            "beer_ibu": 65
+          },
+          "brewery": {
+            "brewery_id": 10,
+            "brewery_name": "Example Brewery"
+          }
+        }
+      ]
+    }
+  }
+}

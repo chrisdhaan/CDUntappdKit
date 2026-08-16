@@ -4,10 +4,33 @@ All notable changes to this project will be documented in this file.
 
 ## Table of Contents
 
+- [Unreleased](#unreleased)
 - [3.0.0](#300)
 - [2.0.0](#200)
 - [1.1.0](#110)
 - [1.0.0](#100)
+
+---
+
+## [Unreleased]
+
+"Expanded Endpoint Coverage" — implements the 7 `CDUntappdRouter` cases that previously had no corresponding `CDUntappdAPIClient` method. Every router case is now backed by a public async/await API method. Part of v3.1.0, which will not be tagged/released until the sibling Feed & Notification Endpoints (#27) and Action Endpoints (#28) work has also merged.
+
+### Added
+
+- `CDUntappdAPIClient.fetchUserBadges(forUsername:offset:)` — user's earned badges
+- `CDUntappdAPIClient.fetchUserBeers(forUsername:offset:limit:sort:)` — beers the user has checked in
+- `CDUntappdAPIClient.fetchBeerInfo(forBid:compact:)` — beer info by ID
+- `CDUntappdAPIClient.fetchBreweryInfo(forBreweryId:compact:)` — brewery info by ID
+- `CDUntappdAPIClient.fetchVenueInfo(forVenueId:compact:)` — venue info by ID
+- `CDUntappdAPIClient.searchBeers(query:offset:limit:sort:)` — beer search
+- `CDUntappdAPIClient.searchBreweries(query:offset:)` — brewery search
+- `CDUntappdUserBeersSortType` / `CDUntappdBeerSearchSortType` — endpoint-specific sort options for the two new endpoints that take a `sort` parameter (each accepts a different subset of values than `CDUntappdUserWishListSortType`, per the Untappd API docs)
+- 15 new tests (model decode coverage for the 7 new response types, plus a lenient-bool decode case for `CDUntappdBeer.isInProduction`) — 160 tests across 33 suites
+
+### Fixed
+
+- `CDUntappdBeer.isInProduction` now decodes leniently from either a JSON boolean or a `1`/`0` integer, matching the existing behavior of `CDUntappdBrewery.isActive`/`CDUntappdVenue.isVerified` — the real Untappd API returns this field as an integer, which previously would have thrown a decoding error
 
 ---
 

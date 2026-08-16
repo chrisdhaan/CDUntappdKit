@@ -1,0 +1,21 @@
+{
+  "meta": {
+    "code": 200
+  },
+  "response": {
+    "venue": {
+      "venue_id": 321,
+      "venue_name": "Test Venue",
+      "venue_slug": "test-venue",
+      "is_verified": 1,
+      "primary_category": "Bar",
+      "location": {
+        "venue_city": "Testville",
+        "venue_state": "CA",
+        "venue_country": "United States",
+        "lat": 37.0,
+        "lng": -122.0
+      }
+    }
+  }
+}

@@ -80,4 +80,116 @@ extension Dictionary where Key: ExpressibleByStringLiteral, Value: Any {
 
         return params
     }
+
+    /// Builds parameters for the user badges API endpoint.
+    /// - Parameter offset: Zero-based offset for pagination. Pass `nil` to omit.
+    /// - Returns: A parameters dictionary with the provided values.
+    static func userBadgesParameters(withOffset offset: Int?) -> Parameters {
+        var params: Parameters = [:]
+
+        if let offset {
+            params["offset"] = offset
+        }
+
+        return params
+    }
+
+    /// Builds parameters for the user beers API endpoint.
+    /// - Parameters:
+    ///   - offset: Zero-based offset for pagination. Pass `nil` to omit.
+    ///   - limit: Maximum number of results (max 50). Pass `nil` to omit.
+    ///   - sort: How to sort results. Pass `nil` to omit.
+    /// - Returns: A parameters dictionary with the provided values.
+    static func userBeersParameters(withOffset offset: Int?,
+                                    limit: Int?,
+                                    sort: CDUntappdUserBeersSortType?) -> Parameters {
+        var params: Parameters = [:]
+
+        if let offset {
+            params["offset"] = offset
+        }
+        if let limit {
+            params["limit"] = limit
+        }
+        if let sort {
+            params["sort"] = sort
+        }
+
+        return params
+    }
+
+    /// Builds parameters for the beer info API endpoint.
+    /// - Parameter isCompact: Pass `true` for a compact response omitting extended fields.
+    /// - Returns: A parameters dictionary with the `compact` key set.
+    static func beerInfoParameters(isCompact compact: Bool) -> Parameters {
+        var params: Parameters = [:]
+
+        params["compact"] = compact ? "true" : false
+
+        return params
+    }
+
+    /// Builds parameters for the brewery info API endpoint.
+    /// - Parameter isCompact: Pass `true` for a compact response omitting extended fields.
+    /// - Returns: A parameters dictionary with the `compact` key set.
+    static func breweryInfoParameters(isCompact compact: Bool) -> Parameters {
+        var params: Parameters = [:]
+
+        params["compact"] = compact ? "true" : false
+
+        return params
+    }
+
+    /// Builds parameters for the venue info API endpoint.
+    /// - Parameter isCompact: Pass `true` for a compact response omitting extended fields.
+    /// - Returns: A parameters dictionary with the `compact` key set.
+    static func venueInfoParameters(isCompact compact: Bool) -> Parameters {
+        var params: Parameters = [:]
+
+        params["compact"] = compact ? "true" : false
+
+        return params
+    }
+
+    /// Builds parameters for the beer search API endpoint.
+    /// - Parameters:
+    ///   - query: The search term.
+    ///   - offset: Zero-based offset for pagination. Pass `nil` to omit.
+    ///   - limit: Maximum number of results (max 50). Pass `nil` to omit.
+    ///   - sort: How to sort results. Pass `nil` to omit.
+    /// - Returns: A parameters dictionary with the provided values.
+    static func beerSearchParameters(query: String,
+                                     offset: Int?,
+                                     limit: Int?,
+                                     sort: CDUntappdBeerSearchSortType?) -> Parameters {
+        var params: Parameters = ["q": query]
+
+        if let offset {
+            params["offset"] = offset
+        }
+        if let limit {
+            params["limit"] = limit
+        }
+        if let sort {
+            params["sort"] = sort
+        }
+
+        return params
+    }
+
+    /// Builds parameters for the brewery search API endpoint.
+    /// - Parameters:
+    ///   - query: The search term.
+    ///   - offset: Zero-based offset for pagination. Pass `nil` to omit.
+    /// - Returns: A parameters dictionary with the provided values.
+    static func brewerySearchParameters(query: String,
+                                        offset: Int?) -> Parameters {
+        var params: Parameters = ["q": query]
+
+        if let offset {
+            params["offset"] = offset
+        }
+
+        return params
+    }
 }

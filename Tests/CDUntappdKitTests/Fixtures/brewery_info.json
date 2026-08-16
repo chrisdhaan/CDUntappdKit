@@ -1,0 +1,20 @@
+{
+  "meta": {
+    "code": 200
+  },
+  "response": {
+    "brewery": {
+      "brewery_id": 789,
+      "brewery_name": "Test Brewery",
+      "brewery_slug": "test-brewery",
+      "brewery_active": 1,
+      "country_name": "United States",
+      "location": {
+        "brewery_city": "Testville",
+        "brewery_state": "CA",
+        "lat": 37.0,
+        "lng": -122.0
+      }
+    }
+  }
+}

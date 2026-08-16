@@ -40,3 +40,27 @@ public enum CDUntappdUserWishListSortType: String, Sendable {
     /// Sort by lowest global rating.
     case lowestRated = "lowest_rated"
 }
+
+/// Sort order options for beer search queries.
+public enum CDUntappdBeerSearchSortType: String, Sendable {
+    /// Sort by check-in count (default).
+    case checkin
+    /// Sort alphabetically by beer name.
+    case name
+}
+
+/// Sort order options for user beers (checked-in beers) queries.
+public enum CDUntappdUserBeersSortType: String, Sendable {
+    /// Sort by date (default).
+    case date
+    /// Sort by highest check-in count.
+    case checkin
+    /// Sort by highest global rating.
+    case highestRated = "highest_rated"
+    /// Sort by lowest global rating.
+    case lowestRated = "lowest_rated"
+    /// Sort by the user's own highest-rated beer.
+    case highestRatedYou = "highest_rated_you"
+    /// Sort by the user's own lowest-rated beer.
+    case lowestRatedYou = "lowest_rated_you"
+}
