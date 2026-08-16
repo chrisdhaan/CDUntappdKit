@@ -780,6 +780,37 @@ public class CDUntappdAPIClient {
         try await self.session.perform(request)
     }
 
+    /// Fetches the authenticated user's pending friend requests.
+    /// - Parameters:
+    ///   - offset: The zero-based offset for pagination. Defaults to `nil` (start from 0).
+    ///   - limit: Maximum number of results to return. Defaults to `nil` (all results).
+    /// - Returns: The decoded ``CDUntappdPendingFriendsResponse``.
+    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
+    public func fetchPendingFriends(offset: Int?,
+                                    limit: Int?) async throws -> CDUntappdPendingFriendsResponse {
+        precondition(
+            self.isAuthenticated(),
+            "Authentication is required to query the Untappd API pending friends endpoint."
+        )
+
+        var params = Parameters.pendingFriendsParameters(withOffset: offset, limit: limit)
+        params = self.oAuthClient.addTokens(toParameters: params)
+
+        let request = try CDUntappdRouter.pendingFriends(parameters: params).asURLRequest()
+        let response: CDUntappdPendingFriendsResponse = try await self.session.perform(request)
+
+        if let metadata = response.metadata,
+           metadata.hasError() {
+            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
+                logger.error("fetchPendingFriends API error: \(metadata.description(), privacy: .public)")
+            }
+            throw CDUntappdKitError.apiError(metadata.description())
+        }
+
+        return response
+    }
+
     /// Deprecated: Use Swift structured concurrency instead.
     ///
     /// With async/await, call `Task.cancel()` on the task that wraps the async API call.

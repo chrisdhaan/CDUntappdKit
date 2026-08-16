@@ -1,0 +1,19 @@
+{
+  "meta": {
+    "code": 200
+  },
+  "response": {
+    "items": [
+      {
+        "friendship_hash": "def456",
+        "user": {
+          "uid": 3,
+          "user_name": "PendingUser",
+          "first_name": "Pending",
+          "last_name": "User"
+        },
+        "created_at": "Fri, 02 Jan 2015 00:00:00 +0000"
+      }
+    ]
+  }
+}

@@ -293,4 +293,23 @@ extension Dictionary where Key: ExpressibleByStringLiteral, Value: Any {
     static func addCommentParameters(comment: String) -> Parameters {
         ["comment": comment]
     }
+
+    /// Builds parameters for the pending friends API endpoint.
+    /// - Parameters:
+    ///   - offset: Zero-based offset for pagination. Pass `nil` to omit.
+    ///   - limit: Maximum number of results. Pass `nil` to omit (API defaults to all results).
+    /// - Returns: A parameters dictionary with the provided values.
+    static func pendingFriendsParameters(withOffset offset: Int?,
+                                         limit: Int?) -> Parameters {
+        var params: Parameters = [:]
+
+        if let offset {
+            params["offset"] = offset
+        }
+        if let limit {
+            params["limit"] = limit
+        }
+
+        return params
+    }
 }
