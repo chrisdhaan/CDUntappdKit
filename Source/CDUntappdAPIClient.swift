@@ -811,6 +811,118 @@ public class CDUntappdAPIClient {
         return response
     }
 
+    /// Sends a friend request to a user.
+    /// - Parameter targetId: The target user's Untappd user ID.
+    /// - Returns: The decoded ``CDUntappdActionResultResponse``.
+    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
+    public func addFriend(targetId: Int) async throws -> CDUntappdActionResultResponse {
+        precondition(
+            self.isAuthenticated(),
+            "Authentication is required to send an Untappd friend request."
+        )
+
+        var params = Parameters()
+        params = self.oAuthClient.addTokens(toParameters: params)
+
+        let request = try CDUntappdRouter.addFriend(targetId: targetId, parameters: params).asURLRequest()
+        let response: CDUntappdActionResultResponse = try await self.session.perform(request)
+
+        if let metadata = response.metadata,
+           metadata.hasError() {
+            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
+                logger.error("addFriend API error: \(metadata.description(), privacy: .public)")
+            }
+            throw CDUntappdKitError.apiError(metadata.description())
+        }
+
+        return response
+    }
+
+    /// Removes a friend.
+    /// - Parameter targetId: The target user's Untappd user ID.
+    /// - Returns: The decoded ``CDUntappdActionResultResponse``.
+    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
+    public func removeFriend(targetId: Int) async throws -> CDUntappdActionResultResponse {
+        precondition(
+            self.isAuthenticated(),
+            "Authentication is required to remove an Untappd friend."
+        )
+
+        var params = Parameters()
+        params = self.oAuthClient.addTokens(toParameters: params)
+
+        let request = try CDUntappdRouter.removeFriend(targetId: targetId, parameters: params).asURLRequest()
+        let response: CDUntappdActionResultResponse = try await self.session.perform(request)
+
+        if let metadata = response.metadata,
+           metadata.hasError() {
+            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
+                logger.error("removeFriend API error: \(metadata.description(), privacy: .public)")
+            }
+            throw CDUntappdKitError.apiError(metadata.description())
+        }
+
+        return response
+    }
+
+    /// Accepts a pending friend request.
+    /// - Parameter targetId: The requesting user's Untappd user ID.
+    /// - Returns: The decoded ``CDUntappdActionResultResponse``.
+    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
+    public func acceptFriend(targetId: Int) async throws -> CDUntappdActionResultResponse {
+        precondition(
+            self.isAuthenticated(),
+            "Authentication is required to accept an Untappd friend request."
+        )
+
+        var params = Parameters()
+        params = self.oAuthClient.addTokens(toParameters: params)
+
+        let request = try CDUntappdRouter.acceptFriend(targetId: targetId, parameters: params).asURLRequest()
+        let response: CDUntappdActionResultResponse = try await self.session.perform(request)
+
+        if let metadata = response.metadata,
+           metadata.hasError() {
+            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
+                logger.error("acceptFriend API error: \(metadata.description(), privacy: .public)")
+            }
+            throw CDUntappdKitError.apiError(metadata.description())
+        }
+
+        return response
+    }
+
+    /// Rejects a pending friend request.
+    /// - Parameter targetId: The requesting user's Untappd user ID.
+    /// - Returns: The decoded ``CDUntappdActionResultResponse``.
+    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
+    public func rejectFriend(targetId: Int) async throws -> CDUntappdActionResultResponse {
+        precondition(
+            self.isAuthenticated(),
+            "Authentication is required to reject an Untappd friend request."
+        )
+
+        var params = Parameters()
+        params = self.oAuthClient.addTokens(toParameters: params)
+
+        let request = try CDUntappdRouter.rejectFriend(targetId: targetId, parameters: params).asURLRequest()
+        let response: CDUntappdActionResultResponse = try await self.session.perform(request)
+
+        if let metadata = response.metadata,
+           metadata.hasError() {
+            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
+                logger.error("rejectFriend API error: \(metadata.description(), privacy: .public)")
+            }
+            throw CDUntappdKitError.apiError(metadata.description())
+        }
+
+        return response
+    }
+
     /// Deprecated: Use Swift structured concurrency instead.
     ///
     /// With async/await, call `Task.cancel()` on the task that wraps the async API call.
