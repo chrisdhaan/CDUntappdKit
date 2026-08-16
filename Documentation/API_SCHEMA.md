@@ -148,7 +148,7 @@ GET /v4/checkin/recent
 }
 ```
 
-**Schema verification — `CDUntappdActivityFeedResponse`:** decodes via nested-container `init(from:)` (`response` → `checkins` → `items` → `[CDUntappdCheckin]`), not a dotted `CodingKey` path — see [Schema Issue #1](#schema-issue-1--dotted-path-codingkeys). Reused as-is by [User](#user-activity-feed-), [Beer](#beer-activity-feed-), [Brewery](#brewery-activity-feed-), and [Venue Activity Feed](#venue-activity-feed-) below — all five share this identical response shape.
+**Schema verification — `CDUntappdActivityFeedResponse`:** decodes via nested-container `init(from:)` (`response` → `checkins` → `items` → `[CDUntappdCheckin]`), not a dotted `CodingKey` path — see [Schema Issue #1](#schema-issue-1--dotted-path-codingkeys). Reused as-is by [User](#user-activity-feed-✅-implemented), [Beer](#beer-activity-feed-✅-implemented), [Brewery](#brewery-activity-feed-✅-implemented), and [Venue Activity Feed](#venue-activity-feed-✅-implemented) below — all five share this identical response shape.
 
 **Schema verification — `CDUntappdCheckin`:** unchanged, already correct.
 
@@ -161,7 +161,7 @@ GET /v4/user/checkins/{USERNAME}
 ```
 **Auth required:** No (pass client credentials or access_token)
 **Client method:** `fetchUserActivityFeed(forUsername:maxId:minId:limit:)` in `CDUntappdAPIClient`
-**Response model:** Reuses `CDUntappdActivityFeedResponse` — identical shape to [Activity Feed](#activity-feed-).
+**Response model:** Reuses `CDUntappdActivityFeedResponse` — identical shape to [Activity Feed](#activity-feed-✅-implemented).
 
 | Parameter | Type | Required | Notes |
 |-----------|------|----------|-------|
@@ -266,7 +266,7 @@ GET /v4/notifications
 }
 ```
 
-**Schema verification — `CDUntappdNotificationsResponse`:** decodes via nested-container `init(from:)` (`response` → `items` → `[CDUntappdNotification]`), not a dotted `CodingKey` path — see [Schema Issue #1](#schema-issue-1--dotted-path-codingkeys). One level shallower than [Activity Feed](#activity-feed-)'s `response.checkins.items` — there is no intermediate `notifications` container, `items` sits directly under `response`.
+**Schema verification — `CDUntappdNotificationsResponse`:** decodes via nested-container `init(from:)` (`response` → `items` → `[CDUntappdNotification]`), not a dotted `CodingKey` path — see [Schema Issue #1](#schema-issue-1--dotted-path-codingkeys). One level shallower than [Activity Feed](#activity-feed-✅-implemented)'s `response.checkins.items` — there is no intermediate `notifications` container, `items` sits directly under `response`.
 
 **Schema verification — `CDUntappdNotification`:** `checkin` reuses the existing `CDUntappdCheckin` model (its `comment` field maps from `checkin_comment`, matching every other endpoint that embeds a checkin — the flat `"shout"` key in an earlier draft of this doc's sample JSON did not match that convention and has been corrected above). `user` reuses the existing `CDUntappdUser` model, which already treats every field as optional so the compact user object here decodes cleanly.
 
@@ -1220,6 +1220,7 @@ GET /v4/user/wishlist/delete
 ```
 GET /v4/venue/foursquare_lookup/{VENUE_ID}
 ```
+**Auth required:** Yes (`access_token`)
 **Client method:** `lookupVenue(byFoursquareId:)` in `CDUntappdAPIClient`
 **Response model:** `CDUntappdFoursquareLookupResponse` → `CDUntappdVenue`
 

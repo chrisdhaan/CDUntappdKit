@@ -178,6 +178,83 @@ struct CDUntappdRouterTests {
     }
 
     @Test
+    func activityFeedRouteUsesGET() throws {
+        let parameters: [String: Any] = ["access_token": "test"]
+        let request = try CDUntappdRouter.activityFeed(parameters: parameters).asURLRequest()
+        #expect(request.httpMethod == "GET")
+    }
+
+    @Test
+    func activityFeedRouteContainsPath() throws {
+        let parameters: [String: Any] = ["access_token": "test"]
+        let request = try CDUntappdRouter.activityFeed(parameters: parameters).asURLRequest()
+        #expect(request.url?.absoluteString.contains("checkin/recent") == true)
+    }
+
+    @Test
+    func userActivityFeedRouteContainsUsername() throws {
+        let parameters: [String: Any] = ["access_token": "test"]
+        let request = try CDUntappdRouter.userActivityFeed(username: "testuser", parameters: parameters).asURLRequest()
+        #expect(request.url?.absoluteString.contains("user/checkins/testuser") == true)
+    }
+
+    @Test
+    func userActivityFeedRouteWithoutUsernameConstructsPath() throws {
+        let parameters: [String: Any] = ["access_token": "test"]
+        let request = try CDUntappdRouter.userActivityFeed(username: nil, parameters: parameters).asURLRequest()
+        #expect(request.url?.absoluteString.contains("user/checkins") == true)
+    }
+
+    @Test
+    func beerActivityFeedRouteContainsBeerId() throws {
+        let parameters: [String: Any] = ["client_id": "test", "client_secret": "test"]
+        let request = try CDUntappdRouter.beerActivityFeed(bid: 456, parameters: parameters).asURLRequest()
+        #expect(request.url?.absoluteString.contains("beer/checkins/456") == true)
+    }
+
+    @Test
+    func breweryActivityFeedRouteContainsBreweryId() throws {
+        let parameters: [String: Any] = ["client_id": "test", "client_secret": "test"]
+        let request = try CDUntappdRouter.breweryActivityFeed(breweryId: 123, parameters: parameters).asURLRequest()
+        #expect(request.url?.absoluteString.contains("brewery/checkins/123") == true)
+    }
+
+    @Test
+    func venueActivityFeedRouteContainsVenueId() throws {
+        let parameters: [String: Any] = ["client_id": "test", "client_secret": "test"]
+        let request = try CDUntappdRouter.venueActivityFeed(venueId: 789, parameters: parameters).asURLRequest()
+        #expect(request.url?.absoluteString.contains("venue/checkins/789") == true)
+    }
+
+    @Test
+    func notificationsRouteUsesGET() throws {
+        let parameters: [String: Any] = ["access_token": "test"]
+        let request = try CDUntappdRouter.notifications(parameters: parameters).asURLRequest()
+        #expect(request.httpMethod == "GET")
+    }
+
+    @Test
+    func notificationsRouteContainsPath() throws {
+        let parameters: [String: Any] = ["access_token": "test"]
+        let request = try CDUntappdRouter.notifications(parameters: parameters).asURLRequest()
+        #expect(request.url?.absoluteString.contains("notifications") == true)
+    }
+
+    @Test
+    func foursquareLookupRouteUsesGET() throws {
+        let parameters: [String: Any] = ["access_token": "test"]
+        let request = try CDUntappdRouter.foursquareLookup(venueId: "4b0123456789", parameters: parameters).asURLRequest()
+        #expect(request.httpMethod == "GET")
+    }
+
+    @Test
+    func foursquareLookupRouteContainsVenueId() throws {
+        let parameters: [String: Any] = ["access_token": "test"]
+        let request = try CDUntappdRouter.foursquareLookup(venueId: "4b0123456789", parameters: parameters).asURLRequest()
+        #expect(request.url?.absoluteString.contains("venue/foursquare_lookup/4b0123456789") == true)
+    }
+
+    @Test
     func routeURLsUseUntappdAPIBase() throws {
         let parameters: [String: Any] = ["client_id": "test", "client_secret": "test"]
         let request = try CDUntappdRouter.userInfo(username: "testuser", parameters: parameters).asURLRequest()
