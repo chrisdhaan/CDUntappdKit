@@ -261,14 +261,12 @@ extension Dictionary where Key: ExpressibleByStringLiteral, Value: Any {
                                   facebook: Bool,
                                   twitter: Bool,
                                   foursquare: Bool) -> Parameters {
-        var params: Parameters = [
-            "bid": bid,
-            "gmt_offset": gmtOffset,
-            "timezone": timezone,
-            "facebook": facebook ? "on" : "off",
-            "twitter": twitter ? "on" : "off",
-            "foursquare": foursquare ? "on" : "off",
-        ]
+        var params: Parameters = ["bid": bid]
+        params["gmt_offset"] = gmtOffset
+        params["timezone"] = timezone
+        params["facebook"] = facebook ? "on" : "off"
+        params["twitter"] = twitter ? "on" : "off"
+        params["foursquare"] = foursquare ? "on" : "off"
         if let foursquareId {
             params["foursquare_id"] = foursquareId
         }
