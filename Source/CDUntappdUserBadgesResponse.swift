@@ -36,14 +36,19 @@ public struct CDUntappdUserBadgesResponse: Decodable, Sendable {
     }
 
     private enum ResponseKeys: String, CodingKey {
+        case badges
+    }
+
+    private enum BadgesKeys: String, CodingKey {
         case items
     }
 
     public init(from decoder: any Decoder) throws {
         let root = try decoder.container(keyedBy: RootKeys.self)
         metadata = try root.decodeIfPresent(CDUntappdMetadata.self, forKey: .metadata)
-        if let responseContainer = try? root.nestedContainer(keyedBy: ResponseKeys.self, forKey: .response) {
-            badges = try responseContainer.decodeIfPresent([CDUntappdBadge].self, forKey: .items)
+        if let responseContainer = try? root.nestedContainer(keyedBy: ResponseKeys.self, forKey: .response),
+           let badgesContainer = try? responseContainer.nestedContainer(keyedBy: BadgesKeys.self, forKey: .badges) {
+            badges = try badgesContainer.decodeIfPresent([CDUntappdBadge].self, forKey: .items)
         } else {
             badges = nil
         }

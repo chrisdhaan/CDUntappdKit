@@ -3,15 +3,13 @@
     "code": 200
   },
   "response": {
-    "brewery": {
+    "breweries": {
       "count": 1,
       "items": [
         {
-          "brewery": {
-            "brewery_id": 44,
-            "brewery_name": "Search Result Brewery",
-            "brewery_slug": "search-result-brewery"
-          }
+          "brewery_id": 44,
+          "brewery_name": "Search Result Brewery",
+          "brewery_slug": "search-result-brewery"
         }
       ]
     }

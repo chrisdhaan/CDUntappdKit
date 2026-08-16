@@ -36,7 +36,7 @@ struct CDUntappdBrewerySearchResponseTests {
         let data = try Data(contentsOf: url)
         let response = try JSONDecoder().decode(CDUntappdBrewerySearchResponse.self, from: data)
         #expect(response.breweries != nil)
-        #expect(response.breweries?.first?.brewery?.name == "Search Result Brewery")
+        #expect(response.breweries?.first?.name == "Search Result Brewery")
     }
 
     @Test

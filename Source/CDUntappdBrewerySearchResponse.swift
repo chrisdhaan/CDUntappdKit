@@ -28,20 +28,18 @@
 public struct CDUntappdBrewerySearchResponse: Decodable, Sendable {
 
     public var metadata: CDUntappdMetadata?
-    public var breweries: [CDUntappdBreweryItem]?
+    public var breweries: [CDUntappdBrewery]?
 
     private enum RootKeys: String, CodingKey {
         case metadata = "meta"
         case response
     }
 
-    /// Untappd's search/brewery endpoint nests results under a singular "brewery" key,
-    /// unlike search/beer's plural "beers" — this asymmetry is a known quirk of the API.
     private enum ResponseKeys: String, CodingKey {
-        case brewery
+        case breweries
     }
 
-    private enum BreweryKeys: String, CodingKey {
+    private enum BreweriesKeys: String, CodingKey {
         case items
     }
 
@@ -49,8 +47,8 @@ public struct CDUntappdBrewerySearchResponse: Decodable, Sendable {
         let root = try decoder.container(keyedBy: RootKeys.self)
         metadata = try root.decodeIfPresent(CDUntappdMetadata.self, forKey: .metadata)
         if let responseContainer = try? root.nestedContainer(keyedBy: ResponseKeys.self, forKey: .response),
-           let breweryContainer = try? responseContainer.nestedContainer(keyedBy: BreweryKeys.self, forKey: .brewery) {
-            breweries = try breweryContainer.decodeIfPresent([CDUntappdBreweryItem].self, forKey: .items)
+           let breweriesContainer = try? responseContainer.nestedContainer(keyedBy: BreweriesKeys.self, forKey: .breweries) {
+            breweries = try breweriesContainer.decodeIfPresent([CDUntappdBrewery].self, forKey: .items)
         } else {
             breweries = nil
         }
