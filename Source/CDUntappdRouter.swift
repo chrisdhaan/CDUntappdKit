@@ -52,6 +52,20 @@ public enum CDUntappdRouter {
     case beerSearch(parameters: Parameters)
     /// Search for breweries.
     case brewerySearch(parameters: Parameters)
+    /// Fetch the authenticated user's friend check-in feed.
+    case activityFeed(parameters: Parameters)
+    /// Fetch a user's check-in history.
+    case userActivityFeed(username: String?, parameters: Parameters)
+    /// Fetch recent check-ins for a beer.
+    case beerActivityFeed(bid: Int, parameters: Parameters)
+    /// Fetch recent check-ins for a brewery.
+    case breweryActivityFeed(breweryId: Int, parameters: Parameters)
+    /// Fetch recent check-ins at a venue.
+    case venueActivityFeed(venueId: Int, parameters: Parameters)
+    /// Fetch the authenticated user's toast and comment notifications.
+    case notifications(parameters: Parameters)
+    /// Look up an Untappd venue by its Foursquare v2 venue ID.
+    case foursquareLookup(venueId: String, parameters: Parameters)
 
     var path: String {
         switch self {
@@ -75,6 +89,20 @@ public enum CDUntappdRouter {
             "search/beer"
         case .brewerySearch:
             "search/brewery"
+        case .activityFeed:
+            "checkin/recent"
+        case .userActivityFeed(let username, parameters: _):
+            String.path("user/checkins", forUsername: username)
+        case .beerActivityFeed(let bid, parameters: _):
+            "beer/checkins/\(bid)"
+        case .breweryActivityFeed(let breweryId, parameters: _):
+            "brewery/checkins/\(breweryId)"
+        case .venueActivityFeed(let venueId, parameters: _):
+            "venue/checkins/\(venueId)"
+        case .notifications:
+            "notifications"
+        case .foursquareLookup(let venueId, parameters: _):
+            "venue/foursquare_lookup/\(venueId)"
         }
     }
 
@@ -89,7 +117,14 @@ public enum CDUntappdRouter {
              let .beerInfo(bid: _, parameters),
              let .venueInfo(venueId: _, parameters),
              let .beerSearch(parameters),
-             let .brewerySearch(parameters):
+             let .brewerySearch(parameters),
+             let .userActivityFeed(username: _, parameters),
+             let .beerActivityFeed(bid: _, parameters),
+             let .breweryActivityFeed(breweryId: _, parameters),
+             let .venueActivityFeed(venueId: _, parameters),
+             let .activityFeed(parameters),
+             let .notifications(parameters),
+             let .foursquareLookup(venueId: _, parameters):
             parameters
         }
     }

@@ -431,6 +431,228 @@ public class CDUntappdAPIClient {
         return response
     }
 
+    /// Fetches the authenticated user's friend check-in activity feed.
+    /// - Parameters:
+    ///   - maxId: Return checkins with ID ≤ maxId (older). Pass `nil` to omit.
+    ///   - minId: Return checkins with ID ≥ minId (newer). Pass `nil` to omit.
+    ///   - limit: Maximum results (default 25, max 50). Pass `nil` to omit.
+    /// - Returns: The decoded ``CDUntappdActivityFeedResponse``.
+    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
+    public func fetchActivityFeed(maxId: Int?,
+                                  minId: Int?,
+                                  limit: Int?) async throws -> CDUntappdActivityFeedResponse {
+        precondition(
+            self.isAuthenticated(),
+            "Authentication is required to query the Untappd API activity feed endpoint."
+        )
+
+        var params = Parameters.activityFeedParameters(maxId: maxId, minId: minId, limit: limit)
+        params = self.oAuthClient.addTokens(toParameters: params)
+
+        let request = try CDUntappdRouter.activityFeed(parameters: params).asURLRequest()
+        let response: CDUntappdActivityFeedResponse = try await self.session.perform(request)
+
+        if let metadata = response.metadata,
+           metadata.hasError() {
+            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
+                logger.error("fetchActivityFeed API error: \(metadata.description(), privacy: .public)")
+            }
+            throw CDUntappdKitError.apiError(metadata.description())
+        }
+
+        return response
+    }
+
+    /// Fetches a user's check-in history.
+    /// - Parameters:
+    ///   - username: The Untappd username to fetch check-ins for. Pass `nil` to fetch for the authenticated user.
+    ///   - maxId: Return checkins with ID ≤ maxId (older). Pass `nil` to omit.
+    ///   - minId: Return checkins with ID ≥ minId (newer). Pass `nil` to omit.
+    ///   - limit: Maximum results (default 25, max 25). Pass `nil` to omit.
+    /// - Returns: The decoded ``CDUntappdActivityFeedResponse``.
+    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
+    public func fetchUserActivityFeed(forUsername username: String?,
+                                      maxId: Int?,
+                                      minId: Int?,
+                                      limit: Int?) async throws -> CDUntappdActivityFeedResponse {
+        precondition(
+            username != nil || self.isAuthenticated(),
+            "Either user authentication or a username are required to query the Untappd API user activity feed endpoint."
+        )
+
+        var params = Parameters.activityFeedParameters(maxId: maxId, minId: minId, limit: limit)
+        params = self.oAuthClient.addTokens(toParameters: params)
+
+        let request = try CDUntappdRouter.userActivityFeed(username: username,
+                                                           parameters: params).asURLRequest()
+        let response: CDUntappdActivityFeedResponse = try await self.session.perform(request)
+
+        if let metadata = response.metadata,
+           metadata.hasError() {
+            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
+                logger.error("fetchUserActivityFeed API error: \(metadata.description(), privacy: .public)")
+            }
+            throw CDUntappdKitError.apiError(metadata.description())
+        }
+
+        return response
+    }
+
+    /// Fetches recent check-ins for a beer.
+    /// - Parameters:
+    ///   - bid: The Untappd beer ID.
+    ///   - maxId: Return checkins with ID ≤ maxId (older). Pass `nil` to omit.
+    ///   - minId: Return checkins with ID ≥ minId (newer). Pass `nil` to omit.
+    ///   - limit: Maximum results (default 25, max 25). Pass `nil` to omit.
+    /// - Returns: The decoded ``CDUntappdActivityFeedResponse``.
+    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
+    public func fetchBeerActivityFeed(forBid bid: Int,
+                                      maxId: Int?,
+                                      minId: Int?,
+                                      limit: Int?) async throws -> CDUntappdActivityFeedResponse {
+        var params = Parameters.activityFeedParameters(maxId: maxId, minId: minId, limit: limit)
+        params = self.oAuthClient.addTokens(toParameters: params)
+
+        let request = try CDUntappdRouter.beerActivityFeed(bid: bid,
+                                                           parameters: params).asURLRequest()
+        let response: CDUntappdActivityFeedResponse = try await self.session.perform(request)
+
+        if let metadata = response.metadata,
+           metadata.hasError() {
+            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
+                logger.error("fetchBeerActivityFeed API error: \(metadata.description(), privacy: .public)")
+            }
+            throw CDUntappdKitError.apiError(metadata.description())
+        }
+
+        return response
+    }
+
+    /// Fetches recent check-ins for a brewery.
+    /// - Parameters:
+    ///   - breweryId: The Untappd brewery ID.
+    ///   - maxId: Return checkins with ID ≤ maxId (older). Pass `nil` to omit.
+    ///   - minId: Return checkins with ID ≥ minId (newer). Pass `nil` to omit.
+    ///   - limit: Maximum results (default 25, max 25). Pass `nil` to omit.
+    /// - Returns: The decoded ``CDUntappdActivityFeedResponse``.
+    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
+    public func fetchBreweryActivityFeed(forBreweryId breweryId: Int,
+                                         maxId: Int?,
+                                         minId: Int?,
+                                         limit: Int?) async throws -> CDUntappdActivityFeedResponse {
+        var params = Parameters.activityFeedParameters(maxId: maxId, minId: minId, limit: limit)
+        params = self.oAuthClient.addTokens(toParameters: params)
+
+        let request = try CDUntappdRouter.breweryActivityFeed(breweryId: breweryId,
+                                                              parameters: params).asURLRequest()
+        let response: CDUntappdActivityFeedResponse = try await self.session.perform(request)
+
+        if let metadata = response.metadata,
+           metadata.hasError() {
+            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
+                logger.error("fetchBreweryActivityFeed API error: \(metadata.description(), privacy: .public)")
+            }
+            throw CDUntappdKitError.apiError(metadata.description())
+        }
+
+        return response
+    }
+
+    /// Fetches recent check-ins at a venue.
+    /// - Parameters:
+    ///   - venueId: The Untappd venue ID.
+    ///   - maxId: Return checkins with ID ≤ maxId (older). Pass `nil` to omit.
+    ///   - minId: Return checkins with ID ≥ minId (newer). Pass `nil` to omit.
+    ///   - limit: Maximum results (default 25, max 25). Pass `nil` to omit.
+    /// - Returns: The decoded ``CDUntappdActivityFeedResponse``.
+    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
+    public func fetchVenueActivityFeed(forVenueId venueId: Int,
+                                       maxId: Int?,
+                                       minId: Int?,
+                                       limit: Int?) async throws -> CDUntappdActivityFeedResponse {
+        var params = Parameters.activityFeedParameters(maxId: maxId, minId: minId, limit: limit)
+        params = self.oAuthClient.addTokens(toParameters: params)
+
+        let request = try CDUntappdRouter.venueActivityFeed(venueId: venueId,
+                                                            parameters: params).asURLRequest()
+        let response: CDUntappdActivityFeedResponse = try await self.session.perform(request)
+
+        if let metadata = response.metadata,
+           metadata.hasError() {
+            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
+                logger.error("fetchVenueActivityFeed API error: \(metadata.description(), privacy: .public)")
+            }
+            throw CDUntappdKitError.apiError(metadata.description())
+        }
+
+        return response
+    }
+
+    /// Fetches the authenticated user's toast and comment notifications.
+    /// - Parameters:
+    ///   - offset: The zero-based offset for pagination. Defaults to `nil` (start from 0).
+    ///   - limit: Maximum number of results to return (max 25, default 25). Defaults to `nil`.
+    /// - Returns: The decoded ``CDUntappdNotificationsResponse``.
+    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
+    public func fetchNotifications(offset: Int?,
+                                   limit: Int?) async throws -> CDUntappdNotificationsResponse {
+        precondition(
+            self.isAuthenticated(),
+            "Authentication is required to query the Untappd API notifications endpoint."
+        )
+
+        var params = Parameters.notificationsParameters(withOffset: offset, limit: limit)
+        params = self.oAuthClient.addTokens(toParameters: params)
+
+        let request = try CDUntappdRouter.notifications(parameters: params).asURLRequest()
+        let response: CDUntappdNotificationsResponse = try await self.session.perform(request)
+
+        if let metadata = response.metadata,
+           metadata.hasError() {
+            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
+                logger.error("fetchNotifications API error: \(metadata.description(), privacy: .public)")
+            }
+            throw CDUntappdKitError.apiError(metadata.description())
+        }
+
+        return response
+    }
+
+    /// Looks up an Untappd venue by its Foursquare v2 venue ID.
+    /// - Parameter foursquareId: The Foursquare v2 venue ID.
+    /// - Returns: The decoded ``CDUntappdFoursquareLookupResponse``.
+    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
+    public func lookupVenue(byFoursquareId foursquareId: String) async throws -> CDUntappdFoursquareLookupResponse {
+        precondition(
+            self.isAuthenticated(),
+            "Authentication is required to query the Untappd API Foursquare venue lookup endpoint."
+        )
+
+        var params = Parameters()
+        params = self.oAuthClient.addTokens(toParameters: params)
+
+        let request = try CDUntappdRouter.foursquareLookup(venueId: foursquareId,
+                                                           parameters: params).asURLRequest()
+        let response: CDUntappdFoursquareLookupResponse = try await self.session.perform(request)
+
+        if let metadata = response.metadata,
+           metadata.hasError() {
+            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
+                logger.error("lookupVenue(byFoursquareId:) API error: \(metadata.description(), privacy: .public)")
+            }
+            throw CDUntappdKitError.apiError(metadata.description())
+        }
+
+        return response
+    }
+
     /// Deprecated: Use Swift structured concurrency instead.
     ///
     /// With async/await, call `Task.cancel()` on the task that wraps the async API call.

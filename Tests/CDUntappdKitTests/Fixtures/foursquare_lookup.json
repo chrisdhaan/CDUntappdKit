@@ -1,0 +1,16 @@
+{
+  "meta": {
+    "code": 200
+  },
+  "response": {
+    "venue": {
+      "venue_id": 321,
+      "venue_name": "Test Venue",
+      "venue_slug": "test-venue",
+      "foursquare": {
+        "foursquare_id": "4b0123456789",
+        "foursquare_url": "https://foursquare.com/v/4b0123456789"
+      }
+    }
+  }
+}

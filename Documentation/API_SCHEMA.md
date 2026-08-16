@@ -24,12 +24,12 @@ Base URL: `https://api.untappd.com/v4/` (HTTPS required)
 - [Meta Envelope](#meta-envelope)
 - [Authentication](#authentication)
 - [Feeds](#feeds)
-  - [Activity Feed](#activity-feed-)
-  - [User Activity Feed](#user-activity-feed-)
-  - [Beer Activity Feed](#beer-activity-feed-)
-  - [Brewery Activity Feed](#brewery-activity-feed-)
-  - [Venue Activity Feed](#venue-activity-feed-)
-  - [Notifications](#notifications-)
+  - [Activity Feed](#activity-feed-✅-implemented)
+  - [User Activity Feed](#user-activity-feed-✅-implemented)
+  - [Beer Activity Feed](#beer-activity-feed-✅-implemented)
+  - [Brewery Activity Feed](#brewery-activity-feed-✅-implemented)
+  - [Venue Activity Feed](#venue-activity-feed-✅-implemented)
+  - [Notifications](#notifications-✅-implemented)
 - [Info / Search](#info--search)
   - [User Info](#user-info-✅-implemented)
   - [User Wish List](#user-wish-list-✅-implemented)
@@ -54,7 +54,7 @@ Base URL: `https://api.untappd.com/v4/` (HTTPS required)
   - [Add to Wish List](#add-to-wish-list-)
   - [Remove from Wish List](#remove-from-wish-list-)
 - [Utilities](#utilities)
-  - [Foursquare Lookup](#foursquare-lookup-)
+  - [Foursquare Lookup](#foursquare-lookup-✅-implemented)
 
 ---
 
@@ -119,14 +119,14 @@ Current implementation decodes this via `CDUntappdOAuthCredential` using `Coding
 
 ---
 
-### Activity Feed 🔲
-
-**Not Implemented.** Returns the authenticated user's friend check-in feed.
+### Activity Feed ✅ Implemented
 
 ```
 GET /v4/checkin/recent
 ```
 **Auth required:** Yes (`access_token`)
+**Client method:** `fetchActivityFeed(maxId:minId:limit:)` in `CDUntappdAPIClient`
+**Response model:** `CDUntappdActivityFeedResponse` → `[CDUntappdCheckin]`
 
 | Parameter | Type | Required | Notes |
 |-----------|------|----------|-------|
@@ -135,7 +135,7 @@ GET /v4/checkin/recent
 | `min_id` | Int | ○ | Return results with checkin_id ≥ min_id (newer) |
 | `limit` | Int | ○ | Default 25, max 50 |
 
-**Response shape:**
+**Full response shape:**
 ```json
 {
   "meta": { "code": 200 },
@@ -148,100 +148,20 @@ GET /v4/checkin/recent
 }
 ```
 
-**Implementation plan:**
+**Schema verification — `CDUntappdActivityFeedResponse`:** decodes via nested-container `init(from:)` (`response` → `checkins` → `items` → `[CDUntappdCheckin]`), not a dotted `CodingKey` path — see [Schema Issue #1](#schema-issue-1--dotted-path-codingkeys). Reused as-is by [User](#user-activity-feed-), [Beer](#beer-activity-feed-), [Brewery](#brewery-activity-feed-), and [Venue Activity Feed](#venue-activity-feed-) below — all five share this identical response shape.
 
-1. **Add router case** in `Source/CDUntappdRouter.swift` after the existing cases:
-   ```swift
-   /// Fetch the authenticated user's friend check-in feed.
-   case activityFeed(parameters: Parameters)
-   ```
-   Add to `var path`:
-   ```swift
-   case .activityFeed: "checkin/recent"
-   ```
-   Add to `asURLRequest()` switch:
-   ```swift
-   case let .activityFeed(parameters):
-       urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
-   ```
-
-2. **Create response model** `Source/CDUntappdActivityFeedResponse.swift`:
-   ```swift
-   import Foundation
-
-   /// Top-level response for the activity feed endpoint.
-   public struct CDUntappdActivityFeedResponse: Decodable, Sendable {
-       public var metadata: CDUntappdMetadata?
-       public var checkins: [CDUntappdCheckin]?
-
-       enum CodingKeys: String, CodingKey {
-           case metadata = "meta"
-           case checkins = "response.checkins.items"
-       }
-   }
-   ```
-   Note: Uses the same dotted-path convention as existing response models.
-   See [Schema Issue #1](#schema-issue-1--dotted-path-codingkeys) before implementing.
-
-3. **Add parameters builder** in `Source/Parameters+CDUntappdKit.swift`:
-   ```swift
-   static func activityFeedParameters(maxId: Int?, minId: Int?, limit: Int?) -> Parameters {
-       var params: Parameters = [:]
-       if let maxId { params["max_id"] = maxId }
-       if let minId { params["min_id"] = minId }
-       if let limit { params["limit"] = limit }
-       return params
-   }
-   ```
-
-4. **Add client method** in `Source/CDUntappdAPIClient.swift` under `// MARK: - Untappd API Methods`:
-   ```swift
-   /// Fetches the authenticated user's friend check-in activity feed.
-   /// - Parameters:
-   ///   - maxId: Return checkins with ID ≤ maxId (older). Pass `nil` to omit.
-   ///   - minId: Return checkins with ID ≥ minId (newer). Pass `nil` to omit.
-   ///   - limit: Maximum results (default 25, max 50). Pass `nil` to omit.
-   /// - Returns: The decoded ``CDUntappdActivityFeedResponse``.
-   /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-   @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
-   public func fetchActivityFeed(maxId: Int?,
-                                 minId: Int?,
-                                 limit: Int?) async throws -> CDUntappdActivityFeedResponse {
-       assert(self.isAuthenticated(),
-              "Authentication is required to query the Untappd API activity feed endpoint.")
-
-       var params = Parameters.activityFeedParameters(maxId: maxId, minId: minId, limit: limit)
-       params = self.oAuthClient.addTokens(toParameters: params)
-
-       let response = try await self.manager
-           .request(CDUntappdRouter.activityFeed(parameters: params))
-           .validate()
-           .serializingDecodable(CDUntappdActivityFeedResponse.self)
-           .value
-
-       if let metadata = response.metadata, metadata.hasError() {
-           logger.error("fetchActivityFeed API error: \(metadata.description(), privacy: .public)")
-           throw CDUntappdKitError.apiError(metadata.description())
-       }
-
-       return response
-   }
-   ```
-
-5. **Add fixture** `Tests/CDUntappdKitTests/Fixtures/activity_feed.json` with at least one checkin item.
-
-6. **Add test** `Tests/CDUntappdKitTests/Models/CDUntappdActivityFeedTests.swift` following the same decode-from-fixture pattern as existing model tests.
+**Schema verification — `CDUntappdCheckin`:** unchanged, already correct.
 
 ---
 
-### User Activity Feed 🔲
-
-**Not Implemented.** Returns a specific user's check-in history.
+### User Activity Feed ✅ Implemented
 
 ```
 GET /v4/user/checkins/{USERNAME}
 ```
 **Auth required:** No (pass client credentials or access_token)
+**Client method:** `fetchUserActivityFeed(forUsername:maxId:minId:limit:)` in `CDUntappdAPIClient`
+**Response model:** Reuses `CDUntappdActivityFeedResponse` — identical shape to [Activity Feed](#activity-feed-).
 
 | Parameter | Type | Required | Notes |
 |-----------|------|----------|-------|
@@ -251,85 +171,16 @@ GET /v4/user/checkins/{USERNAME}
 | `min_id` | Int | ○ | |
 | `limit` | Int | ○ | Default 25, max 25 |
 
-**Response shape:** Identical to [Activity Feed](#activity-feed-) — `response.checkins.items` array of checkins.
-
-**Implementation plan:**
-
-1. **Add router case** in `Source/CDUntappdRouter.swift`:
-   ```swift
-   /// Fetch a user's check-in history.
-   case userActivityFeed(username: String?, parameters: Parameters)
-   ```
-   Add to `var path`:
-   ```swift
-   case .userActivityFeed(let username, parameters: _):
-       String.path("user/checkins", forUsername: username)
-   ```
-   Add to `asURLRequest()` switch:
-   ```swift
-   case .userActivityFeed(username: _, let parameters):
-       urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
-   ```
-
-2. **Reuse** `CDUntappdActivityFeedResponse` — same response shape. No new model needed.
-
-3. **Add parameters builder** in `Source/Parameters+CDUntappdKit.swift`:
-   ```swift
-   static func userActivityFeedParameters(maxId: Int?, minId: Int?, limit: Int?) -> Parameters {
-       var params: Parameters = [:]
-       if let maxId { params["max_id"] = maxId }
-       if let minId { params["min_id"] = minId }
-       if let limit { params["limit"] = limit }
-       return params
-   }
-   ```
-
-4. **Add client method** in `Source/CDUntappdAPIClient.swift`:
-   ```swift
-   /// Fetches a user's check-in history.
-   /// - Parameters:
-   ///   - username: The Untappd username. Pass `nil` for the authenticated user.
-   ///   - maxId: Return checkins with ID ≤ maxId. Pass `nil` to omit.
-   ///   - minId: Return checkins with ID ≥ minId. Pass `nil` to omit.
-   ///   - limit: Maximum results (default 25, max 25). Pass `nil` to omit.
-   /// - Returns: The decoded ``CDUntappdActivityFeedResponse``.
-   /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-   @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
-   public func fetchUserActivityFeed(forUsername username: String?,
-                                     maxId: Int?,
-                                     minId: Int?,
-                                     limit: Int?) async throws -> CDUntappdActivityFeedResponse {
-       assert(username != nil || self.isAuthenticated(),
-              "Either user authentication or a username are required to query the Untappd API user activity feed endpoint.")
-
-       var params = Parameters.userActivityFeedParameters(maxId: maxId, minId: minId, limit: limit)
-       params = self.oAuthClient.addTokens(toParameters: params)
-
-       let response = try await self.manager
-           .request(CDUntappdRouter.userActivityFeed(username: username, parameters: params))
-           .validate()
-           .serializingDecodable(CDUntappdActivityFeedResponse.self)
-           .value
-
-       if let metadata = response.metadata, metadata.hasError() {
-           logger.error("fetchUserActivityFeed API error: \(metadata.description(), privacy: .public)")
-           throw CDUntappdKitError.apiError(metadata.description())
-       }
-
-       return response
-   }
-   ```
-
 ---
 
-### Beer Activity Feed 🔲
-
-**Not Implemented.** Returns recent check-ins for a specific beer.
+### Beer Activity Feed ✅ Implemented
 
 ```
 GET /v4/beer/checkins/{BID}
 ```
 **Auth required:** No
+**Client method:** `fetchBeerActivityFeed(forBid:maxId:minId:limit:)` in `CDUntappdAPIClient`
+**Response model:** Reuses `CDUntappdActivityFeedResponse`.
 
 | Parameter | Type | Required | Notes |
 |-----------|------|----------|-------|
@@ -339,70 +190,16 @@ GET /v4/beer/checkins/{BID}
 | `min_id` | Int | ○ | |
 | `limit` | Int | ○ | Default 25, max 25 |
 
-**Response shape:** Same `response.checkins.items` structure.
-
-**Implementation plan:**
-
-1. **Add router case** in `Source/CDUntappdRouter.swift`:
-   ```swift
-   /// Fetch recent check-ins for a beer.
-   case beerActivityFeed(bid: Int, parameters: Parameters)
-   ```
-   Add to `var path`:
-   ```swift
-   case .beerActivityFeed(let bid, parameters: _): "beer/checkins/\(bid)"
-   ```
-   Add to `asURLRequest()` switch:
-   ```swift
-   case .beerActivityFeed(bid: _, let parameters):
-       urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
-   ```
-
-2. **Reuse** `CDUntappdActivityFeedResponse`. No new model needed.
-
-3. **Add client method** in `Source/CDUntappdAPIClient.swift`:
-   ```swift
-   /// Fetches recent check-ins for a beer.
-   /// - Parameters:
-   ///   - bid: The Untappd beer ID.
-   ///   - maxId: Return checkins with ID ≤ maxId. Pass `nil` to omit.
-   ///   - minId: Return checkins with ID ≥ minId. Pass `nil` to omit.
-   ///   - limit: Maximum results (default 25, max 25). Pass `nil` to omit.
-   /// - Returns: The decoded ``CDUntappdActivityFeedResponse``.
-   /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-   @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
-   public func fetchBeerActivityFeed(forBid bid: Int,
-                                     maxId: Int?,
-                                     minId: Int?,
-                                     limit: Int?) async throws -> CDUntappdActivityFeedResponse {
-       var params = Parameters.activityFeedParameters(maxId: maxId, minId: minId, limit: limit)
-       params = self.oAuthClient.addTokens(toParameters: params)
-
-       let response = try await self.manager
-           .request(CDUntappdRouter.beerActivityFeed(bid: bid, parameters: params))
-           .validate()
-           .serializingDecodable(CDUntappdActivityFeedResponse.self)
-           .value
-
-       if let metadata = response.metadata, metadata.hasError() {
-           logger.error("fetchBeerActivityFeed API error: \(metadata.description(), privacy: .public)")
-           throw CDUntappdKitError.apiError(metadata.description())
-       }
-
-       return response
-   }
-   ```
-
 ---
 
-### Brewery Activity Feed 🔲
-
-**Not Implemented.** Returns recent check-ins for a specific brewery.
+### Brewery Activity Feed ✅ Implemented
 
 ```
 GET /v4/brewery/checkins/{BREWERY_ID}
 ```
 **Auth required:** No
+**Client method:** `fetchBreweryActivityFeed(forBreweryId:maxId:minId:limit:)` in `CDUntappdAPIClient`
+**Response model:** Reuses `CDUntappdActivityFeedResponse`.
 
 | Parameter | Type | Required | Notes |
 |-----------|------|----------|-------|
@@ -412,39 +209,16 @@ GET /v4/brewery/checkins/{BREWERY_ID}
 | `min_id` | Int | ○ | |
 | `limit` | Int | ○ | Default 25, max 25 |
 
-**Response shape:** Same `response.checkins.items` structure.
-
-**Implementation plan:**
-
-1. **Add router case** in `Source/CDUntappdRouter.swift`:
-   ```swift
-   /// Fetch recent check-ins for a brewery.
-   case breweryActivityFeed(breweryId: Int, parameters: Parameters)
-   ```
-   Add to `var path`:
-   ```swift
-   case .breweryActivityFeed(let breweryId, parameters: _): "brewery/checkins/\(breweryId)"
-   ```
-   Add to `asURLRequest()` switch:
-   ```swift
-   case .breweryActivityFeed(breweryId: _, let parameters):
-       urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
-   ```
-
-2. **Reuse** `CDUntappdActivityFeedResponse`. No new model needed.
-
-3. **Add client method** following the exact same pattern as `fetchBeerActivityFeed` above, substituting `breweryId: Int` as the path parameter and using `CDUntappdRouter.breweryActivityFeed`.
-
 ---
 
-### Venue Activity Feed 🔲
-
-**Not Implemented.** Returns recent check-ins at a specific venue.
+### Venue Activity Feed ✅ Implemented
 
 ```
 GET /v4/venue/checkins/{VENUE_ID}
 ```
 **Auth required:** No
+**Client method:** `fetchVenueActivityFeed(forVenueId:maxId:minId:limit:)` in `CDUntappdAPIClient`
+**Response model:** Reuses `CDUntappdActivityFeedResponse`.
 
 | Parameter | Type | Required | Notes |
 |-----------|------|----------|-------|
@@ -454,20 +228,16 @@ GET /v4/venue/checkins/{VENUE_ID}
 | `min_id` | Int | ○ | |
 | `limit` | Int | ○ | Default 25, max 25 |
 
-**Response shape:** Same `response.checkins.items` structure.
-
-**Implementation plan:** Same as [Brewery Activity Feed](#brewery-activity-feed-) above — add router case `venueActivityFeed(venueId: Int, parameters: Parameters)`, path `"venue/checkins/\(venueId)"`, reuse `CDUntappdActivityFeedResponse`, add `fetchVenueActivityFeed(forVenueId:maxId:minId:limit:)` client method.
-
 ---
 
-### Notifications 🔲
-
-**Not Implemented.** Returns the authenticated user's toast and comment notifications.
+### Notifications ✅ Implemented
 
 ```
 GET /v4/notifications
 ```
 **Auth required:** Yes (`access_token`)
+**Client method:** `fetchNotifications(offset:limit:)` in `CDUntappdAPIClient`
+**Response model:** `CDUntappdNotificationsResponse` → `[CDUntappdNotification]`
 
 | Parameter | Type | Required | Notes |
 |-----------|------|----------|-------|
@@ -475,7 +245,7 @@ GET /v4/notifications
 | `offset` | Int | ○ | |
 | `limit` | Int | ○ | Default 25, max 25 |
 
-**Response shape:**
+**Full response shape:**
 ```json
 {
   "meta": { "code": 200 },
@@ -488,8 +258,7 @@ GET /v4/notifications
         "user": { "uid": 1, "user_name": "string", "first_name": "string", "user_avatar": "string" },
         "checkin": {
           "checkin_id": 1,
-          "beer": { "bid": 1, "beer_name": "string" },
-          "shout": "string or null"
+          "checkin_comment": "string or null"
         }
       }
     ]
@@ -497,102 +266,9 @@ GET /v4/notifications
 }
 ```
 
-**Implementation plan:**
+**Schema verification — `CDUntappdNotificationsResponse`:** decodes via nested-container `init(from:)` (`response` → `items` → `[CDUntappdNotification]`), not a dotted `CodingKey` path — see [Schema Issue #1](#schema-issue-1--dotted-path-codingkeys). One level shallower than [Activity Feed](#activity-feed-)'s `response.checkins.items` — there is no intermediate `notifications` container, `items` sits directly under `response`.
 
-1. **Create model** `Source/CDUntappdNotification.swift`:
-   ```swift
-   import Foundation
-
-   /// Represents a single Untappd notification (toast or comment).
-   public struct CDUntappdNotification: Decodable, Sendable {
-       public var id: Int?
-       public var type: String?
-       public var createdAt: String?
-       public var user: CDUntappdUser?
-       public var checkin: CDUntappdCheckin?
-
-       enum CodingKeys: String, CodingKey {
-           case id = "notification_id"
-           case type
-           case createdAt = "created_at"
-           case user
-           case checkin
-       }
-   }
-   ```
-
-2. **Create response model** `Source/CDUntappdNotificationsResponse.swift`:
-   ```swift
-   import Foundation
-
-   /// Top-level response for the notifications endpoint.
-   public struct CDUntappdNotificationsResponse: Decodable, Sendable {
-       public var metadata: CDUntappdMetadata?
-       public var items: [CDUntappdNotification]?
-
-       enum CodingKeys: String, CodingKey {
-           case metadata = "meta"
-           case items = "response.items"
-       }
-   }
-   ```
-
-3. **Add router case** in `Source/CDUntappdRouter.swift`:
-   ```swift
-   /// Fetch the authenticated user's notifications.
-   case notifications(parameters: Parameters)
-   ```
-   Add to `var path`:
-   ```swift
-   case .notifications: "notifications"
-   ```
-   Add to `asURLRequest()`:
-   ```swift
-   case let .notifications(parameters):
-       urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
-   ```
-
-4. **Add parameters builder** in `Source/Parameters+CDUntappdKit.swift`:
-   ```swift
-   static func notificationsParameters(offset: Int?, limit: Int?) -> Parameters {
-       var params: Parameters = [:]
-       if let offset { params["offset"] = offset }
-       if let limit { params["limit"] = limit }
-       return params
-   }
-   ```
-
-5. **Add client method** in `Source/CDUntappdAPIClient.swift`:
-   ```swift
-   /// Fetches the authenticated user's notifications (toasts and comments).
-   /// - Parameters:
-   ///   - offset: Zero-based offset for pagination. Pass `nil` to omit.
-   ///   - limit: Maximum results (default 25, max 25). Pass `nil` to omit.
-   /// - Returns: The decoded ``CDUntappdNotificationsResponse``.
-   /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-   @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
-   public func fetchNotifications(offset: Int?,
-                                  limit: Int?) async throws -> CDUntappdNotificationsResponse {
-       assert(self.isAuthenticated(),
-              "Authentication is required to query the Untappd API notifications endpoint.")
-
-       var params = Parameters.notificationsParameters(offset: offset, limit: limit)
-       params = self.oAuthClient.addTokens(toParameters: params)
-
-       let response = try await self.manager
-           .request(CDUntappdRouter.notifications(parameters: params))
-           .validate()
-           .serializingDecodable(CDUntappdNotificationsResponse.self)
-           .value
-
-       if let metadata = response.metadata, metadata.hasError() {
-           logger.error("fetchNotifications API error: \(metadata.description(), privacy: .public)")
-           throw CDUntappdKitError.apiError(metadata.description())
-       }
-
-       return response
-   }
-   ```
+**Schema verification — `CDUntappdNotification`:** `checkin` reuses the existing `CDUntappdCheckin` model (its `comment` field maps from `checkin_comment`, matching every other endpoint that embeds a checkin — the flat `"shout"` key in an earlier draft of this doc's sample JSON did not match that convention and has been corrected above). `user` reuses the existing `CDUntappdUser` model, which already treats every field as optional so the compact user object here decodes cleanly.
 
 ---
 
@@ -1539,20 +1215,20 @@ GET /v4/user/wishlist/delete
 
 ---
 
-### Foursquare Lookup 🔲
-
-**Not Implemented.** Looks up an Untappd venue by its Foursquare v2 venue ID.
+### Foursquare Lookup ✅ Implemented
 
 ```
 GET /v4/venue/foursquare_lookup/{VENUE_ID}
 ```
+**Client method:** `lookupVenue(byFoursquareId:)` in `CDUntappdAPIClient`
+**Response model:** `CDUntappdFoursquareLookupResponse` → `CDUntappdVenue`
 
 | Parameter | Type | Required | Notes |
 |-----------|------|----------|-------|
 | `access_token` | String | ✅ | |
 | `VENUE_ID` | String (path) | ✅ | Foursquare v2 venue ID |
 
-**Response shape:**
+**Full response shape:**
 ```json
 {
   "meta": { "code": 200 },
@@ -1560,63 +1236,15 @@ GET /v4/venue/foursquare_lookup/{VENUE_ID}
     "venue": {
       "venue_id": 1,
       "venue_name": "string",
-      "foursquare_id": "string"
+      "foursquare": { "foursquare_id": "string", "foursquare_url": "url" }
     }
   }
 }
 ```
 
-**Implementation plan:**
+**Schema verification — `CDUntappdFoursquareLookupResponse`:** decodes via nested-container `init(from:)` (`response` → `venue`), not a dotted `CodingKey` path — see [Schema Issue #1](#schema-issue-1--dotted-path-codingkeys). Reuses the existing `CDUntappdVenue` model, whose own decoder already expects `foursquare_id`/`foursquare_url` nested under a `foursquare` object (not top-level keys, unlike an earlier draft of this doc's sample JSON).
 
-1. **Add router case** in `Source/CDUntappdRouter.swift`:
-   ```swift
-   /// Look up an Untappd venue by Foursquare venue ID.
-   case foursquareLookup(venueId: String, parameters: Parameters)
-   ```
-   In `var path`: `"venue/foursquare_lookup/\(venueId)"`.
-   In `asURLRequest()`: `URLEncoding.default.encode`.
-
-2. **Create response model** `Source/CDUntappdFoursquareLookupResponse.swift`:
-   ```swift
-   import Foundation
-
-   /// Top-level response for the Foursquare venue lookup endpoint.
-   public struct CDUntappdFoursquareLookupResponse: Decodable, Sendable {
-       public var metadata: CDUntappdMetadata?
-       public var venue: CDUntappdVenue?
-
-       enum CodingKeys: String, CodingKey {
-           case metadata = "meta"
-           case venue = "response.venue"
-       }
-   }
-   ```
-
-3. **Add client method** in `Source/CDUntappdAPIClient.swift`:
-   ```swift
-   /// Looks up an Untappd venue by its Foursquare v2 venue ID.
-   /// - Parameter foursquareId: The Foursquare v2 venue ID string.
-   /// - Returns: The decoded ``CDUntappdFoursquareLookupResponse``.
-   /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-   @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
-   public func lookupVenue(byFoursquareId foursquareId: String) async throws -> CDUntappdFoursquareLookupResponse {
-       var params = Parameters()
-       params = self.oAuthClient.addTokens(toParameters: params)
-
-       let response = try await self.manager
-           .request(CDUntappdRouter.foursquareLookup(venueId: foursquareId, parameters: params))
-           .validate()
-           .serializingDecodable(CDUntappdFoursquareLookupResponse.self)
-           .value
-
-       if let metadata = response.metadata, metadata.hasError() {
-           logger.error("lookupVenue(byFoursquareId:) API error: \(metadata.description(), privacy: .public)")
-           throw CDUntappdKitError.apiError(metadata.description())
-       }
-
-       return response
-   }
-   ```
+**Schema verification — `CDUntappdVenue`:** unchanged, no new fields needed for this endpoint.
 
 ---
 
