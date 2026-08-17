@@ -243,5 +243,16 @@ extension SharedKeychainTests {
                 #expect(statusCode == 500)
             }
         }
+
+        @Test
+        func toastThrowsInvalidCredentialsWhenNotAuthenticated() async throws {
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
+            do {
+                _ = try await client.toast(checkinId: 1)
+                Issue.record("Expected .invalidCredentials to be thrown")
+            } catch let CDUntappdKitError.invalidCredentials(message) {
+                #expect(!message.isEmpty)
+            }
+        }
     }
 }
