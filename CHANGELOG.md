@@ -16,7 +16,7 @@ All notable changes to this project will be documented in this file.
 
 Released on 2026-08-16.
 
-"Expanded Endpoint Coverage" — implements every `CDUntappdRouter` case that previously had no corresponding `CDUntappdAPIClient` method, across three batches (#3, #27, #28). Every documented Untappd API endpoint is now backed by a public async/await API method.
+"Expanded Endpoint Coverage" — implements every `CDUntappdRouter` case that previously had no corresponding `CDUntappdAPIClient` method. Every documented Untappd API endpoint is now backed by a public async/await API method.
 
 ### Added
 
@@ -49,7 +49,7 @@ Released on 2026-08-16.
 - `CDUntappdParameterEncoding.httpBodyRequest(for:parameters:)` — POST/httpBody request encoding, the client's first mutating-request support (used by 4 of the 11 new endpoints; the other 7 are `GET`, same as every prior endpoint)
 - Every `CDUntappdRouter` case now has a corresponding public `CDUntappdAPIClient` method — all 28 documented Untappd API endpoints are implemented
 - `CDUntappdCheckin.comments` (`[CDUntappdComment]?`) — decodes a check-in's comment thread, following the same `{"items": [...]}`-wrapped shape already used by this type's `badges`/`media` fields. This exact shape has not been captured from a live response (unlike `badges`/`media`); treat as a confident inference pending live verification. `toasts` remains unimplemented — no `CDUntappdToast` model exists yet.
-- 33 new tests across the #3/#27 batches (model decode coverage for all 10 new response types plus router path/method coverage for the 7 newest cases), plus 44 more across the #28 action-endpoint batch and this follow-up — 222 tests across 42 suites
+- 33 new tests for the info/search and feed endpoints (model decode coverage for all 10 new response types plus router path/method coverage for the 7 newest cases), plus 44 more for the action endpoints and their follow-up fixes — 222 tests across 42 suites
 
 ### Fixed
 
