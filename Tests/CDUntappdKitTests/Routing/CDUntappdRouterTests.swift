@@ -361,6 +361,13 @@ struct CDUntappdRouterTests {
     }
 
     @Test
+    func removeFriendRouteUsesGET() throws {
+        let parameters: [String: Any] = ["access_token": "test"]
+        let request = try CDUntappdRouter.removeFriend(targetId: 7, parameters: parameters).asURLRequest()
+        #expect(request.httpMethod == "GET")
+    }
+
+    @Test
     func removeFriendRouteContainsTargetId() throws {
         let parameters: [String: Any] = ["access_token": "test"]
         let request = try CDUntappdRouter.removeFriend(targetId: 7, parameters: parameters).asURLRequest()
@@ -368,10 +375,24 @@ struct CDUntappdRouterTests {
     }
 
     @Test
+    func acceptFriendRouteUsesGET() throws {
+        let parameters: [String: Any] = ["access_token": "test"]
+        let request = try CDUntappdRouter.acceptFriend(targetId: 7, parameters: parameters).asURLRequest()
+        #expect(request.httpMethod == "GET")
+    }
+
+    @Test
     func acceptFriendRouteContainsTargetId() throws {
         let parameters: [String: Any] = ["access_token": "test"]
         let request = try CDUntappdRouter.acceptFriend(targetId: 7, parameters: parameters).asURLRequest()
         #expect(request.url?.absoluteString.contains("friend/accept/7") == true)
+    }
+
+    @Test
+    func rejectFriendRouteUsesGET() throws {
+        let parameters: [String: Any] = ["access_token": "test"]
+        let request = try CDUntappdRouter.rejectFriend(targetId: 7, parameters: parameters).asURLRequest()
+        #expect(request.httpMethod == "GET")
     }
 
     @Test
@@ -393,6 +414,13 @@ struct CDUntappdRouterTests {
         let parameters: [String: Any] = ["access_token": "test", "bid": 55]
         let request = try CDUntappdRouter.addToWishList(parameters: parameters).asURLRequest()
         #expect(request.url?.absoluteString.contains("user/wishlist/add") == true)
+    }
+
+    @Test
+    func removeFromWishListRouteUsesGET() throws {
+        let parameters: [String: Any] = ["access_token": "test", "bid": 55]
+        let request = try CDUntappdRouter.removeFromWishList(parameters: parameters).asURLRequest()
+        #expect(request.httpMethod == "GET")
     }
 
     @Test

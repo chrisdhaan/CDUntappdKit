@@ -2,7 +2,7 @@
 //  CDUntappdAPIClient+Actions.swift
 //  CDUntappdKit
 //
-//  Created by Christopher de Haan on 8/4/17.
+//  Created by Christopher de Haan on 8/16/26.
 //
 //  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //
@@ -157,6 +157,8 @@ extension CDUntappdAPIClient {
         params = self.oAuthClient.addTokens(toParameters: params)
 
         let request = try CDUntappdRouter.deleteComment(commentId: commentId, parameters: params).asURLRequest()
+        // No metadata error-check here: this endpoint returns HTTP 204 with no body, so
+        // status-code validation (inside perform(_:)) is the only error signal available.
         try await self.session.perform(request)
     }
 

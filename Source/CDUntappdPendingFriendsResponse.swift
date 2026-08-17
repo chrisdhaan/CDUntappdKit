@@ -2,7 +2,7 @@
 //  CDUntappdPendingFriendsResponse.swift
 //  CDUntappdKit
 //
-//  Created by Christopher de Haan on 11/30/17.
+//  Created by Christopher de Haan on 8/16/26.
 //
 //  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //

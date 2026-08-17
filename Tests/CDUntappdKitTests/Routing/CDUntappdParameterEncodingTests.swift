@@ -84,9 +84,9 @@ struct CDUntappdParameterEncodingTests {
     }
 
     @Test
-    func httpBodyRequestPutsParametersInBodyNotQuery() throws {
+    func httpBodyRequestPutsParametersInBothQueryAndBody() throws {
         let request = try CDUntappdParameterEncoding.httpBodyRequest(for: baseURL, parameters: ["bid": 123])
-        #expect(request.url?.query == nil)
+        #expect(request.url?.query == "bid=123")
         let bodyString = try #require(request.httpBody.flatMap { String(data: $0, encoding: .utf8) })
         #expect(bodyString == "bid=123")
     }

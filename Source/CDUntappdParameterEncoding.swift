@@ -86,11 +86,32 @@ enum CDUntappdParameterEncoding {
         return urlRequest
     }
 
-    /// Builds a `POST` request with form-URL-encoded parameters in the httpBody. Replaces
+    /// Builds a `POST` request with form-URL-encoded parameters in the httpBody, and — as a
+    /// defensive hedge — the same parameters mirrored into the query string. Replaces
     /// Alamofire's `URLEncoding.httpBody`, which uses the same escaping as `URLEncoding.default`
     /// (see `encodedQueryString(from:)`), just written to the body instead of the query string.
+    ///
+    /// The query string is populated in addition to the body because this repository's own
+    /// historical Objective-C implementation special-cased `checkin/add` to send `access_token`
+    /// in the query string even though it was a `POST`, suggesting some Untappd write endpoints
+    /// may expect OAuth credentials there rather than (or in addition to) the body. Since this
+    /// layer works on a flat `Parameters` dictionary with no way to distinguish "auth" keys from
+    /// "payload" keys, all parameters are sent in both places; a server reading from either
+    /// location gets what it needs, and redundant data in the other location is harmless.
     static func httpBodyRequest(for url: URL, parameters: Parameters) throws -> URLRequest {
-        var urlRequest = URLRequest(url: url)
+        guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+            throw CDUntappdKitError.invalidRequest(underlying: URLError(.badURL))
+        }
+
+        if !parameters.isEmpty {
+            components.percentEncodedQuery = encodedQueryString(from: parameters)
+        }
+
+        guard let requestURL = components.url else {
+            throw CDUntappdKitError.invalidRequest(underlying: URLError(.badURL))
+        }
+
+        var urlRequest = URLRequest(url: requestURL)
         urlRequest.httpMethod = "POST"
         urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         urlRequest.httpBody = Data(encodedQueryString(from: parameters).utf8)
