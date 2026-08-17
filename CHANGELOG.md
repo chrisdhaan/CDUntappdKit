@@ -57,7 +57,7 @@ Released on 2026-08-17.
 
 ### iOS Example App
 
-- Hardcoded OAuth `clientId`/`clientSecret` moved out of source into a gitignored `Secrets.xcconfig` (with a committed `Secrets.xcconfig.example` template), loaded via `Info.plist` and read at runtime through `Bundle.main.infoDictionary`
+- OAuth `clientId`/`clientSecret` now supplied via a gitignored `Secrets.xcconfig` (with a committed `Secrets.xcconfig.example` template), loaded via `Info.plist` and read at runtime through `Bundle.main.infoDictionary`
 - Fixed three pre-existing build breaks in the `iOS Example` target (not part of CI, so previously unnoticed): a stale deployment target below `CDUntappdKit`'s iOS 15.0 floor, a nonisolated call into `CDUntappdAPIClient`'s `@MainActor` initializer, and a typo in `ViewController.swift` that had never compiled
 - Added a short setup section to `README.md`
 
