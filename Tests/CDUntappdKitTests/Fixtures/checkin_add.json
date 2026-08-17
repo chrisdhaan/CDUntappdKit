@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "code": 200
+  },
+  "response": {
+    "checkin": {
+      "checkin_id": 999888777,
+      "checkin_comment": "Great beer!",
+      "rating_score": 4.5,
+      "created_at": "Mon, 16 Aug 2026 12:00:00 +0000"
+    }
+  }
+}

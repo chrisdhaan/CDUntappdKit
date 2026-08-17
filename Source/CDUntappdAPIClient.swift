@@ -41,8 +41,8 @@ private let logger = Logger(subsystem: CDUntappdKitBundleIdentifier, category: "
 @MainActor
 public class CDUntappdAPIClient {
 
-    private let session: CDUntappdURLSession
-    private let oAuthClient: CDUntappdOAuthClient
+    let session: CDUntappdURLSession
+    let oAuthClient: CDUntappdOAuthClient
 
     // MARK: - Initializers
 

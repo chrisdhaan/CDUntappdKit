@@ -43,7 +43,8 @@ public struct CDUntappdCheckin: Decodable, Sendable {
     /// The venue where the check-in occurred.
     public var venue: CDUntappdVenue?
 //    public var toasts: [CDUntappdToast]?
-//    public var comments: [CDUntappdComment]?
+    /// Comments on the check-in.
+    public var comments: [CDUntappdComment]?
     public var badges: [CDUntappdBadge]?
     public var media: [CDUntappdMedia]?
     public var source: CDUntappdSource?
@@ -58,7 +59,7 @@ public struct CDUntappdCheckin: Decodable, Sendable {
         case beer
         case venue
 //        case toasts
-//        case comments
+        case comments
         case badges
         case media
         case source
@@ -81,6 +82,11 @@ public struct CDUntappdCheckin: Decodable, Sendable {
         source = try root.decodeIfPresent(CDUntappdSource.self, forKey: .source)
         createdAt = try root.decodeIfPresent(String.self, forKey: .createdAt)
 
+        if let commentsContainer = try? root.nestedContainer(keyedBy: ItemsKeys.self, forKey: .comments) {
+            comments = try commentsContainer.decodeIfPresent([CDUntappdComment].self, forKey: .items)
+        } else {
+            comments = nil
+        }
         if let badgesContainer = try? root.nestedContainer(keyedBy: ItemsKeys.self, forKey: .badges) {
             badges = try badgesContainer.decodeIfPresent([CDUntappdBadge].self, forKey: .items)
         } else {

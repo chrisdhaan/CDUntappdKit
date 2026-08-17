@@ -1,8 +1,8 @@
 //
-//  CDUntappdKit.swift
+//  CDUntappdAddCommentResponse.swift
 //  CDUntappdKit
 //
-//  Created by Christopher de Haan on 6/28/22.
+//  Created by Christopher de Haan on 8/16/26.
 //
 //  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //
@@ -25,12 +25,28 @@
 //  THE SOFTWARE.
 //
 
-import Foundation
+/// Top-level response for the add comment endpoint.
+public struct CDUntappdAddCommentResponse: Decodable, Sendable {
 
-// Enforce minimum Swift version for all platforms and build systems.
-#if swift(<5.3)
-    #error("CDUntappdKit doesn't support Swift versions below 5.3.")
-#endif
+    public var metadata: CDUntappdMetadata?
+    public var comment: CDUntappdComment?
 
-/// Current CDUntappdKit version. Necessary since SPM doesn't use dynamic libraries. Plus this will be more accurate.
-let version = "3.1.0"
+    private enum RootKeys: String, CodingKey {
+        case metadata = "meta"
+        case response
+    }
+
+    private enum ResponseKeys: String, CodingKey {
+        case comment
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let root = try decoder.container(keyedBy: RootKeys.self)
+        metadata = try root.decodeIfPresent(CDUntappdMetadata.self, forKey: .metadata)
+        if let responseContainer = try? root.nestedContainer(keyedBy: ResponseKeys.self, forKey: .response) {
+            comment = try responseContainer.decodeIfPresent(CDUntappdComment.self, forKey: .comment)
+        } else {
+            comment = nil
+        }
+    }
+}

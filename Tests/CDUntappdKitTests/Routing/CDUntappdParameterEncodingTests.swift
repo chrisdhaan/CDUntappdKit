@@ -76,4 +76,46 @@ struct CDUntappdParameterEncodingTests {
         let components = try #require(URLComponents(url: requestURL, resolvingAgainstBaseURL: false))
         #expect(components.queryItems?.first(where: { $0.name == "q" })?.value == "Founders + Friends")
     }
+
+    @Test
+    func httpBodyRequestUsesPOSTMethod() throws {
+        let request = try CDUntappdParameterEncoding.httpBodyRequest(for: baseURL, parameters: ["bid": 123])
+        #expect(request.httpMethod == "POST")
+    }
+
+    @Test
+    func httpBodyRequestKeepsNonCredentialParametersBodyOnly() throws {
+        let request = try CDUntappdParameterEncoding.httpBodyRequest(for: baseURL, parameters: ["bid": 123])
+        #expect(request.url?.query == nil)
+        let bodyString = try #require(request.httpBody.flatMap { String(data: $0, encoding: .utf8) })
+        #expect(bodyString == "bid=123")
+    }
+
+    @Test
+    func httpBodyRequestMirrorsCredentialParametersIntoQueryAndBody() throws {
+        let request = try CDUntappdParameterEncoding.httpBodyRequest(for: baseURL, parameters: ["access_token": "abc123", "bid": 123])
+        #expect(request.url?.query == "access_token=abc123")
+        let bodyString = try #require(request.httpBody.flatMap { String(data: $0, encoding: .utf8) })
+        #expect(bodyString == "access_token=abc123&bid=123")
+    }
+
+    @Test
+    func httpBodyRequestSetsFormEncodedContentType() throws {
+        let request = try CDUntappdParameterEncoding.httpBodyRequest(for: baseURL, parameters: ["bid": 123])
+        #expect(request.value(forHTTPHeaderField: "Content-Type") == "application/x-www-form-urlencoded")
+    }
+
+    @Test
+    func httpBodyRequestEncodesMultipleParametersSortedAndJoined() throws {
+        let request = try CDUntappdParameterEncoding.httpBodyRequest(for: baseURL, parameters: ["b": 2, "a": 1])
+        let bodyString = try #require(request.httpBody.flatMap { String(data: $0, encoding: .utf8) })
+        #expect(bodyString == "a=1&b=2")
+    }
+
+    @Test
+    func httpBodyRequestEmptyParametersProduceEmptyBody() throws {
+        let request = try CDUntappdParameterEncoding.httpBodyRequest(for: baseURL, parameters: [:])
+        let bodyString = try #require(request.httpBody.flatMap { String(data: $0, encoding: .utf8) })
+        #expect(bodyString == "")
+    }
 }

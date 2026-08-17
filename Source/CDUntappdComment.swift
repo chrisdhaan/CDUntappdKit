@@ -1,8 +1,8 @@
 //
-//  CDUntappdKit.swift
+//  CDUntappdComment.swift
 //  CDUntappdKit
 //
-//  Created by Christopher de Haan on 6/28/22.
+//  Created by Christopher de Haan on 8/16/26.
 //
 //  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //
@@ -25,12 +25,18 @@
 //  THE SOFTWARE.
 //
 
-import Foundation
+/// Represents a comment on an Untappd check-in.
+public struct CDUntappdComment: Decodable, Sendable {
 
-// Enforce minimum Swift version for all platforms and build systems.
-#if swift(<5.3)
-    #error("CDUntappdKit doesn't support Swift versions below 5.3.")
-#endif
+    public var id: Int?
+    public var user: CDUntappdUser?
+    public var comment: String?
+    public var createdAt: String?
 
-/// Current CDUntappdKit version. Necessary since SPM doesn't use dynamic libraries. Plus this will be more accurate.
-let version = "3.1.0"
+    enum CodingKeys: String, CodingKey {
+        case id = "comment_id"
+        case user
+        case comment
+        case createdAt = "created_at"
+    }
+}

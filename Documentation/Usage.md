@@ -13,7 +13,7 @@ Complete guide to using CDUntappdKit for interacting with the Untappd API.
 - [Brand Assets](#brand-assets)
 - [Platform Notes](#platform-notes)
 - [Advanced: Cancellation](#advanced-cancellation)
-- [Unimplemented Endpoints](#unimplemented-endpoints)
+- [How to Contribute](#how-to-contribute)
 
 ---
 
@@ -25,7 +25,7 @@ Add CDUntappdKit to your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/chrisdhaan/CDUntappdKit.git", .upToNextMajor(from: "3.0.0"))
+    .package(url: "https://github.com/chrisdhaan/CDUntappdKit.git", .upToNextMajor(from: "3.1.0"))
 ],
 targets: [
     .target(
@@ -35,7 +35,7 @@ targets: [
 ]
 ```
 
-Then in your Xcode project, go to **File** > **Add Packages**, paste the URL, and select version 3.0.0 or later.
+Then in your Xcode project, go to **File** > **Add Packages**, paste the URL, and select version 3.1.0 or later.
 
 ### Git Submodule
 
@@ -352,34 +352,13 @@ When a task is cancelled while awaiting a network request, the underlying `URLSe
 
 ---
 
-## Unimplemented Endpoints
-
-The following Untappd API endpoints are not yet implemented in CDUntappdKit — all 11 are the write/action endpoints tracked in [issue #28](https://github.com/chrisdhaan/CDUntappdKit/issues/28) and require an `access_token` (no `client_id`/`client_secret` fallback). Every other documented Untappd endpoint is implemented as of v3.1.0 — see `Documentation/API_SCHEMA.md` for the full, verified list including real paths and response shapes. Contributions are welcome!
-
-### Check-in & Social
-- Checkin (`POST /v4/checkin/add`)
-- Toast / Un-toast (`POST /v4/checkin/toast/{CHECKIN_ID}`)
-- Add Comment (`POST /v4/checkin/addcomment/{CHECKIN_ID}`)
-- Remove Comment (`POST /v4/checkin/deletecomment/{COMMENT_ID}`)
-
-### Friends
-- Pending Friends (`GET /v4/user/pending`)
-- Add Friend (`GET /v4/friend/request/{TARGET_ID}`)
-- Remove Friend (`GET /v4/friend/remove/{TARGET_ID}`)
-- Accept Friend (`GET /v4/friend/accept/{TARGET_ID}`)
-- Reject Friend (`GET /v4/friend/reject/{TARGET_ID}`)
-
-### Wish List
-- Add to Wish List (`GET /v4/user/wishlist/add`)
-- Remove from Wish List (`GET /v4/user/wishlist/delete`)
-
-### How to Contribute
+## How to Contribute
 
 To implement a new endpoint:
 
 1. Add a case to the `CDUntappdRouter` enum in `Source/CDUntappdRouter.swift`
 2. Create the response model in `Source/CDUntappd*.swift`
-3. Add a public `fetch*` method to `CDUntappdAPIClient` using `async throws`
+3. Add a public method to `CDUntappdAPIClient` using `async throws` — read-only `fetch*` methods belong in `Source/CDUntappdAPIClient.swift`; write/action methods (checkin, toast, comments, friends, wish list) belong in `Source/CDUntappdAPIClient+Actions.swift`
 4. Add unit tests in `Tests/CDUntappdKitTests/`
 5. Submit a pull request
 

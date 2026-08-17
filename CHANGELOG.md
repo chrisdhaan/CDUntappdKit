@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## Table of Contents
 
-- [Unreleased](#unreleased)
+- [3.1.0](#310)
 - [3.0.0](#300)
 - [2.0.0](#200)
 - [1.1.0](#110)
@@ -12,9 +12,11 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [Unreleased]
+## [3.1.0](https://github.com/chrisdhaan/CDUntappdKit/releases/tag/3.1.0)
 
-"Expanded Endpoint Coverage" — implements every `CDUntappdRouter` case that previously had no corresponding `CDUntappdAPIClient` method, across two batches (#3, #27). Every `GET` router case is now backed by a public async/await API method. Part of v3.1.0, which will not be tagged/released until the sibling Action Endpoints (#28) work has also merged.
+Released on 2026-08-16.
+
+"Expanded Endpoint Coverage" — implements every `CDUntappdRouter` case that previously had no corresponding `CDUntappdAPIClient` method. Every documented Untappd API endpoint is now backed by a public async/await API method.
 
 ### Added
 
@@ -36,7 +38,18 @@ All notable changes to this project will be documented in this file.
 - `CDUntappdActivityFeedResponse` — shared response model for the five check-in activity feed endpoints above
 - `CDUntappdNotification` / `CDUntappdNotificationsResponse` — notifications response models
 - `CDUntappdFoursquareLookupResponse` — Foursquare lookup response model, wraps the existing `CDUntappdVenue`
-- 33 new tests across both batches (15 for #3, 18 for #27 — model decode coverage for all 10 new response types plus router path/method coverage for the 7 newest cases) — 178 tests across 37 suites
+- `CDUntappdAPIClient.addCheckin(bid:gmtOffset:timezone:foursquareId:latitude:longitude:shout:rating:facebook:twitter:foursquare:)` — post a new beer check-in
+- `CDUntappdAPIClient.toast(checkinId:)` — toggle a toast on a check-in
+- `CDUntappdAPIClient.addComment(toCheckinId:comment:)` — add a comment to a check-in
+- `CDUntappdAPIClient.removeComment(commentId:)` — remove a comment from a check-in
+- `CDUntappdAPIClient.fetchPendingFriends(offset:limit:)` — the authenticated user's pending friend requests
+- `CDUntappdAPIClient.addFriend(targetId:)` / `.removeFriend(targetId:)` / `.acceptFriend(targetId:)` / `.rejectFriend(targetId:)` — friend request actions
+- `CDUntappdAPIClient.addToWishList(bid:)` / `.removeFromWishList(bid:)` — wish list actions
+- `CDUntappdCheckinResponse`, `CDUntappdToastResponse`, `CDUntappdComment` + `CDUntappdAddCommentResponse`, `CDUntappdPendingFriendsResponse`, `CDUntappdActionResultResponse` (shared by 6 of the 11 action endpoints) — new response models
+- `CDUntappdParameterEncoding.httpBodyRequest(for:parameters:)` — POST/httpBody request encoding, the client's first mutating-request support (used by 4 of the 11 new endpoints; the other 7 are `GET`, same as every prior endpoint)
+- Every `CDUntappdRouter` case now has a corresponding public `CDUntappdAPIClient` method — all 28 documented Untappd API endpoints are implemented
+- `CDUntappdCheckin.comments` (`[CDUntappdComment]?`) — decodes a check-in's comment thread, following the same `{"items": [...]}`-wrapped shape already used by this type's `badges`/`media` fields. This exact shape has not been captured from a live response (unlike `badges`/`media`); treat as a confident inference pending live verification. `toasts` remains unimplemented — no `CDUntappdToast` model exists yet.
+- 33 new tests for the info/search and feed endpoints (model decode coverage for all 10 new response types plus router path/method coverage for the 7 newest cases), plus 44 more for the action endpoints and their follow-up fixes — 222 tests across 42 suites
 
 ### Fixed
 

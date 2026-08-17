@@ -66,6 +66,40 @@ public enum CDUntappdRouter {
     case notifications(parameters: Parameters)
     /// Look up an Untappd venue by its Foursquare v2 venue ID.
     case foursquareLookup(venueId: String, parameters: Parameters)
+    /// Post a new beer check-in.
+    case addCheckin(parameters: Parameters)
+    /// Toggle a toast on a check-in (calling it again removes the toast).
+    case toast(checkinId: Int, parameters: Parameters)
+    /// Add a comment to a check-in.
+    case addComment(checkinId: Int, parameters: Parameters)
+    /// Remove a comment from a check-in.
+    case deleteComment(commentId: Int, parameters: Parameters)
+    /// Fetch the authenticated user's pending friend requests.
+    case pendingFriends(parameters: Parameters)
+    /// Send a friend request to a user.
+    case addFriend(targetId: Int, parameters: Parameters)
+    /// Remove a friend.
+    case removeFriend(targetId: Int, parameters: Parameters)
+    /// Accept a pending friend request.
+    case acceptFriend(targetId: Int, parameters: Parameters)
+    /// Reject a pending friend request.
+    case rejectFriend(targetId: Int, parameters: Parameters)
+    /// Add a beer to the authenticated user's wish list.
+    case addToWishList(parameters: Parameters)
+    /// Remove a beer from the authenticated user's wish list.
+    case removeFromWishList(parameters: Parameters)
+
+    /// `true` for the 4 endpoints that are real `POST`/httpBody requests per
+    /// `Documentation/API_SCHEMA.md` — everything else (including the 7 other action endpoints,
+    /// which are `GET` despite mutating state) defaults to `false`.
+    private var isPostRequest: Bool {
+        switch self {
+        case .addCheckin, .toast, .addComment, .deleteComment:
+            true
+        default:
+            false
+        }
+    }
 
     var path: String {
         switch self {
@@ -103,6 +137,28 @@ public enum CDUntappdRouter {
             "notifications"
         case .foursquareLookup(let venueId, parameters: _):
             "venue/foursquare_lookup/\(venueId)"
+        case .addCheckin:
+            "checkin/add"
+        case .toast(let checkinId, parameters: _):
+            "checkin/toast/\(checkinId)"
+        case .addComment(let checkinId, parameters: _):
+            "checkin/addcomment/\(checkinId)"
+        case .deleteComment(let commentId, parameters: _):
+            "checkin/deletecomment/\(commentId)"
+        case .pendingFriends:
+            "user/pending"
+        case .addFriend(let targetId, parameters: _):
+            "friend/request/\(targetId)"
+        case .removeFriend(let targetId, parameters: _):
+            "friend/remove/\(targetId)"
+        case .acceptFriend(let targetId, parameters: _):
+            "friend/accept/\(targetId)"
+        case .rejectFriend(let targetId, parameters: _):
+            "friend/reject/\(targetId)"
+        case .addToWishList:
+            "user/wishlist/add"
+        case .removeFromWishList:
+            "user/wishlist/delete"
         }
     }
 
@@ -124,7 +180,18 @@ public enum CDUntappdRouter {
              let .venueActivityFeed(venueId: _, parameters),
              let .activityFeed(parameters),
              let .notifications(parameters),
-             let .foursquareLookup(venueId: _, parameters):
+             let .foursquareLookup(venueId: _, parameters),
+             let .addCheckin(parameters),
+             let .toast(checkinId: _, parameters),
+             let .addComment(checkinId: _, parameters),
+             let .deleteComment(commentId: _, parameters),
+             let .pendingFriends(parameters),
+             let .addFriend(targetId: _, parameters),
+             let .removeFriend(targetId: _, parameters),
+             let .acceptFriend(targetId: _, parameters),
+             let .rejectFriend(targetId: _, parameters),
+             let .addToWishList(parameters),
+             let .removeFromWishList(parameters):
             parameters
         }
     }
@@ -133,9 +200,11 @@ public enum CDUntappdRouter {
         guard let url = URL(string: CDUntappdURL.base) else {
             throw CDUntappdKitError.invalidRequest(underlying: URLError(.badURL))
         }
-        return try CDUntappdParameterEncoding.urlRequest(
-            for: url.appendingPathComponent(path),
-            parameters: parameters
-        )
+        let fullURL = url.appendingPathComponent(path)
+        return if isPostRequest {
+            try CDUntappdParameterEncoding.httpBodyRequest(for: fullURL, parameters: parameters)
+        } else {
+            try CDUntappdParameterEncoding.urlRequest(for: fullURL, parameters: parameters)
+        }
     }
 }

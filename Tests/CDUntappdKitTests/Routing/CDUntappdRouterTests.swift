@@ -267,4 +267,173 @@ struct CDUntappdRouterTests {
         let request = try CDUntappdRouter.userInfo(username: "testuser", parameters: parameters).asURLRequest()
         #expect(request.url?.query != nil)
     }
+
+    @Test
+    func addCheckinRouteUsesPOST() throws {
+        let parameters: [String: Any] = ["access_token": "test", "bid": 123]
+        let request = try CDUntappdRouter.addCheckin(parameters: parameters).asURLRequest()
+        #expect(request.httpMethod == "POST")
+    }
+
+    @Test
+    func addCheckinRouteContainsPath() throws {
+        let parameters: [String: Any] = ["access_token": "test", "bid": 123]
+        let request = try CDUntappdRouter.addCheckin(parameters: parameters).asURLRequest()
+        #expect(request.url?.absoluteString.contains("checkin/add") == true)
+    }
+
+    @Test
+    func addCheckinRouteEncodesParametersInBody() throws {
+        let parameters: [String: Any] = ["bid": 123]
+        let request = try CDUntappdRouter.addCheckin(parameters: parameters).asURLRequest()
+        let bodyString = try #require(request.httpBody.flatMap { String(data: $0, encoding: .utf8) })
+        #expect(bodyString == "bid=123")
+    }
+
+    @Test
+    func toastRouteUsesPOST() throws {
+        let parameters: [String: Any] = ["access_token": "test"]
+        let request = try CDUntappdRouter.toast(checkinId: 42, parameters: parameters).asURLRequest()
+        #expect(request.httpMethod == "POST")
+    }
+
+    @Test
+    func toastRouteContainsCheckinId() throws {
+        let parameters: [String: Any] = ["access_token": "test"]
+        let request = try CDUntappdRouter.toast(checkinId: 42, parameters: parameters).asURLRequest()
+        #expect(request.url?.absoluteString.contains("checkin/toast/42") == true)
+    }
+
+    @Test
+    func addCommentRouteUsesPOST() throws {
+        let parameters: [String: Any] = ["access_token": "test", "comment": "Cheers!"]
+        let request = try CDUntappdRouter.addComment(checkinId: 42, parameters: parameters).asURLRequest()
+        #expect(request.httpMethod == "POST")
+    }
+
+    @Test
+    func addCommentRouteContainsCheckinId() throws {
+        let parameters: [String: Any] = ["access_token": "test", "comment": "Cheers!"]
+        let request = try CDUntappdRouter.addComment(checkinId: 42, parameters: parameters).asURLRequest()
+        #expect(request.url?.absoluteString.contains("checkin/addcomment/42") == true)
+    }
+
+    @Test
+    func deleteCommentRouteUsesPOST() throws {
+        let parameters: [String: Any] = ["access_token": "test"]
+        let request = try CDUntappdRouter.deleteComment(commentId: 99, parameters: parameters).asURLRequest()
+        #expect(request.httpMethod == "POST")
+    }
+
+    @Test
+    func deleteCommentRouteContainsCommentId() throws {
+        let parameters: [String: Any] = ["access_token": "test"]
+        let request = try CDUntappdRouter.deleteComment(commentId: 99, parameters: parameters).asURLRequest()
+        #expect(request.url?.absoluteString.contains("checkin/deletecomment/99") == true)
+    }
+
+    @Test
+    func pendingFriendsRouteUsesGET() throws {
+        let parameters: [String: Any] = ["access_token": "test"]
+        let request = try CDUntappdRouter.pendingFriends(parameters: parameters).asURLRequest()
+        #expect(request.httpMethod == "GET")
+    }
+
+    @Test
+    func pendingFriendsRouteContainsPath() throws {
+        let parameters: [String: Any] = ["access_token": "test"]
+        let request = try CDUntappdRouter.pendingFriends(parameters: parameters).asURLRequest()
+        #expect(request.url?.absoluteString.contains("user/pending") == true)
+    }
+
+    @Test
+    func addFriendRouteUsesGET() throws {
+        let parameters: [String: Any] = ["access_token": "test"]
+        let request = try CDUntappdRouter.addFriend(targetId: 7, parameters: parameters).asURLRequest()
+        #expect(request.httpMethod == "GET")
+    }
+
+    @Test
+    func addFriendRouteContainsTargetId() throws {
+        let parameters: [String: Any] = ["access_token": "test"]
+        let request = try CDUntappdRouter.addFriend(targetId: 7, parameters: parameters).asURLRequest()
+        #expect(request.url?.absoluteString.contains("friend/request/7") == true)
+    }
+
+    @Test
+    func removeFriendRouteUsesGET() throws {
+        let parameters: [String: Any] = ["access_token": "test"]
+        let request = try CDUntappdRouter.removeFriend(targetId: 7, parameters: parameters).asURLRequest()
+        #expect(request.httpMethod == "GET")
+    }
+
+    @Test
+    func removeFriendRouteContainsTargetId() throws {
+        let parameters: [String: Any] = ["access_token": "test"]
+        let request = try CDUntappdRouter.removeFriend(targetId: 7, parameters: parameters).asURLRequest()
+        #expect(request.url?.absoluteString.contains("friend/remove/7") == true)
+    }
+
+    @Test
+    func acceptFriendRouteUsesGET() throws {
+        let parameters: [String: Any] = ["access_token": "test"]
+        let request = try CDUntappdRouter.acceptFriend(targetId: 7, parameters: parameters).asURLRequest()
+        #expect(request.httpMethod == "GET")
+    }
+
+    @Test
+    func acceptFriendRouteContainsTargetId() throws {
+        let parameters: [String: Any] = ["access_token": "test"]
+        let request = try CDUntappdRouter.acceptFriend(targetId: 7, parameters: parameters).asURLRequest()
+        #expect(request.url?.absoluteString.contains("friend/accept/7") == true)
+    }
+
+    @Test
+    func rejectFriendRouteUsesGET() throws {
+        let parameters: [String: Any] = ["access_token": "test"]
+        let request = try CDUntappdRouter.rejectFriend(targetId: 7, parameters: parameters).asURLRequest()
+        #expect(request.httpMethod == "GET")
+    }
+
+    @Test
+    func rejectFriendRouteContainsTargetId() throws {
+        let parameters: [String: Any] = ["access_token": "test"]
+        let request = try CDUntappdRouter.rejectFriend(targetId: 7, parameters: parameters).asURLRequest()
+        #expect(request.url?.absoluteString.contains("friend/reject/7") == true)
+    }
+
+    @Test
+    func addToWishListRouteUsesGET() throws {
+        let parameters: [String: Any] = ["access_token": "test", "bid": 55]
+        let request = try CDUntappdRouter.addToWishList(parameters: parameters).asURLRequest()
+        #expect(request.httpMethod == "GET")
+    }
+
+    @Test
+    func addToWishListRouteContainsPath() throws {
+        let parameters: [String: Any] = ["access_token": "test", "bid": 55]
+        let request = try CDUntappdRouter.addToWishList(parameters: parameters).asURLRequest()
+        #expect(request.url?.absoluteString.contains("user/wishlist/add") == true)
+    }
+
+    @Test
+    func removeFromWishListRouteUsesGET() throws {
+        let parameters: [String: Any] = ["access_token": "test", "bid": 55]
+        let request = try CDUntappdRouter.removeFromWishList(parameters: parameters).asURLRequest()
+        #expect(request.httpMethod == "GET")
+    }
+
+    @Test
+    func removeFromWishListRouteContainsPath() throws {
+        let parameters: [String: Any] = ["access_token": "test", "bid": 55]
+        let request = try CDUntappdRouter.removeFromWishList(parameters: parameters).asURLRequest()
+        #expect(request.url?.absoluteString.contains("user/wishlist/delete") == true)
+    }
+
+    @Test
+    func addToWishListRouteContainsBidParameter() throws {
+        let parameters: [String: Any] = ["access_token": "test", "bid": 55]
+        let request = try CDUntappdRouter.addToWishList(parameters: parameters).asURLRequest()
+        #expect(request.url?.query?.contains("bid=55") == true)
+    }
 }

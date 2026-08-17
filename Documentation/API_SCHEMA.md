@@ -42,17 +42,17 @@ Base URL: `https://api.untappd.com/v4/` (HTTPS required)
   - [Beer Search](#beer-search-✅-implemented)
   - [Brewery Search](#brewery-search-✅-implemented)
 - [Actions](#actions)
-  - [Checkin](#checkin-)
-  - [Toast / Un-toast](#toast--un-toast-)
-  - [Add Comment](#add-comment-)
-  - [Remove Comment](#remove-comment-)
-  - [Pending Friends](#pending-friends-)
-  - [Add Friend](#add-friend-)
-  - [Remove Friend](#remove-friend-)
-  - [Accept Friend](#accept-friend-)
-  - [Reject Friend](#reject-friend-)
-  - [Add to Wish List](#add-to-wish-list-)
-  - [Remove from Wish List](#remove-from-wish-list-)
+  - [Checkin](#checkin-✅-implemented)
+  - [Toast / Un-toast](#toast--un-toast-✅-implemented)
+  - [Add Comment](#add-comment-✅-implemented)
+  - [Remove Comment](#remove-comment-✅-implemented)
+  - [Pending Friends](#pending-friends-✅-implemented)
+  - [Add Friend](#add-friend-✅-implemented)
+  - [Remove Friend](#remove-friend-✅-implemented)
+  - [Accept Friend](#accept-friend-✅-implemented)
+  - [Reject Friend](#reject-friend-✅-implemented)
+  - [Add to Wish List](#add-to-wish-list-✅-implemented)
+  - [Remove from Wish List](#remove-from-wish-list-✅-implemented)
 - [Utilities](#utilities)
   - [Foursquare Lookup](#foursquare-lookup-✅-implemented)
 
@@ -150,7 +150,7 @@ GET /v4/checkin/recent
 
 **Schema verification — `CDUntappdActivityFeedResponse`:** decodes via nested-container `init(from:)` (`response` → `checkins` → `items` → `[CDUntappdCheckin]`), not a dotted `CodingKey` path — see [Schema Issue #1](#schema-issue-1--dotted-path-codingkeys). Reused as-is by [User](#user-activity-feed-✅-implemented), [Beer](#beer-activity-feed-✅-implemented), [Brewery](#brewery-activity-feed-✅-implemented), and [Venue Activity Feed](#venue-activity-feed-✅-implemented) below — all five share this identical response shape.
 
-**Schema verification — `CDUntappdCheckin`:** unchanged, already correct.
+**Schema verification — `CDUntappdCheckin`:** `comments` (`[CDUntappdComment]?`) is now decoded, following the `{"items": [...]}`-wrapped shape already verified for this type's `badges`/`media` fields and used consistently for list fields elsewhere in the API. Unlike `badges`/`media`, this specific shape has not been captured from a live response — no endpoint response containing a checkin with comments has been verified against this doc. Treat as a confident inference (flagged as such in the model's own doc comment), not a verified shape. `toasts` remains commented out — no `CDUntappdToast` model exists yet. Otherwise unchanged, already correct.
 
 ---
 
@@ -794,13 +794,13 @@ All action endpoints require `access_token` — they cannot use client credentia
 
 ---
 
-### Checkin 🔲
-
-**Not Implemented.**
+### Checkin ✅ Implemented
 
 ```
 POST /v4/checkin/add
 ```
+**Client method:** `addCheckin(bid:gmtOffset:timezone:foursquareId:latitude:longitude:shout:rating:facebook:twitter:foursquare:)` in `CDUntappdAPIClient`
+**Response model:** `CDUntappdCheckinResponse` → `CDUntappdCheckin`
 
 | Parameter | Type | Required | Notes |
 |-----------|------|----------|-------|
@@ -819,137 +819,19 @@ POST /v4/checkin/add
 
 **Response shape:** Returns the created `CDUntappdCheckin` object inside `response.checkin`.
 
-**Implementation plan:**
-
-1. **Create response model** `Source/CDUntappdCheckinResponse.swift`:
-   ```swift
-   import Foundation
-
-   /// Top-level response for the checkin add endpoint.
-   public struct CDUntappdCheckinResponse: Decodable, Sendable {
-       public var metadata: CDUntappdMetadata?
-       public var checkin: CDUntappdCheckin?
-
-       enum CodingKeys: String, CodingKey {
-           case metadata = "meta"
-           case checkin = "response.checkin"
-       }
-   }
-   ```
-
-2. **Add router case** in `Source/CDUntappdRouter.swift`:
-   ```swift
-   /// Post a new beer check-in.
-   case addCheckin(parameters: Parameters)
-   ```
-   Checkin uses `POST` — override `var method`:
-   ```swift
-   case .addCheckin: .post
-   ```
-   Add to `var path`:
-   ```swift
-   case .addCheckin: "checkin/add"
-   ```
-   Add to `asURLRequest()`:
-   ```swift
-   case let .addCheckin(parameters):
-       urlRequest = try URLEncoding.httpBody.encode(urlRequest, with: parameters)
-   ```
-   Note: POST body parameters use `URLEncoding.httpBody`, not `URLEncoding.default`.
-
-3. **Create a parameters builder** in `Source/Parameters+CDUntappdKit.swift`:
-   ```swift
-   static func checkinParameters(bid: Int,
-                                 gmtOffset: String,
-                                 timezone: String,
-                                 foursquareId: String?,
-                                 latitude: Double?,
-                                 longitude: Double?,
-                                 shout: String?,
-                                 rating: Double?,
-                                 facebook: Bool,
-                                 twitter: Bool,
-                                 foursquare: Bool) -> Parameters {
-       var params: Parameters = [
-           "bid": bid,
-           "gmt_offset": gmtOffset,
-           "timezone": timezone,
-           "facebook": facebook ? "on" : "off",
-           "twitter": twitter ? "on" : "off",
-           "foursquare": foursquare ? "on" : "off"
-       ]
-       if let foursquareId { params["foursquare_id"] = foursquareId }
-       if let latitude { params["geolat"] = latitude }
-       if let longitude { params["geolng"] = longitude }
-       if let shout { params["shout"] = shout }
-       if let rating { params["rating"] = rating }
-       return params
-   }
-   ```
-
-4. **Add client method** in `Source/CDUntappdAPIClient.swift`:
-   ```swift
-   /// Posts a new beer check-in.
-   ///
-   /// - Parameters:
-   ///   - bid: The Untappd beer ID to check in.
-   ///   - gmtOffset: Hours offset from GMT (e.g. `"-5"`).
-   ///   - timezone: Timezone abbreviation (e.g. `"EST"`).
-   ///   - foursquareId: Foursquare venue ID. Pass `nil` to omit.
-   ///   - latitude: Location latitude. Pass `nil` to omit.
-   ///   - longitude: Location longitude. Pass `nil` to omit.
-   ///   - shout: Optional comment, max 140 characters. Pass `nil` to omit.
-   ///   - rating: Rating from 1.0–5.0 in 0.5 increments. Pass `nil` to omit.
-   ///   - facebook: Pass `true` to cross-post to Facebook.
-   ///   - twitter: Pass `true` to cross-post to Twitter.
-   ///   - foursquare: Pass `true` to cross-post to Foursquare (requires lat/lng).
-   /// - Returns: The decoded ``CDUntappdCheckinResponse``.
-   /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-   @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
-   public func addCheckin(bid: Int,
-                          gmtOffset: String,
-                          timezone: String,
-                          foursquareId: String?,
-                          latitude: Double?,
-                          longitude: Double?,
-                          shout: String?,
-                          rating: Double?,
-                          facebook: Bool = false,
-                          twitter: Bool = false,
-                          foursquare: Bool = false) async throws -> CDUntappdCheckinResponse {
-       assert(self.isAuthenticated(),
-              "Authentication is required to post a check-in.")
-
-       var params = Parameters.checkinParameters(bid: bid, gmtOffset: gmtOffset, timezone: timezone,
-                                                 foursquareId: foursquareId, latitude: latitude,
-                                                 longitude: longitude, shout: shout, rating: rating,
-                                                 facebook: facebook, twitter: twitter, foursquare: foursquare)
-       params = self.oAuthClient.addTokens(toParameters: params)
-
-       let response = try await self.manager
-           .request(CDUntappdRouter.addCheckin(parameters: params))
-           .validate()
-           .serializingDecodable(CDUntappdCheckinResponse.self)
-           .value
-
-       if let metadata = response.metadata, metadata.hasError() {
-           logger.error("addCheckin API error: \(metadata.description(), privacy: .public)")
-           throw CDUntappdKitError.apiError(metadata.description())
-       }
-
-       return response
-   }
-   ```
+**Schema verification — `CDUntappdCheckinResponse`:** decodes via nested-container `init(from:)` (`response` → `checkin`), not the dotted `CodingKey` path shown in the original implementation-plan snippet — see [Schema Issue #1](#schema-issue-1--dotted-path-codingkeys). POST body parameters are encoded via `CDUntappdParameterEncoding.httpBodyRequest(for:parameters:)`, this endpoint's first use of `httpBody` encoding in the client.
 
 ---
 
-### Toast / Un-toast 🔲
+### Toast / Un-toast ✅ Implemented
 
-**Not Implemented.** Toggles a toast on a check-in (calling it again removes the toast).
+Toggles a toast on a check-in (calling it again removes the toast).
 
 ```
 POST /v4/checkin/toast/{CHECKIN_ID}
 ```
+**Client method:** `toast(checkinId:)` in `CDUntappdAPIClient`
+**Response model:** `CDUntappdToastResponse`
 
 | Parameter | Type | Required | Notes |
 |-----------|------|----------|-------|
@@ -961,43 +843,17 @@ POST /v4/checkin/toast/{CHECKIN_ID}
 { "meta": { "code": 200 }, "response": { "result": "success" } }
 ```
 
-**Implementation plan:**
-
-1. **Add router case** (POST to path parameter URL):
-   ```swift
-   case toast(checkinId: Int, parameters: Parameters)
-   ```
-   In `var method`: `.post` for `.toast`.
-   In `var path`: `"checkin/toast/\(checkinId)"`.
-   In `asURLRequest()`: `URLEncoding.httpBody.encode`.
-
-2. **Create response model** `Source/CDUntappdToastResponse.swift`:
-   ```swift
-   import Foundation
-
-   /// Top-level response for the toast/un-toast endpoint.
-   public struct CDUntappdToastResponse: Decodable, Sendable {
-       public var metadata: CDUntappdMetadata?
-       public var result: String?
-
-       enum CodingKeys: String, CodingKey {
-           case metadata = "meta"
-           case result = "response.result"
-       }
-   }
-   ```
-
-3. **Add client method** `toast(checkinId:) async throws -> CDUntappdToastResponse`.
+**Schema verification — `CDUntappdToastResponse`:** decodes via nested-container `init(from:)` (`response` → `result`), not the dotted `CodingKey` path shown in the original implementation-plan snippet — see [Schema Issue #1](#schema-issue-1--dotted-path-codingkeys).
 
 ---
 
-### Add Comment 🔲
-
-**Not Implemented.**
+### Add Comment ✅ Implemented
 
 ```
 POST /v4/checkin/addcomment/{CHECKIN_ID}
 ```
+**Client method:** `addComment(toCheckinId:comment:)` in `CDUntappdAPIClient`
+**Response model:** `CDUntappdAddCommentResponse` → `CDUntappdComment`
 
 | Parameter | Type | Required | Notes |
 |-----------|------|----------|-------|
@@ -1007,57 +863,19 @@ POST /v4/checkin/addcomment/{CHECKIN_ID}
 
 **Response shape:** Returns the created comment object with `comment_id`, `user`, `comment`, `created_at`.
 
-**Implementation plan:**
+**Schema verification — `CDUntappdAddCommentResponse`:** decodes via nested-container `init(from:)` (`response` → `comment`), not the dotted `CodingKey` path shown in the original implementation-plan snippet — see [Schema Issue #1](#schema-issue-1--dotted-path-codingkeys).
 
-1. **Create model** `Source/CDUntappdComment.swift`:
-   ```swift
-   import Foundation
-
-   /// Represents a comment on an Untappd check-in.
-   public struct CDUntappdComment: Decodable, Sendable {
-       public var id: Int?
-       public var user: CDUntappdUser?
-       public var comment: String?
-       public var createdAt: String?
-
-       enum CodingKeys: String, CodingKey {
-           case id = "comment_id"
-           case user
-           case comment
-           case createdAt = "created_at"
-       }
-   }
-   ```
-
-2. **Create response model** `Source/CDUntappdAddCommentResponse.swift`:
-   ```swift
-   import Foundation
-
-   /// Top-level response for the add comment endpoint.
-   public struct CDUntappdAddCommentResponse: Decodable, Sendable {
-       public var metadata: CDUntappdMetadata?
-       public var comment: CDUntappdComment?
-
-       enum CodingKeys: String, CodingKey {
-           case metadata = "meta"
-           case comment = "response.comment"
-       }
-   }
-   ```
-
-3. **Add router case** `addComment(checkinId: Int, parameters: Parameters)`, POST method, path `"checkin/addcomment/\(checkinId)"`.
-
-4. **Add client method** `addComment(toCheckinId:comment:) async throws -> CDUntappdAddCommentResponse`.
+**Schema verification — `CDUntappdComment`:** unchanged, matches the original implementation-plan snippet exactly.
 
 ---
 
-### Remove Comment 🔲
-
-**Not Implemented.**
+### Remove Comment ✅ Implemented
 
 ```
 POST /v4/checkin/deletecomment/{COMMENT_ID}
 ```
+**Client method:** `removeComment(commentId:)` in `CDUntappdAPIClient`
+**Response model:** none — returns `Void`
 
 | Parameter | Type | Required | Notes |
 |-----------|------|----------|-------|
@@ -1066,17 +884,19 @@ POST /v4/checkin/deletecomment/{COMMENT_ID}
 
 **Response shape:** Returns HTTP 204 — `response` object is empty.
 
-**Implementation plan:** Add router case `deleteComment(commentId: Int, parameters: Parameters)`, POST, path `"checkin/deletecomment/\(commentId)"`. Return type can be `CDUntappdMetadata` only (no response body). Client method: `removeComment(commentId:) async throws`.
+**Schema verification:** since there's no body to decode, this endpoint uses `CDUntappdURLSession`'s `Void`-returning `perform(_:)` overload, which validates only the HTTP status code (200–299) — a deviation from the original implementation-plan note suggesting `CDUntappdMetadata` as the return type. No new response model was needed.
 
 ---
 
-### Pending Friends 🔲
+### Pending Friends ✅ Implemented
 
-**Not Implemented.** Returns pending friend requests for the authenticated user.
+Returns pending friend requests for the authenticated user.
 
 ```
 GET /v4/user/pending
 ```
+**Client method:** `fetchPendingFriends(offset:limit:)` in `CDUntappdAPIClient`
+**Response model:** `CDUntappdPendingFriendsResponse` → `[CDUntappdFriend]`
 
 | Parameter | Type | Required | Notes |
 |-----------|------|----------|-------|
@@ -1086,31 +906,19 @@ GET /v4/user/pending
 
 **Response shape:** Array of user objects (same shape as friends list items).
 
-**Implementation plan:**
-
-1. **Add router case** `pendingFriends(parameters: Parameters)`, GET, path `"user/pending"`.
-2. **Create response model** `Source/CDUntappdPendingFriendsResponse.swift` — wraps `[CDUntappdUser]`:
-   ```swift
-   public struct CDUntappdPendingFriendsResponse: Decodable, Sendable {
-       public var metadata: CDUntappdMetadata?
-       public var items: [CDUntappdUser]?
-       enum CodingKeys: String, CodingKey {
-           case metadata = "meta"
-           case items = "response.items"
-       }
-   }
-   ```
-3. **Add client method** `fetchPendingFriends(offset:limit:) async throws -> CDUntappdPendingFriendsResponse`.
+**Schema verification — `CDUntappdPendingFriendsResponse`:** the `items` array decodes as `[CDUntappdFriend]`, not `[CDUntappdUser]` as the original implementation-plan snippet said — pending-friend list items have the same shape as `CDUntappdUserFriendsResponse`'s items (including the `mutual_friends` field), so the existing `CDUntappdFriend` model was reused rather than introducing a duplicate user-only type. It also decodes via nested-container `init(from:)` (`response` → `items`), not the dotted `CodingKey` path shown in the original snippet — see [Schema Issue #1](#schema-issue-1--dotted-path-codingkeys).
 
 ---
 
-### Add Friend 🔲
+### Add Friend ✅ Implemented
 
-**Not Implemented.** Sends a friend request to a user.
+Sends a friend request to a user.
 
 ```
 GET /v4/friend/request/{TARGET_ID}
 ```
+**Client method:** `addFriend(targetId:)` in `CDUntappdAPIClient`
+**Response model:** `CDUntappdActionResultResponse`
 
 | Parameter | Type | Required | Notes |
 |-----------|------|----------|-------|
@@ -1119,69 +927,55 @@ GET /v4/friend/request/{TARGET_ID}
 
 **Response shape:** `{ "response": { "result": boolean } }`
 
-**Implementation plan:** Add router case `addFriend(targetId: Int, parameters: Parameters)`, GET, path `"friend/request/\(targetId)"`. Create `CDUntappdFriendActionResponse` (reused for all four friend action endpoints — see below). Client method: `addFriend(targetId:) async throws -> CDUntappdFriendActionResponse`.
+**Schema verification — `CDUntappdActionResultResponse`:** decodes via nested-container `init(from:)` (`response` → `result`), not the dotted `CodingKey` path shown in the original implementation-plan snippet — see [Schema Issue #1](#schema-issue-1--dotted-path-codingkeys). Named `CDUntappdActionResultResponse`, not `CDUntappdFriendActionResponse` as the original plan named it, since it's shared by all six boolean-result action endpoints (the four friend actions plus add/remove wish list), not just the friend ones.
 
 ---
 
-### Remove Friend 🔲
-
-**Not Implemented.**
+### Remove Friend ✅ Implemented
 
 ```
 GET /v4/friend/remove/{TARGET_ID}
 ```
+**Client method:** `removeFriend(targetId:)` in `CDUntappdAPIClient`
+**Response model:** `CDUntappdActionResultResponse`
 
-Same shape as [Add Friend](#add-friend-). Router case: `removeFriend(targetId: Int, parameters: Parameters)`, path `"friend/remove/\(targetId)"`. Client method: `removeFriend(targetId:) async throws`.
+Same shape as [Add Friend](#add-friend-✅-implemented).
 
 ---
 
-### Accept Friend 🔲
-
-**Not Implemented.**
+### Accept Friend ✅ Implemented
 
 ```
 GET /v4/friend/accept/{TARGET_ID}
 ```
+**Client method:** `acceptFriend(targetId:)` in `CDUntappdAPIClient`
+**Response model:** `CDUntappdActionResultResponse`
 
-Same shape as [Add Friend](#add-friend-). Router case: `acceptFriend(targetId: Int, parameters: Parameters)`, path `"friend/accept/\(targetId)"`. Client method: `acceptFriend(targetId:) async throws`.
+Same shape as [Add Friend](#add-friend-✅-implemented).
 
 ---
 
-### Reject Friend 🔲
-
-**Not Implemented.**
+### Reject Friend ✅ Implemented
 
 ```
 GET /v4/friend/reject/{TARGET_ID}
 ```
+**Client method:** `rejectFriend(targetId:)` in `CDUntappdAPIClient`
+**Response model:** `CDUntappdActionResultResponse`
 
-Same shape as [Add Friend](#add-friend-). Router case: `rejectFriend(targetId: Int, parameters: Parameters)`, path `"friend/reject/\(targetId)"`. Client method: `rejectFriend(targetId:) async throws`.
+Same shape as [Add Friend](#add-friend-✅-implemented).
 
-**Shared model for all four friend action endpoints** `Source/CDUntappdFriendActionResponse.swift`:
-```swift
-import Foundation
-
-/// Top-level response for friend action endpoints (add, remove, accept, reject).
-public struct CDUntappdFriendActionResponse: Decodable, Sendable {
-    public var metadata: CDUntappdMetadata?
-    public var result: Bool?
-
-    enum CodingKeys: String, CodingKey {
-        case metadata = "meta"
-        case result = "response.result"
-    }
-}
-```
+**Shared model for six action endpoints** (the four friend actions here plus [Add to Wish List](#add-to-wish-list-✅-implemented) / [Remove from Wish List](#remove-from-wish-list-✅-implemented)): `Source/CDUntappdActionResultResponse.swift`, decoding `{ "response": { "result": Bool } }` via nested-container `init(from:)`.
 
 ---
 
-### Add to Wish List 🔲
-
-**Not Implemented.**
+### Add to Wish List ✅ Implemented
 
 ```
 GET /v4/user/wishlist/add
 ```
+**Client method:** `addToWishList(bid:)` in `CDUntappdAPIClient`
+**Response model:** `CDUntappdActionResultResponse` (reused — see [friend actions](#reject-friend-✅-implemented))
 
 | Parameter | Type | Required | Notes |
 |-----------|------|----------|-------|
@@ -1190,24 +984,22 @@ GET /v4/user/wishlist/add
 
 **Response shape:** `{ "response": { "result": boolean } }`
 
-**Implementation plan:** Add router case `addToWishList(parameters: Parameters)`, GET, path `"user/wishlist/add"`. Reuse `CDUntappdFriendActionResponse` (same boolean result shape). Client method: `addToWishList(bid:) async throws -> CDUntappdFriendActionResponse`.
-
 ---
 
-### Remove from Wish List 🔲
-
-**Not Implemented.**
+### Remove from Wish List ✅ Implemented
 
 ```
 GET /v4/user/wishlist/delete
 ```
+**Client method:** `removeFromWishList(bid:)` in `CDUntappdAPIClient`
+**Response model:** `CDUntappdActionResultResponse` (reused — see [friend actions](#reject-friend-✅-implemented))
 
 | Parameter | Type | Required | Notes |
 |-----------|------|----------|-------|
 | `access_token` | String | ✅ | |
 | `bid` | Int | ✅ | Beer ID to remove |
 
-**Response shape:** Same boolean result. Router case: `removeFromWishList(parameters: Parameters)`, path `"user/wishlist/delete"`. Client method: `removeFromWishList(bid:) async throws -> CDUntappdFriendActionResponse`.
+**Response shape:** Same boolean result.
 
 ---
 

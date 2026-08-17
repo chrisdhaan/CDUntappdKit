@@ -1,0 +1,16 @@
+{
+  "meta": {
+    "code": 200
+  },
+  "response": {
+    "comment": {
+      "comment_id": 555,
+      "comment": "Cheers!",
+      "created_at": "Mon, 16 Aug 2026 12:00:00 +0000",
+      "user": {
+        "uid": 2,
+        "user_name": "TestFriend"
+      }
+    }
+  }
+}

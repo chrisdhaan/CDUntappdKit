@@ -76,4 +76,31 @@ struct CDUntappdCheckinTests {
         #expect(checkin.badges == nil)
         #expect(checkin.media == nil)
     }
+
+    @Test
+    func decodesNestedCommentsFromItemsWrappedShape() throws {
+        let json = """
+        {
+          "checkin_id": 1,
+          "comments": {
+            "items": [
+              { "comment_id": 1, "comment": "Cheers!" }
+            ]
+          }
+        }
+        """.data(using: .utf8)!
+        let checkin = try JSONDecoder().decode(CDUntappdCheckin.self, from: json)
+        #expect(checkin.comments?.first?.comment == "Cheers!")
+    }
+
+    @Test
+    func commentsIsNilWhenKeyIsAbsent() throws {
+        let json = """
+        {
+          "checkin_id": 1
+        }
+        """.data(using: .utf8)!
+        let checkin = try JSONDecoder().decode(CDUntappdCheckin.self, from: json)
+        #expect(checkin.comments == nil)
+    }
 }
