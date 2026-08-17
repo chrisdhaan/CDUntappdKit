@@ -22,17 +22,49 @@ Untappd REST API, decoding responses into strongly-typed Swift model structs.
 
 - ``CDUntappdKitError``
 
-### Models
+### Core Models
 
 - ``CDUntappdUser``
 - ``CDUntappdBeer``
+- ``CDUntappdBeerItem``
 - ``CDUntappdBrewery``
 - ``CDUntappdVenue``
 - ``CDUntappdCheckin``
+- ``CDUntappdComment``
 - ``CDUntappdWishList``
+- ``CDUntappdWishListItem``
 - ``CDUntappdFriend``
 - ``CDUntappdBadge``
 - ``CDUntappdStats``
+- ``CDUntappdMedia``
+- ``CDUntappdSource``
+- ``CDUntappdCategory``
+- ``CDUntappdContact``
+- ``CDUntappdRecentBrew``
+- ``CDUntappdSettings``
+- ``CDUntappdNotification``
+- ``CDUntappdMetadata``
+
+### Response Types
+
+- ``CDUntappdUserInfoResponse``
+- ``CDUntappdUserWishListResponse``
+- ``CDUntappdUserFriendsResponse``
+- ``CDUntappdUserBadgesResponse``
+- ``CDUntappdUserBeersResponse``
+- ``CDUntappdBeerInfoResponse``
+- ``CDUntappdBreweryInfoResponse``
+- ``CDUntappdVenueInfoResponse``
+- ``CDUntappdBeerSearchResponse``
+- ``CDUntappdBrewerySearchResponse``
+- ``CDUntappdActivityFeedResponse``
+- ``CDUntappdNotificationsResponse``
+- ``CDUntappdFoursquareLookupResponse``
+- ``CDUntappdCheckinResponse``
+- ``CDUntappdToastResponse``
+- ``CDUntappdAddCommentResponse``
+- ``CDUntappdPendingFriendsResponse``
+- ``CDUntappdActionResultResponse``
 
 ### Routing
 
@@ -42,3 +74,5 @@ Untappd REST API, decoding responses into strongly-typed Swift model structs.
 ### Enumerations
 
 - ``CDUntappdUserWishListSortType``
+- ``CDUntappdBeerSearchSortType``
+- ``CDUntappdUserBeersSortType``
