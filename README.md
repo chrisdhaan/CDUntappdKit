@@ -66,6 +66,16 @@ Clone the repository and add `CDUntappdKit.xcodeproj` to your Xcode project:
 git submodule add https://github.com/chrisdhaan/CDUntappdKit.git
 ```
 
+## iOS Example App
+
+The `iOS Example` app reads its Untappd OAuth `clientId`/`clientSecret` from `iOS Example/Secrets.xcconfig` (gitignored). Before building it:
+
+```bash
+cp "iOS Example/Secrets.xcconfig.example" "iOS Example/Secrets.xcconfig"
+```
+
+Then edit `Secrets.xcconfig` with your own credentials from the [Untappd API](https://untappd.com/api/register).
+
 ## Quick Start
 
 ### Initialize the client

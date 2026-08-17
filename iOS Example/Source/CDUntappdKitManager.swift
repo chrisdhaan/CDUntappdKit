@@ -28,6 +28,7 @@
 import CDUntappdKit
 import UIKit
 
+@MainActor
 final class CDUntappdKitManager: NSObject {
 
     static let shared = CDUntappdKitManager()
@@ -35,9 +36,16 @@ final class CDUntappdKitManager: NSObject {
     var apiClient: CDUntappdAPIClient!
 
     func configure() {
-        // How to authorize using your clientId and clientSecret
-        self.apiClient = CDUntappdAPIClient(clientId: "BDCFF6FA3CF64AC57585386B4051EB5A716F3FBD",
-                                            clientSecret: "572C8CB091E1AC5C8ED452A40A7EFF68832A08B9",
+        // clientId/clientSecret are sourced from Secrets.xcconfig via Info.plist.
+        // Copy Secrets.xcconfig.example to Secrets.xcconfig and fill in your own
+        // Untappd API credentials before building this app.
+        guard let clientId = Bundle.main.infoDictionary?["UNTAPPD_CLIENT_ID"] as? String,
+              let clientSecret = Bundle.main.infoDictionary?["UNTAPPD_CLIENT_SECRET"] as? String else {
+            fatalError("Missing UNTAPPD_CLIENT_ID / UNTAPPD_CLIENT_SECRET. Copy Secrets.xcconfig.example to Secrets.xcconfig and fill in your credentials.")
+        }
+
+        self.apiClient = CDUntappdAPIClient(clientId: clientId,
+                                            clientSecret: clientSecret,
                                             redirectUrl: "https://www.untappd.com/")
     }
 }

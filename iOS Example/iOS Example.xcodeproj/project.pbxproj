@@ -78,6 +78,8 @@
 		B267916F1F35089F008635CD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Resources/Base.lproj/Main.storyboard; sourceTree = SOURCE_ROOT; };
 		B26791721F350922008635CD /* CDUntappdKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CDUntappdKit.xcodeproj; path = ../CDUntappdKit.xcodeproj; sourceTree = "<group>"; };
 		B2D6C3DF1F43D5290067279A /* CDUntappdKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDUntappdKitManager.swift; sourceTree = "<group>"; };
+		ADE233BEB11843BDBEC02753 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		D76BD8D3EF5C45B1A5DEEA59 /* Secrets.xcconfig.example */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig.example; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +97,8 @@
 			isa = PBXGroup;
 			children = (
 				B26791611F350863008635CD /* Source */,
+				ADE233BEB11843BDBEC02753 /* Secrets.xcconfig */,
+				D76BD8D3EF5C45B1A5DEEA59 /* Secrets.xcconfig.example */,
 				B267914D1F35082B008635CD /* Products */,
 				B26791721F350922008635CD /* CDUntappdKit.xcodeproj */,
 			);
@@ -343,7 +347,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -397,7 +401,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -412,6 +416,7 @@
 		};
 		B267915F1F35082B008635CD /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = ADE233BEB11843BDBEC02753 /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Resources/Info.plist;
@@ -423,6 +428,7 @@
 		};
 		B26791601F35082B008635CD /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = ADE233BEB11843BDBEC02753 /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Resources/Info.plist;
