@@ -73,6 +73,5 @@ swiftformat Source Tests --lint
 
 ## Known Limitations / Tech Debt
 
-- 17 of 28 Untappd endpoints are implemented — the 11 remaining are the write/action endpoints (checkin, toast, comments, friend requests, wish list add/remove), tracked in [issue #28](https://github.com/chrisdhaan/CDUntappdKit/issues/28)
 - No watchOS OAuth flow (WKWebView unavailable on watchOS)
 - No visionOS OAuth flow — `authenticate()` is `#if os(iOS) || os(visionOS)` but the UIApplication-based top-view-controller lookup may need a visionOS-specific window scene approach
