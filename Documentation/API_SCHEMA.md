@@ -150,7 +150,7 @@ GET /v4/checkin/recent
 
 **Schema verification — `CDUntappdActivityFeedResponse`:** decodes via nested-container `init(from:)` (`response` → `checkins` → `items` → `[CDUntappdCheckin]`), not a dotted `CodingKey` path — see [Schema Issue #1](#schema-issue-1--dotted-path-codingkeys). Reused as-is by [User](#user-activity-feed-✅-implemented), [Beer](#beer-activity-feed-✅-implemented), [Brewery](#brewery-activity-feed-✅-implemented), and [Venue Activity Feed](#venue-activity-feed-✅-implemented) below — all five share this identical response shape.
 
-**Schema verification — `CDUntappdCheckin`:** unchanged, already correct.
+**Schema verification — `CDUntappdCheckin`:** `comments` (`[CDUntappdComment]?`) is now decoded, following the `{"items": [...]}`-wrapped shape already verified for this type's `badges`/`media` fields and used consistently for list fields elsewhere in the API. Unlike `badges`/`media`, this specific shape has not been captured from a live response — no endpoint response containing a checkin with comments has been verified against this doc. Treat as a confident inference (flagged as such in the model's own doc comment), not a verified shape. `toasts` remains commented out — no `CDUntappdToast` model exists yet. Otherwise unchanged, already correct.
 
 ---
 
