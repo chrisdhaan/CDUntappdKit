@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file.
 
 ## [3.1.0](https://github.com/chrisdhaan/CDUntappdKit/releases/tag/3.1.0)
 
-Released on 2026-08-16.
+Released on 2026-08-17.
 
 "Expanded Endpoint Coverage" — implements every `CDUntappdRouter` case that previously had no corresponding `CDUntappdAPIClient` method. Every documented Untappd API endpoint is now backed by a public async/await API method.
 
@@ -54,6 +54,12 @@ Released on 2026-08-16.
 ### Fixed
 
 - `CDUntappdBeer.isInProduction` now decodes leniently from either a JSON boolean or a `1`/`0` integer, matching the existing behavior of `CDUntappdBrewery.isActive`/`CDUntappdVenue.isVerified` — the real Untappd API returns this field as an integer, which previously would have thrown a decoding error
+
+### iOS Example App
+
+- Hardcoded OAuth `clientId`/`clientSecret` moved out of source into a gitignored `Secrets.xcconfig` (with a committed `Secrets.xcconfig.example` template), loaded via `Info.plist` and read at runtime through `Bundle.main.infoDictionary`
+- Fixed three pre-existing build breaks in the `iOS Example` target (not part of CI, so previously unnoticed): a stale deployment target below `CDUntappdKit`'s iOS 15.0 floor, a nonisolated call into `CDUntappdAPIClient`'s `@MainActor` initializer, and a typo in `ViewController.swift` that had never compiled
+- Added a short setup section to `README.md`
 
 ---
 
