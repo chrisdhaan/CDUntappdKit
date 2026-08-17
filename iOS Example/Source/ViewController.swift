@@ -85,12 +85,11 @@ extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row {
         case 0:
-            Task { [weak self] in
+            Task {
                 do {
-                    let response = try await self?.CDUntappdKitManager.shared.apiClient.fetchUserInfo(forUsername: "DehaanSolo",
-                                                                                                       compact: false)
-                    if let response = response,
-                        let user = response.user {
+                    let response = try await CDUntappdKitManager.shared.apiClient.fetchUserInfo(forUsername: "DehaanSolo",
+                                                                                                compact: false)
+                    if let user = response.user {
                         print(user)
                     }
                 } catch {
@@ -98,14 +97,13 @@ extension ViewController: UITableViewDelegate {
                 }
             }
         case 1:
-            Task { [weak self] in
+            Task {
                 do {
-                    let response = try await self?.CDUntappdKitManager.shared.apiClient.fetchUserWishList(forUsername: "DehaanSolo",
-                                                                                                           offset: 0,
-                                                                                                           limit: 10,
-                                                                                                           sort: .highestABV)
-                    if let response = response,
-                        let wishList = response.wishList {
+                    let response = try await CDUntappdKitManager.shared.apiClient.fetchUserWishList(forUsername: "DehaanSolo",
+                                                                                                    offset: 0,
+                                                                                                    limit: 10,
+                                                                                                    sort: .highestABV)
+                    if let wishList = response.wishList {
                         print(wishList)
                     }
                 } catch {
@@ -113,13 +111,12 @@ extension ViewController: UITableViewDelegate {
                 }
             }
         case 2:
-            Task { [weak self] in
+            Task {
                 do {
-                    let response = try await self?.CDUntappdKitManager.shared.apiClient.fetchUserFriends(forUsername: "DehaanSolo",
-                                                                                                          offset: 0,
-                                                                                                          limit: 10)
-                    if let response = response,
-                        let friends = response.friends {
+                    let response = try await CDUntappdKitManager.shared.apiClient.fetchUserFriends(forUsername: "DehaanSolo",
+                                                                                                   offset: 0,
+                                                                                                   limit: 10)
+                    if let friends = response.friends {
                         print(friends)
                     }
                 } catch {

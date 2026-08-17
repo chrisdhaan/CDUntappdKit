@@ -39,3 +39,6 @@ playground.xcworkspace
 Documentation/IMPROVEMENTS.md
 docs/superpowers/
 .superpowers/
+
+# Local secrets
+iOS Example/Secrets.xcconfig
