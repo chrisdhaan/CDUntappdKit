@@ -44,12 +44,6 @@ public struct CDUntappdCheckin: Decodable, Sendable {
     public var venue: CDUntappdVenue?
 //    public var toasts: [CDUntappdToast]?
     /// Comments on the check-in.
-    ///
-    /// Decoded as an `items`-wrapped list, matching every other list field on this type
-    /// (`badges`, `media`) and Untappd's consistent list-wrapping convention elsewhere in the
-    /// API. Unlike those fields, this exact shape is not documented in `Documentation/API_SCHEMA.md`
-    /// — no endpoint response containing a checkin with comments has been captured and verified.
-    /// Treat as a confident inference, not a verified shape, until confirmed against a live response.
     public var comments: [CDUntappdComment]?
     public var badges: [CDUntappdBadge]?
     public var media: [CDUntappdMedia]?
