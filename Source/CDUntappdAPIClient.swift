@@ -51,25 +51,26 @@ public class CDUntappdAPIClient {
     ///   - clientId: Your Untappd application client ID.
     ///   - clientSecret: Your Untappd application client secret. Do not share this key.
     ///   - redirectUrl: The OAuth redirect URL registered with your application.
+    ///   - retryConfiguration: Configuration for automatic retry with exponential backoff on
+    ///     transient failures and rate-limit responses. Defaults to `.disabled`.
     public convenience init(clientId: String,
                             clientSecret: String,
-                            redirectUrl: String) {
-        self.init(clientId: clientId,
-                  clientSecret: clientSecret,
-                  redirectUrl: redirectUrl,
-                  urlSession: URLSession(configuration: .default))
+                            redirectUrl: String,
+                            retryConfiguration: CDUntappdRetryConfiguration = .disabled) {
+        self.init(clientId: clientId, clientSecret: clientSecret, redirectUrl: redirectUrl,
+                  urlSession: URLSession(configuration: .default), retryConfiguration: retryConfiguration)
     }
 
     init(clientId: String,
          clientSecret: String,
          redirectUrl: String,
-         urlSession: URLSession) {
+         urlSession: URLSession,
+         retryConfiguration: CDUntappdRetryConfiguration = .disabled) {
         precondition(!clientId.isEmpty && !clientSecret.isEmpty && !redirectUrl.isEmpty,
                      "A clientId, clientSecret, and redirectUrl are required to query the Untappd Developers API oauth endpoint.")
-        self.oAuthClient = CDUntappdOAuthClient(clientId: clientId,
-                                                clientSecret: clientSecret,
-                                                redirectUrl: redirectUrl)
-        self.session = CDUntappdURLSession(session: urlSession)
+        self.oAuthClient = CDUntappdOAuthClient(clientId: clientId, clientSecret: clientSecret, redirectUrl: redirectUrl,
+                                                retryConfiguration: retryConfiguration)
+        self.session = CDUntappdURLSession(session: urlSession, retryConfiguration: retryConfiguration)
     }
 
     // MARK: - Authentication Methods

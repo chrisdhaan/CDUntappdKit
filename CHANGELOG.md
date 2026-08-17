@@ -15,7 +15,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-Part of the v3.2.0 "Client Configurability" release, which will not be tagged/released until the sibling Response Caching, Automatic Retry with Exponential Backoff, Middleware/Interceptor Pattern, and Decoder Configuration work has also merged.
+Part of the v3.2.0 "Client Configurability" release, which will not be tagged/released until the sibling Response Caching, Middleware/Interceptor Pattern, and Decoder Configuration work has also merged.
+
+### Added
+
+- `CDUntappdRetryConfiguration` — opt-in automatic retry with exponential backoff for `CDUntappdAPIClient` and `CDUntappdOAuthClient` requests, configurable via a new `retryConfiguration` init parameter on both (defaults to `.disabled`, so existing behavior is unchanged unless a caller opts in). Retries transient network failures and retryable HTTP status codes (default: `408, 429, 500, 502, 503, 504`) on idempotent HTTP methods only — POST requests (e.g. `addCheckin`, `toast`, `addComment`) are never auto-retried, so those can never be silently submitted twice. Note some write/action endpoints (`addFriend`, `removeFriend`, `acceptFriend`, `rejectFriend`, `addToWishList`, `removeFromWishList`) are `GET` requests and so are still retried like any other idempotent call.
 
 ### Updated
 

@@ -68,7 +68,9 @@ CDUntappdURLSession.perform(_:)  ← actor
      CDUntappdUserInfoResponse  ←  returned to caller
 ```
 
-This is deliberately simple compared to some other native-URLSession API client libraries: there is no caching, retry, or request-adapter layer in the pipeline today. Those are tracked as separate, opt-in additions for a future release (v3.2.0 — [#8](https://github.com/chrisdhaan/CDUntappdKit/issues/8) response caching, [#9](https://github.com/chrisdhaan/CDUntappdKit/issues/9) retry with backoff, [#10](https://github.com/chrisdhaan/CDUntappdKit/issues/10) middleware/interceptors), not yet built.
+This is deliberately simple compared to some other native-URLSession API client libraries: there is no caching or request-adapter layer in the pipeline today. Those are tracked as separate, opt-in additions for a future release (v3.2.0 — [#8](https://github.com/chrisdhaan/CDUntappdKit/issues/8) response caching, [#10](https://github.com/chrisdhaan/CDUntappdKit/issues/10) middleware/interceptors), not yet built.
+
+`CDUntappdURLSession.perform(_:)` does have an opt-in retry layer ([#9](https://github.com/chrisdhaan/CDUntappdKit/issues/9)): pass a `CDUntappdRetryConfiguration` to `CDUntappdAPIClient.init`/`CDUntappdOAuthClient.init` (default `.disabled`, so behavior is unchanged unless a caller opts in) to retry transient network failures and retryable HTTP status codes with exponential backoff, on idempotent HTTP methods only. `cancelAllTasks()` cancels both in-flight `URLSession` tasks and any pending retry backoff sleep.
 
 ## Model Hierarchy
 

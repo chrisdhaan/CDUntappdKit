@@ -42,7 +42,8 @@ final class CDUntappdMockURLProtocol: URLProtocol, @unchecked Sendable {
     private static let stubPropertyKey = "CDUntappdMockURLProtocolStub"
 
     private static let urlKeyedStubsLock = NSLock()
-    private nonisolated(unsafe) static var urlKeyedStubs: [URL: Stub] = [:]
+    private nonisolated(unsafe) static var urlKeyedStubQueues: [URL: [Stub]] = [:]
+    private nonisolated(unsafe) static var urlKeyedRequestCounts: [URL: Int] = [:]
 
     /// Returns a copy of `request` with `stub` attached, for use with a session created by
     /// `makeSession()`. Safe under concurrent test execution: the stub travels with this
@@ -53,20 +54,44 @@ final class CDUntappdMockURLProtocol: URLProtocol, @unchecked Sendable {
         return mutableRequest as URLRequest
     }
 
-    /// Registers `stub` to be served for any request whose `url` equals `url`, for use when
+    /// Registers `stub` to be served for every request whose `url` equals `url`, for use when
     /// the code under test builds its own `URLRequest` internally. Give each call a distinct
     /// `url` so concurrently-running tests never share an entry.
     static func register(stub: Stub, for url: URL) {
+        register(stubs: [stub], for: url)
+    }
+
+    /// Registers an ordered sequence of stubs to be served, one per request, to any request
+    /// whose `url` equals `url` — e.g. `[.init(statusCode: 500), .init(statusCode: 200)]` to
+    /// simulate a retryable failure followed by success. Once the sequence is exhausted, the
+    /// last stub repeats for any further requests. Give each call a distinct `url` so
+    /// concurrently-running tests never share an entry.
+    static func register(stubs: [Stub], for url: URL) {
         urlKeyedStubsLock.lock()
         defer { urlKeyedStubsLock.unlock() }
-        urlKeyedStubs[url] = stub
+        urlKeyedStubQueues[url] = stubs
+        urlKeyedRequestCounts[url] = 0
+    }
+
+    /// The number of requests served so far for `url` via `register(stub:for:)`/
+    /// `register(stubs:for:)` — lets a retry test assert exactly how many attempts were made.
+    static func requestCount(for url: URL) -> Int {
+        urlKeyedStubsLock.lock()
+        defer { urlKeyedStubsLock.unlock() }
+        return urlKeyedRequestCounts[url] ?? 0
     }
 
     private static func urlKeyedStub(for url: URL?) -> Stub? {
         guard let url else { return nil }
         urlKeyedStubsLock.lock()
         defer { urlKeyedStubsLock.unlock() }
-        return urlKeyedStubs[url]
+        guard var queue = urlKeyedStubQueues[url], let stub = queue.first else { return nil }
+        if queue.count > 1 {
+            queue.removeFirst()
+            urlKeyedStubQueues[url] = queue
+        }
+        urlKeyedRequestCounts[url, default: 0] += 1
+        return stub
     }
 
     static func makeSession() -> URLSession {

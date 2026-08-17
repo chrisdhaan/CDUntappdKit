@@ -210,6 +210,28 @@ extension SharedKeychainTests {
         }
 
         @Test
+        func authorizeRetriesRetryableStatusCodeWhenRetryConfigurationProvided() async throws {
+            let url = try expectedAuthorizeURL(clientId: "test", clientSecret: "test",
+                                               redirectUrl: "test://callback", code: "auth_code_retry_success")
+            CDUntappdMockURLProtocol.register(
+                stubs: [
+                    .init(statusCode: 503, data: Data()),
+                    .init(statusCode: 200, data: Data(#"{"response": {"access_token": "retried_token"}}"#.utf8)),
+                ],
+                for: url
+            )
+            let client = CDUntappdOAuthClient(
+                clientId: "test", clientSecret: "test", redirectUrl: "test://callback",
+                urlSession: CDUntappdMockURLProtocol.makeSession(),
+                retryConfiguration: CDUntappdRetryConfiguration(retryLimit: 2, initialDelay: 0.01)
+            )
+            try await client.authorize(withCode: "auth_code_retry_success")
+            #expect(CDUntappdKeychain.string(forKey: CDUntappdDefaults.accessToken) == "retried_token")
+            #expect(CDUntappdMockURLProtocol.requestCount(for: url) == 2)
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
+        }
+
+        @Test
         func authorizeReportsFailureOnHTTPError() async throws {
             let url = try expectedAuthorizeURL(clientId: "test", clientSecret: "test",
                                                redirectUrl: "test://callback", code: "auth_code_http_error")
