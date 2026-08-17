@@ -41,7 +41,8 @@ final class CDUntappdKitManager: NSObject {
         // Untappd API credentials before building this app.
         guard let clientId = Bundle.main.infoDictionary?["UNTAPPD_CLIENT_ID"] as? String,
               let clientSecret = Bundle.main.infoDictionary?["UNTAPPD_CLIENT_SECRET"] as? String else {
-            fatalError("Missing UNTAPPD_CLIENT_ID / UNTAPPD_CLIENT_SECRET. Copy Secrets.xcconfig.example to Secrets.xcconfig and fill in your credentials.")
+            fatalError("Missing UNTAPPD_CLIENT_ID / UNTAPPD_CLIENT_SECRET. Copy Secrets.xcconfig.example to " +
+                "Secrets.xcconfig and fill in your credentials.")
         }
 
         self.apiClient = CDUntappdAPIClient(clientId: clientId,
