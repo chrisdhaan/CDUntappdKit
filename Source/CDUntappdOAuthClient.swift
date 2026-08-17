@@ -52,24 +52,28 @@ public final class CDUntappdOAuthClient: Sendable {
     ///   - clientId: Your Untappd application client ID.
     ///   - clientSecret: Your Untappd application client secret.
     ///   - redirectUrl: The OAuth redirect URL registered with your application.
+    ///   - retryConfiguration: Configuration for automatic retry with exponential backoff on
+    ///     transient failures and rate-limit responses. Defaults to `.disabled`.
     public convenience init(clientId: String,
                             clientSecret: String,
-                            redirectUrl: String) {
-        self.init(clientId: clientId, clientSecret: clientSecret,
-                  redirectUrl: redirectUrl, urlSession: URLSession(configuration: .default))
+                            redirectUrl: String,
+                            retryConfiguration: CDUntappdRetryConfiguration = .disabled) {
+        self.init(clientId: clientId, clientSecret: clientSecret, redirectUrl: redirectUrl,
+                  urlSession: URLSession(configuration: .default), retryConfiguration: retryConfiguration)
     }
 
     /// Creates an OAuth client with an injected `URLSession`, for testing.
     init(clientId: String,
          clientSecret: String,
          redirectUrl: String,
-         urlSession: URLSession) {
+         urlSession: URLSession,
+         retryConfiguration: CDUntappdRetryConfiguration = .disabled) {
         precondition(!clientId.isEmpty && !clientSecret.isEmpty && !redirectUrl.isEmpty,
                      "A clientId, clientSecret, and redirectUrl are required to query the Untappdd Developers API oauth endpoint.")
         self.clientId = clientId
         self.clientSecret = clientSecret
         self.redirectUrl = redirectUrl
-        self.session = CDUntappdURLSession(session: urlSession)
+        self.session = CDUntappdURLSession(session: urlSession, retryConfiguration: retryConfiguration)
     }
 
     // MARK: - Authorization Methods

@@ -121,6 +121,32 @@ extension SharedKeychainTests {
             }
         }
 
+        @Test
+        func fetchUserInfoRetriesRetryableStatusCodeWhenRetryConfigurationProvided() async throws {
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
+            let json = """
+            {"meta": {"code": 200}, "response": {"user": {"user_name": "testuser"}}}
+            """
+            let url = try expectedFetchUserInfoURL(forUsername: "testuser-retry-success", compact: false)
+            CDUntappdMockURLProtocol.register(
+                stubs: [
+                    .init(statusCode: 503, data: Data()),
+                    .init(statusCode: 200, data: Data(json.utf8)),
+                ],
+                for: url
+            )
+            let client = CDUntappdAPIClient(
+                clientId: "test_id",
+                clientSecret: "test_secret",
+                redirectUrl: "testapp://oauth",
+                urlSession: CDUntappdMockURLProtocol.makeSession(),
+                retryConfiguration: CDUntappdRetryConfiguration(retryLimit: 2, initialDelay: 0.01)
+            )
+            let response = try await client.fetchUserInfo(forUsername: "testuser-retry-success", compact: false)
+            #expect(response.user?.username == "testuser")
+            #expect(CDUntappdMockURLProtocol.requestCount(for: url) == 2)
+        }
+
         /// Mirrors `expectedFetchUserInfoURL` above — see its doc comment for why this
         /// replication is necessary instead of attaching a stub to a specific `URLRequest`.
         private func expectedFetchUserWishListURL(forUsername username: String,
