@@ -86,25 +86,27 @@ enum CDUntappdParameterEncoding {
         return urlRequest
     }
 
-    /// Builds a `POST` request with form-URL-encoded parameters in the httpBody, and — as a
-    /// defensive hedge — the same parameters mirrored into the query string. Replaces
+    /// Builds a `POST` request with form-URL-encoded parameters in the httpBody. Replaces
     /// Alamofire's `URLEncoding.httpBody`, which uses the same escaping as `URLEncoding.default`
     /// (see `encodedQueryString(from:)`), just written to the body instead of the query string.
     ///
-    /// The query string is populated in addition to the body because this repository's own
-    /// historical Objective-C implementation special-cased `checkin/add` to send `access_token`
-    /// in the query string even though it was a `POST`, suggesting some Untappd write endpoints
-    /// may expect OAuth credentials there rather than (or in addition to) the body. Since this
-    /// layer works on a flat `Parameters` dictionary with no way to distinguish "auth" keys from
-    /// "payload" keys, all parameters are sent in both places; a server reading from either
-    /// location gets what it needs, and redundant data in the other location is harmless.
+    /// OAuth credential parameters (`access_token`, `client_id`, `client_secret`) are additionally
+    /// mirrored into the query string as a defensive hedge: this repo's historical pre-Swift
+    /// implementation special-cased exactly this for `checkin/add`, suggesting Untappd's real API
+    /// may expect credentials in the query string even on `POST` requests. Non-credential
+    /// parameters — which may include free-text user content like `shout`/`comment`, or location
+    /// data — stay body-only, so they never end up in a URL that an intermediate proxy or server
+    /// access log might record.
     static func httpBodyRequest(for url: URL, parameters: Parameters) throws -> URLRequest {
+        let credentialKeys: Set<String> = ["access_token", "client_id", "client_secret"]
+        let credentialParameters = parameters.filter { credentialKeys.contains($0.key) }
+
         guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             throw CDUntappdKitError.invalidRequest(underlying: URLError(.badURL))
         }
 
-        if !parameters.isEmpty {
-            components.percentEncodedQuery = encodedQueryString(from: parameters)
+        if !credentialParameters.isEmpty {
+            components.percentEncodedQuery = encodedQueryString(from: credentialParameters)
         }
 
         guard let requestURL = components.url else {

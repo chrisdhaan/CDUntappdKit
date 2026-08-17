@@ -84,11 +84,19 @@ struct CDUntappdParameterEncodingTests {
     }
 
     @Test
-    func httpBodyRequestPutsParametersInBothQueryAndBody() throws {
+    func httpBodyRequestKeepsNonCredentialParametersBodyOnly() throws {
         let request = try CDUntappdParameterEncoding.httpBodyRequest(for: baseURL, parameters: ["bid": 123])
-        #expect(request.url?.query == "bid=123")
+        #expect(request.url?.query == nil)
         let bodyString = try #require(request.httpBody.flatMap { String(data: $0, encoding: .utf8) })
         #expect(bodyString == "bid=123")
+    }
+
+    @Test
+    func httpBodyRequestMirrorsCredentialParametersIntoQueryAndBody() throws {
+        let request = try CDUntappdParameterEncoding.httpBodyRequest(for: baseURL, parameters: ["access_token": "abc123", "bid": 123])
+        #expect(request.url?.query == "access_token=abc123")
+        let bodyString = try #require(request.httpBody.flatMap { String(data: $0, encoding: .utf8) })
+        #expect(bodyString == "access_token=abc123&bid=123")
     }
 
     @Test
