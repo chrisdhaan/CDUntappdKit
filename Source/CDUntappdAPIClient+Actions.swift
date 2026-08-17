@@ -47,7 +47,7 @@ extension CDUntappdAPIClient {
     ///   - twitter: Pass `true` to cross-post to Twitter. Defaults to `false`.
     ///   - foursquare: Pass `true` to cross-post to Foursquare (requires lat/lng). Defaults to `false`.
     /// - Returns: The decoded ``CDUntappdCheckinResponse``.
-    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    /// - Throws: ``CDUntappdKitError`` if the client isn't authenticated, the request fails, or the API returns an error.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func addCheckin(bid: Int,
                            gmtOffset: String,
@@ -60,10 +60,11 @@ extension CDUntappdAPIClient {
                            facebook: Bool = false,
                            twitter: Bool = false,
                            foursquare: Bool = false) async throws -> CDUntappdCheckinResponse {
-        precondition(
-            self.isAuthenticated(),
-            "Authentication is required to post an Untappd check-in."
-        )
+        guard self.isAuthenticated() else {
+            throw CDUntappdKitError.invalidCredentials(
+                "Authentication is required to post an Untappd check-in."
+            )
+        }
 
         var params = Parameters.checkinParameters(bid: bid, gmtOffset: gmtOffset, timezone: timezone,
                                                   foursquareId: foursquareId, latitude: latitude,
@@ -88,13 +89,14 @@ extension CDUntappdAPIClient {
     /// Toggles a toast on a check-in (calling it again removes the toast).
     /// - Parameter checkinId: The Untappd check-in ID to toast.
     /// - Returns: The decoded ``CDUntappdToastResponse``.
-    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    /// - Throws: ``CDUntappdKitError`` if the client isn't authenticated, the request fails, or the API returns an error.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func toast(checkinId: Int) async throws -> CDUntappdToastResponse {
-        precondition(
-            self.isAuthenticated(),
-            "Authentication is required to toast an Untappd check-in."
-        )
+        guard self.isAuthenticated() else {
+            throw CDUntappdKitError.invalidCredentials(
+                "Authentication is required to toast an Untappd check-in."
+            )
+        }
 
         var params = Parameters()
         params = self.oAuthClient.addTokens(toParameters: params)
@@ -118,13 +120,14 @@ extension CDUntappdAPIClient {
     ///   - checkinId: The Untappd check-in ID to comment on.
     ///   - comment: The comment text, max 140 characters.
     /// - Returns: The decoded ``CDUntappdAddCommentResponse``.
-    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    /// - Throws: ``CDUntappdKitError`` if the client isn't authenticated, the request fails, or the API returns an error.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func addComment(toCheckinId checkinId: Int, comment: String) async throws -> CDUntappdAddCommentResponse {
-        precondition(
-            self.isAuthenticated(),
-            "Authentication is required to comment on an Untappd check-in."
-        )
+        guard self.isAuthenticated() else {
+            throw CDUntappdKitError.invalidCredentials(
+                "Authentication is required to comment on an Untappd check-in."
+            )
+        }
 
         var params = Parameters.addCommentParameters(comment: comment)
         params = self.oAuthClient.addTokens(toParameters: params)
@@ -145,13 +148,14 @@ extension CDUntappdAPIClient {
 
     /// Removes a comment from a check-in.
     /// - Parameter commentId: The Untappd comment ID to remove.
-    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    /// - Throws: ``CDUntappdKitError`` if the client isn't authenticated, the request fails, or the API returns an error.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func removeComment(commentId: Int) async throws {
-        precondition(
-            self.isAuthenticated(),
-            "Authentication is required to remove an Untappd check-in comment."
-        )
+        guard self.isAuthenticated() else {
+            throw CDUntappdKitError.invalidCredentials(
+                "Authentication is required to remove an Untappd check-in comment."
+            )
+        }
 
         var params = Parameters()
         params = self.oAuthClient.addTokens(toParameters: params)
@@ -167,14 +171,15 @@ extension CDUntappdAPIClient {
     ///   - offset: The zero-based offset for pagination. Defaults to `nil` (start from 0).
     ///   - limit: Maximum number of results to return. Defaults to `nil` (all results).
     /// - Returns: The decoded ``CDUntappdPendingFriendsResponse``.
-    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    /// - Throws: ``CDUntappdKitError`` if the client isn't authenticated, the request fails, or the API returns an error.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func fetchPendingFriends(offset: Int?,
                                     limit: Int?) async throws -> CDUntappdPendingFriendsResponse {
-        precondition(
-            self.isAuthenticated(),
-            "Authentication is required to query the Untappd API pending friends endpoint."
-        )
+        guard self.isAuthenticated() else {
+            throw CDUntappdKitError.invalidCredentials(
+                "Authentication is required to query the Untappd API pending friends endpoint."
+            )
+        }
 
         var params = Parameters.pendingFriendsParameters(withOffset: offset, limit: limit)
         params = self.oAuthClient.addTokens(toParameters: params)
@@ -196,13 +201,14 @@ extension CDUntappdAPIClient {
     /// Sends a friend request to a user.
     /// - Parameter targetId: The target user's Untappd user ID.
     /// - Returns: The decoded ``CDUntappdActionResultResponse``.
-    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    /// - Throws: ``CDUntappdKitError`` if the client isn't authenticated, the request fails, or the API returns an error.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func addFriend(targetId: Int) async throws -> CDUntappdActionResultResponse {
-        precondition(
-            self.isAuthenticated(),
-            "Authentication is required to send an Untappd friend request."
-        )
+        guard self.isAuthenticated() else {
+            throw CDUntappdKitError.invalidCredentials(
+                "Authentication is required to send an Untappd friend request."
+            )
+        }
 
         var params = Parameters()
         params = self.oAuthClient.addTokens(toParameters: params)
@@ -224,13 +230,14 @@ extension CDUntappdAPIClient {
     /// Removes a friend.
     /// - Parameter targetId: The target user's Untappd user ID.
     /// - Returns: The decoded ``CDUntappdActionResultResponse``.
-    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    /// - Throws: ``CDUntappdKitError`` if the client isn't authenticated, the request fails, or the API returns an error.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func removeFriend(targetId: Int) async throws -> CDUntappdActionResultResponse {
-        precondition(
-            self.isAuthenticated(),
-            "Authentication is required to remove an Untappd friend."
-        )
+        guard self.isAuthenticated() else {
+            throw CDUntappdKitError.invalidCredentials(
+                "Authentication is required to remove an Untappd friend."
+            )
+        }
 
         var params = Parameters()
         params = self.oAuthClient.addTokens(toParameters: params)
@@ -252,13 +259,14 @@ extension CDUntappdAPIClient {
     /// Accepts a pending friend request.
     /// - Parameter targetId: The requesting user's Untappd user ID.
     /// - Returns: The decoded ``CDUntappdActionResultResponse``.
-    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    /// - Throws: ``CDUntappdKitError`` if the client isn't authenticated, the request fails, or the API returns an error.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func acceptFriend(targetId: Int) async throws -> CDUntappdActionResultResponse {
-        precondition(
-            self.isAuthenticated(),
-            "Authentication is required to accept an Untappd friend request."
-        )
+        guard self.isAuthenticated() else {
+            throw CDUntappdKitError.invalidCredentials(
+                "Authentication is required to accept an Untappd friend request."
+            )
+        }
 
         var params = Parameters()
         params = self.oAuthClient.addTokens(toParameters: params)
@@ -280,13 +288,14 @@ extension CDUntappdAPIClient {
     /// Rejects a pending friend request.
     /// - Parameter targetId: The requesting user's Untappd user ID.
     /// - Returns: The decoded ``CDUntappdActionResultResponse``.
-    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    /// - Throws: ``CDUntappdKitError`` if the client isn't authenticated, the request fails, or the API returns an error.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func rejectFriend(targetId: Int) async throws -> CDUntappdActionResultResponse {
-        precondition(
-            self.isAuthenticated(),
-            "Authentication is required to reject an Untappd friend request."
-        )
+        guard self.isAuthenticated() else {
+            throw CDUntappdKitError.invalidCredentials(
+                "Authentication is required to reject an Untappd friend request."
+            )
+        }
 
         var params = Parameters()
         params = self.oAuthClient.addTokens(toParameters: params)
@@ -308,13 +317,14 @@ extension CDUntappdAPIClient {
     /// Adds a beer to the authenticated user's wish list.
     /// - Parameter bid: The Untappd beer ID to add.
     /// - Returns: The decoded ``CDUntappdActionResultResponse``.
-    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    /// - Throws: ``CDUntappdKitError`` if the client isn't authenticated, the request fails, or the API returns an error.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func addToWishList(bid: Int) async throws -> CDUntappdActionResultResponse {
-        precondition(
-            self.isAuthenticated(),
-            "Authentication is required to add a beer to the Untappd wish list."
-        )
+        guard self.isAuthenticated() else {
+            throw CDUntappdKitError.invalidCredentials(
+                "Authentication is required to add a beer to the Untappd wish list."
+            )
+        }
 
         var params = Parameters.wishListActionParameters(bid: bid)
         params = self.oAuthClient.addTokens(toParameters: params)
@@ -336,13 +346,14 @@ extension CDUntappdAPIClient {
     /// Removes a beer from the authenticated user's wish list.
     /// - Parameter bid: The Untappd beer ID to remove.
     /// - Returns: The decoded ``CDUntappdActionResultResponse``.
-    /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
+    /// - Throws: ``CDUntappdKitError`` if the client isn't authenticated, the request fails, or the API returns an error.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func removeFromWishList(bid: Int) async throws -> CDUntappdActionResultResponse {
-        precondition(
-            self.isAuthenticated(),
-            "Authentication is required to remove a beer from the Untappd wish list."
-        )
+        guard self.isAuthenticated() else {
+            throw CDUntappdKitError.invalidCredentials(
+                "Authentication is required to remove a beer from the Untappd wish list."
+            )
+        }
 
         var params = Parameters.wishListActionParameters(bid: bid)
         params = self.oAuthClient.addTokens(toParameters: params)

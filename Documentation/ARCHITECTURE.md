@@ -172,9 +172,9 @@ All async API methods throw `CDUntappdKitError`:
 | `.httpError(statusCode:data:)` | The server returned a non-2xx HTTP status code |
 | `.decodingFailed(underlying:)` | `JSONDecoder` failed to parse the response body |
 | `.apiError(String)` | The API returned a 2xx response whose body describes an application-level error (via the `meta` envelope's error fields) |
-| `.invalidCredentials(String)` | A required precondition (non-empty OAuth client ID/secret, non-empty authorization code) wasn't met, so no request was sent |
+| `.invalidCredentials(String)` | A required precondition (non-empty OAuth client ID/secret, non-empty authorization code) wasn't met, or the client wasn't authenticated when calling a write/action endpoint, so no request was sent |
 
-Errors surface directly from `async throws` — there is no `nil`-on-error pattern. `precondition()` (not `assert()`, as of the v3.0.0 concurrency audit) additionally guards username-or-authentication requirements on fetch methods, so those failures are enforced in Release builds too, not just Debug.
+Errors surface directly from `async throws` — there is no `nil`-on-error pattern. Read-only fetch methods still `precondition()` (not `assert()`, as of the v3.0.0 concurrency audit) on username/authentication requirements, enforced in Release builds too, not just Debug — a missing username or auth token there is treated as a caller bug. The 11 write/action endpoints (`CDUntappdAPIClient+Actions.swift`) instead throw `.invalidCredentials(String)` on a missing auth token, since a token can expire between an app's `isAuthenticated()` check and a write call — a routine runtime condition, not a programmer error (v3.2.0).
 
 ## Thread Safety
 

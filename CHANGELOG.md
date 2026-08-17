@@ -4,11 +4,22 @@ All notable changes to this project will be documented in this file.
 
 ## Table of Contents
 
+- [Unreleased](#unreleased)
 - [3.1.0](#310)
 - [3.0.0](#300)
 - [2.0.0](#200)
 - [1.1.0](#110)
 - [1.0.0](#100)
+
+---
+
+## [Unreleased]
+
+Part of the v3.2.0 "Client Configurability" release, which will not be tagged/released until the sibling Response Caching, Automatic Retry with Exponential Backoff, Middleware/Interceptor Pattern, and Decoder Configuration work has also merged.
+
+### Updated
+
+- The 11 write/action-endpoint methods on `CDUntappdAPIClient` (`addCheckin`, `toast`, `addComment`, `removeComment`, `fetchPendingFriends`, `addFriend`, `removeFriend`, `acceptFriend`, `rejectFriend`, `addToWishList`, `removeFromWishList`) now throw `CDUntappdKitError.invalidCredentials(_:)` when called without an active access token, instead of crashing via `precondition`. An expired or missing token between an `isAuthenticated()` check and a write call is a routine runtime condition, not a programmer error, so it's now catchable. Read-only fetch methods are unchanged and still precondition on authentication.
 
 ---
 
