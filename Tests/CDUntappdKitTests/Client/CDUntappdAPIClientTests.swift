@@ -349,6 +349,25 @@ extension SharedKeychainTests {
         }
 
         @Test
+        func fetchUserInfoAppliesDecoderConfigurationKeyStrategy() async throws {
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
+            let json = """
+            {"meta": {"code": 200}, "response": {"user": {"user_name": "testuser"}}}
+            """
+            let url = try expectedFetchUserInfoURL(forUsername: "testuser-decoder-config", compact: false)
+            CDUntappdMockURLProtocol.register(stub: .init(statusCode: 200, data: Data(json.utf8)), for: url)
+            let client = CDUntappdAPIClient(
+                clientId: "test_id",
+                clientSecret: "test_secret",
+                redirectUrl: "testapp://oauth",
+                urlSession: CDUntappdMockURLProtocol.makeSession(),
+                decoderConfiguration: CDUntappdDecoderConfiguration(keyDecodingStrategy: .convertFromSnakeCase)
+            )
+            let response = try await client.fetchUserInfo(forUsername: "testuser-decoder-config", compact: false)
+            #expect(response.user?.username == nil)
+        }
+
+        @Test
         func toastThrowsInvalidCredentialsWhenNotAuthenticated() async throws {
             CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
             do {

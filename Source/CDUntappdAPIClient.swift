@@ -46,37 +46,19 @@ public class CDUntappdAPIClient {
 
     // MARK: - Initializers
 
-    /// Creates an Untappd API client.
-    /// - Parameters:
-    ///   - clientId: Your Untappd application client ID.
-    ///   - clientSecret: Your Untappd application client secret. Do not share this key.
-    ///   - redirectUrl: The OAuth redirect URL registered with your application.
-    ///   - retryConfiguration: Configuration for automatic retry with exponential backoff on
-    ///     transient failures and rate-limit responses. Defaults to `.disabled`.
-    ///   - eventMonitors: Observers notified of request/response lifecycle events. Defaults to none.
-    ///   - requestAdapters: Adapters run in order to mutate each outgoing request before it is sent.
-    ///     Defaults to none.
-    ///   - cacheConfiguration: Configuration for the built-in in-memory response cache applied to
-    ///     `GET` requests. Defaults to `.disabled`.
-    public convenience init(clientId: String, clientSecret: String, redirectUrl: String,
-                            retryConfiguration: CDUntappdRetryConfiguration = .disabled,
-                            eventMonitors: [any CDUntappdEventMonitor] = [], requestAdapters: [any CDUntappdRequestAdapter] = [],
-                            cacheConfiguration: CDUntappdCacheConfiguration = .disabled) {
-        self.init(clientId: clientId, clientSecret: clientSecret, redirectUrl: redirectUrl, urlSession: URLSession(configuration: .default),
-                  retryConfiguration: retryConfiguration, eventMonitors: eventMonitors, requestAdapters: requestAdapters,
-                  cacheConfiguration: cacheConfiguration)
-    }
-
     init(clientId: String, clientSecret: String, redirectUrl: String, urlSession: URLSession,
          retryConfiguration: CDUntappdRetryConfiguration = .disabled,
          eventMonitors: [any CDUntappdEventMonitor] = [], requestAdapters: [any CDUntappdRequestAdapter] = [],
-         cacheConfiguration: CDUntappdCacheConfiguration = .disabled) {
+         cacheConfiguration: CDUntappdCacheConfiguration = .disabled,
+         decoderConfiguration: CDUntappdDecoderConfiguration = .default) {
         precondition(!clientId.isEmpty && !clientSecret.isEmpty && !redirectUrl.isEmpty,
                      "A clientId, clientSecret, and redirectUrl are required to query the Untappd Developers API oauth endpoint.")
         self.oAuthClient = CDUntappdOAuthClient(clientId: clientId, clientSecret: clientSecret, redirectUrl: redirectUrl,
                                                 retryConfiguration: retryConfiguration, eventMonitors: eventMonitors,
-                                                requestAdapters: requestAdapters, cacheConfiguration: cacheConfiguration)
-        self.session = CDUntappdURLSession(session: urlSession, retryConfiguration: retryConfiguration,
+                                                requestAdapters: requestAdapters, cacheConfiguration: cacheConfiguration,
+                                                decoderConfiguration: decoderConfiguration)
+        self.session = CDUntappdURLSession(session: urlSession, decoderConfiguration: decoderConfiguration,
+                                           retryConfiguration: retryConfiguration,
                                            eventMonitors: eventMonitors, requestAdapters: requestAdapters,
                                            cacheConfiguration: cacheConfiguration)
     }
@@ -671,5 +653,32 @@ public class CDUntappdAPIClient {
     @available(*, deprecated, message: "Use Task.cancel() with async/await API instead")
     public func cancelAllPendingAPIRequests() async {
         await self.session.cancelAllTasks()
+    }
+}
+
+extension CDUntappdAPIClient {
+
+    /// Creates an Untappd API client.
+    /// - Parameters:
+    ///   - clientId: Your Untappd application client ID.
+    ///   - clientSecret: Your Untappd application client secret. Do not share this key.
+    ///   - redirectUrl: The OAuth redirect URL registered with your application.
+    ///   - retryConfiguration: Configuration for automatic retry with exponential backoff on
+    ///     transient failures and rate-limit responses. Defaults to `.disabled`.
+    ///   - eventMonitors: Observers notified of request/response lifecycle events. Defaults to none.
+    ///   - requestAdapters: Adapters run in order to mutate each outgoing request before it is sent.
+    ///     Defaults to none.
+    ///   - cacheConfiguration: Configuration for the built-in in-memory response cache applied to
+    ///     `GET` requests. Defaults to `.disabled`.
+    ///   - decoderConfiguration: Configuration for `JSONDecoder`'s key and date decoding strategies.
+    ///     Defaults to `.default`.
+    public convenience init(clientId: String, clientSecret: String, redirectUrl: String,
+                            retryConfiguration: CDUntappdRetryConfiguration = .disabled,
+                            eventMonitors: [any CDUntappdEventMonitor] = [], requestAdapters: [any CDUntappdRequestAdapter] = [],
+                            cacheConfiguration: CDUntappdCacheConfiguration = .disabled,
+                            decoderConfiguration: CDUntappdDecoderConfiguration = .default) {
+        self.init(clientId: clientId, clientSecret: clientSecret, redirectUrl: redirectUrl, urlSession: URLSession(configuration: .default),
+                  retryConfiguration: retryConfiguration, eventMonitors: eventMonitors, requestAdapters: requestAdapters,
+                  cacheConfiguration: cacheConfiguration, decoderConfiguration: decoderConfiguration)
     }
 }

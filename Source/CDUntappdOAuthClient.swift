@@ -59,16 +59,20 @@ public final class CDUntappdOAuthClient: Sendable {
     ///     Defaults to none.
     ///   - cacheConfiguration: Configuration for the built-in in-memory response cache applied to
     ///     `GET` requests. Defaults to `.disabled`.
+    ///   - decoderConfiguration: Configuration for `JSONDecoder`'s key and date decoding strategies.
+    ///     Defaults to `.default`.
     public convenience init(clientId: String,
                             clientSecret: String,
                             redirectUrl: String,
                             retryConfiguration: CDUntappdRetryConfiguration = .disabled,
                             eventMonitors: [any CDUntappdEventMonitor] = [],
                             requestAdapters: [any CDUntappdRequestAdapter] = [],
-                            cacheConfiguration: CDUntappdCacheConfiguration = .disabled) {
+                            cacheConfiguration: CDUntappdCacheConfiguration = .disabled,
+                            decoderConfiguration: CDUntappdDecoderConfiguration = .default) {
         self.init(clientId: clientId, clientSecret: clientSecret, redirectUrl: redirectUrl,
                   urlSession: URLSession(configuration: .default), retryConfiguration: retryConfiguration,
-                  eventMonitors: eventMonitors, requestAdapters: requestAdapters, cacheConfiguration: cacheConfiguration)
+                  eventMonitors: eventMonitors, requestAdapters: requestAdapters, cacheConfiguration: cacheConfiguration,
+                  decoderConfiguration: decoderConfiguration)
     }
 
     /// Creates an OAuth client with an injected `URLSession`, for testing.
@@ -79,13 +83,15 @@ public final class CDUntappdOAuthClient: Sendable {
          retryConfiguration: CDUntappdRetryConfiguration = .disabled,
          eventMonitors: [any CDUntappdEventMonitor] = [],
          requestAdapters: [any CDUntappdRequestAdapter] = [],
-         cacheConfiguration: CDUntappdCacheConfiguration = .disabled) {
+         cacheConfiguration: CDUntappdCacheConfiguration = .disabled,
+         decoderConfiguration: CDUntappdDecoderConfiguration = .default) {
         precondition(!clientId.isEmpty && !clientSecret.isEmpty && !redirectUrl.isEmpty,
                      "A clientId, clientSecret, and redirectUrl are required to query the Untappdd Developers API oauth endpoint.")
         self.clientId = clientId
         self.clientSecret = clientSecret
         self.redirectUrl = redirectUrl
-        self.session = CDUntappdURLSession(session: urlSession, retryConfiguration: retryConfiguration,
+        self.session = CDUntappdURLSession(session: urlSession, decoderConfiguration: decoderConfiguration,
+                                           retryConfiguration: retryConfiguration,
                                            eventMonitors: eventMonitors, requestAdapters: requestAdapters,
                                            cacheConfiguration: cacheConfiguration)
     }

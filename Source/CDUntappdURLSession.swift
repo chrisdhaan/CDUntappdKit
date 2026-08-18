@@ -53,14 +53,14 @@ actor CDUntappdURLSession {
 
     init(
         session: URLSession = .shared,
-        decoder: JSONDecoder = JSONDecoder(),
+        decoderConfiguration: CDUntappdDecoderConfiguration = .default,
         retryConfiguration: CDUntappdRetryConfiguration = .disabled,
         eventMonitors: [any CDUntappdEventMonitor] = [],
         requestAdapters: [any CDUntappdRequestAdapter] = [],
         cacheConfiguration: CDUntappdCacheConfiguration = .disabled
     ) {
         self.session = session
-        self.decoder = decoder
+        self.decoder = decoderConfiguration.makeDecoder()
         self.retryConfiguration = retryConfiguration
         self.eventMonitors = eventMonitors
         self.requestAdapters = requestAdapters
