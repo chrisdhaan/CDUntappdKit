@@ -33,6 +33,15 @@ import Foundation
 ///   signs requests with a per-attempt nonce/timestamp will not get a fresh value on retry; such
 ///   an adapter should refresh proactively before the request reaches CDUntappdKit, rather than
 ///   relying on being re-invoked mid-retry.
+/// - Important: Retry eligibility (see `CDUntappdRetryConfiguration`) is decided from the
+///   *adapted* request's HTTP method, not the original one — an adapter that rewrites
+///   `httpMethod` changes which requests are treated as idempotent for retry purposes.
+/// - Important: `CDUntappdAPIClient` and `CDUntappdOAuthClient` each own a separate
+///   `CDUntappdURLSession` actor instance. Passing the same adapter to both (as
+///   `CDUntappdAPIClient.init` does by default with its internal `CDUntappdOAuthClient`) means
+///   `adapt(_:)` can be invoked concurrently from two independent actors with no shared
+///   serialization between them — a conforming type must do its own synchronization if it holds
+///   mutable state.
 public protocol CDUntappdRequestAdapter: AnyObject, Sendable {
     /// Mutate and return the request. Return the request unchanged to pass it through.
     func adapt(_ urlRequest: URLRequest) throws -> URLRequest

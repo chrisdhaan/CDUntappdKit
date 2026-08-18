@@ -26,6 +26,12 @@
 import Foundation
 
 /// Observes `CDUntappdAPIClient`/`CDUntappdOAuthClient` request and response events.
+///
+/// - Important: `CDUntappdAPIClient` and `CDUntappdOAuthClient` each own a separate
+///   `CDUntappdURLSession` actor instance. Passing the same monitor to both (as
+///   `CDUntappdAPIClient.init` does by default with its internal `CDUntappdOAuthClient`) means its
+///   methods can be invoked concurrently from two independent actors with no shared serialization
+///   between them — a conforming type must do its own synchronization if it holds mutable state.
 public protocol CDUntappdEventMonitor: AnyObject, Sendable {
     /// Called once per logical request, immediately before it is first sent.
     func requestDidStart(urlRequest: URLRequest)

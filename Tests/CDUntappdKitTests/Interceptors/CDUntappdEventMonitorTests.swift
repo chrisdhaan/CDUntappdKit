@@ -13,6 +13,7 @@ struct CDUntappdEventMonitorTests {
         private let lock = NSLock()
         private var _startedRequests: [URLRequest] = []
         private var _completedResponses: [(response: HTTPURLResponse?, error: Error?)] = []
+        private var _retryCounts: [Int] = []
 
         var startedRequests: [URLRequest] {
             lock.lock()
@@ -26,6 +27,12 @@ struct CDUntappdEventMonitorTests {
             return _completedResponses
         }
 
+        var retryCounts: [Int] {
+            lock.lock()
+            defer { lock.unlock() }
+            return _retryCounts
+        }
+
         func requestDidStart(urlRequest: URLRequest) {
             lock.lock()
             _startedRequests.append(urlRequest)
@@ -35,6 +42,12 @@ struct CDUntappdEventMonitorTests {
         func requestDidComplete(urlRequest _: URLRequest?, response: HTTPURLResponse?, data _: Data?, error: Error?) {
             lock.lock()
             _completedResponses.append((response, error))
+            lock.unlock()
+        }
+
+        func requestWillRetry(urlRequest _: URLRequest?, retryCount: Int) {
+            lock.lock()
+            _retryCounts.append(retryCount)
             lock.unlock()
         }
     }
@@ -105,5 +118,27 @@ struct CDUntappdEventMonitorTests {
         #expect(monitor.startedRequests.count == 1)
         #expect(monitor.completedResponses.count == 1)
         #expect(monitor.completedResponses.first?.response?.statusCode == 200)
+        #expect(monitor.retryCounts == [1])
+    }
+
+    @Test
+    func notifiesMonitorOfDecodingFailureAsATerminalError() async throws {
+        let request = makeRequest(path: "decode-failure")
+        try CDUntappdMockURLProtocol.register(
+            stub: .init(statusCode: 200, data: Data(#"{"unexpected":"shape"}"#.utf8)),
+            for: #require(request.url)
+        )
+        let monitor = SpyMonitor()
+        let session = CDUntappdURLSession(session: CDUntappdMockURLProtocol.makeSession(), eventMonitors: [monitor])
+
+        do {
+            let _: Fixture = try await session.perform(request)
+            Issue.record("Expected .decodingFailed to be thrown")
+        } catch is CDUntappdKitError {
+            // expected
+        }
+
+        #expect(monitor.completedResponses.count == 1)
+        #expect(monitor.completedResponses.first?.error != nil)
     }
 }
