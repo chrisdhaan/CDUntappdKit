@@ -53,24 +53,26 @@ public class CDUntappdAPIClient {
     ///   - redirectUrl: The OAuth redirect URL registered with your application.
     ///   - retryConfiguration: Configuration for automatic retry with exponential backoff on
     ///     transient failures and rate-limit responses. Defaults to `.disabled`.
-    public convenience init(clientId: String,
-                            clientSecret: String,
-                            redirectUrl: String,
-                            retryConfiguration: CDUntappdRetryConfiguration = .disabled) {
-        self.init(clientId: clientId, clientSecret: clientSecret, redirectUrl: redirectUrl,
-                  urlSession: URLSession(configuration: .default), retryConfiguration: retryConfiguration)
+    ///   - eventMonitors: Observers notified of request/response lifecycle events. Defaults to none.
+    ///   - requestAdapters: Adapters run in order to mutate each outgoing request before it is sent.
+    ///     Defaults to none.
+    public convenience init(clientId: String, clientSecret: String, redirectUrl: String,
+                            retryConfiguration: CDUntappdRetryConfiguration = .disabled,
+                            eventMonitors: [any CDUntappdEventMonitor] = [], requestAdapters: [any CDUntappdRequestAdapter] = []) {
+        self.init(clientId: clientId, clientSecret: clientSecret, redirectUrl: redirectUrl, urlSession: URLSession(configuration: .default),
+                  retryConfiguration: retryConfiguration, eventMonitors: eventMonitors, requestAdapters: requestAdapters)
     }
 
-    init(clientId: String,
-         clientSecret: String,
-         redirectUrl: String,
-         urlSession: URLSession,
-         retryConfiguration: CDUntappdRetryConfiguration = .disabled) {
+    init(clientId: String, clientSecret: String, redirectUrl: String, urlSession: URLSession,
+         retryConfiguration: CDUntappdRetryConfiguration = .disabled,
+         eventMonitors: [any CDUntappdEventMonitor] = [], requestAdapters: [any CDUntappdRequestAdapter] = []) {
         precondition(!clientId.isEmpty && !clientSecret.isEmpty && !redirectUrl.isEmpty,
                      "A clientId, clientSecret, and redirectUrl are required to query the Untappd Developers API oauth endpoint.")
         self.oAuthClient = CDUntappdOAuthClient(clientId: clientId, clientSecret: clientSecret, redirectUrl: redirectUrl,
-                                                retryConfiguration: retryConfiguration)
-        self.session = CDUntappdURLSession(session: urlSession, retryConfiguration: retryConfiguration)
+                                                retryConfiguration: retryConfiguration,
+                                                eventMonitors: eventMonitors, requestAdapters: requestAdapters)
+        self.session = CDUntappdURLSession(session: urlSession, retryConfiguration: retryConfiguration,
+                                           eventMonitors: eventMonitors, requestAdapters: requestAdapters)
     }
 
     // MARK: - Authentication Methods

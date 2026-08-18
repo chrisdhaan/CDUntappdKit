@@ -27,14 +27,17 @@ import Foundation
 
 /// A minimal request/decode pipeline over `URLSession`, replacing `Alamofire.Session`.
 ///
-/// Deliberately has no cache or request-adapter support — those are separate, not-yet-built
-/// features that will extend this actor later.
+/// Deliberately has no response-caching support — a separate, not-yet-built feature that will
+/// extend this actor later. Retry (`CDUntappdRetryConfiguration`), event monitoring
+/// (`CDUntappdEventMonitor`), and request adaptation (`CDUntappdRequestAdapter`) are supported.
 @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
 actor CDUntappdURLSession {
 
     private let session: URLSession
     private let decoder: JSONDecoder
     private let retryConfiguration: CDUntappdRetryConfiguration
+    private let eventMonitors: [any CDUntappdEventMonitor]
+    private let requestAdapters: [any CDUntappdRequestAdapter]
     private var retrySleepTasks: [UUID: Task<Void, any Error>] = [:]
 
     /// HTTP methods safe to automatically resend without risking a duplicate side effect —
@@ -50,33 +53,65 @@ actor CDUntappdURLSession {
     init(
         session: URLSession = .shared,
         decoder: JSONDecoder = JSONDecoder(),
-        retryConfiguration: CDUntappdRetryConfiguration = .disabled
+        retryConfiguration: CDUntappdRetryConfiguration = .disabled,
+        eventMonitors: [any CDUntappdEventMonitor] = [],
+        requestAdapters: [any CDUntappdRequestAdapter] = []
     ) {
         self.session = session
         self.decoder = decoder
         self.retryConfiguration = retryConfiguration
+        self.eventMonitors = eventMonitors
+        self.requestAdapters = requestAdapters
     }
 
+    /// Decoding happens after `performRequest` returns, so a decode failure is reported to
+    /// `eventMonitors` as its own terminal outcome here — `performRequest` only ever notifies
+    /// monitors of the HTTP-level result, not whether the body could be decoded.
     func perform<T: Decodable>(_ request: URLRequest) async throws -> T {
-        let data = try await performRequest(request)
+        let result = try await performRequest(request)
         do {
-            return try decoder.decode(T.self, from: data)
+            let decoded = try decoder.decode(T.self, from: result.data)
+            notifyComplete(result.request, response: result.response, data: result.data, error: nil)
+            return decoded
         } catch {
-            throw CDUntappdKitError.decodingFailed(underlying: error)
+            let wrapped = CDUntappdKitError.decodingFailed(underlying: error)
+            notifyComplete(result.request, response: result.response, data: result.data, error: wrapped)
+            throw wrapped
         }
     }
 
     /// Performs a request that returns no body (e.g. an HTTP 204 response), validating only the
     /// status code. Used for endpoints like `removeComment` where there's nothing to decode.
     func perform(_ request: URLRequest) async throws {
-        _ = try await performRequest(request)
+        let result = try await performRequest(request)
+        notifyComplete(result.request, response: result.response, data: result.data, error: nil)
+    }
+
+    /// The successful outcome of `performRequest`: the response body, alongside the adapted
+    /// request and HTTP response that produced it, so callers can notify `eventMonitors` of
+    /// their own terminal outcome (e.g. a decode failure).
+    private struct PerformResult {
+        let data: Data
+        let request: URLRequest
+        let response: HTTPURLResponse
     }
 
     /// Sends `request`, retrying per `retryConfiguration` on transient failures, and returns the
-    /// successful response body. Every retry decision (idempotent method, retryable status/error
+    /// successful response. Every retry decision (idempotent method, retryable status/error
     /// code, attempts remaining) is centralized in `shouldRetry(...)` so both `perform` overloads
-    /// share identical retry behavior.
-    private func performRequest(_ request: URLRequest) async throws -> Data {
+    /// share identical retry behavior. Does not itself notify monitors of a successful HTTP
+    /// response — only of terminal failures — leaving success notification to the callers above.
+    private func performRequest(_ originalRequest: URLRequest) async throws -> PerformResult {
+        let request: URLRequest
+        do {
+            request = try adaptedRequest(from: originalRequest)
+        } catch {
+            let wrapped = (error as? CDUntappdKitError) ?? .invalidRequest(underlying: error)
+            notifyStart(originalRequest)
+            notifyComplete(originalRequest, response: nil, data: nil, error: wrapped)
+            throw wrapped
+        }
+        notifyStart(request)
         var attempt: UInt = 0
         while true {
             let data: Data
@@ -86,7 +121,7 @@ actor CDUntappdURLSession {
                 data = responseData
                 httpResponse = response as? HTTPURLResponse
             } catch {
-                try await retryOrThrow(.networkFailure(underlying: error), request: request, attempt: &attempt)
+                try await retryOrThrow(.networkFailure(underlying: error), request: request, attempt: &attempt, response: nil, data: nil)
                 continue
             }
 
@@ -94,7 +129,9 @@ actor CDUntappdURLSession {
                 try await retryOrThrow(
                     .networkFailure(underlying: URLError(.badServerResponse)),
                     request: request,
-                    attempt: &attempt
+                    attempt: &attempt,
+                    response: nil,
+                    data: data
                 )
                 continue
             }
@@ -103,23 +140,76 @@ actor CDUntappdURLSession {
                 try await retryOrThrow(
                     .httpError(statusCode: httpResponse.statusCode, data: data),
                     request: request,
-                    attempt: &attempt
+                    attempt: &attempt,
+                    response: httpResponse,
+                    data: data
                 )
                 continue
             }
 
-            return data
+            return PerformResult(data: data, request: request, response: httpResponse)
         }
     }
 
+    /// Runs `requestAdapters` in order, once per logical call (not once per retry attempt — see
+    /// `CDUntappdRequestAdapter`'s doc comment). Restores any framework-set header an adapter
+    /// stripped entirely — currently just `Content-Type` on POST requests (`CDUntappdRouter`
+    /// never sets an auth header; OAuth credentials travel as URL query parameters, which this
+    /// restoration does not touch and an adapter that replaces `request.url` can still drop). An
+    /// adapter that sets a *different* value for a header (e.g. token rotation) keeps its
+    /// replacement.
+    private func adaptedRequest(from originalRequest: URLRequest) throws -> URLRequest {
+        var request = originalRequest
+        let originalHeaders = originalRequest.allHTTPHeaderFields ?? [:]
+        for adapter in requestAdapters {
+            request = try adapter.adapt(request)
+        }
+        for (header, originalValue) in originalHeaders where request.value(forHTTPHeaderField: header) == nil {
+            request.setValue(originalValue, forHTTPHeaderField: header)
+        }
+        return request
+    }
+
     /// Sleeps for the backoff interval and advances `attempt` if `error` should be retried;
-    /// otherwise throws `error` (or a cancellation error from the backoff sleep itself).
-    private func retryOrThrow(_ error: CDUntappdKitError, request: URLRequest, attempt: inout UInt) async throws {
+    /// otherwise notifies monitors of the terminal failure and throws `error` (or a cancellation
+    /// error from the backoff sleep itself).
+    private func retryOrThrow(
+        _ error: CDUntappdKitError,
+        request: URLRequest,
+        attempt: inout UInt,
+        response: HTTPURLResponse?,
+        data: Data?
+    ) async throws {
         guard shouldRetry(error, httpMethod: request.httpMethod, attempt: attempt) else {
+            notifyComplete(request, response: response, data: data, error: error)
             throw error
         }
-        try await trackedSleep(nanoseconds: backoffNanoseconds(attempt: attempt))
+        notifyRetry(request, retryCount: Int(attempt + 1))
+        do {
+            try await trackedSleep(nanoseconds: backoffNanoseconds(attempt: attempt))
+        } catch {
+            notifyComplete(request, response: response, data: data, error: error)
+            throw error
+        }
         attempt += 1
+    }
+
+    private func notifyStart(_ request: URLRequest) {
+        for monitor in eventMonitors {
+            monitor.requestDidStart(urlRequest: request)
+        }
+    }
+
+    private func notifyComplete(_ request: URLRequest, response: HTTPURLResponse?, data: Data?, error: Error?) {
+        for monitor in eventMonitors {
+            monitor.requestDidComplete(urlRequest: request, response: response, data: data, error: error)
+        }
+    }
+
+    private func notifyRetry(_ request: URLRequest, retryCount: Int) {
+        for monitor in eventMonitors {
+            monitor.requestWillRetry(urlRequest: request, retryCount: retryCount)
+        }
     }
 
     private func shouldRetry(_ error: CDUntappdKitError, httpMethod: String?, attempt: UInt) -> Bool {

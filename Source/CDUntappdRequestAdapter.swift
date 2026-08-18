@@ -1,0 +1,48 @@
+//
+//  CDUntappdRequestAdapter.swift
+//  CDUntappdKit
+//
+//  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
+
+import Foundation
+
+/// Adapts a `URLRequest` before `CDUntappdAPIClient`/`CDUntappdOAuthClient` sends it.
+///
+/// - Important: `adapt(_:)` runs exactly once per logical API call, before the first attempt —
+///   not once per retry attempt. If a retry occurs (see `CDUntappdRetryConfiguration`), the same
+///   already-adapted request is resent unchanged. An adapter that refreshes an expiring token or
+///   signs requests with a per-attempt nonce/timestamp will not get a fresh value on retry; such
+///   an adapter should refresh proactively before the request reaches CDUntappdKit, rather than
+///   relying on being re-invoked mid-retry.
+/// - Important: Retry eligibility (see `CDUntappdRetryConfiguration`) is decided from the
+///   *adapted* request's HTTP method, not the original one — an adapter that rewrites
+///   `httpMethod` changes which requests are treated as idempotent for retry purposes.
+/// - Important: `CDUntappdAPIClient` and `CDUntappdOAuthClient` each own a separate
+///   `CDUntappdURLSession` actor instance. Passing the same adapter to both (as
+///   `CDUntappdAPIClient.init` does by default with its internal `CDUntappdOAuthClient`) means
+///   `adapt(_:)` can be invoked concurrently from two independent actors with no shared
+///   serialization between them — a conforming type must do its own synchronization if it holds
+///   mutable state.
+public protocol CDUntappdRequestAdapter: AnyObject, Sendable {
+    /// Mutate and return the request. Return the request unchanged to pass it through.
+    func adapt(_ urlRequest: URLRequest) throws -> URLRequest
+}

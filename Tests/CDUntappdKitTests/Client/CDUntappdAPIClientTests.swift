@@ -147,6 +147,42 @@ extension SharedKeychainTests {
             #expect(CDUntappdMockURLProtocol.requestCount(for: url) == 2)
         }
 
+        private final class RecordingMonitor: CDUntappdEventMonitor, @unchecked Sendable {
+            private let lock = NSLock()
+            private var _startCount = 0
+            var startCount: Int {
+                lock.lock()
+                defer { lock.unlock() }
+                return _startCount
+            }
+
+            func requestDidStart(urlRequest _: URLRequest) {
+                lock.lock()
+                _startCount += 1
+                lock.unlock()
+            }
+        }
+
+        @Test
+        func fetchUserInfoNotifiesEventMonitorProvidedAtInit() async throws {
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
+            let json = """
+            {"meta": {"code": 200}, "response": {"user": {"user_name": "testuser"}}}
+            """
+            let url = try expectedFetchUserInfoURL(forUsername: "testuser-monitor", compact: false)
+            CDUntappdMockURLProtocol.register(stub: .init(statusCode: 200, data: Data(json.utf8)), for: url)
+            let monitor = RecordingMonitor()
+            let client = CDUntappdAPIClient(
+                clientId: "test_id",
+                clientSecret: "test_secret",
+                redirectUrl: "testapp://oauth",
+                urlSession: CDUntappdMockURLProtocol.makeSession(),
+                eventMonitors: [monitor]
+            )
+            _ = try await client.fetchUserInfo(forUsername: "testuser-monitor", compact: false)
+            #expect(monitor.startCount == 1)
+        }
+
         /// Mirrors `expectedFetchUserInfoURL` above — see its doc comment for why this
         /// replication is necessary instead of attaching a stub to a specific `URLRequest`.
         private func expectedFetchUserWishListURL(forUsername username: String,
