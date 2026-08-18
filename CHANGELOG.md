@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## Table of Contents
 
-- [Unreleased](#unreleased)
+- [3.2.0](#320)
 - [3.1.0](#310)
 - [3.0.0](#300)
 - [2.0.0](#200)
@@ -13,9 +13,11 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [Unreleased]
+## [3.2.0](https://github.com/chrisdhaan/CDUntappdKit/releases/tag/3.2.0)
 
-Part of the v3.2.0 "Client Configurability" release, which will not be tagged/released until the sibling Decoder Configuration work has also merged.
+Released on 2026-08-18.
+
+"Client Configurability" — adds opt-in retry, middleware/interceptor, response-caching, and decoder-configuration surfaces to `CDUntappdAPIClient` and `CDUntappdOAuthClient`, plus throwing (rather than crashing) auth errors on write/action endpoints.
 
 ### Added
 
