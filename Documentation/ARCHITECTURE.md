@@ -68,12 +68,11 @@ CDUntappdURLSession.perform(_:)  ← actor
      CDUntappdUserInfoResponse  ←  returned to caller
 ```
 
-This is deliberately simple compared to some other native-URLSession API client libraries: there is no response-caching layer in the pipeline today. That's tracked as a separate, opt-in addition for a future release (v3.2.0 — [#8](https://github.com/chrisdhaan/CDUntappdKit/issues/8) response caching), not yet built.
-
-`CDUntappdURLSession.perform(_:)` does have opt-in retry ([#9](https://github.com/chrisdhaan/CDUntappdKit/issues/9)) and middleware/interceptor ([#10](https://github.com/chrisdhaan/CDUntappdKit/issues/10)) layers:
+`CDUntappdURLSession.perform(_:)` has opt-in retry, middleware/interceptor, and response-caching layers:
 
 - Pass a `CDUntappdRetryConfiguration` to `CDUntappdAPIClient.init`/`CDUntappdOAuthClient.init` (default `.disabled`, so behavior is unchanged unless a caller opts in) to retry transient network failures and retryable HTTP status codes with exponential backoff, on idempotent HTTP methods only. `cancelAllTasks()` cancels both in-flight `URLSession` tasks and any pending retry backoff sleep.
 - Pass `eventMonitors: [any CDUntappdEventMonitor]` to observe request/response lifecycle events (start, terminal completion, retry) and/or `requestAdapters: [any CDUntappdRequestAdapter]` to mutate each outgoing request (e.g. custom headers) before it's sent — both default to `[]`. The adapter chain runs once per logical call, before the first attempt, not once per retry; any framework-set header an adapter strips is restored from the original request so a careless adapter can't accidentally break auth. Both `CDUntappdAPIClient` and `CDUntappdOAuthClient` thread the same monitors/adapters into their own `CDUntappdURLSession` instance.
+- Pass a `CDUntappdCacheConfiguration` to cache `GET` responses in memory for a configurable TTL (default `.disabled`, so behavior is unchanged unless a caller opts in). The cache key is computed from the *adapted* request, consistent with how retry eligibility is decided; a hit skips the network entirely but still notifies `eventMonitors` with a paired start/complete. Only a successful decode is ever written to the cache, and a cached entry that later fails to decode (e.g. a stale shape after an app update) is evicted rather than repeatedly failing — the next call for that key hits the network fresh. `CDUntappdAPIClient.clearCache()` removes every entry on demand.
 
 ## Model Hierarchy
 
