@@ -231,6 +231,27 @@ extension SharedKeychainTests {
             CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
         }
 
+        @Test
+        func authorizeServesSecondIdenticalCallFromCacheWhenCacheConfigurationProvided() async throws {
+            let url = try expectedAuthorizeURL(clientId: "test", clientSecret: "test",
+                                               redirectUrl: "test://callback", code: "auth_code_cache_hit")
+            CDUntappdMockURLProtocol.register(
+                stub: .init(statusCode: 200, data: Data(#"{"response": {"access_token": "cached_token"}}"#.utf8)),
+                for: url
+            )
+            let client = CDUntappdOAuthClient(
+                clientId: "test", clientSecret: "test", redirectUrl: "test://callback",
+                urlSession: CDUntappdMockURLProtocol.makeSession(),
+                cacheConfiguration: CDUntappdCacheConfiguration(ttl: 300)
+            )
+            try await client.authorize(withCode: "auth_code_cache_hit")
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
+            try await client.authorize(withCode: "auth_code_cache_hit")
+            #expect(CDUntappdKeychain.string(forKey: CDUntappdDefaults.accessToken) == "cached_token")
+            #expect(CDUntappdMockURLProtocol.requestCount(for: url) == 1)
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
+        }
+
         private final class RecordingMonitor: CDUntappdEventMonitor, @unchecked Sendable {
             private let lock = NSLock()
             private var _startCount = 0

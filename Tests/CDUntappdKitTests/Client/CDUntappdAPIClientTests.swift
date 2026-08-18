@@ -307,6 +307,48 @@ extension SharedKeychainTests {
         }
 
         @Test
+        func fetchUserInfoServesSecondIdenticalCallFromCacheWhenCacheConfigurationProvided() async throws {
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
+            let json = """
+            {"meta": {"code": 200}, "response": {"user": {"user_name": "testuser"}}}
+            """
+            let url = try expectedFetchUserInfoURL(forUsername: "testuser-cache-hit", compact: false)
+            CDUntappdMockURLProtocol.register(stub: .init(statusCode: 200, data: Data(json.utf8)), for: url)
+            let client = CDUntappdAPIClient(
+                clientId: "test_id",
+                clientSecret: "test_secret",
+                redirectUrl: "testapp://oauth",
+                urlSession: CDUntappdMockURLProtocol.makeSession(),
+                cacheConfiguration: CDUntappdCacheConfiguration(ttl: 300)
+            )
+            _ = try await client.fetchUserInfo(forUsername: "testuser-cache-hit", compact: false)
+            let second = try await client.fetchUserInfo(forUsername: "testuser-cache-hit", compact: false)
+            #expect(second.user?.username == "testuser")
+            #expect(CDUntappdMockURLProtocol.requestCount(for: url) == 1)
+        }
+
+        @Test
+        func clearCacheForcesTheNextFetchUserInfoCallToHitTheNetwork() async throws {
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
+            let json = """
+            {"meta": {"code": 200}, "response": {"user": {"user_name": "testuser"}}}
+            """
+            let url = try expectedFetchUserInfoURL(forUsername: "testuser-clear-cache", compact: false)
+            CDUntappdMockURLProtocol.register(stub: .init(statusCode: 200, data: Data(json.utf8)), for: url)
+            let client = CDUntappdAPIClient(
+                clientId: "test_id",
+                clientSecret: "test_secret",
+                redirectUrl: "testapp://oauth",
+                urlSession: CDUntappdMockURLProtocol.makeSession(),
+                cacheConfiguration: CDUntappdCacheConfiguration(ttl: 300)
+            )
+            _ = try await client.fetchUserInfo(forUsername: "testuser-clear-cache", compact: false)
+            client.clearCache()
+            _ = try await client.fetchUserInfo(forUsername: "testuser-clear-cache", compact: false)
+            #expect(CDUntappdMockURLProtocol.requestCount(for: url) == 2)
+        }
+
+        @Test
         func toastThrowsInvalidCredentialsWhenNotAuthenticated() async throws {
             CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
             do {

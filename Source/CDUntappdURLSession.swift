@@ -27,9 +27,9 @@ import Foundation
 
 /// A minimal request/decode pipeline over `URLSession`, replacing `Alamofire.Session`.
 ///
-/// Deliberately has no response-caching support — a separate, not-yet-built feature that will
-/// extend this actor later. Retry (`CDUntappdRetryConfiguration`), event monitoring
-/// (`CDUntappdEventMonitor`), and request adaptation (`CDUntappdRequestAdapter`) are supported.
+/// Supports retry (`CDUntappdRetryConfiguration`), event monitoring (`CDUntappdEventMonitor`),
+/// request adaptation (`CDUntappdRequestAdapter`), and an opt-in in-memory response cache
+/// (`CDUntappdCacheConfiguration`) for `GET` requests.
 @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
 actor CDUntappdURLSession {
 
@@ -38,6 +38,7 @@ actor CDUntappdURLSession {
     private let retryConfiguration: CDUntappdRetryConfiguration
     private let eventMonitors: [any CDUntappdEventMonitor]
     private let requestAdapters: [any CDUntappdRequestAdapter]
+    private let cache: CDUntappdResponseCache?
     private var retrySleepTasks: [UUID: Task<Void, any Error>] = [:]
 
     /// HTTP methods safe to automatically resend without risking a duplicate side effect —
@@ -55,29 +56,49 @@ actor CDUntappdURLSession {
         decoder: JSONDecoder = JSONDecoder(),
         retryConfiguration: CDUntappdRetryConfiguration = .disabled,
         eventMonitors: [any CDUntappdEventMonitor] = [],
-        requestAdapters: [any CDUntappdRequestAdapter] = []
+        requestAdapters: [any CDUntappdRequestAdapter] = [],
+        cacheConfiguration: CDUntappdCacheConfiguration = .disabled
     ) {
         self.session = session
         self.decoder = decoder
         self.retryConfiguration = retryConfiguration
         self.eventMonitors = eventMonitors
         self.requestAdapters = requestAdapters
+        self.cache = cacheConfiguration.ttl > 0 ? CDUntappdResponseCache(configuration: cacheConfiguration) : nil
     }
 
     /// Decoding happens after `performRequest` returns, so a decode failure is reported to
     /// `eventMonitors` as its own terminal outcome here — `performRequest` only ever notifies
     /// monitors of the HTTP-level result, not whether the body could be decoded.
+    ///
+    /// A cache write only ever happens after a successful decode (`result.cacheKey` is only
+    /// non-nil on a live, cacheable fetch — never on a cache hit, which has nothing new to
+    /// write), so a corrupted or transient response can never poison the cache. Conversely, if
+    /// decoding a *cached* entry fails (e.g. its shape no longer matches `T`, such as after an
+    /// app update), that entry is evicted so the next call for the same key hits the network
+    /// fresh rather than repeatedly failing against the same stale bytes.
     func perform<T: Decodable>(_ request: URLRequest) async throws -> T {
         let result = try await performRequest(request)
         do {
             let decoded = try decoder.decode(T.self, from: result.data)
             notifyComplete(result.request, response: result.response, data: result.data, error: nil)
+            if let cacheKey = result.cacheKey {
+                cache?.set(data: result.data, forKey: cacheKey)
+            }
             return decoded
         } catch {
             let wrapped = CDUntappdKitError.decodingFailed(underlying: error)
             notifyComplete(result.request, response: result.response, data: result.data, error: wrapped)
+            if result.servedFromCache {
+                cache?.remove(forKey: CDUntappdCacheKey.key(for: result.request))
+            }
             throw wrapped
         }
+    }
+
+    /// Removes every entry from the response cache, if caching is enabled.
+    nonisolated func clearCache() {
+        cache?.removeAll()
     }
 
     /// Performs a request that returns no body (e.g. an HTTP 204 response), validating only the
@@ -89,11 +110,17 @@ actor CDUntappdURLSession {
 
     /// The successful outcome of `performRequest`: the response body, alongside the adapted
     /// request and HTTP response that produced it, so callers can notify `eventMonitors` of
-    /// their own terminal outcome (e.g. a decode failure).
+    /// their own terminal outcome (e.g. a decode failure). `response` is `nil` for a cache hit,
+    /// which never touches the network. `cacheKey` is non-nil only for a live, cacheable fetch —
+    /// signaling to `perform<T>` that a successful decode should be written to the cache;
+    /// `servedFromCache` signals the opposite case, that a decode failure should evict the
+    /// now-suspect cached entry instead.
     private struct PerformResult {
         let data: Data
         let request: URLRequest
-        let response: HTTPURLResponse
+        let response: HTTPURLResponse?
+        let cacheKey: String?
+        let servedFromCache: Bool
     }
 
     /// Sends `request`, retrying per `retryConfiguration` on transient failures, and returns the
@@ -111,6 +138,17 @@ actor CDUntappdURLSession {
             notifyComplete(originalRequest, response: nil, data: nil, error: wrapped)
             throw wrapped
         }
+
+        // Cache key is computed from the *adapted* request — consistent with retry eligibility
+        // above, which also decides from the adapted request rather than the original one (see
+        // CDUntappdRequestAdapter's doc comment). Only GET requests are ever cacheable.
+        let cacheKey: String? = (cache != nil && request.httpMethod?.uppercased() == "GET")
+            ? CDUntappdCacheKey.key(for: request) : nil
+        if let cacheKey, let cachedData = cache?.data(forKey: cacheKey) {
+            notifyStart(request)
+            return PerformResult(data: cachedData, request: request, response: nil, cacheKey: nil, servedFromCache: true)
+        }
+
         notifyStart(request)
         var attempt: UInt = 0
         while true {
@@ -147,7 +185,7 @@ actor CDUntappdURLSession {
                 continue
             }
 
-            return PerformResult(data: data, request: request, response: httpResponse)
+            return PerformResult(data: data, request: request, response: httpResponse, cacheKey: cacheKey, servedFromCache: false)
         }
     }
 

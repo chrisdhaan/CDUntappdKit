@@ -56,23 +56,29 @@ public class CDUntappdAPIClient {
     ///   - eventMonitors: Observers notified of request/response lifecycle events. Defaults to none.
     ///   - requestAdapters: Adapters run in order to mutate each outgoing request before it is sent.
     ///     Defaults to none.
+    ///   - cacheConfiguration: Configuration for the built-in in-memory response cache applied to
+    ///     `GET` requests. Defaults to `.disabled`.
     public convenience init(clientId: String, clientSecret: String, redirectUrl: String,
                             retryConfiguration: CDUntappdRetryConfiguration = .disabled,
-                            eventMonitors: [any CDUntappdEventMonitor] = [], requestAdapters: [any CDUntappdRequestAdapter] = []) {
+                            eventMonitors: [any CDUntappdEventMonitor] = [], requestAdapters: [any CDUntappdRequestAdapter] = [],
+                            cacheConfiguration: CDUntappdCacheConfiguration = .disabled) {
         self.init(clientId: clientId, clientSecret: clientSecret, redirectUrl: redirectUrl, urlSession: URLSession(configuration: .default),
-                  retryConfiguration: retryConfiguration, eventMonitors: eventMonitors, requestAdapters: requestAdapters)
+                  retryConfiguration: retryConfiguration, eventMonitors: eventMonitors, requestAdapters: requestAdapters,
+                  cacheConfiguration: cacheConfiguration)
     }
 
     init(clientId: String, clientSecret: String, redirectUrl: String, urlSession: URLSession,
          retryConfiguration: CDUntappdRetryConfiguration = .disabled,
-         eventMonitors: [any CDUntappdEventMonitor] = [], requestAdapters: [any CDUntappdRequestAdapter] = []) {
+         eventMonitors: [any CDUntappdEventMonitor] = [], requestAdapters: [any CDUntappdRequestAdapter] = [],
+         cacheConfiguration: CDUntappdCacheConfiguration = .disabled) {
         precondition(!clientId.isEmpty && !clientSecret.isEmpty && !redirectUrl.isEmpty,
                      "A clientId, clientSecret, and redirectUrl are required to query the Untappd Developers API oauth endpoint.")
         self.oAuthClient = CDUntappdOAuthClient(clientId: clientId, clientSecret: clientSecret, redirectUrl: redirectUrl,
-                                                retryConfiguration: retryConfiguration,
-                                                eventMonitors: eventMonitors, requestAdapters: requestAdapters)
+                                                retryConfiguration: retryConfiguration, eventMonitors: eventMonitors,
+                                                requestAdapters: requestAdapters, cacheConfiguration: cacheConfiguration)
         self.session = CDUntappdURLSession(session: urlSession, retryConfiguration: retryConfiguration,
-                                           eventMonitors: eventMonitors, requestAdapters: requestAdapters)
+                                           eventMonitors: eventMonitors, requestAdapters: requestAdapters,
+                                           cacheConfiguration: cacheConfiguration)
     }
 
     // MARK: - Authentication Methods
