@@ -25,7 +25,7 @@ Add CDUntappdKit to your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/chrisdhaan/CDUntappdKit.git", .upToNextMajor(from: "3.2.0"))
+    .package(url: "https://github.com/chrisdhaan/CDUntappdKit.git", .upToNextMajor(from: "3.2.1"))
 ],
 targets: [
     .target(
@@ -35,17 +35,7 @@ targets: [
 ]
 ```
 
-Then in your Xcode project, go to **File** > **Add Packages**, paste the URL, and select version 3.2.0 or later.
-
-### Git Submodule
-
-Clone the repository as a submodule:
-
-```bash
-git submodule add https://github.com/chrisdhaan/CDUntappdKit.git
-```
-
-Then drag `CDUntappdKit.xcodeproj` into your Xcode project and add `CDUntappdKit.framework` to your target's **Embedded Binaries**.
+Then in your Xcode project, go to **File** > **Add Packages**, paste the URL, and select version 3.2.1 or later.
 
 ---
 

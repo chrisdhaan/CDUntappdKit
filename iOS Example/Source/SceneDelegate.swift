@@ -1,8 +1,8 @@
 //
-//  CDUntappdKit.swift
-//  CDUntappdKit
+//  SceneDelegate.swift
+//  iOS Example
 //
-//  Created by Christopher de Haan on 6/28/22.
+//  Created by Christopher de Haan on 8/18/26.
 //
 //  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //
@@ -25,12 +25,16 @@
 //  THE SOFTWARE.
 //
 
-import Foundation
+import UIKit
 
-// Enforce minimum Swift version for all platforms and build systems.
-#if swift(<5.3)
-    #error("CDUntappdKit doesn't support Swift versions below 5.3.")
-#endif
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
-/// Current CDUntappdKit version. Necessary since SPM doesn't use dynamic libraries. Plus this will be more accurate.
-let version = "3.2.1"
+    var window: UIWindow?
+
+    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        guard scene is UIWindowScene else { return }
+
+        // Window is configured by the storyboard's UISceneStoryboardFile entry point.
+    }
+
+}
