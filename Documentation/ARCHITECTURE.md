@@ -68,9 +68,12 @@ CDUntappdURLSession.perform(_:)  ← actor
      CDUntappdUserInfoResponse  ←  returned to caller
 ```
 
-This is deliberately simple compared to some other native-URLSession API client libraries: there is no caching or request-adapter layer in the pipeline today. Those are tracked as separate, opt-in additions for a future release (v3.2.0 — [#8](https://github.com/chrisdhaan/CDUntappdKit/issues/8) response caching, [#10](https://github.com/chrisdhaan/CDUntappdKit/issues/10) middleware/interceptors), not yet built.
+This is deliberately simple compared to some other native-URLSession API client libraries: there is no response-caching layer in the pipeline today. That's tracked as a separate, opt-in addition for a future release (v3.2.0 — [#8](https://github.com/chrisdhaan/CDUntappdKit/issues/8) response caching), not yet built.
 
-`CDUntappdURLSession.perform(_:)` does have an opt-in retry layer ([#9](https://github.com/chrisdhaan/CDUntappdKit/issues/9)): pass a `CDUntappdRetryConfiguration` to `CDUntappdAPIClient.init`/`CDUntappdOAuthClient.init` (default `.disabled`, so behavior is unchanged unless a caller opts in) to retry transient network failures and retryable HTTP status codes with exponential backoff, on idempotent HTTP methods only. `cancelAllTasks()` cancels both in-flight `URLSession` tasks and any pending retry backoff sleep.
+`CDUntappdURLSession.perform(_:)` does have opt-in retry ([#9](https://github.com/chrisdhaan/CDUntappdKit/issues/9)) and middleware/interceptor ([#10](https://github.com/chrisdhaan/CDUntappdKit/issues/10)) layers:
+
+- Pass a `CDUntappdRetryConfiguration` to `CDUntappdAPIClient.init`/`CDUntappdOAuthClient.init` (default `.disabled`, so behavior is unchanged unless a caller opts in) to retry transient network failures and retryable HTTP status codes with exponential backoff, on idempotent HTTP methods only. `cancelAllTasks()` cancels both in-flight `URLSession` tasks and any pending retry backoff sleep.
+- Pass `eventMonitors: [any CDUntappdEventMonitor]` to observe request/response lifecycle events (start, terminal completion, retry) and/or `requestAdapters: [any CDUntappdRequestAdapter]` to mutate each outgoing request (e.g. custom headers) before it's sent — both default to `[]`. The adapter chain runs once per logical call, before the first attempt, not once per retry; any framework-set header an adapter strips is restored from the original request so a careless adapter can't accidentally break auth. Both `CDUntappdAPIClient` and `CDUntappdOAuthClient` thread the same monitors/adapters into their own `CDUntappdURLSession` instance.
 
 ## Model Hierarchy
 

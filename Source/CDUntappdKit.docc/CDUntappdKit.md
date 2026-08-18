@@ -22,6 +22,11 @@ Untappd REST API, decoding responses into strongly-typed Swift model structs.
 
 - ``CDUntappdRetryConfiguration``
 
+### Interceptors
+
+- ``CDUntappdEventMonitor``
+- ``CDUntappdRequestAdapter``
+
 ### Errors
 
 - ``CDUntappdKitError``

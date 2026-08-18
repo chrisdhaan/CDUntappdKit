@@ -35,6 +35,8 @@ actor CDUntappdURLSession {
     private let session: URLSession
     private let decoder: JSONDecoder
     private let retryConfiguration: CDUntappdRetryConfiguration
+    private let eventMonitors: [any CDUntappdEventMonitor]
+    private let requestAdapters: [any CDUntappdRequestAdapter]
     private var retrySleepTasks: [UUID: Task<Void, any Error>] = [:]
 
     /// HTTP methods safe to automatically resend without risking a duplicate side effect —
@@ -50,11 +52,15 @@ actor CDUntappdURLSession {
     init(
         session: URLSession = .shared,
         decoder: JSONDecoder = JSONDecoder(),
-        retryConfiguration: CDUntappdRetryConfiguration = .disabled
+        retryConfiguration: CDUntappdRetryConfiguration = .disabled,
+        eventMonitors: [any CDUntappdEventMonitor] = [],
+        requestAdapters: [any CDUntappdRequestAdapter] = []
     ) {
         self.session = session
         self.decoder = decoder
         self.retryConfiguration = retryConfiguration
+        self.eventMonitors = eventMonitors
+        self.requestAdapters = requestAdapters
     }
 
     func perform<T: Decodable>(_ request: URLRequest) async throws -> T {
@@ -76,7 +82,17 @@ actor CDUntappdURLSession {
     /// successful response body. Every retry decision (idempotent method, retryable status/error
     /// code, attempts remaining) is centralized in `shouldRetry(...)` so both `perform` overloads
     /// share identical retry behavior.
-    private func performRequest(_ request: URLRequest) async throws -> Data {
+    private func performRequest(_ originalRequest: URLRequest) async throws -> Data {
+        let request: URLRequest
+        do {
+            request = try adaptedRequest(from: originalRequest)
+        } catch {
+            let wrapped = (error as? CDUntappdKitError) ?? .invalidRequest(underlying: error)
+            notifyStart(originalRequest)
+            notifyComplete(originalRequest, response: nil, data: nil, error: wrapped)
+            throw wrapped
+        }
+        notifyStart(request)
         var attempt: UInt = 0
         while true {
             let data: Data
@@ -86,7 +102,7 @@ actor CDUntappdURLSession {
                 data = responseData
                 httpResponse = response as? HTTPURLResponse
             } catch {
-                try await retryOrThrow(.networkFailure(underlying: error), request: request, attempt: &attempt)
+                try await retryOrThrow(.networkFailure(underlying: error), request: request, attempt: &attempt, response: nil, data: nil)
                 continue
             }
 
@@ -94,7 +110,9 @@ actor CDUntappdURLSession {
                 try await retryOrThrow(
                     .networkFailure(underlying: URLError(.badServerResponse)),
                     request: request,
-                    attempt: &attempt
+                    attempt: &attempt,
+                    response: nil,
+                    data: data
                 )
                 continue
             }
@@ -103,23 +121,75 @@ actor CDUntappdURLSession {
                 try await retryOrThrow(
                     .httpError(statusCode: httpResponse.statusCode, data: data),
                     request: request,
-                    attempt: &attempt
+                    attempt: &attempt,
+                    response: httpResponse,
+                    data: data
                 )
                 continue
             }
 
+            notifyComplete(request, response: httpResponse, data: data, error: nil)
             return data
         }
     }
 
+    /// Runs `requestAdapters` in order, once per logical call (not once per retry attempt — see
+    /// `CDUntappdRequestAdapter`'s doc comment). Restores any framework-set header an adapter
+    /// stripped entirely, so a careless adapter can't accidentally drop auth/content-type
+    /// headers `CDUntappdRouter` already set; an adapter that sets a *different* value for a
+    /// header (e.g. token rotation) keeps its replacement.
+    private func adaptedRequest(from originalRequest: URLRequest) throws -> URLRequest {
+        var request = originalRequest
+        let originalHeaders = originalRequest.allHTTPHeaderFields ?? [:]
+        for adapter in requestAdapters {
+            request = try adapter.adapt(request)
+        }
+        for (header, originalValue) in originalHeaders where request.value(forHTTPHeaderField: header) == nil {
+            request.setValue(originalValue, forHTTPHeaderField: header)
+        }
+        return request
+    }
+
     /// Sleeps for the backoff interval and advances `attempt` if `error` should be retried;
-    /// otherwise throws `error` (or a cancellation error from the backoff sleep itself).
-    private func retryOrThrow(_ error: CDUntappdKitError, request: URLRequest, attempt: inout UInt) async throws {
+    /// otherwise notifies monitors of the terminal failure and throws `error` (or a cancellation
+    /// error from the backoff sleep itself).
+    private func retryOrThrow(
+        _ error: CDUntappdKitError,
+        request: URLRequest,
+        attempt: inout UInt,
+        response: HTTPURLResponse?,
+        data: Data?
+    ) async throws {
         guard shouldRetry(error, httpMethod: request.httpMethod, attempt: attempt) else {
+            notifyComplete(request, response: response, data: data, error: error)
             throw error
         }
-        try await trackedSleep(nanoseconds: backoffNanoseconds(attempt: attempt))
+        notifyRetry(request, retryCount: Int(attempt + 1))
+        do {
+            try await trackedSleep(nanoseconds: backoffNanoseconds(attempt: attempt))
+        } catch {
+            notifyComplete(request, response: response, data: data, error: error)
+            throw error
+        }
         attempt += 1
+    }
+
+    private func notifyStart(_ request: URLRequest) {
+        for monitor in eventMonitors {
+            monitor.requestDidStart(urlRequest: request)
+        }
+    }
+
+    private func notifyComplete(_ request: URLRequest, response: HTTPURLResponse?, data: Data?, error: Error?) {
+        for monitor in eventMonitors {
+            monitor.requestDidComplete(urlRequest: request, response: response, data: data, error: error)
+        }
+    }
+
+    private func notifyRetry(_ request: URLRequest, retryCount: Int) {
+        for monitor in eventMonitors {
+            monitor.requestWillRetry(urlRequest: request, retryCount: retryCount)
+        }
     }
 
     private func shouldRetry(_ error: CDUntappdKitError, httpMethod: String?, attempt: UInt) -> Bool {

@@ -231,6 +231,44 @@ extension SharedKeychainTests {
             CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
         }
 
+        private final class RecordingMonitor: CDUntappdEventMonitor, @unchecked Sendable {
+            private let lock = NSLock()
+            private var _startCount = 0
+            var startCount: Int {
+                lock.lock()
+                defer { lock.unlock() }
+                return _startCount
+            }
+
+            func requestDidStart(urlRequest _: URLRequest) {
+                lock.lock()
+                _startCount += 1
+                lock.unlock()
+            }
+        }
+
+        /// Guards against the exact bug #9's retryConfiguration hit: eventMonitors/requestAdapters
+        /// passed to CDUntappdOAuthClient's own init must reach its own CDUntappdURLSession, not
+        /// just CDUntappdAPIClient's.
+        @Test
+        func authorizeNotifiesEventMonitorProvidedAtInit() async throws {
+            let url = try expectedAuthorizeURL(clientId: "test", clientSecret: "test",
+                                               redirectUrl: "test://callback", code: "auth_code_monitor")
+            CDUntappdMockURLProtocol.register(
+                stub: .init(statusCode: 200, data: Data(#"{"response": {"access_token": "monitored_token"}}"#.utf8)),
+                for: url
+            )
+            let monitor = RecordingMonitor()
+            let client = CDUntappdOAuthClient(
+                clientId: "test", clientSecret: "test", redirectUrl: "test://callback",
+                urlSession: CDUntappdMockURLProtocol.makeSession(),
+                eventMonitors: [monitor]
+            )
+            try await client.authorize(withCode: "auth_code_monitor")
+            #expect(monitor.startCount == 1)
+            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
+        }
+
         @Test
         func authorizeReportsFailureOnHTTPError() async throws {
             let url = try expectedAuthorizeURL(clientId: "test", clientSecret: "test",
