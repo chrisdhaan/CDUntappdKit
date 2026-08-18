@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## Table of Contents
 
-- [Unreleased](#unreleased)
+- [3.2.0](#320)
 - [3.1.0](#310)
 - [3.0.0](#300)
 - [2.0.0](#200)
@@ -13,15 +13,18 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [Unreleased]
+## [3.2.0](https://github.com/chrisdhaan/CDUntappdKit/releases/tag/3.2.0)
 
-Part of the v3.2.0 "Client Configurability" release, which will not be tagged/released until the sibling Decoder Configuration work has also merged.
+Released on 2026-08-18.
+
+"Client Configurability" — adds opt-in retry, middleware/interceptor, response-caching, and decoder-configuration surfaces to `CDUntappdAPIClient` and `CDUntappdOAuthClient`, plus throwing (rather than crashing) auth errors on write/action endpoints.
 
 ### Added
 
 - `CDUntappdRetryConfiguration` — opt-in automatic retry with exponential backoff for `CDUntappdAPIClient` and `CDUntappdOAuthClient` requests, configurable via a new `retryConfiguration` init parameter on both (defaults to `.disabled`, so existing behavior is unchanged unless a caller opts in). Retries transient network failures and retryable HTTP status codes (default: `408, 429, 500, 502, 503, 504`) on idempotent HTTP methods only — POST requests (e.g. `addCheckin`, `toast`, `addComment`) are never auto-retried, so those can never be silently submitted twice. Note some write/action endpoints (`addFriend`, `removeFriend`, `acceptFriend`, `rejectFriend`, `addToWishList`, `removeFromWishList`) are `GET` requests and so are still retried like any other idempotent call.
 - `CDUntappdEventMonitor` and `CDUntappdRequestAdapter` — opt-in hooks for observing network events and mutating outgoing requests, configurable via new `eventMonitors`/`requestAdapters` init parameters on `CDUntappdAPIClient` and `CDUntappdOAuthClient` (both default to `[]`, so existing behavior is unchanged unless a caller opts in). `CDUntappdEventMonitor` observes request start, terminal completion (success or non-retried failure), and retry attempts. `CDUntappdRequestAdapter` mutates a request once per logical call, before the first attempt — not once per retry — and any framework-set header an adapter strips is restored from the original request.
 - `CDUntappdCacheConfiguration` and `CDUntappdAPIClient.clearCache()` — an opt-in, in-memory response cache for `GET` requests on `CDUntappdAPIClient` and `CDUntappdOAuthClient`, configurable via a new `cacheConfiguration` init parameter on both (defaults to `.disabled`, so existing behavior is unchanged unless a caller opts in). Entries expire after a configurable TTL (default 5 minutes) and only ever get written after a successful decode, so a corrupted or transient response can never poison the cache; if a cached entry later fails to decode (e.g. its shape no longer matches after an app update), it's evicted and the next call for that key hits the network fresh. Note this applies uniformly to every `GET` request, including the write/action endpoints noted above that happen to be `GET` — a repeated identical call within the TTL returns the cached result instead of re-hitting the network.
+- `CDUntappdDecoderConfiguration` — customizes the `JSONDecoder.KeyDecodingStrategy`/`DateDecodingStrategy` used to decode every response, configurable via a new `decoderConfiguration` init parameter on `CDUntappdAPIClient` and `CDUntappdOAuthClient` (defaults to `.default`, matching a plain `JSONDecoder()`, so existing behavior is unchanged unless a caller opts in). Every model's explicit snake_case `CodingKeys` already handle Untappd's real response shapes without this — it exists to close the configuration-surface gap with retry/monitor/adapter/cache, not because any current model needs it.
 
 ### Updated
 

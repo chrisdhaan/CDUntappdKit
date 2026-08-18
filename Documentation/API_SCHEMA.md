@@ -111,7 +111,7 @@ GET https://untappd.com/oauth/authorize/
 { "response": { "access_token": "string" } }
 ```
 
-Current implementation decodes this via `CDUntappdOAuthCredential` using `CodingKey` raw value `"response.access_token"`. See [Schema Issue #1](#schema-issue-1--dotted-path-codingkeys).
+**Schema verification — `CDUntappdOAuthCredential`:** decodes via nested-container `init(from:)` (`response` → `access_token`), not a dotted `CodingKey` path — see [Schema Issue #1](#schema-issue-1--dotted-path-codingkeys).
 
 ---
 
@@ -1043,23 +1043,19 @@ GET /v4/venue/foursquare_lookup/{VENUE_ID}
 
 ## Known Schema Issues
 
-### Schema Issue #1 — Dotted-path CodingKeys
+### Schema Issue #1 — Dotted-path CodingKeys (✅ Resolved)
 
-Several models use dotted strings as `CodingKey` raw values to express nested JSON paths:
+An early draft of this codebase used dotted strings as `CodingKey` raw values to express nested JSON paths:
 ```swift
-case user = "response.user"          // CDUntappdUserInfoResponse
-case items = "beers.items"           // CDUntappdWishList
-case friends = "response.items"      // CDUntappdUserFriendsResponse
-case mutualFriends = "mutual_friends.items"  // CDUntappdFriend
+case user = "response.user"          // CDUntappdUserInfoResponse, early draft
+case items = "beers.items"           // CDUntappdWishList, early draft
+case friends = "response.items"      // CDUntappdUserFriendsResponse, early draft
+case mutualFriends = "mutual_friends.items"  // CDUntappdFriend, early draft
 ```
 
-**Swift's `Codable` does not support dotted key paths as `CodingKey` raw values.** The decoder looks for a literal JSON key named `"response.user"`, not a nested path. If the live API returns a standard nested structure (`{"response": {"user": {...}}}`), these properties will always decode as `nil`.
+**Swift's `Codable` does not support dotted key paths as `CodingKey` raw values.** The decoder looks for a literal JSON key named `"response.user"`, not a nested path, so against a standard nested API response (`{"response": {"user": {...}}}`) these properties would always have decoded as `nil`.
 
-This means all three "implemented" endpoints may silently return `nil` for their primary payload fields in practice.
-
-**How to verify:** Call `fetchUserInfo(forUsername:compact:)` in the iOS Example app and print whether `response.user` is non-nil.
-
-**Fix (if broken):** Replace dotted-path keys with proper nested container decoding using `init(from:)`. Example for `CDUntappdUserInfoResponse`:
+**Resolution:** Every response model in this document now decodes via a custom `init(from:)` with nested `KeyedDecodingContainer`s instead of a dotted-path raw value — see `Documentation/ARCHITECTURE.md`'s Model Hierarchy section. Every "see Schema Issue #1" cross-reference throughout this document confirms that endpoint's response model follows the pattern correctly. Example, for `CDUntappdUserInfoResponse`:
 
 ```swift
 public struct CDUntappdUserInfoResponse: Decodable, Sendable {
@@ -1078,23 +1074,25 @@ public struct CDUntappdUserInfoResponse: Decodable, Sendable {
 }
 ```
 
-Apply the same pattern to all dotted-path models. This is the most impactful bug to verify and fix before implementing new endpoints — all new response models in this document use the same convention and will have the same issue if the convention is broken.
+**Pattern for new endpoints:** Any new response model that nests payload data below `response` must use this nested-container pattern, not a dotted-string `CodingKey` raw value.
 
-### Schema Issue #2 — `Bool` vs `Int` for flag fields
+### Schema Issue #2 — `Bool` vs `Int` for flag fields (✅ Resolved)
 
-`CDUntappdBrewery.isActive` and `CDUntappdVenue.isVerified` are declared as `Bool?` but the Untappd API returns `1`/`0` integers. Swift's `JSONDecoder` in its default configuration cannot decode an integer as a `Bool` — it will throw a type mismatch error, causing the entire parent struct to fail to decode.
+`CDUntappdBrewery.isActive` and `CDUntappdVenue.isVerified` are declared as `Bool?`, but the Untappd API returns `1`/`0` integers for these fields. Swift's `JSONDecoder` in its default configuration cannot decode an integer as a `Bool` — it would throw a type mismatch error, causing the entire parent struct to fail to decode.
 
-**Fix:** Change both to `Int?` and add a computed `Bool` property:
+**Resolution:** Both properties kept their public `Bool?` type (no breaking API change) and instead gained a private `decodeLenientBool(from:forKey:)` helper, called from each type's custom `init(from:)`, that tries `Int` first (`1` → `true`, anything else → `false`) and falls back to a literal `Bool` if that fails:
+
 ```swift
-// In CDUntappdBrewery:
-public var isActive: Int?
-public var isActiveFlag: Bool { isActive == 1 }
-
-// In CDUntappdVenue:
-public var isVerified: Int?
-public var isVerifiedFlag: Bool { isVerified == 1 }
+private static func decodeLenientBool(from container: KeyedDecodingContainer<RootKeys>,
+                                      forKey key: RootKeys) -> Bool? {
+    if let intValue = try? container.decodeIfPresent(Int.self, forKey: key) {
+        return intValue == 1
+    }
+    return (try? container.decodeIfPresent(Bool.self, forKey: key)) ?? nil
+}
 ```
-Or use a custom `init(from:)` that manually handles both types.
+
+`CDUntappdBeer.isInProduction` later followed the same lenient-decode pattern when the identical `Int`-vs-`Bool` mismatch was caught there during v3.1.0 code review (see the Beer Info section above) — this is now the established convention for any boolean flag field that the live API may return as either type.
 
 ### Schema Issue #3 — Typos in public property names
 

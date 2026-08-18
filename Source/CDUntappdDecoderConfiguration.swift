@@ -1,8 +1,6 @@
 //
-//  CDUntappdKit.swift
+//  CDUntappdDecoderConfiguration.swift
 //  CDUntappdKit
-//
-//  Created by Christopher de Haan on 6/28/22.
 //
 //  Copyright © 2016-2026 Christopher de Haan <contact@christopherdehaan.me>
 //
@@ -27,10 +25,29 @@
 
 import Foundation
 
-// Enforce minimum Swift version for all platforms and build systems.
-#if swift(<5.3)
-    #error("CDUntappdKit doesn't support Swift versions below 5.3.")
-#endif
+/// Specifies JSON decoding options for CDUntappdKit responses.
+public struct CDUntappdDecoderConfiguration: @unchecked Sendable {
+    /// Strategy for decoding keys. Default: `.useDefaultKeys`.
+    public let keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy
+    /// Strategy for decoding dates. Default: `.deferredToDate`.
+    public let dateDecodingStrategy: JSONDecoder.DateDecodingStrategy
 
-/// Current CDUntappdKit version. Necessary since SPM doesn't use dynamic libraries. Plus this will be more accurate.
-let version = "3.2.0"
+    public init(
+        keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy = .useDefaultKeys,
+        dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .deferredToDate
+    ) {
+        self.keyDecodingStrategy = keyDecodingStrategy
+        self.dateDecodingStrategy = dateDecodingStrategy
+    }
+
+    /// Standard configuration — the default when no configuration is provided.
+    public static let `default` = CDUntappdDecoderConfiguration()
+
+    /// Builds a configured `JSONDecoder` from this configuration.
+    public func makeDecoder() -> JSONDecoder {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = keyDecodingStrategy
+        decoder.dateDecodingStrategy = dateDecodingStrategy
+        return decoder
+    }
+}

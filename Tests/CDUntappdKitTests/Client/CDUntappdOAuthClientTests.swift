@@ -252,6 +252,23 @@ extension SharedKeychainTests {
             CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
         }
 
+        @Test
+        func authorizeAppliesDecoderConfigurationKeyStrategy() async throws {
+            let url = try expectedAuthorizeURL(clientId: "test", clientSecret: "test",
+                                               redirectUrl: "test://callback", code: "auth_code_decoder_config")
+            CDUntappdMockURLProtocol.register(
+                stub: .init(statusCode: 200, data: Data(#"{"response": {"access_token": "should_not_store"}}"#.utf8)),
+                for: url
+            )
+            let client = CDUntappdOAuthClient(
+                clientId: "test", clientSecret: "test", redirectUrl: "test://callback",
+                urlSession: CDUntappdMockURLProtocol.makeSession(),
+                decoderConfiguration: CDUntappdDecoderConfiguration(keyDecodingStrategy: .convertFromSnakeCase)
+            )
+            try await client.authorize(withCode: "auth_code_decoder_config")
+            #expect(CDUntappdKeychain.string(forKey: CDUntappdDefaults.accessToken) == nil)
+        }
+
         private final class RecordingMonitor: CDUntappdEventMonitor, @unchecked Sendable {
             private let lock = NSLock()
             private var _startCount = 0
