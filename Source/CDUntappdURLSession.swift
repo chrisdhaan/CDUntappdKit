@@ -242,7 +242,7 @@ actor CDUntappdURLSession {
         }
     }
 
-    private func notifyComplete(_ request: URLRequest, response: HTTPURLResponse?, data: Data?, error: Error?) {
+    private func notifyComplete(_ request: URLRequest, response: HTTPURLResponse?, data: Data?, error: (any Error)?) {
         for monitor in eventMonitors {
             monitor.requestDidComplete(urlRequest: request, response: response, data: data, error: error)
         }

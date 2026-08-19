@@ -23,17 +23,17 @@ import Foundation
 ///    request) so concurrently-running tests can never collide on the same entry.
 public final class CDUntappdMockURLProtocol: URLProtocol, @unchecked Sendable {
 
-    public struct Stub {
+    public struct Stub: Sendable {
         public let statusCode: Int
         public let data: Data
         public let headers: [String: String]
-        public let error: (any Error)?
+        public let error: (any Error & Sendable)?
         /// Delays the response, to give a test a window in which the request is genuinely
         /// in-flight (e.g. to exercise cancellation).
         public let delay: TimeInterval
 
-        public init(statusCode: Int = 200, data: Data = Data(), headers: [String: String] = [:], error: (any Error)? = nil,
-                    delay: TimeInterval = 0) {
+        public init(statusCode: Int = 200, data: Data = Data(), headers: [String: String] = [:],
+                    error: (any Error & Sendable)? = nil, delay: TimeInterval = 0) {
             self.statusCode = statusCode
             self.data = data
             self.headers = headers
