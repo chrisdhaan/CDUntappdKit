@@ -105,11 +105,11 @@ public final class CDUntappdMockURLProtocol: URLProtocol, @unchecked Sendable {
         return URLSession(configuration: configuration)
     }
 
-    override public class func canInit(with request: URLRequest) -> Bool {
+    override public static func canInit(with request: URLRequest) -> Bool {
         true
     }
 
-    override public class func canonicalRequest(for request: URLRequest) -> URLRequest {
+    override public static func canonicalRequest(for request: URLRequest) -> URLRequest {
         request
     }
 
