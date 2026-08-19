@@ -28,7 +28,6 @@
 import Foundation
 import os.log
 
-@available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, visionOS 1.0, *)
 private let logger = Logger(subsystem: CDUntappdKitBundleIdentifier, category: "OAuthClient")
 
 /// Handles OAuth 2.0 authentication with the Untappd API.
@@ -103,7 +102,6 @@ public final class CDUntappdOAuthClient: Sendable {
     /// - Parameter code: The authorization code received from the OAuth redirect.
     /// - Throws: ``CDUntappdKitError`` if the client isn't configured with valid credentials,
     ///   `code` is empty, the network request fails, or the response can't be decoded.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func authorize(withCode code: String) async throws {
         guard !clientId.isEmpty,
               !clientSecret.isEmpty,
@@ -132,7 +130,6 @@ public final class CDUntappdOAuthClient: Sendable {
     ///   - code: The authorization code received from the OAuth provider.
     ///   - completion: A closure called with the result, on the main thread. Passes `true` and
     ///     `nil` on success, `false` and an error on failure.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     @available(*, deprecated, renamed: "authorize(withCode:)")
     public func authorize(withCode code: String!, completion: @escaping @Sendable (Bool?, (any Error)?) -> Void) {
         Task { @MainActor in
@@ -154,7 +151,7 @@ public final class CDUntappdOAuthClient: Sendable {
         } else {
             CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
         }
-        if !keychainWriteSucceeded, #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, visionOS 1.0, *) {
+        if !keychainWriteSucceeded {
             logger.error("Failed to store OAuth access token in the Keychain.")
         }
     }

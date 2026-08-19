@@ -23,6 +23,7 @@
 //  THE SOFTWARE.
 //
 
+import CDUntappdKitTesting
 import Foundation
 import Testing
 @testable import CDUntappdKit
@@ -318,8 +319,8 @@ extension SharedKeychainTests {
             )
             do {
                 try await client.authorize(withCode: "auth_code_http_error")
-                Issue.record("Expected .httpError to be thrown")
-            } catch let CDUntappdKitError.httpError(statusCode, _) {
+                Issue.record("Expected .httpErrorWithHeaders to be thrown")
+            } catch let CDUntappdKitError.httpErrorWithHeaders(statusCode, _, _) {
                 #expect(statusCode == 401)
             }
         }

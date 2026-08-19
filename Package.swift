@@ -38,14 +38,16 @@ let package = Package(name: "CDUntappdKit",
                                           targets: ["CDUntappdKit"]),
                                  .library(name: "CDUntappdKitDynamic",
                                           type: .dynamic,
-                                          targets: ["CDUntappdKit"])],
+                                          targets: ["CDUntappdKit"]),
+                                 .library(name: "CDUntappdKitTesting",
+                                          targets: ["CDUntappdKitTesting"])],
                       dependencies: [
                           .package(url: "https://github.com/apple/swift-docc-plugin",
                                    from: "1.3.0")
                       ],
                       targets: [.target(name: "CDUntappdKit",
                                         path: "Source",
-                                        exclude: ["Info.plist"],
+                                        exclude: ["Info.plist", "Testing"],
                                         resources: [.process("PrivacyInfo.xcprivacy")],
                                         swiftSettings: [
                                             .enableUpcomingFeature("ExistentialAny")
@@ -56,9 +58,14 @@ let package = Package(name: "CDUntappdKit",
                                             .linkedFramework("Cocoa",
                                                              .when(platforms: [.macOS]))
                                         ]),
+                                .target(name: "CDUntappdKitTesting",
+                                        path: "Source/Testing",
+                                        swiftSettings: [
+                                            .enableUpcomingFeature("ExistentialAny")
+                                        ]),
                                 .testTarget(
                                     name: "CDUntappdKitTests",
-                                    dependencies: ["CDUntappdKit"],
+                                    dependencies: ["CDUntappdKit", "CDUntappdKitTesting"],
                                     path: "Tests/CDUntappdKitTests",
                                     resources: [.process("Fixtures")]
                                 )],

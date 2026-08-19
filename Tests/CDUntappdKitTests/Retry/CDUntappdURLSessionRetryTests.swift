@@ -1,3 +1,4 @@
+import CDUntappdKitTesting
 import Foundation
 import Testing
 @testable import CDUntappdKit
@@ -44,8 +45,8 @@ struct CDUntappdURLSessionRetryTests {
         )
         do {
             let _: Fixture = try await session.perform(request)
-            Issue.record("Expected .httpError to be thrown")
-        } catch let CDUntappdKitError.httpError(statusCode, _) {
+            Issue.record("Expected .httpErrorWithHeaders to be thrown")
+        } catch let CDUntappdKitError.httpErrorWithHeaders(statusCode, _, _) {
             #expect(statusCode == 503)
         }
         #expect(try CDUntappdMockURLProtocol.requestCount(for: #require(request.url)) == 3)
@@ -61,8 +62,8 @@ struct CDUntappdURLSessionRetryTests {
         )
         do {
             let _: Fixture = try await session.perform(request)
-            Issue.record("Expected .httpError to be thrown")
-        } catch let CDUntappdKitError.httpError(statusCode, _) {
+            Issue.record("Expected .httpErrorWithHeaders to be thrown")
+        } catch let CDUntappdKitError.httpErrorWithHeaders(statusCode, _, _) {
             #expect(statusCode == 404)
         }
         #expect(try CDUntappdMockURLProtocol.requestCount(for: #require(request.url)) == 1)
@@ -78,8 +79,8 @@ struct CDUntappdURLSessionRetryTests {
         )
         do {
             let _: Fixture = try await session.perform(request)
-            Issue.record("Expected .httpError to be thrown")
-        } catch let CDUntappdKitError.httpError(statusCode, _) {
+            Issue.record("Expected .httpErrorWithHeaders to be thrown")
+        } catch let CDUntappdKitError.httpErrorWithHeaders(statusCode, _, _) {
             #expect(statusCode == 503)
         }
         #expect(try CDUntappdMockURLProtocol.requestCount(for: #require(request.url)) == 1)
@@ -132,8 +133,8 @@ struct CDUntappdURLSessionRetryTests {
         let session = CDUntappdURLSession(session: CDUntappdMockURLProtocol.makeSession())
         do {
             let _: Fixture = try await session.perform(request)
-            Issue.record("Expected .httpError to be thrown")
-        } catch let CDUntappdKitError.httpError(statusCode, _) {
+            Issue.record("Expected .httpErrorWithHeaders to be thrown")
+        } catch let CDUntappdKitError.httpErrorWithHeaders(statusCode, _, _) {
             #expect(statusCode == 503)
         }
         #expect(try CDUntappdMockURLProtocol.requestCount(for: #require(request.url)) == 1)

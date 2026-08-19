@@ -27,6 +27,7 @@ struct CDUntappdKitErrorTests {
         #expect((carried as? URLError)?.code == .notConnectedToInternet)
     }
 
+    @available(*, deprecated, message: "Exercises the deprecated .httpError case for source-compatibility coverage.")
     @Test
     func httpErrorCarriesStatusCodeAndData() {
         let data = Data("not found".utf8)
@@ -37,6 +38,20 @@ struct CDUntappdKitErrorTests {
         }
         #expect(statusCode == 404)
         #expect(carriedData == data)
+    }
+
+    @Test
+    func httpErrorWithHeadersCarriesStatusCodeDataAndHeaders() {
+        let data = Data("not found".utf8)
+        let headers = ["Retry-After": "30"]
+        let error = CDUntappdKitError.httpErrorWithHeaders(statusCode: 404, data: data, headers: headers)
+        guard case let .httpErrorWithHeaders(statusCode, carriedData, carriedHeaders) = error else {
+            Issue.record("Expected .httpErrorWithHeaders")
+            return
+        }
+        #expect(statusCode == 404)
+        #expect(carriedData == data)
+        #expect(carriedHeaders == headers)
     }
 
     @Test

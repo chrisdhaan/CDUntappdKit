@@ -13,6 +13,7 @@ Complete guide to using CDUntappdKit for interacting with the Untappd API.
 - [Brand Assets](#brand-assets)
 - [Platform Notes](#platform-notes)
 - [Advanced: Cancellation](#advanced-cancellation)
+- [Testing Utilities](#testing-utilities)
 - [How to Contribute](#how-to-contribute)
 
 ---
@@ -25,7 +26,7 @@ Add CDUntappdKit to your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/chrisdhaan/CDUntappdKit.git", .upToNextMajor(from: "3.2.1"))
+    .package(url: "https://github.com/chrisdhaan/CDUntappdKit.git", .upToNextMajor(from: "3.3.0"))
 ],
 targets: [
     .target(
@@ -35,7 +36,7 @@ targets: [
 ]
 ```
 
-Then in your Xcode project, go to **File** > **Add Packages**, paste the URL, and select version 3.2.1 or later.
+Then in your Xcode project, go to **File** > **Add Packages**, paste the URL, and select version 3.3.0 or later.
 
 ---
 
@@ -223,12 +224,14 @@ Task {
             print("Request could not be constructed: \(underlyingError)")
         case .networkFailure(let underlyingError):
             print("Network request failed: \(underlyingError)")
-        case .httpError(let statusCode, let data):
-            print("HTTP error \(statusCode)")
+        case .httpErrorWithHeaders(let statusCode, let data, let headers):
+            print("HTTP error \(statusCode), headers: \(headers)")
         case .apiError(let message):
             print("API error: \(message)")
         case .decodingFailed(let underlyingError):
             print("Response decode failed: \(underlyingError)")
+        default:
+            print("Other error: \(error)")
         }
     } catch {
         print("Unexpected error: \(error)")
@@ -240,7 +243,7 @@ Task {
 
 - **`invalidRequest(Error)`** — The request could not be constructed (e.g. an invalid URL from route parameters).
 - **`networkFailure(Error)`** — A transport-level failure occurred (no connection, timed out, etc).
-- **`httpError(statusCode: Int, data: Data)`** — The API returned a non-2xx HTTP status code.
+- **`httpErrorWithHeaders(statusCode: Int, data: Data, headers: [String: String])`** — The API returned a non-2xx HTTP status code. Carries the failed response's HTTP headers (e.g. `Retry-After`, rate-limit headers). Replaces the deprecated `httpError(statusCode:data:)` case, which CDUntappdKit no longer throws.
 - **`apiError(String)`** — The Untappd API returned an error response (invalid username, rate limit, etc.).
 - **`decodingFailed(Error)`** — The response body couldn't be decoded into the expected model.
 
@@ -339,6 +342,52 @@ currentTask?.cancel()
 When a task is cancelled while awaiting a network request, the underlying `URLSessionTask` is cancelled. The async call throws `CancellationError`.
 
 **Note:** The deprecated method `cancelAllPendingAPIRequests()` is no longer available. Use `Task.cancel()` instead for fine-grained control.
+
+---
+
+## Testing Utilities
+
+The `CDUntappdKitTesting` product exposes `CDUntappdMockURLProtocol`, a `URLProtocol` that intercepts requests and returns a pre-configured response, so your own test suite can mock CDUntappdKit-backed network calls without hitting the real API:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/chrisdhaan/CDUntappdKit.git", .upToNextMajor(from: "3.3.0"))
+],
+targets: [
+    .testTarget(
+        name: "MyAppTests",
+        dependencies: [
+            .product(name: "CDUntappdKit", package: "CDUntappdKit"),
+            .product(name: "CDUntappdKitTesting", package: "CDUntappdKit")
+        ]
+    )
+]
+```
+
+Build a client backed by a mocked session using the `urlSession:` initializer:
+
+```swift
+import CDUntappdKit
+import CDUntappdKitTesting
+
+let client = CDUntappdAPIClient(
+    clientId: "test-client-id",
+    clientSecret: "test-client-secret",
+    redirectUrl: "yourapp://oauth/callback",
+    urlSession: CDUntappdMockURLProtocol.makeSession()
+)
+```
+
+Then register a stub for the request your code under test will send:
+
+```swift
+CDUntappdMockURLProtocol.register(
+    stub: .init(statusCode: 200, data: Data(#"{"meta":{"code":200},"response":{"user":{"user_name":"DehaanSolo"}}}"#.utf8)),
+    for: url
+)
+```
+
+`register(stub:for:)` matches by exact `URL`, for requests your code under test builds internally (e.g. through `CDUntappdAPIClient`'s fetch methods). `Stub` also accepts `headers`, `error`, and `delay` — see the type's doc comments for the full contract, including guidance on avoiding cross-test collisions under concurrent execution.
 
 ---
 

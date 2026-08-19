@@ -38,13 +38,13 @@ public protocol CDUntappdEventMonitor: AnyObject, Sendable {
     /// Called once per logical request, when it reaches a terminal outcome (success or a
     /// non-retried failure). `response` is `nil` for a request that failed before a response was
     /// received; check `error` to distinguish that from success.
-    func requestDidComplete(urlRequest: URLRequest?, response: HTTPURLResponse?, data: Data?, error: Error?)
+    func requestDidComplete(urlRequest: URLRequest?, response: HTTPURLResponse?, data: Data?, error: (any Error)?)
     /// Called when a request will be retried after a recoverable failure.
     func requestWillRetry(urlRequest: URLRequest?, retryCount: Int)
 }
 
 public extension CDUntappdEventMonitor {
     func requestDidStart(urlRequest _: URLRequest) {}
-    func requestDidComplete(urlRequest _: URLRequest?, response _: HTTPURLResponse?, data _: Data?, error _: Error?) {}
+    func requestDidComplete(urlRequest _: URLRequest?, response _: HTTPURLResponse?, data _: Data?, error _: (any Error)?) {}
     func requestWillRetry(urlRequest _: URLRequest?, retryCount _: Int) {}
 }

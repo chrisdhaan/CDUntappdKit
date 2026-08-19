@@ -21,19 +21,22 @@ import Foundation
 ///    object's identity, which a separately-constructed "equivalent" request can't share.
 ///    Give each such registration a unique `URL` (e.g. a unique username baked into the
 ///    request) so concurrently-running tests can never collide on the same entry.
-final class CDUntappdMockURLProtocol: URLProtocol, @unchecked Sendable {
+public final class CDUntappdMockURLProtocol: URLProtocol, @unchecked Sendable {
 
-    struct Stub {
-        let statusCode: Int
-        let data: Data
-        let error: Error?
+    public struct Stub: Sendable {
+        public let statusCode: Int
+        public let data: Data
+        public let headers: [String: String]
+        public let error: (any Error & Sendable)?
         /// Delays the response, to give a test a window in which the request is genuinely
         /// in-flight (e.g. to exercise cancellation).
-        let delay: TimeInterval
+        public let delay: TimeInterval
 
-        init(statusCode: Int = 200, data: Data = Data(), error: Error? = nil, delay: TimeInterval = 0) {
+        public init(statusCode: Int = 200, data: Data = Data(), headers: [String: String] = [:],
+                    error: (any Error & Sendable)? = nil, delay: TimeInterval = 0) {
             self.statusCode = statusCode
             self.data = data
+            self.headers = headers
             self.error = error
             self.delay = delay
         }
@@ -48,8 +51,10 @@ final class CDUntappdMockURLProtocol: URLProtocol, @unchecked Sendable {
     /// Returns a copy of `request` with `stub` attached, for use with a session created by
     /// `makeSession()`. Safe under concurrent test execution: the stub travels with this
     /// specific request instance only.
-    static func stubbing(_ request: URLRequest, with stub: Stub) -> URLRequest {
-        let mutableRequest = (request as NSURLRequest).mutableCopy() as! NSMutableURLRequest
+    public static func stubbing(_ request: URLRequest, with stub: Stub) -> URLRequest {
+        guard let mutableRequest = (request as NSURLRequest).mutableCopy() as? NSMutableURLRequest else {
+            return request
+        }
         URLProtocol.setProperty(stub, forKey: stubPropertyKey, in: mutableRequest)
         return mutableRequest as URLRequest
     }
@@ -57,7 +62,7 @@ final class CDUntappdMockURLProtocol: URLProtocol, @unchecked Sendable {
     /// Registers `stub` to be served for every request whose `url` equals `url`, for use when
     /// the code under test builds its own `URLRequest` internally. Give each call a distinct
     /// `url` so concurrently-running tests never share an entry.
-    static func register(stub: Stub, for url: URL) {
+    public static func register(stub: Stub, for url: URL) {
         register(stubs: [stub], for: url)
     }
 
@@ -66,7 +71,7 @@ final class CDUntappdMockURLProtocol: URLProtocol, @unchecked Sendable {
     /// simulate a retryable failure followed by success. Once the sequence is exhausted, the
     /// last stub repeats for any further requests. Give each call a distinct `url` so
     /// concurrently-running tests never share an entry.
-    static func register(stubs: [Stub], for url: URL) {
+    public static func register(stubs: [Stub], for url: URL) {
         urlKeyedStubsLock.lock()
         defer { urlKeyedStubsLock.unlock() }
         urlKeyedStubQueues[url] = stubs
@@ -75,7 +80,7 @@ final class CDUntappdMockURLProtocol: URLProtocol, @unchecked Sendable {
 
     /// The number of requests served so far for `url` via `register(stub:for:)`/
     /// `register(stubs:for:)` — lets a retry test assert exactly how many attempts were made.
-    static func requestCount(for url: URL) -> Int {
+    public static func requestCount(for url: URL) -> Int {
         urlKeyedStubsLock.lock()
         defer { urlKeyedStubsLock.unlock() }
         return urlKeyedRequestCounts[url] ?? 0
@@ -94,21 +99,21 @@ final class CDUntappdMockURLProtocol: URLProtocol, @unchecked Sendable {
         return stub
     }
 
-    static func makeSession() -> URLSession {
+    public static func makeSession() -> URLSession {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.protocolClasses = [CDUntappdMockURLProtocol.self]
         return URLSession(configuration: configuration)
     }
 
-    override class func canInit(with request: URLRequest) -> Bool {
+    override public static func canInit(with request: URLRequest) -> Bool {
         true
     }
 
-    override class func canonicalRequest(for request: URLRequest) -> URLRequest {
+    override public static func canonicalRequest(for request: URLRequest) -> URLRequest {
         request
     }
 
-    override func startLoading() {
+    override public func startLoading() {
         guard let stub = (URLProtocol.property(forKey: Self.stubPropertyKey, in: request) as? Stub)
             ?? Self.urlKeyedStub(for: request.url)
         else {
@@ -124,7 +129,7 @@ final class CDUntappdMockURLProtocol: URLProtocol, @unchecked Sendable {
         }
     }
 
-    override func stopLoading() {}
+    override public func stopLoading() {}
 
     private func respond(with stub: Stub) {
         if let error = stub.error {
@@ -135,7 +140,7 @@ final class CDUntappdMockURLProtocol: URLProtocol, @unchecked Sendable {
             url: request.url ?? URL(string: "https://api.untappd.com/v4/")!,
             statusCode: stub.statusCode,
             httpVersion: "HTTP/1.1",
-            headerFields: nil
+            headerFields: stub.headers
         )!
         client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
         client?.urlProtocol(self, didLoad: stub.data)

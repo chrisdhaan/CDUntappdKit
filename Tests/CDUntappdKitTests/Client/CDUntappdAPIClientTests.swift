@@ -23,6 +23,7 @@
 //  THE SOFTWARE.
 //
 
+import CDUntappdKitTesting
 import Foundation
 import Testing
 @testable import CDUntappdKit
@@ -115,8 +116,8 @@ extension SharedKeychainTests {
             )
             do {
                 _ = try await client.fetchUserInfo(forUsername: "testuser-http-error", compact: false)
-                Issue.record("Expected .httpError to be thrown")
-            } catch let CDUntappdKitError.httpError(statusCode, _) {
+                Issue.record("Expected .httpErrorWithHeaders to be thrown")
+            } catch let CDUntappdKitError.httpErrorWithHeaders(statusCode, _, _) {
                 #expect(statusCode == 500)
             }
         }
@@ -241,8 +242,8 @@ extension SharedKeychainTests {
                                                        offset: nil,
                                                        limit: nil,
                                                        sort: nil)
-                Issue.record("Expected .httpError to be thrown")
-            } catch let CDUntappdKitError.httpError(statusCode, _) {
+                Issue.record("Expected .httpErrorWithHeaders to be thrown")
+            } catch let CDUntappdKitError.httpErrorWithHeaders(statusCode, _, _) {
                 #expect(statusCode == 500)
             }
         }
@@ -300,8 +301,8 @@ extension SharedKeychainTests {
                 _ = try await client.fetchUserFriends(forUsername: "testuser-friends-http-error",
                                                       offset: nil,
                                                       limit: nil)
-                Issue.record("Expected .httpError to be thrown")
-            } catch let CDUntappdKitError.httpError(statusCode, _) {
+                Issue.record("Expected .httpErrorWithHeaders to be thrown")
+            } catch let CDUntappdKitError.httpErrorWithHeaders(statusCode, _, _) {
                 #expect(statusCode == 500)
             }
         }

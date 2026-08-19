@@ -30,7 +30,6 @@ import Foundation
 /// Supports retry (`CDUntappdRetryConfiguration`), event monitoring (`CDUntappdEventMonitor`),
 /// request adaptation (`CDUntappdRequestAdapter`), and an opt-in in-memory response cache
 /// (`CDUntappdCacheConfiguration`) for `GET` requests.
-@available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
 actor CDUntappdURLSession {
 
     private let session: URLSession
@@ -175,8 +174,12 @@ actor CDUntappdURLSession {
             }
 
             guard (200 ..< 300).contains(httpResponse.statusCode) else {
+                let headers = httpResponse.allHeaderFields.reduce(into: [String: String]()) { result, field in
+                    guard let key = field.key as? String else { return }
+                    result[key] = "\(field.value)"
+                }
                 try await retryOrThrow(
-                    .httpError(statusCode: httpResponse.statusCode, data: data),
+                    .httpErrorWithHeaders(statusCode: httpResponse.statusCode, data: data, headers: headers),
                     request: request,
                     attempt: &attempt,
                     response: httpResponse,
@@ -238,7 +241,7 @@ actor CDUntappdURLSession {
         }
     }
 
-    private func notifyComplete(_ request: URLRequest, response: HTTPURLResponse?, data: Data?, error: Error?) {
+    private func notifyComplete(_ request: URLRequest, response: HTTPURLResponse?, data: Data?, error: (any Error)?) {
         for monitor in eventMonitors {
             monitor.requestDidComplete(urlRequest: request, response: response, data: data, error: error)
         }
@@ -254,7 +257,7 @@ actor CDUntappdURLSession {
         guard attempt < retryConfiguration.retryLimit else { return false }
         guard let httpMethod, Self.idempotentHTTPMethods.contains(httpMethod.uppercased()) else { return false }
         switch error {
-        case let .httpError(statusCode, _):
+        case let .httpErrorWithHeaders(statusCode, _, _):
             return retryConfiguration.retryableHTTPStatusCodes.contains(statusCode)
         case let .networkFailure(underlying):
             guard let urlError = underlying as? URLError else { return false }

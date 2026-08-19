@@ -31,7 +31,6 @@ import os.log
     import UIKit
 #endif
 
-@available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, visionOS 1.0, *)
 private let logger = Logger(subsystem: CDUntappdKitBundleIdentifier, category: "APIClient")
 
 /// The primary API client for interacting with the Untappd API.
@@ -46,11 +45,29 @@ public class CDUntappdAPIClient {
 
     // MARK: - Initializers
 
-    init(clientId: String, clientSecret: String, redirectUrl: String, urlSession: URLSession,
-         retryConfiguration: CDUntappdRetryConfiguration = .disabled,
-         eventMonitors: [any CDUntappdEventMonitor] = [], requestAdapters: [any CDUntappdRequestAdapter] = [],
-         cacheConfiguration: CDUntappdCacheConfiguration = .disabled,
-         decoderConfiguration: CDUntappdDecoderConfiguration = .default) {
+    /// Creates an Untappd API client backed by a caller-supplied `URLSession`.
+    ///
+    /// Intended for tests: pass a session built around `CDUntappdMockURLProtocol.makeSession()`
+    /// (from the `CDUntappdKitTesting` product) to mock network calls without hitting the real API.
+    /// - Parameters:
+    ///   - clientId: Your Untappd application client ID.
+    ///   - clientSecret: Your Untappd application client secret. Do not share this key.
+    ///   - redirectUrl: The OAuth redirect URL registered with your application.
+    ///   - urlSession: The `URLSession` used to perform requests.
+    ///   - retryConfiguration: Configuration for automatic retry with exponential backoff on
+    ///     transient failures and rate-limit responses. Defaults to `.disabled`.
+    ///   - eventMonitors: Observers notified of request/response lifecycle events. Defaults to none.
+    ///   - requestAdapters: Adapters run in order to mutate each outgoing request before it is sent.
+    ///     Defaults to none.
+    ///   - cacheConfiguration: Configuration for the built-in in-memory response cache applied to
+    ///     `GET` requests. Defaults to `.disabled`.
+    ///   - decoderConfiguration: Configuration for `JSONDecoder`'s key and date decoding strategies.
+    ///     Defaults to `.default`.
+    public init(clientId: String, clientSecret: String, redirectUrl: String, urlSession: URLSession,
+                retryConfiguration: CDUntappdRetryConfiguration = .disabled,
+                eventMonitors: [any CDUntappdEventMonitor] = [], requestAdapters: [any CDUntappdRequestAdapter] = [],
+                cacheConfiguration: CDUntappdCacheConfiguration = .disabled,
+                decoderConfiguration: CDUntappdDecoderConfiguration = .default) {
         precondition(!clientId.isEmpty && !clientSecret.isEmpty && !redirectUrl.isEmpty,
                      "A clientId, clientSecret, and redirectUrl are required to query the Untappd Developers API oauth endpoint.")
         self.oAuthClient = CDUntappdOAuthClient(clientId: clientId, clientSecret: clientSecret, redirectUrl: redirectUrl,
@@ -112,7 +129,6 @@ public class CDUntappdAPIClient {
     ///   - compact: Pass `true` to omit checkins, media, and recent brews. Defaults to `false` for full response.
     /// - Returns: The decoded ``CDUntappdUserInfoResponse``.
     /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func fetchUserInfo(forUsername username: String?,
                               compact: Bool) async throws -> CDUntappdUserInfoResponse {
         precondition(
@@ -129,9 +145,7 @@ public class CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("fetchUserInfo API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("fetchUserInfo API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -146,7 +160,6 @@ public class CDUntappdAPIClient {
     ///   - sort: How to sort results. Defaults to `nil` (date order).
     /// - Returns: The decoded ``CDUntappdUserWishListResponse``.
     /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func fetchUserWishList(forUsername username: String?,
                                   offset: Int?,
                                   limit: Int?,
@@ -167,9 +180,7 @@ public class CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("fetchUserWishList API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("fetchUserWishList API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -183,7 +194,6 @@ public class CDUntappdAPIClient {
     ///   - limit: Maximum number of results to return (max 25, default 25). Defaults to `nil`.
     /// - Returns: The decoded ``CDUntappdUserFriendsResponse``.
     /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func fetchUserFriends(forUsername username: String?,
                                  offset: Int?,
                                  limit: Int?) async throws -> CDUntappdUserFriendsResponse {
@@ -202,9 +212,7 @@ public class CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("fetchUserFriends API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("fetchUserFriends API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -217,7 +225,6 @@ public class CDUntappdAPIClient {
     ///   - offset: The zero-based offset for pagination. Defaults to `nil` (start from 0).
     /// - Returns: The decoded ``CDUntappdUserBadgesResponse``.
     /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func fetchUserBadges(forUsername username: String?,
                                 offset: Int?) async throws -> CDUntappdUserBadgesResponse {
         precondition(
@@ -234,9 +241,7 @@ public class CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("fetchUserBadges API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("fetchUserBadges API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -251,7 +256,6 @@ public class CDUntappdAPIClient {
     ///   - sort: How to sort results. Defaults to `nil` (date order).
     /// - Returns: The decoded ``CDUntappdUserBeersResponse``.
     /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func fetchUserBeers(forUsername username: String?,
                                offset: Int?,
                                limit: Int?,
@@ -272,9 +276,7 @@ public class CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("fetchUserBeers API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("fetchUserBeers API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -287,7 +289,6 @@ public class CDUntappdAPIClient {
     ///   - compact: Pass `true` to omit extended fields. Defaults to `false`.
     /// - Returns: The decoded ``CDUntappdBeerInfoResponse``.
     /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func fetchBeerInfo(forBid bid: Int,
                               compact: Bool) async throws -> CDUntappdBeerInfoResponse {
         var params = Parameters.beerInfoParameters(isCompact: compact)
@@ -299,9 +300,7 @@ public class CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("fetchBeerInfo API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("fetchBeerInfo API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -314,7 +313,6 @@ public class CDUntappdAPIClient {
     ///   - compact: Pass `true` to omit extended fields. Defaults to `false`.
     /// - Returns: The decoded ``CDUntappdBreweryInfoResponse``.
     /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func fetchBreweryInfo(forBreweryId breweryId: Int,
                                  compact: Bool) async throws -> CDUntappdBreweryInfoResponse {
         var params = Parameters.breweryInfoParameters(isCompact: compact)
@@ -326,9 +324,7 @@ public class CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("fetchBreweryInfo API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("fetchBreweryInfo API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -341,7 +337,6 @@ public class CDUntappdAPIClient {
     ///   - compact: Pass `true` to omit extended fields. Defaults to `false`.
     /// - Returns: The decoded ``CDUntappdVenueInfoResponse``.
     /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func fetchVenueInfo(forVenueId venueId: Int,
                                compact: Bool) async throws -> CDUntappdVenueInfoResponse {
         var params = Parameters.venueInfoParameters(isCompact: compact)
@@ -353,9 +348,7 @@ public class CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("fetchVenueInfo API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("fetchVenueInfo API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -370,7 +363,6 @@ public class CDUntappdAPIClient {
     ///   - sort: How to sort results. Defaults to `nil` (date order).
     /// - Returns: The decoded ``CDUntappdBeerSearchResponse``.
     /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func searchBeers(query: String,
                             offset: Int?,
                             limit: Int?,
@@ -386,9 +378,7 @@ public class CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("searchBeers API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("searchBeers API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -401,7 +391,6 @@ public class CDUntappdAPIClient {
     ///   - offset: The zero-based offset for pagination. Defaults to `nil` (start from 0).
     /// - Returns: The decoded ``CDUntappdBrewerySearchResponse``.
     /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func searchBreweries(query: String,
                                 offset: Int?) async throws -> CDUntappdBrewerySearchResponse {
         var params = Parameters.brewerySearchParameters(query: query,
@@ -413,9 +402,7 @@ public class CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("searchBreweries API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("searchBreweries API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -429,7 +416,6 @@ public class CDUntappdAPIClient {
     ///   - limit: Maximum results (default 25, max 50). Pass `nil` to omit.
     /// - Returns: The decoded ``CDUntappdActivityFeedResponse``.
     /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func fetchActivityFeed(maxId: Int?,
                                   minId: Int?,
                                   limit: Int?) async throws -> CDUntappdActivityFeedResponse {
@@ -446,9 +432,7 @@ public class CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("fetchActivityFeed API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("fetchActivityFeed API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -463,7 +447,6 @@ public class CDUntappdAPIClient {
     ///   - limit: Maximum results (default 25, max 25). Pass `nil` to omit.
     /// - Returns: The decoded ``CDUntappdActivityFeedResponse``.
     /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func fetchUserActivityFeed(forUsername username: String?,
                                       maxId: Int?,
                                       minId: Int?,
@@ -482,9 +465,7 @@ public class CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("fetchUserActivityFeed API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("fetchUserActivityFeed API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -499,7 +480,6 @@ public class CDUntappdAPIClient {
     ///   - limit: Maximum results (default 25, max 25). Pass `nil` to omit.
     /// - Returns: The decoded ``CDUntappdActivityFeedResponse``.
     /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func fetchBeerActivityFeed(forBid bid: Int,
                                       maxId: Int?,
                                       minId: Int?,
@@ -513,9 +493,7 @@ public class CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("fetchBeerActivityFeed API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("fetchBeerActivityFeed API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -530,7 +508,6 @@ public class CDUntappdAPIClient {
     ///   - limit: Maximum results (default 25, max 25). Pass `nil` to omit.
     /// - Returns: The decoded ``CDUntappdActivityFeedResponse``.
     /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func fetchBreweryActivityFeed(forBreweryId breweryId: Int,
                                          maxId: Int?,
                                          minId: Int?,
@@ -544,9 +521,7 @@ public class CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("fetchBreweryActivityFeed API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("fetchBreweryActivityFeed API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -561,7 +536,6 @@ public class CDUntappdAPIClient {
     ///   - limit: Maximum results (default 25, max 25). Pass `nil` to omit.
     /// - Returns: The decoded ``CDUntappdActivityFeedResponse``.
     /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func fetchVenueActivityFeed(forVenueId venueId: Int,
                                        maxId: Int?,
                                        minId: Int?,
@@ -575,9 +549,7 @@ public class CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("fetchVenueActivityFeed API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("fetchVenueActivityFeed API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -590,7 +562,6 @@ public class CDUntappdAPIClient {
     ///   - limit: Maximum number of results to return (max 25, default 25). Defaults to `nil`.
     /// - Returns: The decoded ``CDUntappdNotificationsResponse``.
     /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func fetchNotifications(offset: Int?,
                                    limit: Int?) async throws -> CDUntappdNotificationsResponse {
         precondition(
@@ -606,9 +577,7 @@ public class CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("fetchNotifications API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("fetchNotifications API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -619,7 +588,6 @@ public class CDUntappdAPIClient {
     /// - Parameter foursquareId: The Foursquare v2 venue ID.
     /// - Returns: The decoded ``CDUntappdFoursquareLookupResponse``.
     /// - Throws: ``CDUntappdKitError`` if the request fails or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func lookupVenue(byFoursquareId foursquareId: String) async throws -> CDUntappdFoursquareLookupResponse {
         precondition(
             self.isAuthenticated(),
@@ -635,9 +603,7 @@ public class CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("lookupVenue(byFoursquareId:) API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("lookupVenue(byFoursquareId:) API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 

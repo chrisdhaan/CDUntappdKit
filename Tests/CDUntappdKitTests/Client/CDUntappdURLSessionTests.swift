@@ -1,3 +1,4 @@
+import CDUntappdKitTesting
 import Foundation
 import Testing
 @testable import CDUntappdKit
@@ -26,15 +27,16 @@ struct CDUntappdURLSessionTests {
     func performThrowsHTTPErrorForNon2xxStatus() async throws {
         let stubbedRequest = CDUntappdMockURLProtocol.stubbing(
             request,
-            with: .init(statusCode: 404, data: Data("not found".utf8))
+            with: .init(statusCode: 404, data: Data("not found".utf8), headers: ["Retry-After": "30"])
         )
         let session = CDUntappdURLSession(session: CDUntappdMockURLProtocol.makeSession())
         do {
             let _: Fixture = try await session.perform(stubbedRequest)
-            Issue.record("Expected .httpError to be thrown")
-        } catch let CDUntappdKitError.httpError(statusCode, data) {
+            Issue.record("Expected .httpErrorWithHeaders to be thrown")
+        } catch let CDUntappdKitError.httpErrorWithHeaders(statusCode, data, headers) {
             #expect(statusCode == 404)
             #expect(data == Data("not found".utf8))
+            #expect(headers["Retry-After"] == "30")
         }
     }
 
@@ -111,8 +113,8 @@ struct CDUntappdURLSessionTests {
         let session = CDUntappdURLSession(session: CDUntappdMockURLProtocol.makeSession())
         do {
             try await session.perform(stubbedRequest)
-            Issue.record("Expected .httpError to be thrown")
-        } catch let CDUntappdKitError.httpError(statusCode, data) {
+            Issue.record("Expected .httpErrorWithHeaders to be thrown")
+        } catch let CDUntappdKitError.httpErrorWithHeaders(statusCode, data, _) {
             #expect(statusCode == 404)
             #expect(data == Data("not found".utf8))
         }

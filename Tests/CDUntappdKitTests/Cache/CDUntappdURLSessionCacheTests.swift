@@ -1,3 +1,4 @@
+import CDUntappdKitTesting
 import Foundation
 import Testing
 @testable import CDUntappdKit
@@ -108,8 +109,8 @@ struct CDUntappdURLSessionCacheTests {
         for _ in 0 ..< 2 {
             do {
                 let _: Fixture = try await session.perform(request)
-                Issue.record("Expected .httpError to be thrown")
-            } catch let CDUntappdKitError.httpError(statusCode, _) {
+                Issue.record("Expected .httpErrorWithHeaders to be thrown")
+            } catch let CDUntappdKitError.httpErrorWithHeaders(statusCode, _, _) {
                 #expect(statusCode == 404)
             }
         }
