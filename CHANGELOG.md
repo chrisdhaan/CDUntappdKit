@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## Table of Contents
 
+- [4.0.0](#400)
 - [3.3.0](#330)
 - [3.2.1](#321)
 - [3.2.0](#320)
@@ -12,6 +13,20 @@ All notable changes to this project will be documented in this file.
 - [2.0.0](#200)
 - [1.1.0](#110)
 - [1.0.0](#100)
+
+---
+
+## [4.0.0](https://github.com/chrisdhaan/CDUntappdKit/releases/tag/4.0.0)
+
+Released on 2026-08-19.
+
+Removes three long-deprecated public API members.
+
+### Removed
+
+- `CDUntappdAPIClient.cancelAllPendingAPIRequests()` — deprecated since 2.0.0; use `Task.cancel()` on the task wrapping the async API call instead.
+- `CDUntappdOAuthClient.authorize(withCode:completion:)` — deprecated since 3.0.0; use `authorize(withCode:)` (`async throws`) instead.
+- `CDUntappdKitError.httpError(statusCode:data:)` — deprecated since 3.3.0; use `.httpErrorWithHeaders(statusCode:data:headers:)` instead.
 
 ---
 

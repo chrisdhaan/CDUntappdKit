@@ -243,7 +243,7 @@ Task {
 
 - **`invalidRequest(Error)`** — The request could not be constructed (e.g. an invalid URL from route parameters).
 - **`networkFailure(Error)`** — A transport-level failure occurred (no connection, timed out, etc).
-- **`httpErrorWithHeaders(statusCode: Int, data: Data, headers: [String: String])`** — The API returned a non-2xx HTTP status code. Carries the failed response's HTTP headers (e.g. `Retry-After`, rate-limit headers). Replaces the deprecated `httpError(statusCode:data:)` case, which CDUntappdKit no longer throws.
+- **`httpErrorWithHeaders(statusCode: Int, data: Data, headers: [String: String])`** — The API returned a non-2xx HTTP status code. Carries the failed response's HTTP headers (e.g. `Retry-After`, rate-limit headers).
 - **`apiError(String)`** — The Untappd API returned an error response (invalid username, rate limit, etc.).
 - **`decodingFailed(Error)`** — The response body couldn't be decoded into the expected model.
 
@@ -341,7 +341,7 @@ currentTask?.cancel()
 
 When a task is cancelled while awaiting a network request, the underlying `URLSessionTask` is cancelled. The async call throws `CancellationError`.
 
-**Note:** The deprecated method `cancelAllPendingAPIRequests()` is no longer available. Use `Task.cancel()` instead for fine-grained control.
+**Note:** `cancelAllPendingAPIRequests()` was removed in 4.0.0. Use `Task.cancel()` instead for fine-grained control.
 
 ---
 
