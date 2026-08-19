@@ -17,7 +17,7 @@ All notable changes to this project will be documented in this file.
 
 ## [3.3.0](https://github.com/chrisdhaan/CDUntappdKit/releases/tag/3.3.0)
 
-Released on 2026-08-18.
+Released on 2026-08-19.
 
 Adds a public testing product for mocking network calls, and surfaces HTTP response headers on failed requests.
 
