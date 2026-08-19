@@ -4,12 +4,29 @@ All notable changes to this project will be documented in this file.
 
 ## Table of Contents
 
+- [3.2.1](#321)
 - [3.2.0](#320)
 - [3.1.0](#310)
 - [3.0.0](#300)
 - [2.0.0](#200)
 - [1.1.0](#110)
 - [1.0.0](#100)
+
+---
+
+## [3.2.1](https://github.com/chrisdhaan/CDUntappdKit/releases/tag/3.2.1)
+
+Released on 2026-08-18.
+
+iOS Example modernization and documentation cleanup.
+
+### Removed
+
+- The documented Git Submodule install instructions from `README.md`/`Documentation/Usage.md` — this path never delivered the `PrivacyInfo.xcprivacy` privacy manifest, and Swift Package Manager is now the only documented install method. `CDUntappdKit.xcodeproj` can still be embedded manually via a git submodule; it's just no longer a recommended, documented path.
+
+### iOS Example App
+
+- Modernized to the `UIScene`/`SceneDelegate` app lifecycle
 
 ---
 

@@ -54,16 +54,8 @@ Add CDUntappdKit to your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/chrisdhaan/CDUntappdKit.git", .upToNextMajor(from: "3.2.0"))
+    .package(url: "https://github.com/chrisdhaan/CDUntappdKit.git", .upToNextMajor(from: "3.2.1"))
 ]
-```
-
-### Git Submodule
-
-Clone the repository and add `CDUntappdKit.xcodeproj` to your Xcode project:
-
-```bash
-git submodule add https://github.com/chrisdhaan/CDUntappdKit.git
 ```
 
 ## iOS Example App
