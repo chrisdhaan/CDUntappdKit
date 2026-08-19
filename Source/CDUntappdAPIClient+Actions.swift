@@ -28,7 +28,6 @@
 import Foundation
 import os.log
 
-@available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, visionOS 1.0, *)
 private let logger = Logger(subsystem: CDUntappdKitBundleIdentifier, category: "APIClient")
 
 extension CDUntappdAPIClient {
@@ -48,7 +47,6 @@ extension CDUntappdAPIClient {
     ///   - foursquare: Pass `true` to cross-post to Foursquare (requires lat/lng). Defaults to `false`.
     /// - Returns: The decoded ``CDUntappdCheckinResponse``.
     /// - Throws: ``CDUntappdKitError`` if the client isn't authenticated, the request fails, or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func addCheckin(bid: Int,
                            gmtOffset: String,
                            timezone: String,
@@ -77,9 +75,7 @@ extension CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("addCheckin API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("addCheckin API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -90,7 +86,6 @@ extension CDUntappdAPIClient {
     /// - Parameter checkinId: The Untappd check-in ID to toast.
     /// - Returns: The decoded ``CDUntappdToastResponse``.
     /// - Throws: ``CDUntappdKitError`` if the client isn't authenticated, the request fails, or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func toast(checkinId: Int) async throws -> CDUntappdToastResponse {
         guard self.isAuthenticated() else {
             throw CDUntappdKitError.invalidCredentials(
@@ -106,9 +101,7 @@ extension CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("toast API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("toast API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -121,7 +114,6 @@ extension CDUntappdAPIClient {
     ///   - comment: The comment text, max 140 characters.
     /// - Returns: The decoded ``CDUntappdAddCommentResponse``.
     /// - Throws: ``CDUntappdKitError`` if the client isn't authenticated, the request fails, or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func addComment(toCheckinId checkinId: Int, comment: String) async throws -> CDUntappdAddCommentResponse {
         guard self.isAuthenticated() else {
             throw CDUntappdKitError.invalidCredentials(
@@ -137,9 +129,7 @@ extension CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("addComment API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("addComment API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -149,7 +139,6 @@ extension CDUntappdAPIClient {
     /// Removes a comment from a check-in.
     /// - Parameter commentId: The Untappd comment ID to remove.
     /// - Throws: ``CDUntappdKitError`` if the client isn't authenticated, the request fails, or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func removeComment(commentId: Int) async throws {
         guard self.isAuthenticated() else {
             throw CDUntappdKitError.invalidCredentials(
@@ -172,7 +161,6 @@ extension CDUntappdAPIClient {
     ///   - limit: Maximum number of results to return. Defaults to `nil` (all results).
     /// - Returns: The decoded ``CDUntappdPendingFriendsResponse``.
     /// - Throws: ``CDUntappdKitError`` if the client isn't authenticated, the request fails, or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func fetchPendingFriends(offset: Int?,
                                     limit: Int?) async throws -> CDUntappdPendingFriendsResponse {
         guard self.isAuthenticated() else {
@@ -189,9 +177,7 @@ extension CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("fetchPendingFriends API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("fetchPendingFriends API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -202,7 +188,6 @@ extension CDUntappdAPIClient {
     /// - Parameter targetId: The target user's Untappd user ID.
     /// - Returns: The decoded ``CDUntappdActionResultResponse``.
     /// - Throws: ``CDUntappdKitError`` if the client isn't authenticated, the request fails, or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func addFriend(targetId: Int) async throws -> CDUntappdActionResultResponse {
         guard self.isAuthenticated() else {
             throw CDUntappdKitError.invalidCredentials(
@@ -218,9 +203,7 @@ extension CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("addFriend API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("addFriend API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -231,7 +214,6 @@ extension CDUntappdAPIClient {
     /// - Parameter targetId: The target user's Untappd user ID.
     /// - Returns: The decoded ``CDUntappdActionResultResponse``.
     /// - Throws: ``CDUntappdKitError`` if the client isn't authenticated, the request fails, or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func removeFriend(targetId: Int) async throws -> CDUntappdActionResultResponse {
         guard self.isAuthenticated() else {
             throw CDUntappdKitError.invalidCredentials(
@@ -247,9 +229,7 @@ extension CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("removeFriend API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("removeFriend API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -260,7 +240,6 @@ extension CDUntappdAPIClient {
     /// - Parameter targetId: The requesting user's Untappd user ID.
     /// - Returns: The decoded ``CDUntappdActionResultResponse``.
     /// - Throws: ``CDUntappdKitError`` if the client isn't authenticated, the request fails, or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func acceptFriend(targetId: Int) async throws -> CDUntappdActionResultResponse {
         guard self.isAuthenticated() else {
             throw CDUntappdKitError.invalidCredentials(
@@ -276,9 +255,7 @@ extension CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("acceptFriend API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("acceptFriend API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -289,7 +266,6 @@ extension CDUntappdAPIClient {
     /// - Parameter targetId: The requesting user's Untappd user ID.
     /// - Returns: The decoded ``CDUntappdActionResultResponse``.
     /// - Throws: ``CDUntappdKitError`` if the client isn't authenticated, the request fails, or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func rejectFriend(targetId: Int) async throws -> CDUntappdActionResultResponse {
         guard self.isAuthenticated() else {
             throw CDUntappdKitError.invalidCredentials(
@@ -305,9 +281,7 @@ extension CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("rejectFriend API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("rejectFriend API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -318,7 +292,6 @@ extension CDUntappdAPIClient {
     /// - Parameter bid: The Untappd beer ID to add.
     /// - Returns: The decoded ``CDUntappdActionResultResponse``.
     /// - Throws: ``CDUntappdKitError`` if the client isn't authenticated, the request fails, or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func addToWishList(bid: Int) async throws -> CDUntappdActionResultResponse {
         guard self.isAuthenticated() else {
             throw CDUntappdKitError.invalidCredentials(
@@ -334,9 +307,7 @@ extension CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("addToWishList API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("addToWishList API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 
@@ -347,7 +318,6 @@ extension CDUntappdAPIClient {
     /// - Parameter bid: The Untappd beer ID to remove.
     /// - Returns: The decoded ``CDUntappdActionResultResponse``.
     /// - Throws: ``CDUntappdKitError`` if the client isn't authenticated, the request fails, or the API returns an error.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
     public func removeFromWishList(bid: Int) async throws -> CDUntappdActionResultResponse {
         guard self.isAuthenticated() else {
             throw CDUntappdKitError.invalidCredentials(
@@ -363,9 +333,7 @@ extension CDUntappdAPIClient {
 
         if let metadata = response.metadata,
            metadata.hasError() {
-            if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-                logger.error("removeFromWishList API error: \(metadata.description(), privacy: .public)")
-            }
+            logger.error("removeFromWishList API error: \(metadata.description(), privacy: .public)")
             throw CDUntappdKitError.apiError(metadata.description())
         }
 

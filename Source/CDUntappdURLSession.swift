@@ -30,7 +30,6 @@ import Foundation
 /// Supports retry (`CDUntappdRetryConfiguration`), event monitoring (`CDUntappdEventMonitor`),
 /// request adaptation (`CDUntappdRequestAdapter`), and an opt-in in-memory response cache
 /// (`CDUntappdCacheConfiguration`) for `GET` requests.
-@available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
 actor CDUntappdURLSession {
 
     private let session: URLSession
