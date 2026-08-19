@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## Table of Contents
 
+- [3.3.0](#330)
 - [3.2.1](#321)
 - [3.2.0](#320)
 - [3.1.0](#310)
@@ -11,6 +12,23 @@ All notable changes to this project will be documented in this file.
 - [2.0.0](#200)
 - [1.1.0](#110)
 - [1.0.0](#100)
+
+---
+
+## [3.3.0](https://github.com/chrisdhaan/CDUntappdKit/releases/tag/3.3.0)
+
+Released on 2026-08-18.
+
+Adds a public testing product for mocking network calls, and surfaces HTTP response headers on failed requests.
+
+### Added
+
+- `CDUntappdKitTesting` SPM product — exposes `CDUntappdMockURLProtocol`, a `URLProtocol`-based request mock previously internal to this package's own test suite, so downstream consumers can mock CDUntappdKit-backed network calls in their own test suites without reimplementing a `URLProtocol` stub. `CDUntappdAPIClient`'s `urlSession:`-accepting initializer is now public to pair with it.
+- `CDUntappdKitError.httpErrorWithHeaders(statusCode:data:headers:)` — carries the failed response's HTTP headers (e.g. `Retry-After`, rate-limit headers) alongside the status code and body.
+
+### Deprecated
+
+- `CDUntappdKitError.httpError(statusCode:data:)` — replaced by `httpErrorWithHeaders(statusCode:data:headers:)`. CDUntappdKit no longer throws this case; it remains declared only for source compatibility with existing exhaustive pattern matches.
 
 ---
 

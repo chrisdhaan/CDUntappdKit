@@ -46,11 +46,29 @@ public class CDUntappdAPIClient {
 
     // MARK: - Initializers
 
-    init(clientId: String, clientSecret: String, redirectUrl: String, urlSession: URLSession,
-         retryConfiguration: CDUntappdRetryConfiguration = .disabled,
-         eventMonitors: [any CDUntappdEventMonitor] = [], requestAdapters: [any CDUntappdRequestAdapter] = [],
-         cacheConfiguration: CDUntappdCacheConfiguration = .disabled,
-         decoderConfiguration: CDUntappdDecoderConfiguration = .default) {
+    /// Creates an Untappd API client backed by a caller-supplied `URLSession`.
+    ///
+    /// Intended for tests: pass a session built around `CDUntappdMockURLProtocol.makeSession()`
+    /// (from the `CDUntappdKitTesting` product) to mock network calls without hitting the real API.
+    /// - Parameters:
+    ///   - clientId: Your Untappd application client ID.
+    ///   - clientSecret: Your Untappd application client secret. Do not share this key.
+    ///   - redirectUrl: The OAuth redirect URL registered with your application.
+    ///   - urlSession: The `URLSession` used to perform requests.
+    ///   - retryConfiguration: Configuration for automatic retry with exponential backoff on
+    ///     transient failures and rate-limit responses. Defaults to `.disabled`.
+    ///   - eventMonitors: Observers notified of request/response lifecycle events. Defaults to none.
+    ///   - requestAdapters: Adapters run in order to mutate each outgoing request before it is sent.
+    ///     Defaults to none.
+    ///   - cacheConfiguration: Configuration for the built-in in-memory response cache applied to
+    ///     `GET` requests. Defaults to `.disabled`.
+    ///   - decoderConfiguration: Configuration for `JSONDecoder`'s key and date decoding strategies.
+    ///     Defaults to `.default`.
+    public init(clientId: String, clientSecret: String, redirectUrl: String, urlSession: URLSession,
+                retryConfiguration: CDUntappdRetryConfiguration = .disabled,
+                eventMonitors: [any CDUntappdEventMonitor] = [], requestAdapters: [any CDUntappdRequestAdapter] = [],
+                cacheConfiguration: CDUntappdCacheConfiguration = .disabled,
+                decoderConfiguration: CDUntappdDecoderConfiguration = .default) {
         precondition(!clientId.isEmpty && !clientSecret.isEmpty && !redirectUrl.isEmpty,
                      "A clientId, clientSecret, and redirectUrl are required to query the Untappd Developers API oauth endpoint.")
         self.oAuthClient = CDUntappdOAuthClient(clientId: clientId, clientSecret: clientSecret, redirectUrl: redirectUrl,
