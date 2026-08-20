@@ -20,7 +20,7 @@ All notable changes to this project will be documented in this file.
 
 Released on 2026-08-19.
 
-Removes three long-deprecated public API members, and gives the iOS Example app an on-screen JSON response viewer.
+Removes three long-deprecated public API members, and expands the iOS Example app to demo 9 more read-only endpoints with an on-screen JSON response viewer.
 
 ### Removed
 
@@ -31,6 +31,7 @@ Removes three long-deprecated public API members, and gives the iOS Example app 
 ### iOS Example App
 
 - Tapping an endpoint row now pushes a pretty-printed JSON view of the response instead of printing it to the Xcode console, and a failed request now shows an alert instead of a silent console log. `Main.storyboard`'s root view controller is now wrapped in a `UINavigationController` to support this.
+- Grew from 3 to 12 demoed endpoints: added `fetchUserBadges`, `fetchUserBeers`, `fetchUserActivityFeed`, `searchBeers`, `searchBreweries`, `fetchBeerInfo`, `fetchBreweryInfo`, `fetchBeerActivityFeed`, and `fetchBreweryActivityFeed`. The beer/brewery-ID-based rows resolve a real ID via a live search first rather than hardcoding one, so they can't go stale. Venue-based endpoints (`fetchVenueInfo`, `fetchVenueActivityFeed`, `lookupVenue(byFoursquareId:)`) and everything requiring OAuth (the global activity feed, notifications, pending friends) or a write/action call remain undemoed — the example app doesn't have an OAuth login flow wired in yet.
 
 ---
 
