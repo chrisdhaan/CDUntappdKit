@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		86EA84908DD545B68474099D /* CDUntappdJSONResponseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFD684054FF44AE977B8D8A /* CDUntappdJSONResponseViewController.swift */; };
+		EE9A3969EFAB4D728EE1C075 /* JSONPrettyPrinter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABD2E6A331CB491B80CF4150 /* JSONPrettyPrinter.swift */; };
 		999E32D150159655434B5B17 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CA9748B7CC1227442D63D0 /* SceneDelegate.swift */; };
 		B26791641F350863008635CD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26791621F350863008635CD /* AppDelegate.swift */; };
 		B26791651F350863008635CD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26791631F350863008635CD /* ViewController.swift */; };
@@ -70,6 +72,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		FFFD684054FF44AE977B8D8A /* CDUntappdJSONResponseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDUntappdJSONResponseViewController.swift; sourceTree = "<group>"; };
+		ABD2E6A331CB491B80CF4150 /* JSONPrettyPrinter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONPrettyPrinter.swift; sourceTree = "<group>"; };
 		ADE233BEB11843BDBEC02753 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		B267914C1F35082B008635CD /* iOS Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B26791621F350863008635CD /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -120,6 +124,8 @@
 				B26791621F350863008635CD /* AppDelegate.swift */,
 				B2D6C3DF1F43D5290067279A /* CDUntappdKitManager.swift */,
 				B26791631F350863008635CD /* ViewController.swift */,
+				FFFD684054FF44AE977B8D8A /* CDUntappdJSONResponseViewController.swift */,
+				ABD2E6A331CB491B80CF4150 /* JSONPrettyPrinter.swift */,
 				B26791661F35086C008635CD /* Resources */,
 				B26791671F350874008635CD /* Supporting Files */,
 				E8CA9748B7CC1227442D63D0 /* SceneDelegate.swift */,
@@ -271,6 +277,8 @@
 				B26791651F350863008635CD /* ViewController.swift in Sources */,
 				B26791641F350863008635CD /* AppDelegate.swift in Sources */,
 				999E32D150159655434B5B17 /* SceneDelegate.swift in Sources */,
+				86EA84908DD545B68474099D /* CDUntappdJSONResponseViewController.swift in Sources */,
+				EE9A3969EFAB4D728EE1C075 /* JSONPrettyPrinter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

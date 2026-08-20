@@ -20,13 +20,17 @@ All notable changes to this project will be documented in this file.
 
 Released on 2026-08-19.
 
-Removes three long-deprecated public API members.
+Removes three long-deprecated public API members, and gives the iOS Example app an on-screen JSON response viewer.
 
 ### Removed
 
 - `CDUntappdAPIClient.cancelAllPendingAPIRequests()` — deprecated since 2.0.0; use `Task.cancel()` on the task wrapping the async API call instead.
 - `CDUntappdOAuthClient.authorize(withCode:completion:)` — deprecated since 3.0.0; use `authorize(withCode:)` (`async throws`) instead.
 - `CDUntappdKitError.httpError(statusCode:data:)` — deprecated since 3.3.0; use `.httpErrorWithHeaders(statusCode:data:headers:)` instead.
+
+### iOS Example App
+
+- Tapping an endpoint row now pushes a pretty-printed JSON view of the response instead of printing it to the Xcode console, and a failed request now shows an alert instead of a silent console log. `Main.storyboard`'s root view controller is now wrapped in a `UINavigationController` to support this.
 
 ---
 

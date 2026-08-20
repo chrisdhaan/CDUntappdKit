@@ -29,8 +29,14 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    @IBOutlet weak private var tableView: UITableView!
+    @IBOutlet private var tableView: UITableView!
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // Hidden here (rather than always-hidden on the navigation controller) so the bar still
+        // animates back in for the pushed JSON response screen and back out when returning here.
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
 }
 
 // MARK: - UITableViewDataSource Methods
@@ -38,11 +44,11 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDataSource {
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        1
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        3
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -71,9 +77,9 @@ extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case 0:
-            return "Untappd API Endpoints"
+            "Untappd API Endpoints"
         default:
-            return ""
+            ""
         }
     }
 }
@@ -89,11 +95,9 @@ extension ViewController: UITableViewDelegate {
                 do {
                     let response = try await CDUntappdKitManager.shared.apiClient.fetchUserInfo(forUsername: "DehaanSolo",
                                                                                                 compact: false)
-                    if let user = response.user {
-                        print(user)
-                    }
+                    presentJSONResponse(response, title: "user/info/{username}")
                 } catch {
-                    print("Error fetching user info: \(error.localizedDescription)")
+                    presentError(error)
                 }
             }
         case 1:
@@ -103,11 +107,9 @@ extension ViewController: UITableViewDelegate {
                                                                                                     offset: 0,
                                                                                                     limit: 10,
                                                                                                     sort: .highestABV)
-                    if let wishList = response.wishList {
-                        print(wishList)
-                    }
+                    presentJSONResponse(response, title: "user/wishlist/{username}")
                 } catch {
-                    print("Error fetching wish list: \(error.localizedDescription)")
+                    presentError(error)
                 }
             }
         case 2:
@@ -116,11 +118,9 @@ extension ViewController: UITableViewDelegate {
                     let response = try await CDUntappdKitManager.shared.apiClient.fetchUserFriends(forUsername: "DehaanSolo",
                                                                                                    offset: 0,
                                                                                                    limit: 10)
-                    if let friends = response.friends {
-                        print(friends)
-                    }
+                    presentJSONResponse(response, title: "user/friends/{username}")
                 } catch {
-                    print("Error fetching friends: \(error.localizedDescription)")
+                    presentError(error)
                 }
             }
         default:
@@ -129,6 +129,21 @@ extension ViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0.1
+        0.1
+    }
+}
+
+private extension ViewController {
+
+    func presentJSONResponse(_ response: Sendable, title: String) {
+        let jsonText = JSONPrettyPrinter.string(from: response)
+        let jsonResponseViewController = CDUntappdJSONResponseViewController(title: title, jsonText: jsonText)
+        navigationController?.pushViewController(jsonResponseViewController, animated: true)
+    }
+
+    func presentError(_ error: Error) {
+        let alertController = UIAlertController(title: "Request Failed", message: "\(error)", preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alertController, animated: true, completion: nil)
     }
 }
