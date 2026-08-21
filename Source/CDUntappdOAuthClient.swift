@@ -124,24 +124,6 @@ public final class CDUntappdOAuthClient: Sendable {
         Self.storeAccessToken(from: oAuthCredential)
     }
 
-    /// Exchanges an OAuth authorization code for an access token.
-    ///
-    /// - Parameters:
-    ///   - code: The authorization code received from the OAuth provider.
-    ///   - completion: A closure called with the result, on the main thread. Passes `true` and
-    ///     `nil` on success, `false` and an error on failure.
-    @available(*, deprecated, renamed: "authorize(withCode:)")
-    public func authorize(withCode code: String!, completion: @escaping @Sendable (Bool?, (any Error)?) -> Void) {
-        Task { @MainActor in
-            do {
-                try await self.authorize(withCode: code ?? "")
-                completion(true, nil)
-            } catch {
-                completion(false, error)
-            }
-        }
-    }
-
     /// Stores the credential's access token in the Keychain, or clears any previously stored
     /// token if the response didn't include one - matching the prior `UserDefaults.set(nil,
     /// forKey:)` behavior, which is equivalent to `removeObject(forKey:)`.

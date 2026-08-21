@@ -609,17 +609,6 @@ public class CDUntappdAPIClient {
 
         return response
     }
-
-    /// Deprecated: Use Swift structured concurrency instead.
-    ///
-    /// With async/await, call `Task.cancel()` on the task that wraps the async API call.
-    ///
-    /// Suspends until all in-flight requests have actually finished cancelling, not just until
-    /// cancellation has been requested.
-    @available(*, deprecated, message: "Use Task.cancel() with async/await API instead")
-    public func cancelAllPendingAPIRequests() async {
-        await self.session.cancelAllTasks()
-    }
 }
 
 extension CDUntappdAPIClient {

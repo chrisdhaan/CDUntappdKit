@@ -33,9 +33,6 @@ public enum CDUntappdKitError: Error, Sendable {
     case invalidRequest(underlying: any Error & Sendable)
     /// A transport-level failure occurred (no connection, timed out, etc).
     case networkFailure(underlying: any Error & Sendable)
-    /// The API returned a non-2xx HTTP status code.
-    @available(*, deprecated, message: "Use .httpErrorWithHeaders(statusCode:data:headers:) instead; CDUntappdKit no longer throws this case.")
-    case httpError(statusCode: Int, data: Data)
     /// The API returned a non-2xx HTTP status code. Carries the failed response's HTTP headers
     /// (e.g. `Retry-After`, rate-limit headers) alongside the status code and body.
     case httpErrorWithHeaders(statusCode: Int, data: Data, headers: [String: String])

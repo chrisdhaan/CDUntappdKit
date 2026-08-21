@@ -42,7 +42,7 @@ Builds `URLRequest`s from `Parameters`, in two forms: `urlRequest(for:parameters
 ### CDUntappdURLSession
 An internal actor wrapping `URLSession`. Performs a built `URLRequest`, validates the HTTP status code, and decodes the response body, mapping every failure mode to a `CDUntappdKitError` case. Being an actor, its internal state needs no manual locking.
 
-`cancelAllTasks()` (invoked by the deprecated `CDUntappdAPIClient.cancelAllPendingAPIRequests()`) waits for in-flight tasks to actually finish cancelling — not just for cancellation to be requested — by polling `session.allTasks` until empty, with a ~5s best-effort bound.
+`cancelAllTasks()` waits for in-flight tasks to actually finish cancelling — not just for cancellation to be requested — by polling `session.allTasks` until empty, with a ~5s best-effort bound.
 
 ### CDUntappdOAuthViewController (iOS and visionOS)
 A `UIViewController` wrapping `WKWebView` that presents the Untappd OAuth login page and intercepts the redirect callback. Available on iOS and visionOS via `#if os(iOS) || os(visionOS)` platform guard — see [Platform-Specific Behavior](#platform-specific-behavior) below for why the other three platforms don't get this.

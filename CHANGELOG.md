@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## Table of Contents
 
+- [4.0.0](#400)
 - [3.3.0](#330)
 - [3.2.1](#321)
 - [3.2.0](#320)
@@ -12,6 +13,25 @@ All notable changes to this project will be documented in this file.
 - [2.0.0](#200)
 - [1.1.0](#110)
 - [1.0.0](#100)
+
+---
+
+## [4.0.0](https://github.com/chrisdhaan/CDUntappdKit/releases/tag/4.0.0)
+
+Released on 2026-08-21.
+
+Removes three long-deprecated public API members, and expands the iOS Example app to demo 9 more read-only endpoints with an on-screen JSON response viewer.
+
+### Removed
+
+- `CDUntappdAPIClient.cancelAllPendingAPIRequests()` — deprecated since 2.0.0; use `Task.cancel()` on the task wrapping the async API call instead.
+- `CDUntappdOAuthClient.authorize(withCode:completion:)` — deprecated since 3.0.0; use `authorize(withCode:)` (`async throws`) instead.
+- `CDUntappdKitError.httpError(statusCode:data:)` — deprecated since 3.3.0; use `.httpErrorWithHeaders(statusCode:data:headers:)` instead.
+
+### iOS Example App
+
+- Tapping an endpoint row now pushes a pretty-printed JSON view of the response instead of printing it to the Xcode console, and a failed request now shows an alert instead of a silent console log. `Main.storyboard`'s root view controller is now wrapped in a `UINavigationController` to support this.
+- Grew from 3 to 12 demoed endpoints: added `fetchUserBadges`, `fetchUserBeers`, `fetchUserActivityFeed`, `searchBeers`, `searchBreweries`, `fetchBeerInfo`, `fetchBreweryInfo`, `fetchBeerActivityFeed`, and `fetchBreweryActivityFeed`. The beer/brewery-ID-based rows resolve a real ID via a live search first rather than hardcoding one, so they can't go stale. Venue-based endpoints (`fetchVenueInfo`, `fetchVenueActivityFeed`, `lookupVenue(byFoursquareId:)`) and everything requiring OAuth (the global activity feed, notifications, pending friends) or a write/action call remain undemoed — the example app doesn't have an OAuth login flow wired in yet.
 
 ---
 

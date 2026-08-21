@@ -334,46 +334,5 @@ extension SharedKeychainTests {
             }
         }
 
-        @Test
-        func deprecatedCompletionShimReportsFailureOnMainThreadForEmptyCode() async {
-            let client = CDUntappdOAuthClient(clientId: "test", clientSecret: "test",
-                                              redirectUrl: "test://callback")
-            let (success, error, wasMainThread) = await withCheckedContinuation {
-                (continuation: CheckedContinuation<(Bool?, Error?, Bool), Never>) in
-                client.authorize(withCode: "") { success, error in
-                    continuation.resume(returning: (success, error, Thread.isMainThread))
-                }
-            }
-            #expect(success == false)
-            #expect(error != nil)
-            #expect(wasMainThread == true)
-        }
-
-        @Test
-        func deprecatedCompletionShimStoresAccessTokenOnSuccess() async throws {
-            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
-            let url = try expectedAuthorizeURL(clientId: "test", clientSecret: "test",
-                                               redirectUrl: "test://callback", code: "auth_code_shim_success")
-            CDUntappdMockURLProtocol.register(
-                stub: .init(statusCode: 200, data: Data(#"{"response": {"access_token": "shim_token_789"}}"#.utf8)),
-                for: url
-            )
-            let client = CDUntappdOAuthClient(
-                clientId: "test", clientSecret: "test", redirectUrl: "test://callback",
-                urlSession: CDUntappdMockURLProtocol.makeSession()
-            )
-            let result = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Bool?, Error>) in
-                client.authorize(withCode: "auth_code_shim_success") { success, error in
-                    if let error {
-                        continuation.resume(throwing: error)
-                    } else {
-                        continuation.resume(returning: success)
-                    }
-                }
-            }
-            #expect(result == true)
-            #expect(CDUntappdKeychain.string(forKey: CDUntappdDefaults.accessToken) == "shim_token_789")
-            CDUntappdKeychain.delete(forKey: CDUntappdDefaults.accessToken)
-        }
     }
 }

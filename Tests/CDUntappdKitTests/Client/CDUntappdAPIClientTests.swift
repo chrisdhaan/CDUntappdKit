@@ -60,11 +60,6 @@ extension SharedKeychainTests {
             #expect(client.isAuthenticated() == false)
         }
 
-        @Test
-        func cancelAllPendingAPIRequestsCompletesWithNoInFlightRequests() async {
-            await client.cancelAllPendingAPIRequests()
-        }
-
         /// `CDUntappdAPIClient.fetchUserInfo` builds its own `URLRequest` internally via
         /// `CDUntappdRouter`, so the test can't attach a stub to that specific request instance
         /// the way `CDUntappdURLSessionTests` does (`URLProtocol.setProperty` is tied to request
