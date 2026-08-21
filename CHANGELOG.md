@@ -18,7 +18,7 @@ All notable changes to this project will be documented in this file.
 
 ## [4.0.0](https://github.com/chrisdhaan/CDUntappdKit/releases/tag/4.0.0)
 
-Released on 2026-08-19.
+Released on 2026-08-21.
 
 Removes three long-deprecated public API members, and expands the iOS Example app to demo 9 more read-only endpoints with an on-screen JSON response viewer.
 
