@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## Table of Contents
 
+- [Unreleased](#unreleased)
 - [4.0.0](#400)
 - [3.3.0](#330)
 - [3.2.1](#321)
@@ -13,6 +14,15 @@ All notable changes to this project will be documented in this file.
 - [2.0.0](#200)
 - [1.1.0](#110)
 - [1.0.0](#100)
+
+---
+
+## [Unreleased]
+
+### Changed
+
+- Aligned `.swiftformat` and CI conventions with the sibling CDMarkdownKit/CDYelpFusionKit/CDOAuth1Kit/CDYahooKit frameworks, including bumping `.swiftformat`'s target Swift version to 6.0 to match `swiftLanguageModes: [.v6]`, and adding an Example-app build to CI.
+- Tightened the `file_length`, `function_body_length`, and `type_body_length` SwiftLint limits to match the shared baseline agreed across all 5 sibling frameworks. Every violation was fixed by restructuring — splitting `CDUntappdAPIClient` into per-endpoint-group extensions, splitting `CDUntappdURLSession`'s retry/cancellation logic into its own file, and factoring `CDUntappdVenue`'s initializer into named decode helpers — rather than raising the limits or disabling the rules.
 
 ---
 
