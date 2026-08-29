@@ -107,54 +107,28 @@ public struct CDUntappdVenue: Decodable, Sendable {
         parentCategoryId = try root.decodeIfPresent(String.self, forKey: .parentCategoryId)
         primaryCategory = try root.decodeIfPresent(String.self, forKey: .primaryCategory)
         slug = try root.decodeIfPresent(String.self, forKey: .slug)
+        categories = try Self.decodeCategories(from: root)
 
-        if let categoriesContainer = try? root.nestedContainer(keyedBy: ItemsKeys.self, forKey: .categories) {
-            categories = try categoriesContainer.decodeIfPresent([CDUntappdCategory].self, forKey: .items)
-        } else {
-            categories = nil
-        }
+        let icons = try Self.decodeIcons(from: root)
+        smallIcon = icons.small
+        mediumIcon = icons.medium
+        largeIcon = icons.large
 
-        if let iconContainer = try? root.nestedContainer(keyedBy: IconKeys.self, forKey: .venueIcon) {
-            smallIcon = try iconContainer.decodeIfPresent(URL.self, forKey: .small)
-            mediumIcon = try iconContainer.decodeIfPresent(URL.self, forKey: .medium)
-            largeIcon = try iconContainer.decodeIfPresent(URL.self, forKey: .large)
-        } else {
-            smallIcon = nil
-            mediumIcon = nil
-            largeIcon = nil
-        }
+        let location = try Self.decodeLocation(from: root)
+        latitude = location.latitude
+        longitude = location.longitude
+        address = location.address
+        city = location.city
+        state = location.state
+        country = location.country
 
-        if let locationContainer = try? root.nestedContainer(keyedBy: LocationKeys.self, forKey: .location) {
-            latitude = try locationContainer.decodeIfPresent(Double.self, forKey: .lat)
-            longitude = try locationContainer.decodeIfPresent(Double.self, forKey: .lng)
-            address = try locationContainer.decodeIfPresent(String.self, forKey: .address)
-            city = try locationContainer.decodeIfPresent(String.self, forKey: .city)
-            state = try locationContainer.decodeIfPresent(String.self, forKey: .state)
-            country = try locationContainer.decodeIfPresent(String.self, forKey: .country)
-        } else {
-            latitude = nil
-            longitude = nil
-            address = nil
-            city = nil
-            state = nil
-            country = nil
-        }
+        let foursquare = try Self.decodeFoursquare(from: root)
+        foursqaureId = foursquare.id
+        foursqaureUrl = foursquare.url
 
-        if let foursquareContainer = try? root.nestedContainer(keyedBy: FoursquareKeys.self, forKey: .foursquare) {
-            foursqaureId = try foursquareContainer.decodeIfPresent(String.self, forKey: .id)
-            foursqaureUrl = try foursquareContainer.decodeIfPresent(URL.self, forKey: .url)
-        } else {
-            foursqaureId = nil
-            foursqaureUrl = nil
-        }
-
-        if let contactContainer = try? root.nestedContainer(keyedBy: ContactKeys.self, forKey: .contact) {
-            twitterHandle = try contactContainer.decodeIfPresent(String.self, forKey: .twitter)
-            website = try contactContainer.decodeIfPresent(URL.self, forKey: .url)
-        } else {
-            twitterHandle = nil
-            website = nil
-        }
+        let contact = try Self.decodeContact(from: root)
+        twitterHandle = contact.twitter
+        website = contact.url
     }
 
     /// Untappd returns this flag as either a JSON boolean or a `1`/`0` integer
@@ -165,5 +139,82 @@ public struct CDUntappdVenue: Decodable, Sendable {
             return intValue == 1
         }
         return (try? container.decodeIfPresent(Bool.self, forKey: key)) ?? nil
+    }
+
+    private static func decodeCategories(from root: KeyedDecodingContainer<RootKeys>) throws -> [CDUntappdCategory]? {
+        guard let categoriesContainer = try? root.nestedContainer(keyedBy: ItemsKeys.self, forKey: .categories) else {
+            return nil
+        }
+        return try categoriesContainer.decodeIfPresent([CDUntappdCategory].self, forKey: .items)
+    }
+
+    private struct DecodedIcons {
+        let small: URL?
+        let medium: URL?
+        let large: URL?
+    }
+
+    private static func decodeIcons(from root: KeyedDecodingContainer<RootKeys>) throws -> DecodedIcons {
+        guard let iconContainer = try? root.nestedContainer(keyedBy: IconKeys.self, forKey: .venueIcon) else {
+            return DecodedIcons(small: nil, medium: nil, large: nil)
+        }
+        return try DecodedIcons(
+            small: iconContainer.decodeIfPresent(URL.self, forKey: .small),
+            medium: iconContainer.decodeIfPresent(URL.self, forKey: .medium),
+            large: iconContainer.decodeIfPresent(URL.self, forKey: .large)
+        )
+    }
+
+    private struct DecodedLocation {
+        let latitude: Double?
+        let longitude: Double?
+        let address: String?
+        let city: String?
+        let state: String?
+        let country: String?
+    }
+
+    private static func decodeLocation(from root: KeyedDecodingContainer<RootKeys>) throws -> DecodedLocation {
+        guard let locationContainer = try? root.nestedContainer(keyedBy: LocationKeys.self, forKey: .location) else {
+            return DecodedLocation(latitude: nil, longitude: nil, address: nil, city: nil, state: nil, country: nil)
+        }
+        return try DecodedLocation(
+            latitude: locationContainer.decodeIfPresent(Double.self, forKey: .lat),
+            longitude: locationContainer.decodeIfPresent(Double.self, forKey: .lng),
+            address: locationContainer.decodeIfPresent(String.self, forKey: .address),
+            city: locationContainer.decodeIfPresent(String.self, forKey: .city),
+            state: locationContainer.decodeIfPresent(String.self, forKey: .state),
+            country: locationContainer.decodeIfPresent(String.self, forKey: .country)
+        )
+    }
+
+    private struct DecodedFoursquare {
+        let id: String?
+        let url: URL?
+    }
+
+    private static func decodeFoursquare(from root: KeyedDecodingContainer<RootKeys>) throws -> DecodedFoursquare {
+        guard let foursquareContainer = try? root.nestedContainer(keyedBy: FoursquareKeys.self, forKey: .foursquare) else {
+            return DecodedFoursquare(id: nil, url: nil)
+        }
+        return try DecodedFoursquare(
+            id: foursquareContainer.decodeIfPresent(String.self, forKey: .id),
+            url: foursquareContainer.decodeIfPresent(URL.self, forKey: .url)
+        )
+    }
+
+    private struct DecodedContact {
+        let twitter: String?
+        let url: URL?
+    }
+
+    private static func decodeContact(from root: KeyedDecodingContainer<RootKeys>) throws -> DecodedContact {
+        guard let contactContainer = try? root.nestedContainer(keyedBy: ContactKeys.self, forKey: .contact) else {
+            return DecodedContact(twitter: nil, url: nil)
+        }
+        return try DecodedContact(
+            twitter: contactContainer.decodeIfPresent(String.self, forKey: .twitter),
+            url: contactContainer.decodeIfPresent(URL.self, forKey: .url)
+        )
     }
 }

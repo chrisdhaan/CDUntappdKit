@@ -17,25 +17,25 @@ cyclomatic_complexity:
   warning: 55
 # number of lines allowed in a function
 function_body_length:
-  error: 60
-  warning: 55
+  error: 100
+  warning: 40
 # number of parameters allowed for a function
 function_parameter_count: 15
 # number of lines allowed in a file
 file_length:
-  error: 1200
-  warning: 750
+  error: 1000
+  warning: 400
 # rules related to vars/lets
 identifier_name:
   excluded:
     - id
 # number of characters allowed in a line
 line_length:
-  error: 160
+  error: 200
   ignores_comments: true
   ignores_function_declarations: true
   warning: 149
 # number of lines allowed in a type declaration
 type_body_length:
-  error: 450
-  warning: 400
+  error: 350
+  warning: 200
