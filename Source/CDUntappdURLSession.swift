@@ -32,14 +32,19 @@ import Foundation
 /// (`CDUntappdCacheConfiguration`) for `GET` requests.
 actor CDUntappdURLSession {
 
-    private let session: URLSession
+    // Not private: read by CDUntappdURLSession+RetrySupport.swift's cancelAllTasks().
+    let session: URLSession
     private let decoder: JSONDecoder
-    private let retryConfiguration: CDUntappdRetryConfiguration
-    private let eventMonitors: [any CDUntappdEventMonitor]
+    // Not private: read by CDUntappdURLSession+RetrySupport.swift's shouldRetry/backoffNanoseconds.
+    let retryConfiguration: CDUntappdRetryConfiguration
+    // Not private: read by CDUntappdURLSession+RetrySupport.swift's notify*(_:) methods.
+    let eventMonitors: [any CDUntappdEventMonitor]
     private let requestAdapters: [any CDUntappdRequestAdapter]
     private let cache: CDUntappdResponseCache?
-    private var retrySleepTasks: [UUID: Task<Void, any Error>] = [:]
+    // Not private: read/written by CDUntappdURLSession+RetrySupport.swift.
+    var retrySleepTasks: [UUID: Task<Void, any Error>] = [:]
 
+    /// Not private: read by CDUntappdURLSession+RetrySupport.swift's shouldRetry(_:httpMethod:attempt:).
     /// HTTP methods safe to automatically resend without risking a duplicate side effect —
     /// notably excludes POST, so a retried POST write/action request (e.g. `addCheckin`,
     /// `toast`, `addComment`) can never be silently submitted twice. This does NOT cover every
@@ -48,7 +53,7 @@ actor CDUntappdURLSession {
     /// retried like any other idempotent call — whether repeating one of those state changes is
     /// actually a server-side no-op isn't documented in `Documentation/API_SCHEMA.md` and hasn't
     /// been live-verified.
-    private static let idempotentHTTPMethods: Set<String> = ["DELETE", "GET", "HEAD", "OPTIONS", "PUT", "TRACE"]
+    static let idempotentHTTPMethods: Set<String> = ["DELETE", "GET", "HEAD", "OPTIONS", "PUT", "TRACE"]
 
     init(
         session: URLSession = .shared,
@@ -149,6 +154,13 @@ actor CDUntappdURLSession {
         }
 
         notifyStart(request)
+        return try await sendWithRetry(request, cacheKey: cacheKey)
+    }
+
+    /// The retry loop proper, factored out of `performRequest` so each stays under the shared
+    /// function_body_length threshold. `cacheKey` is threaded through unchanged from the caller —
+    /// it only ever affects the final successful `PerformResult`, never the retry decisions here.
+    private func sendWithRetry(_ request: URLRequest, cacheKey: String?) async throws -> PerformResult {
         var attempt: UInt = 0
         while true {
             let data: Data
@@ -234,91 +246,8 @@ actor CDUntappdURLSession {
         }
         attempt += 1
     }
-
-    private func notifyStart(_ request: URLRequest) {
-        for monitor in eventMonitors {
-            monitor.requestDidStart(urlRequest: request)
-        }
-    }
-
-    private func notifyComplete(_ request: URLRequest, response: HTTPURLResponse?, data: Data?, error: (any Error)?) {
-        for monitor in eventMonitors {
-            monitor.requestDidComplete(urlRequest: request, response: response, data: data, error: error)
-        }
-    }
-
-    private func notifyRetry(_ request: URLRequest, retryCount: Int) {
-        for monitor in eventMonitors {
-            monitor.requestWillRetry(urlRequest: request, retryCount: retryCount)
-        }
-    }
-
-    private func shouldRetry(_ error: CDUntappdKitError, httpMethod: String?, attempt: UInt) -> Bool {
-        guard attempt < retryConfiguration.retryLimit else { return false }
-        guard let httpMethod, Self.idempotentHTTPMethods.contains(httpMethod.uppercased()) else { return false }
-        switch error {
-        case let .httpErrorWithHeaders(statusCode, _, _):
-            return retryConfiguration.retryableHTTPStatusCodes.contains(statusCode)
-        case let .networkFailure(underlying):
-            guard let urlError = underlying as? URLError else { return false }
-            // .cancelled must never be retried, even if a caller's retryableURLErrorCodes
-            // includes it — cancelAllTasks() must reliably terminate an in-flight request
-            // rather than have it silently resent.
-            guard urlError.code != .cancelled else { return false }
-            return retryConfiguration.retryableURLErrorCodes.contains(urlError.code)
-        default:
-            return false
-        }
-    }
-
-    private func backoffNanoseconds(attempt: UInt) -> UInt64 {
-        let maxDelay: TimeInterval = 60
-        let delay = min(retryConfiguration.initialDelay * pow(2.0, Double(attempt)), maxDelay)
-        return UInt64(max(0, delay) * 1_000_000_000)
-    }
-
-    /// Sleeps for `nanoseconds`, tracked in `retrySleepTasks` so `cancelAllTasks()` can cancel a
-    /// pending retry's backoff wait — a plain `URLSession` task cancel wouldn't reach it, since
-    /// no network task is in flight during the sleep.
-    private func trackedSleep(nanoseconds: UInt64) async throws {
-        let id = UUID()
-        let task = Task<Void, any Error> { try await Task.sleep(nanoseconds: nanoseconds) }
-        retrySleepTasks[id] = task
-        defer {
-            task.cancel()
-            retrySleepTasks.removeValue(forKey: id)
-        }
-        do {
-            try await withTaskCancellationHandler {
-                try await task.value
-            } onCancel: {
-                task.cancel()
-            }
-        } catch {
-            throw CDUntappdKitError.networkFailure(underlying: error)
-        }
-    }
-
-    /// Cancels all in-flight requests and any Tasks sleeping during retry backoff, and suspends
-    /// until they've actually finished cancelling — not just until cancellation has been
-    /// requested.
-    ///
-    /// Polls for up to ~5 seconds (500 attempts, 10ms apart); if tasks are still outstanding
-    /// after that, returns anyway on a best-effort basis rather than suspending indefinitely.
-    func cancelAllTasks() async {
-        for task in retrySleepTasks.values {
-            task.cancel()
-        }
-        retrySleepTasks.removeAll()
-
-        for task in await session.allTasks {
-            task.cancel()
-        }
-
-        var remainingPollAttempts = 500
-        while remainingPollAttempts > 0, await !session.allTasks.isEmpty {
-            remainingPollAttempts -= 1
-            try? await Task.sleep(nanoseconds: 10_000_000)
-        }
-    }
 }
+
+// notifyStart/notifyComplete/notifyRetry, shouldRetry, backoffNanoseconds, trackedSleep, and
+// cancelAllTasks live in CDUntappdURLSession+RetrySupport.swift, split out to keep this file's
+// type body under the shared type_body_length threshold.

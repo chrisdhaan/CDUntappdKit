@@ -1,5 +1,5 @@
 # Swift language version target
---swiftversion 5.9
+--swiftversion 6.0
 
 # Indentation: 4 spaces, no tabs
 --indent 4
